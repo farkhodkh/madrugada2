@@ -1,0 +1,1 @@
+/Users/farkhodkh/AndroidStudioProjects/PPTK/POS/buildSrc/build/classes/kotlin/main/Dependencies.class:/Users/farkhodkh/AndroidStudioProjects/PPTK/POS/buildSrc/build/classes/kotlin/main/Versions.class
