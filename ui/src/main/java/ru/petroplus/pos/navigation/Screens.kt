@@ -1,8 +1,8 @@
 package ru.petroplus.pos.navigation
 
 sealed class Screens(val route: String) {
-    object MainScreen : Screens("main_screen")
-    object ShoppingChartScreen : Screens("shopping_chart_screen")
+    object DebitScreen : Screens("debit_screen")
+    object RefundScreen : Screens("refund_screen")
     object SettingsScreen : Screens("setting_screen")
 
     fun withArgs(vararg args: String): String {

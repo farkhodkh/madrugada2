@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.navigation.compose.rememberNavController
@@ -27,21 +27,21 @@ class MainActivity : ComponentActivity() {
                         BottomNavigationController(
                             items = listOf(
                                 BottomBarItem(
-                                    name = "Основной",
-                                    route = Screens.MainScreen.route,
-                                    icon = Icons.Default.Home
+                                    name = "Дебит",
+                                    route = Screens.DebitScreen.route,
+                                    icon = Icons.Default.ShoppingCart
                                 ),
                                 BottomBarItem(
-                                    name = "Продажи",
-                                    route = Screens.ShoppingChartScreen.route,
-                                    icon = Icons.Default.ShoppingCart,
-                                    badgeCount = 3
+                                    name = "Возврат",
+                                    route = Screens.RefundScreen.route,
+                                    icon = Icons.Default.Refresh,
+                                    badgeCount = 0
                                 ),
                                 BottomBarItem(
                                     name = "Настройки",
                                     route = Screens.SettingsScreen.route,
                                     icon = Icons.Default.Settings,
-                                    badgeCount = 2
+                                    badgeCount = 0
                                 ),
                             ),
                             navController = navController,

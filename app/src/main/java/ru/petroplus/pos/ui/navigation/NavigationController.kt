@@ -4,19 +4,19 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.petroplus.pos.mainscreen.ui.MainScreen
+import ru.petroplus.pos.mainscreen.ui.DebitScreen
 import ru.petroplus.pos.navigation.Screens
 import ru.petroplus.pos.navigation.SettingsScreen
-import ru.petroplus.pos.ui.views.ShoppingChartScreen
+import ru.petroplus.pos.ui.views.RefundScreen
 
 @Composable
 fun NavigationController(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screens.MainScreen.route) {
+    NavHost(navController = navController, startDestination = Screens.DebitScreen.route) {
 
         composable(
-            route = Screens.MainScreen.route
+            route = Screens.DebitScreen.route
         ) {
-            MainScreen(onClickListener = { screen ->
+            DebitScreen(onClickListener = { screen ->
                 navController.navigate(screen)
             })
         }
@@ -27,8 +27,8 @@ fun NavigationController(navController: NavHostController) {
             })
         }
 
-        composable(Screens.ShoppingChartScreen.route) {
-            ShoppingChartScreen(onClickListener = { screen ->
+        composable(Screens.RefundScreen.route) {
+            RefundScreen(onClickListener = { screen ->
                 navController.navigate(screen)
             })
         }
