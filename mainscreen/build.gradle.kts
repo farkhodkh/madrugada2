@@ -62,6 +62,9 @@ dependencies {
     implementation("${Dependencies.composeNavigation}:${Versions.composeNavigation}")
     implementation("${Dependencies.composeFoundation}:${Versions.compose}")
 
+    //Lifecycle
+    implementation("${Dependencies.lifecycleViewModel}:${Versions.lifecycle}")
+    implementation("${Dependencies.lifecycleRuntime}:${Versions.lifecycle}")
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")

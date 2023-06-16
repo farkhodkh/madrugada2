@@ -8,9 +8,12 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
+.idea
 /build
 /core/build
 /mainscreen/build
+/nativelib/build
+/buildSrc/build
 /ui/build
 /util/build
 /captures
