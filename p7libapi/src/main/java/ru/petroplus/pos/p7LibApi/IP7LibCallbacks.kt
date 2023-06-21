@@ -61,7 +61,6 @@ interface IP7LibCallbacks {
      * Метод поиска последней транзакции по номеру карты
      * @param cardNumber - номер карты
      * @param transactionEntity - <=> Запись в базе данных
-     * TODO - Нужно согласовать схему таблицы записей
      */
     fun findLastTransaction(cardNumber: Int, transactionEntity: TransactionInfoDto): ResultCode
 

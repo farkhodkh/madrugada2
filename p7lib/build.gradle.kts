@@ -11,6 +11,7 @@ android {
     defaultConfig {
         minSdk = Versions.minSdkVersion
         targetSdk = Versions.targetSdk
+
     }
 
     buildTypes {
@@ -22,7 +23,12 @@ android {
             )
         }
     }
-
+    externalNativeBuild {
+        cmake {
+            path = File("src/main/cpp/CMakeLists.txt")
+            version = "3.18.1"
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
