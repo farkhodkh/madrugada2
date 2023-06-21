@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = Dependencies.namespaceNativelib
+    namespace = Dependencies.namespaceP7LibApi
     compileSdkVersion = Versions.compileSdkVersion
 
     defaultConfig {
@@ -23,7 +23,7 @@ android {
         }
     }
 
-        compileOptions {
+    compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation("${Dependencies.gson}:${Versions.gson}")
 
     //implementation 'androidx.core:core-ktx:1.7.20'
     //implementation 'androidx.appcompat:appcompat:1.6.1'

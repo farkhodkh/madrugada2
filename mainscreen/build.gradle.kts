@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = Dependencies.namespaceMainscreen
+    namespace = Dependencies.namespaceMainScreen
     compileSdkVersion = Versions.compileSdkVersion
 
     defaultConfig {

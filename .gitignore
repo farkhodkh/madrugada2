@@ -16,6 +16,8 @@
 /buildSrc/build
 /ui/build
 /util/build
+/p7lib/build
+/p7libapi/build
 /captures
 .externalNativeBuild
 .cxx

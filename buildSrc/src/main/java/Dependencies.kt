@@ -4,9 +4,9 @@ object Dependencies {
     const val namespaceUi = "ru.petroplus.pos.ui"
     const val namespaceUtil = "ru.petroplus.pos.util"
     const val namespaceCore = "ru.petroplus.pos.core"
-    const val namespaceMainscreen = "ru.petroplus.pos.mainscreen"
-    const val namespaceNativelib = "ru.petroplus.pos.nativelib"
-
+    const val namespaceMainScreen = "ru.petroplus.pos.mainscreen"
+    const val namespaceP7Lib = "ru.petroplus.pos.p7Lib"
+    const val namespaceP7LibApi = "ru.petroplus.pos.p7LibApi"
 
     const val androidApplication = "com.android.application"
     const val kotlinAndroid = "android"
@@ -37,6 +37,8 @@ object Dependencies {
     const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx"
     const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-compose"
 
+    const val gson = "implementation 'com.google.code.gson:gson"
+
 }
 
 object Versions {
@@ -65,4 +67,5 @@ object Versions {
     const val composeNavigation = "2.4.0-alpha10"
     const val composeConstraint = "1.0.0-rc01"
     const val lifecycle = "2.5.1"
+    const val gson = "2.10.1"
 }

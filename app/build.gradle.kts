@@ -88,4 +88,6 @@ dependencies {
     implementation(project(":util"))
     implementation(project(":ui"))
     implementation(project(":mainscreen"))
+    implementation(project(":p7lib"))
+    implementation(project(":p7libapi"))
 }
