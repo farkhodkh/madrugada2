@@ -7,7 +7,7 @@ package ru.petroplus.pos.p7LibApi.dto
  * @property errorMessage - Текстовое описание ошибки
  */
 class ErrorInfoDto(
-    var errorCode: Int,
-    var errorStack: Array<ResultCode>,
-    var errorMessage: String
+    var errorCode: Int = 0,
+    var errorStack: Array<ResultCode> = arrayOf(),
+    var errorMessage: String = ""
 )

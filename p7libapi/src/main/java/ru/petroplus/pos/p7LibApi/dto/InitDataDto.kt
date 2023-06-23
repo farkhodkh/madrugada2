@@ -12,8 +12,8 @@ package ru.petroplus.pos.p7LibApi.dto
  * @author - @FAHA
  */
 class InitDataDto(
-    var acquirerId: Int,
-    var terminalId: Int,
-    var hostIp: String,
-    var hostPort: Int,
+    var acquirerId: Int = 0,
+    var terminalId: Int = 0,
+    var hostIp: String = "",
+    var hostPort: Int = 0,
 )

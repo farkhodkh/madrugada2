@@ -9,8 +9,8 @@ package ru.petroplus.pos.p7LibApi.dto
  * @property sum - Сумма (sum == 1000(1р))
  */
 class RefundParamsDto(
-    var serviceWhat: Int,
-    var amount: Double,
-    var price: Double,
-    var sum: Double,
+    var serviceWhat: Int = 0,
+    var amount: Double = 0.0,
+    var price: Double = 0.0,
+    var sum: Double = 0.0,
 )

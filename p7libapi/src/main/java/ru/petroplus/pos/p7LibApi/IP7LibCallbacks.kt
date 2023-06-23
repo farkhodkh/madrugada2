@@ -1,10 +1,11 @@
 package ru.petroplus.pos.p7LibApi
 
+import ru.petroplus.pos.p7LibApi.dto.PrintDataDto
 import ru.petroplus.pos.p7LibApi.dto.ResultCode
 import ru.petroplus.pos.p7LibApi.dto.TransactionInfoDto
+import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petroplus.pos.p7LibApi.requests.ApduData
 import ru.petroplus.pos.p7LibApi.responces.OperationResult
-import java.util.concurrent.TimeUnit
 
 /**
  * Interface для обслуживания "callback" ов библиотеки p7lib
@@ -65,7 +66,14 @@ interface IP7LibCallbacks {
     fun findLastTransaction(cardNumber: Int, transactionEntity: TransactionInfoDto): ResultCode
 
     /**
-     *
+     * Обновление записей транзакции в БД
+     * @param record - Содержание транзакции для печати
      */
-//    fun printSimpleDoc(SimpleDoc)
+    fun updateTransaction(record: TransactionRecordDto)
+
+    /**
+     * Распечатка чека по результатам транзакции
+     * @param data - Данные для заполнения чека для печати
+     */
+    fun printSimpleDoc(data: PrintDataDto)
 }

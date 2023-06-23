@@ -9,9 +9,9 @@ package ru.petroplus.pos.p7LibApi.dto
  * @property issuerId -
  */
 class TransactionInfoDto(
-    var onlineTmNumber: Int,
-    var cardNumber: String,
-    var terminalNumber: Int,
-    var terminalId: Int,
-    var issuerId: Int
+    var onlineTmNumber: Int = 0,
+    var cardNumber: String = "",
+    var terminalNumber: Int = 0,
+    var terminalId: Int = 0,
+    var issuerId: Int = 0
 )
