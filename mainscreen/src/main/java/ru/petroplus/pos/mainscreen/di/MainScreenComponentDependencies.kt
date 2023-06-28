@@ -1,4 +1,4 @@
 package ru.petroplus.pos.mainscreen.di
 
-class MainScreenComponentDependencies {
+interface MainScreenComponentDependencies {
 }

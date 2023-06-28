@@ -32,4 +32,8 @@ android {
     }
 }
 
-dependencies { }
+dependencies {
+
+    //Dagger 2
+    implementation("${Dependencies.dagger}:${Versions.dagger}")
+}

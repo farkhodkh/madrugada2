@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="starting_application_label_text">Загрузка приложения ...</string>
+    <string name="insert_card_label_text">Вставьте карту</string>
+    <string name="need_to_upload_ini_file_label_text">Не обнаружен ini файл с настройками терминала. Загрузить?</string>
+    <string name="ini_file_description_label_text">Файл настроек необходимо получить у службы поддержки и загрузить на терминале</string>
+    <string name="Cancel">Отмена</string>
+    <string name="OK">ДА</string>
+</resources>

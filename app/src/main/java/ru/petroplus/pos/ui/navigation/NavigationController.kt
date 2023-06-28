@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.petroplus.pos.mainscreen.ui.DebitScreen
+import ru.petroplus.pos.mainscreen.ui.configuration.ConfigurationCheckScreen
+import ru.petroplus.pos.mainscreen.ui.debit.DebitScreen
 import ru.petroplus.pos.navigation.Screens
 import ru.petroplus.pos.navigation.SettingsScreen
 import ru.petroplus.pos.ui.views.RefundScreen
@@ -33,5 +34,8 @@ fun NavigationController(navController: NavHostController) {
             })
         }
 
+        composable(Screens.ConfigurationCheckScreen.route) {
+            ConfigurationCheckScreen()
+        }
     }
 }
