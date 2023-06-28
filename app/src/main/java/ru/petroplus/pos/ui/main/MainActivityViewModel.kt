@@ -9,21 +9,25 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.petroplus.pos.R
+import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
+import ru.petroplus.pos.p7LibApi.dto.OK
+import ru.petroplus.pos.util.ConfigurationFileReader
+import ru.petroplus.pos.util.ext.toInitDataDto
 import java.io.File
 import kotlin.system.exitProcess
 
-
 class MainActivityViewModel(
-    private val p7LibraryRepository: IP7LibRepository
+    private val p7LibraryRepository: IP7LibRepository,
+    private val callbacks: IP7LibCallbacks
 ) : ViewModel() {
 
-    val _viewState: MutableStateFlow<MainScreenState> = MutableStateFlow(MainScreenState.StartingState)
-    val viewState: StateFlow<MainScreenState> = _viewState
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MainScreenState.StartingState)
+    private val configurationReaderUtil by lazy { ConfigurationFileReader() }
 
-//    private var _viewState: MutableLiveData<MainScreenState> = MutableLiveData(MainScreenState.StartingState)
-//    val viewState: LiveData<MainScreenState> = _viewState
+    private val _viewState: MutableStateFlow<MainScreenState> =
+        MutableStateFlow(MainScreenState.StartingState)
+    val viewState: StateFlow<MainScreenState> = _viewState
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MainScreenState.StartingState)
 
     private var cacheDir: File? = null
 
@@ -34,23 +38,48 @@ class MainActivityViewModel(
         }
     }
 
-    private fun initLibrary() {
-
-    }
-
     private fun readIniFile() {
         cacheDir?.let { dir ->
             if (dir.exists()) {
-                val iniFile = dir
+                val confFile = dir
                     .listFiles()
-                    ?.filter { it.isFile && it.name.endsWith(".ini") }
+                    ?.filter { it.isFile && it.name.endsWith(".ini") }?.firstOrNull()
 
-                if (iniFile.isNullOrEmpty()) {
+                if (confFile == null) {
                     _viewState.value = MainScreenState.NoIniFileError
                 } else {
-                    //_viewState.value = MainScreenState.NoIniFileError
+                    viewModelScope.launch {
+                        readConfigurationFile(confFile)
+                    }
                 }
             }
+        }
+    }
+
+    private fun readConfigurationFile(confFile: File) {
+        try {
+            configurationReaderUtil
+                .readConfigurationFileContent(confFile)
+        } catch (ex: ConfigurationFileReader.ConfigurationFileReaderException) {
+            _viewState.value =
+                MainScreenState.CheckingSettingsError(R.string.cache_dir_access_error)
+            return
+        }
+
+        val result = p7LibraryRepository.init(
+            configurationReaderUtil.properties.toInitDataDto(),
+            "",
+            callbacks,
+            "",
+            ""
+        )
+
+        if (result.code == OK.code) {
+            _viewState.value =
+                MainScreenState.CheckingSuccessState
+        } else {
+            _viewState.value =
+                MainScreenState.CheckingSettingsError(R.string.cache_dir_access_error)
         }
     }
 

@@ -29,7 +29,6 @@ interface IP7LibRepository {
         dataDir : String,
     ): ResultCode
 
-
     /**
      * Метод завершения работы с библиотекой. Вызов метода обязателен
      */

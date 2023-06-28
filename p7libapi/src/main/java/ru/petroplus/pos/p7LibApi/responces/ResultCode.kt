@@ -6,147 +6,147 @@ package ru.petroplus.pos.p7LibApi.dto
  *
  * @author - @FAHA
  */
-sealed interface ResultCode
+sealed class ResultCode(val code: Int)
 
 /**
  * Успешный результат выполнения команды
  */
-object OK : ResultCode
+object OK: ResultCode(0)
 
 /**
  * Параметры библиотеки уже были успешно проинициализированы
  */
-object AlreadyInitialized : ResultCode
+object AlreadyInitialized : ResultCode(1)
 
 /**
  *
  */
-object NonInitializedError : ResultCode
+object NonInitializedError : ResultCode(2)
 
 /**
  *
  */
-object CardResetInitError : ResultCode
+object CardResetInitError : ResultCode(3)
 
 /**
  *
  */
-object CardIoInitError : ResultCode
+object CardIoInitError : ResultCode(4)
 
 /**
  *
  */
-object CardSelectError : ResultCode
+object CardSelectError : ResultCode(5)
 
 /**
  *
  */
-object CardAuthError : ResultCode
+object CardAuthError : ResultCode(6)
 
 /**
  *
  */
-object LoadIniError : ResultCode
+object LoadIniError : ResultCode(7)
 
 /**
  *
  */
-object LibFatalError : ResultCode
+object LibFatalError : ResultCode(8)
 
 /**
  *
  */
-object SequenceError : ResultCode
+object SequenceError : ResultCode(9)
 
 /**
  *
  */
-object NotPetrol7Card : ResultCode
+object NotPetrol7Card : ResultCode(10)
 
 /**
  *
  */
-object CardReadError : ResultCode
+object CardReadError : ResultCode(11)
 
 /**
  *
  */
-object SamGetError : ResultCode
+object SamGetError : ResultCode(12)
 
 /**
  *
  */
-object PinDataError : ResultCode
+object PinDataError : ResultCode(13)
 
 /**
  *
  */
-object PinCheckError : ResultCode
+object PinCheckError : ResultCode(14)
 
 /**
  *
  */
-object DebitError : ResultCode
+object DebitError : ResultCode(15)
 
 /**
  *
  */
-object ArgAmountPriceSumError : ResultCode
+object ArgAmountPriceSumError : ResultCode(16)
 
 /**
  *
  */
-object ArgServiceError : ResultCode
+object ArgServiceError : ResultCode(17)
 
 /**
  *
  */
-object ArgPinBlockError : ResultCode
+object ArgPinBlockError : ResultCode(18)
 
 /**
  *
  */
-object ArgCardTypeJError : ResultCode
+object ArgCardTypeJError : ResultCode(19)
 
 /**
  *
  */
-object RefundError : ResultCode
+object RefundError : ResultCode(20)
 
 /**
  *
  */
-object SamResetInitError : ResultCode
+object SamResetInitError : ResultCode(21)
 
 /**
  *
  */
-object SamIoInitError : ResultCode
+object SamIoInitError : ResultCode(22)
 
 /**
  *
  */
-object SamSelectError : ResultCode
+object SamSelectError : ResultCode(23)
 
 /**
  *
  */
-object SamAuthInitError : ResultCode
+object SamAuthInitError : ResultCode(24)
 
 /**
  *
  */
-object SamLicenseError : ResultCode
+object SamLicenseError : ResultCode(25)
 
 /**
  *
  */
-object NetworkModuleError : ResultCode
+object NetworkModuleError : ResultCode(26)
 
 /**
  *
  */
-object UndefinedError : ResultCode
+object UndefinedError : ResultCode(27)
 
 
 

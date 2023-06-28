@@ -1,6 +1,7 @@
 package ru.petroplus.pos.ui.main
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.ExperimentalMaterialApi
@@ -35,13 +36,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewState by viewModel.viewState.collectAsState()
 
-            when(viewState) {
+            when (viewState) {
                 MainScreenState.StartingState -> {
                     StartingApplicationBlockingScreen()
                 }
+
                 MainScreenState.CheckingSettingsState -> {
                     viewModel.setCacheDir(cacheDir = cacheDir)
                 }
+
                 MainScreenState.CheckingSuccessState -> {
                     val navController = rememberNavController()
                     BottomNavWithBadgesTheme() {
@@ -78,14 +81,21 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-                is MainScreenState.CheckingSettingsError -> {
 
+                is MainScreenState.CheckingSettingsError -> {
+                    Toast.makeText(
+                        this,
+                        (viewState as MainScreenState.CheckingSettingsError).errorMessageId,
+                        Toast.LENGTH_LONG)
+                        .show()
                 }
+
                 MainScreenState.DownloadIniFileState -> {
                     FilePickerDialog() {
                         viewModel.configurationFileDownloaded()
                     }
                 }
+
                 MainScreenState.NoIniFileError -> {
                     ConfigurationFileRequiredDialog { result ->
                         if (result) {
