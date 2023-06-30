@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:name="ru.petroplus.pos.App"
         android:allowBackup="true"
@@ -15,7 +17,7 @@
         android:theme="@style/Theme.POS"
         tools:targetApi="31">
         <activity
-            android:name="ru.petroplus.pos.ui.MainActivity"
+            android:name="ru.petroplus.pos.ui.main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

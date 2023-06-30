@@ -43,6 +43,7 @@ android {
 
 dependencies {
     implementation("${Dependencies.gson}:${Versions.gson}")
+    implementation("${Dependencies.composeRuntime}:${Versions.compose}")
 
     //implementation 'androidx.core:core-ktx:1.7.20'
     //implementation 'androidx.appcompat:appcompat:1.6.1'

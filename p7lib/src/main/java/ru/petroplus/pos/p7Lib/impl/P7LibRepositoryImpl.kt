@@ -7,6 +7,10 @@ import ru.petroplus.pos.p7LibApi.dto.*
 import ru.petroplus.pos.p7LibApi.dto.card.CardInfo
 
 class P7LibRepositoryImpl : IP7LibRepository {
+    init {
+        System.loadLibrary("p7lib")
+    }
+
     external override fun init(
         initData: InitDataDto,
         lastOpGUID: TransactionUUID,

@@ -61,6 +61,4 @@ dependencies {
     implementation("${Dependencies.composeNavigation}:${Versions.composeNavigation}")
     implementation("${Dependencies.composeFoundation}:${Versions.compose}")
 
-    //Dagger 2
-    implementation("${Dependencies.dagger}:${Versions.dagger}")
 }
