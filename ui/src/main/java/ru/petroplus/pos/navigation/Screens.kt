@@ -5,6 +5,8 @@ sealed class Screens(val route: String) {
     object RefundScreen : Screens("refund_screen")
     object SettingsScreen : Screens("setting_screen")
 
+    object ConfigurationCheckScreen: Screens("configuration_check_screen")
+
     fun withArgs(vararg args: String): String {
         return buildString {
             append(route)

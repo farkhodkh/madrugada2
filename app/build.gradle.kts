@@ -66,18 +66,19 @@ dependencies {
     implementation("${Dependencies.composeUiUtil}:${Versions.compose}")
     implementation("${Dependencies.composeUiToolPreview}:${Versions.compose}")
     implementation("${Dependencies.composeUiTool}:${Versions.compose}")
+    implementation("${Dependencies.composeRuntime}:${Versions.compose}")
     implementation("${Dependencies.activityCompose}:${Versions.activityCompose}")
     implementation("${Dependencies.composeNavigation}:${Versions.composeNavigation}")
     implementation("${Dependencies.composeFoundation}:${Versions.compose}")
 
     //Lifecycle
+    //Lifecycle
     implementation("${Dependencies.lifecycleViewModel}:${Versions.lifecycle}")
+    implementation("${Dependencies.lifecycleRuntime}:${Versions.lifecycle}")
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
     kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
-//    implementation ("com.google.dagger:dagger:2.45")
-//    kapt ("com.google.dagger:dagger-compiler:2.45")
 
     //Testing
     implementation("${Dependencies.junit}:${Versions.junit}")

@@ -32,4 +32,6 @@ android {
     }
 }
 
-dependencies { }
+dependencies {
+    implementation(project(":p7libapi"))
+}

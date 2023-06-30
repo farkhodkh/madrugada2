@@ -51,6 +51,10 @@ dependencies {
 
     implementation(project(":p7libapi"))
 
+    //Dagger 2
+    implementation("${Dependencies.dagger}:${Versions.dagger}")
+    implementation("${Dependencies.composeRuntime}:${Versions.compose}")
+
     //implementation 'androidx.core:core-ktx:1.7.20'
     //implementation 'androidx.appcompat:appcompat:1.6.1'
     //implementation 'com.google.android.material:material:1.8.0'
@@ -59,4 +63,8 @@ dependencies {
     //androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     //implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+
+    //Modules
+    implementation(project(":core"))
+    implementation(project(":util"))
 }

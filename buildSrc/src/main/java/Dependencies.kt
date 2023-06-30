@@ -30,6 +30,7 @@ object Dependencies {
     const val composeUiUtil = "androidx.compose.ui:ui-util"
     const val composeUiToolPreview = "androidx.compose.ui:ui-tooling-preview"
     const val composeUiTool = "androidx.compose.ui:ui-tooling"
+    const val composeRuntime = "androidx.compose.runtime:runtime"
     const val composeLiveDate = "androidx.compose.runtime:runtime-livedata"
 
     const val composeNavigation = "androidx.navigation:navigation-compose"
@@ -37,7 +38,7 @@ object Dependencies {
     const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx"
     const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-compose"
 
-    const val gson = "implementation 'com.google.code.gson:gson"
+    const val gson = "com.google.code.gson:gson"
 
 }
 
