@@ -1,5 +1,6 @@
 package ru.petroplus.pos.ui.main
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -13,8 +14,11 @@ import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
 import ru.petroplus.pos.p7LibApi.dto.OK
 import ru.petroplus.pos.util.ConfigurationFileReader
+import ru.petroplus.pos.util.constants.Constants.CONFIG_FILE_NAME
 import ru.petroplus.pos.util.ext.toInitDataDto
-import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
+import java.io.IOException
 import kotlin.system.exitProcess
 
 class MainActivityViewModel(
@@ -29,8 +33,6 @@ class MainActivityViewModel(
     val viewState: StateFlow<MainScreenState> = _viewState
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MainScreenState.StartingState)
 
-    private var cacheDir: File? = null
-
     init {
         viewModelScope.launch {
             delay(2000)
@@ -38,31 +40,19 @@ class MainActivityViewModel(
         }
     }
 
-    private fun readIniFile() {
-        cacheDir?.let { dir ->
-            if (dir.exists()) {
-                val confFile = dir
-                    .listFiles()
-                    ?.filter { it.isFile && it.name.endsWith(".ini") }?.firstOrNull()
-
-                if (confFile == null) {
-                    _viewState.value = MainScreenState.NoIniFileError
-                } else {
-                    viewModelScope.launch {
-                        readConfigurationFile(confFile)
-                    }
-                }
-            }
+    fun readConfigurationFile(confFile: FileInputStream?) {
+        if (confFile == null) {
+            _viewState.value =
+                MainScreenState.NoIniFileError
+            return
         }
-    }
 
-    private fun readConfigurationFile(confFile: File) {
         try {
             configurationReaderUtil
                 .readConfigurationFileContent(confFile)
         } catch (ex: ConfigurationFileReader.ConfigurationFileReaderException) {
             _viewState.value =
-                MainScreenState.CheckingSettingsError(R.string.cache_dir_access_error)
+                MainScreenState.CheckingSettingsError(errorMessageId = R.string.cache_dir_access_error)
             return
         }
 
@@ -83,16 +73,6 @@ class MainActivityViewModel(
         }
     }
 
-    fun setCacheDir(cacheDir: File?) {
-        cacheDir?.let {
-            this.cacheDir = it
-            readIniFile()
-        } ?: run {
-            _viewState.value =
-                MainScreenState.CheckingSettingsError(R.string.cache_dir_access_error)
-        }
-    }
-
     fun configurationFileDownloadRequired() {
         _viewState.value = MainScreenState.DownloadIniFileState
     }
@@ -101,7 +81,22 @@ class MainActivityViewModel(
         exitProcess(0)
     }
 
-    fun configurationFileDownloaded() {
-        _viewState.value = MainScreenState.CheckingSuccessState
+    fun configurationFileDownloaded(baseContext: Context, configurationContent: String) {
+
+        try {
+            val filename = CONFIG_FILE_NAME
+            baseContext.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(configurationContent.toByteArray())
+            }
+            _viewState.value = MainScreenState.CheckingSuccessState
+
+        } catch (ex: FileNotFoundException) {
+            _viewState.value =
+                MainScreenState.CheckingSettingsError(R.string.cache_dir_access_error)
+        } catch (ex: IOException) {
+            _viewState.value =
+                MainScreenState.CheckingSettingsError(errorMessage = ex.localizedMessage.toString())
+        }
+
     }
 }

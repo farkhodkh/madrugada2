@@ -22,6 +22,8 @@ import ru.petroplus.pos.navigation.BottomNavigationController
 import ru.petroplus.pos.navigation.Screens
 import ru.petroplus.pos.ui.BottomNavWithBadgesTheme
 import ru.petroplus.pos.ui.navigation.NavigationController
+import ru.petroplus.pos.util.constants.Constants
+import java.io.FileNotFoundException
 import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
@@ -42,12 +44,17 @@ class MainActivity : ComponentActivity() {
                 }
 
                 MainScreenState.CheckingSettingsState -> {
-                    viewModel.setCacheDir(cacheDir = cacheDir)
+                    try {
+                        val fis = applicationContext.openFileInput(Constants.CONFIG_FILE_NAME)
+                        viewModel.readConfigurationFile(fis)
+                    } catch (ex: FileNotFoundException) {
+                        viewModel.readConfigurationFile(null)
+                    }
                 }
 
                 MainScreenState.CheckingSuccessState -> {
                     val navController = rememberNavController()
-                    BottomNavWithBadgesTheme() {
+                    BottomNavWithBadgesTheme {
                         Scaffold(
                             bottomBar = {
                                 BottomNavigationController(
@@ -83,16 +90,24 @@ class MainActivity : ComponentActivity() {
                 }
 
                 is MainScreenState.CheckingSettingsError -> {
-                    Toast.makeText(
-                        this,
-                        (viewState as MainScreenState.CheckingSettingsError).errorMessageId,
-                        Toast.LENGTH_LONG)
-                        .show()
+                    with((viewState as MainScreenState.CheckingSettingsError)) {
+                        val message = if (this.errorMessageId == 0) {
+                            this.errorMessage
+                        } else {
+                            this.errorMessage
+                        }
+                        Toast.makeText(
+                            this@MainActivity,
+                            message,
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                    }
                 }
 
                 MainScreenState.DownloadIniFileState -> {
-                    FilePickerDialog() {
-                        viewModel.configurationFileDownloaded()
+                    FilePickerDialog { configurationContent ->
+                        viewModel.configurationFileDownloaded(baseContext, configurationContent)
                     }
                 }
 
