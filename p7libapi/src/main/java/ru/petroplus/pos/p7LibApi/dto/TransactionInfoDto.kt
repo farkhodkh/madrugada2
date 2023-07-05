@@ -1,7 +1,7 @@
 package ru.petroplus.pos.p7LibApi.dto
 
 /**
- * TODO Нужны описание класса и свойств
+ * TODO -  Юрий добавь описание
  * @property onlineTmNumber -
  * @property cardNumber -
  * @property terminalNumber -

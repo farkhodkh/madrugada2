@@ -2,7 +2,7 @@ package ru.petroplus.pos.p7LibApi.requests
 
 /**
  * Класс задаёт структуру информационного сообщения, адресованного карте
- * TODO - добавить описание полей свойств
+ * TODO -  Юрий добавь описание
  * @property GLA -
  * @property INS -
  * @property P1 -
