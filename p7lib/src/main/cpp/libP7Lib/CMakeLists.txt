@@ -4,11 +4,6 @@ set(LIB_NAME P7Lib_lib)
 # Source groups
 ################################################################################
 
-#set (CommonPrjctsDir ../../../../../..)
-
-
-
-
 set(Self
     "${P7LIB_LIB_DIR}/P7Lib_lib.h"
     "${P7LIB_LIB_DIR}/P7Lib_lib.cpp"

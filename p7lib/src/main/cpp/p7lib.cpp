@@ -9,6 +9,7 @@
 #include <map>
 
 #include "P7Lib_lib.h"
+#include "TypesConversions.h"
 
 using namespace P7Lib;
 //---------------------------------------------------------------------------------------------------------------
@@ -18,7 +19,7 @@ const char *TAG = "P7Lib";
 //---------------------------------------------------------------------------------------------------------------
 
 class TCallbackController {
-public: //private:
+ private:
   static JNIEnv *getJniEnv();
 
   static JavaVM *JVM;
@@ -33,9 +34,7 @@ public: //private:
 //  static jmethodID ChangeParamCallbackID;
 //  static int       ChangeParamCallback(TSomeType &Value);
 
-public:
-  static std::string JStringToString(JNIEnv *env, jstring jStr);
-
+ public:
   static TCallbacksSet GetCallbacks(JNIEnv *jniEnv, jobject &CallbackObjectJava);
   static void Free(void);
 };
@@ -43,27 +42,6 @@ public:
 
 JavaVM *TCallbackController::JVM = nullptr;
 jobject TCallbackController::CallbackObject = nullptr;
-//--------------------------------------------------
-
-std::string TCallbackController::JStringToString(JNIEnv *env, jstring jStr) {
-    if (!jStr)
-        return "";
-
-    jclass     stringClass = env->GetObjectClass(jStr);
-    jmethodID  getBytes = env->GetMethodID(stringClass, "getBytes", "(Ljava/lang/String;)[B");
-    jbyteArray stringJbytes = (jbyteArray) env->CallObjectMethod(jStr, getBytes, env->NewStringUTF("UTF-8"));
-
-    auto length = (size_t) env->GetArrayLength(stringJbytes);
-    jbyte* pBytes = env->GetByteArrayElements(stringJbytes, nullptr);
-
-    std::string ret = std::string((char *)pBytes, length);
-    env->ReleaseByteArrayElements(stringJbytes, pBytes, JNI_ABORT);
-
-    env->DeleteLocalRef(stringJbytes);
-    env->DeleteLocalRef(stringClass);
-
-    return ret;
-}
 //--------------------------------------------------
 
 JNIEnv* TCallbackController::getJniEnv() {
@@ -143,6 +121,9 @@ Java_ru_petroplus_pos_p7Lib_impl_P7LibRepositoryImpl_init(JNIEnv *env, jobject t
     TTransactionUUID LastOpGUID;
     std::string      TempDir;
     std::string      DataDir;
+
+     TempDir = TP7LibTypeConvertor::JStringToString(env, temp_dir);
+     DataDir = TP7LibTypeConvertor::JStringToString(env, data_dir);
 
     TP7ErrorType Err = TP7Lib::Init(IniData, LastOpGUID,
                                     TCallbackController::GetCallbacks(env, callbacks),
