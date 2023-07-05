@@ -9,10 +9,24 @@ cmake_minimum_required(VERSION 3.18.1)
 
 project("p7lib")
 
+message("${CMAKE_SYSTEM_NAME} is target system")
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
 # Gradle automatically packages shared libraries with your APK.
+
+set (COMMON_PRJCTS_DIR ${PROJECT_SOURCE_DIR}/../../../../..)
+set (P7LIB_LIB_DIR ${COMMON_PRJCTS_DIR}/P7LIB_LIB)
+set (P7LIB_DLL_DIR ${COMMON_PRJCTS_DIR}/P7LIB_DLL)
+
+message("COMMON_PRJCTS_DIR is ${COMMON_PRJCTS_DIR}")
+message("P7LIB_LIB_DIR     is ${P7LIB_LIB_DIR}")
+message("P7LIB_DLL_DIR     is ${P7LIB_DLL_DIR}")
+
+
+add_subdirectory(libP7Lib)
+
 
 add_library( # Sets the name of the library.
         p7lib
@@ -23,6 +37,19 @@ add_library( # Sets the name of the library.
         # Provides a relative path to your source file(s).
         p7lib.cpp
         )
+
+################################################################################
+# Include directories
+################################################################################
+
+
+
+#set (P7LIB_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../P7Lib;")
+
+include_directories(p7lib
+        "${P7LIB_LIB_DIR};"
+)
+
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -41,9 +68,13 @@ find_library( # Sets the name of the path variable.
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
 
+
+
+
 target_link_libraries( # Specifies the target library.
         p7lib
 
         # Links the target library to the log library
         # included in the NDK.
-        ${log-lib})
+        ${log-lib}
+        "P7Lib_lib")
