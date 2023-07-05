@@ -1,6 +1,5 @@
 package ru.petroplus.pos.p7LibApi
 
-import ru.petroplus.pos.p7LibApi.`typealias`.TransactionUUID
 import ru.petroplus.pos.p7LibApi.dto.*
 import ru.petroplus.pos.p7LibApi.dto.card.CardInfo
 
@@ -23,7 +22,7 @@ interface IP7LibRepository {
      */
     fun init(
         initData: InitDataDto,
-        lastOpGUID : TransactionUUID,
+        lastOpGUID : TransactionUUIDDto,
         callbacks : IP7LibCallbacks,
         tempDir : String,
         dataDir : String,
@@ -50,13 +49,13 @@ interface IP7LibRepository {
      * @param params - задаёт параметры для выполнения операции (код услуги, код кошелька, цену,
      * количество и стоимость проданной услуги, а также шифрованный PIN)
      * @param info - <=> используется для возвращения информации о выполненной транзакции, а также содержит информации, которую необходимо напечатать на чеке
-     * @param uuid - <=> используется для возвращения информации о идентификаторах выполненной операции
+     * @param transactionUuid - <=> используется для возвращения информации о идентификаторах выполненной операции
      * @return результат выполнения команды, ResultCode
      */
     fun debit(
         params: DebitParamsDto,
         info: TransactionInfoDto,
-        uuid: TransactionUUID
+        transactionUuid: TransactionUUIDDto
     ): ResultCode
 
     /**
@@ -64,13 +63,13 @@ interface IP7LibRepository {
      * @param params - задаёт параметры для выполнения операции (код купленной услуги, а также цену, количество и стоимость услуги)
      * @param info - <=> используется для возвращения информации о выполненной транзакции, а также содержит информации,
      * которую необходимо напечатать на чеке
-     * @param uuid - <=>используется для возвращения информации о идентификаторах выполненной операции
+     * @param transactionUuid - <=>используется для возвращения информации о идентификаторах выполненной операции
      * @return результат выполнения команды, ResultCode
      */
     fun refund(
         params: RefundParamsDto,
         info: TransactionInfoDto,
-        uuid: TransactionUUID
+        transactionUuid: TransactionUUIDDto
     ): ResultCode
 
     /**

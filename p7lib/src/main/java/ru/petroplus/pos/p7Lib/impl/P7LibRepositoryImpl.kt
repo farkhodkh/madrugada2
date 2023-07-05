@@ -2,7 +2,6 @@ package ru.petroplus.pos.p7Lib.impl
 
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
-import ru.petroplus.pos.p7LibApi.`typealias`.TransactionUUID
 import ru.petroplus.pos.p7LibApi.dto.*
 import ru.petroplus.pos.p7LibApi.dto.card.CardInfo
 
@@ -13,7 +12,7 @@ class P7LibRepositoryImpl : IP7LibRepository {
 
     external override fun init(
         initData: InitDataDto,
-        lastOpGUID: TransactionUUID,
+        lastOpGUID: TransactionUUIDDto,
         callbacks: IP7LibCallbacks,
         tempDir: String,
         dataDir: String
@@ -26,13 +25,13 @@ class P7LibRepositoryImpl : IP7LibRepository {
     external override fun debit(
         params: DebitParamsDto,
         info: TransactionInfoDto,
-        uuid: TransactionUUID
+        transactionUuid: TransactionUUIDDto
     ): ResultCode
 
     external override fun refund(
         params: RefundParamsDto,
         info: TransactionInfoDto,
-        uuid: TransactionUUID
+        transactionUuid: TransactionUUIDDto
     ): ResultCode
 
     external override fun getErrorInfo(errorInfo: ErrorInfoDto): ResultCode

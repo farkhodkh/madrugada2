@@ -2,7 +2,7 @@ package ru.petroplus.pos.p7LibApi.dto.card
 
 /**
  * Interface для определения типов карт
- *  TODO - Заполнить описание всех реализаций
+ *  TODO -  Юрий добавь описание
  */
 sealed interface CardType
 
