@@ -1,7 +1,7 @@
 package ru.petroplus.pos.di
 
 import android.content.Context
-import android.content.ServiceConnection
+//import android.content.ServiceConnection
 import dagger.Module
 import dagger.Provides
 import ru.petroplus.pos.core.AppScope
