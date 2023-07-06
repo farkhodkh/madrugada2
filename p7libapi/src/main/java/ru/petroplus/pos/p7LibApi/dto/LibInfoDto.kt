@@ -2,7 +2,7 @@ package ru.petroplus.pos.p7LibApi.dto
 
 /**
  * Класс который содержит информацию о номере эсквайра и номер терминала, а также номер версии библиотеки.
- * TODO - Добавить описание свойств
+ * TODO -  Юрий добавь описание
  * @property acquirerId -
  * @property terminalNum -
  * @property majorVersion -

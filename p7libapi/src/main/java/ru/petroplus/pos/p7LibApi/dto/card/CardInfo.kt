@@ -2,7 +2,7 @@ package ru.petroplus.pos.p7LibApi.dto.card
 
 /**
  * Interface информации о карте
- * TODO - Заполнить описание
+ * TODO -  Юрий добавь описание
  * @property isReactCard -
  * @property PTC -
  * @property cardId -
