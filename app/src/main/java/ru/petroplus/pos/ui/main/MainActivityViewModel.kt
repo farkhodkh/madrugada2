@@ -12,6 +12,7 @@ import ru.petroplus.pos.R
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
 import ru.petroplus.pos.p7LibApi.dto.OK
+import ru.petroplus.pos.p7LibApi.dto.TransactionUUIDDto
 import ru.petroplus.pos.util.ConfigurationFileReader
 import ru.petroplus.pos.util.ext.toInitDataDto
 import java.io.File
@@ -68,7 +69,7 @@ class MainActivityViewModel(
 
         val result = p7LibraryRepository.init(
             configurationReaderUtil.properties.toInitDataDto(),
-            "",
+            TransactionUUIDDto(),
             callbacks,
             "",
             ""
