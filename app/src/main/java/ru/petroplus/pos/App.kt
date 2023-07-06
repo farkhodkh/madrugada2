@@ -5,7 +5,6 @@ import android.content.Context
 import ru.petroplus.pos.di.AppComponent
 import ru.petroplus.pos.di.AppComponentDependencies
 import ru.petroplus.pos.di.DaggerAppComponent
-import ru.petroplus.pos.ui.main.MainActivity
 
 class App : Application() {
 
@@ -29,11 +28,13 @@ class App : Application() {
 }
 
 val Context.appComponent: AppComponent
-    get() = when (this) {
-        is MainActivity -> {
-            App.appComponent
-        }
-        else -> {
-            this.applicationContext.appComponent
-        }
-    }
+    get() = App.appComponent
+//    = when (this) {
+//        is MainActivity -> {
+//            App.appComponent
+//        }
+//        else -> {
+//            App.appComponent
+////            this.applicationContext.appComponent
+//        }
+//    }

@@ -61,4 +61,6 @@ dependencies {
     implementation("${Dependencies.composeNavigation}:${Versions.composeNavigation}")
     implementation("${Dependencies.composeFoundation}:${Versions.compose}")
 
+    //Modules
+    implementation(project(":util"))
 }
