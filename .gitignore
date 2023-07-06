@@ -18,6 +18,8 @@
 /util/build
 /p7lib/build
 /p7libapi/build
+/evotorsdk/build
+/sdkapi/build
 /captures
 .externalNativeBuild
 .cxx

@@ -96,7 +96,7 @@ class MainActivityViewModel(
                 MainScreenState.CheckingSettingsError(R.string.cache_dir_access_error)
         } catch (ex: IOException) {
             _viewState.value =
-                MainScreenState.CheckingSettingsError(errorMessage = ex.localizedMessage.toString())
+                MainScreenState.CheckingSettingsError(errorMessage = ex.localizedMessage.orEmpty())
         }
 
     }
