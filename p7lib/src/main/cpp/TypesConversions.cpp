@@ -9,10 +9,7 @@
 
 //---------------------------------------------------------------------------------------------------------------
 
-std::string TP7LibTypeConvertor::JStringToString(JNIEnv *env, jstring jStr) {
-  if (!jStr)
-    return "";
-
+void TP7LibTypeConvertor::JStringToString(JNIEnv *env, const jstring &jStr, std::string &Str) {
   jclass     stringClass = env->GetObjectClass(jStr);
   jmethodID  getBytes = env->GetMethodID(stringClass, "getBytes", "(Ljava/lang/String;)[B");
   jbyteArray stringJbytes = (jbyteArray) env->CallObjectMethod(jStr, getBytes, env->NewStringUTF("UTF-8"));
@@ -20,15 +17,22 @@ std::string TP7LibTypeConvertor::JStringToString(JNIEnv *env, jstring jStr) {
   auto length = (size_t) env->GetArrayLength(stringJbytes);
   jbyte* pBytes = env->GetByteArrayElements(stringJbytes, nullptr);
 
-  std::string ret = std::string((char *)pBytes, length);
-  env->ReleaseByteArrayElements(stringJbytes, pBytes, JNI_ABORT);
+  Str = std::string((char *)pBytes, length);
 
+  env->ReleaseByteArrayElements(stringJbytes, pBytes, JNI_ABORT);
   env->DeleteLocalRef(stringJbytes);
   env->DeleteLocalRef(stringClass);
-
-  return ret;
 }
 //--------------------------------------------------
+
+void TP7LibTypeConvertor::StringToJString(JNIEnv *env, const std::string &Str, jstring &jStr) {
+  if (jStr) {
+    env->DeleteLocalRef(jStr);  }
+  jStr = env->NewStringUTF(Str.c_str());
+}
+//--------------------------------------------------
+
+
 
 
 

@@ -18,7 +18,8 @@ using namespace P7Lib;
 
 class TP7LibTypeConvertor {
 public:
-  static std::string JStringToString(JNIEnv *env, jstring jStr);
+  static void JStringToString(JNIEnv *env, const jstring &jStr,    std::string &Str);
+  static void StringToJString(JNIEnv *env, const std::string &Str, jstring &jStr);
 
 
 };
