@@ -2,7 +2,7 @@ package ru.petroplus.pos.util
 
 import android.util.Patterns
 import ru.petroplus.pos.util.ext.isNotConfigurationCommentedLine
-import java.io.File
+import java.io.FileInputStream
 import java.io.InputStream
 import java.util.*
 
@@ -16,9 +16,9 @@ class ConfigurationFileReader() {
     private val REQUIRED_FIELDS_LITS = listOf("AcquireID", "TerminalID", "Host1_ip", "Host1_port")
 
     @Throws(ConfigurationFileReaderException::class)
-    fun readConfigurationFileContent(configurationFile: File) {
+    fun readConfigurationFileContent(configurationFile: FileInputStream) {
         try {
-            inputStream = configurationFile.inputStream()
+            inputStream = configurationFile
             properties.load(inputStream)
         } catch (ex: Exception) {
             throw ConfigurationFileReaderException(true, ex.localizedMessage.orEmpty())

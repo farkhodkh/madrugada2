@@ -7,6 +7,8 @@ object Dependencies {
     const val namespaceMainScreen = "ru.petroplus.pos.mainscreen"
     const val namespaceP7Lib = "ru.petroplus.pos.p7Lib"
     const val namespaceP7LibApi = "ru.petroplus.pos.p7LibApi"
+    const val namespaceEvotorSdk = "ru.petroplus.pos.evotorsdk"
+    const val namespaceSdkApi = "ru.petroplus.pos.sdkapi"
 
     const val androidApplication = "com.android.application"
     const val kotlinAndroid = "android"
@@ -39,6 +41,7 @@ object Dependencies {
     const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-compose"
 
     const val gson = "com.google.code.gson:gson"
+    const val evotor = "com.github.evotor:integration-library"
 
 }
 
@@ -69,4 +72,5 @@ object Versions {
     const val composeConstraint = "1.0.0-rc01"
     const val lifecycle = "2.5.1"
     const val gson = "2.10.1"
+    const val evotor = "v0.6.03"
 }

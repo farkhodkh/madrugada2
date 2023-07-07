@@ -1,6 +1,6 @@
 package ru.petroplus.pos.blockingScreen
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,15 +21,16 @@ import ru.petroplus.pos.ui.R
 fun InsertClientCardScreen(
     modifier: Modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight()
-) {
+        .fillMaxHeight(),
+        onClickListener: () -> Unit,
+    ) {
     Surface(
         modifier = modifier,
         elevation = 3.dp,
     ) {
-        Box(
+        Column(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 modifier = Modifier.padding(16.dp),
@@ -44,5 +45,5 @@ fun InsertClientCardScreen(
 @Preview
 @Composable
 fun previewInsertClientCardScreen() {
-    InsertClientCardScreen()
+    InsertClientCardScreen(onClickListener = {})
 }

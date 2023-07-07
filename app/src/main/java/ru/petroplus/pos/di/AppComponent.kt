@@ -13,8 +13,10 @@ import ru.petroplus.pos.p7Lib.di.P7LibComponentDependencies
     dependencies = [AppComponentDependencies::class]
 )
 @AppScope
-interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies {
-    //override val libraryRepository: IP7LibRepository
+interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies
+//    , EvotorComponentDependencies
+{
+//    override val sdkConnection: ServiceConnection
 
     @Component.Builder
     interface Builder {

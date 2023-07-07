@@ -5,6 +5,7 @@ import ru.petroplus.pos.p7LibApi.dto.ResultCode
 import ru.petroplus.pos.p7LibApi.dto.TransactionInfoDto
 import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petroplus.pos.p7LibApi.requests.ApduData
+import ru.petroplus.pos.p7LibApi.responces.ApduAnswer
 import ru.petroplus.pos.p7LibApi.responces.OperationResult
 
 /**
@@ -20,29 +21,32 @@ interface IP7LibCallbacks {
 
     /**
      * Метод "Сброса карты", возвращает код результата операции
+     * @param answer - Ответ APDU
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun cardReset(): OperationResult
+    fun cardReset(answer: ApduAnswer): OperationResult
 
     /**
      * Обмен данными с картой
      * @param data - Информационное сообщение для передачи на карту
+     * @param answer - Ответ APDU
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun sendDataToCard(data: ApduData): OperationResult
+    fun sendDataToCard(data: ApduData, answer: ApduAnswer): OperationResult
 
     /**
      * Сброс SAM карты
+     * @param answer - Ответ APDU
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun samReset(): OperationResult
+    fun samReset(answer: ApduAnswer): OperationResult
 
     /**
      * Обмен данными с SAM картой
      * @param data - Информационное сообщение для передачи на карту
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun sendToSamCard(data: ApduData): OperationResult
+    fun sendToSamCard(data: ApduData, answer: ApduAnswer): OperationResult
 
     /**
      * Проверка наличия установленного соединения с "АС"

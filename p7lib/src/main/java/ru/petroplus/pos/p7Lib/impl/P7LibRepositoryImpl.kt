@@ -29,7 +29,7 @@ class P7LibRepositoryImpl : IP7LibRepository {
     ): ResultCode
 
     external override fun refund(
-        params: RefundParamsDto,
+        param: RefundParamsDto,
         info: TransactionInfoDto,
         transactionUuid: TransactionUUIDDto
     ): ResultCode

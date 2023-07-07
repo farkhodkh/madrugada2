@@ -5,5 +5,33 @@
     <string name="need_to_upload_ini_file_label_text">Не обнаружен ini файл с настройками терминала. Загрузить?</string>
     <string name="ini_file_description_label_text">Файл настроек необходимо получить у службы поддержки и загрузить на терминале</string>
     <string name="Cancel">Отмена</string>
-    <string name="OK">ДА</string>
+    <string name="OK">OK</string>
+    <string name="add_configuration_content_label_text">Добавление конфигурации</string>
+    <string name="configuration_content_label_text">Содержание конфигурационного файла</string>
+    <string name="put_configuration_content_here">Вставьте содержание конфигурационного файла</string>
+    <string name="configuration_demo_content">[General]
+AcquireID = 4000
+TerminalID = 12
+
+[Authorization]
+;Host1_ip = 91.240.172.69
+;Host1_port = 6567
+;Host1_ip = 127.0.0.1
+;Host1_ip = 91.240.172.192
+Host1_ip = 91.240.172.195
+Host1_port = 6567
+
+[AuthData]
+AuthPin = "000000000000"
+LastOnlineTrz=157
+
+[Signature]
+Data = ""
+
+[UUID]
+LastGenTime=1685106271
+ClockSequence=2331
+HasNodeID=1
+NodeID=01B652966F64
+</string>
 </resources>
