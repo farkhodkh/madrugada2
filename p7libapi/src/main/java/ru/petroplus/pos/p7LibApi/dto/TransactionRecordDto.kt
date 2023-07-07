@@ -23,12 +23,15 @@ import ru.petroplus.pos.p7LibApi.dto.card.CardType
 //ключ - DebitToken или просто Token
 //+ номер смены
 //+ тип операции (дебет/возврат)
+/**
+ * TODO - Юрий, добавиь описание класса и типов
+ */
 class TransactionRecordDto(
     val cardNumber: Int,
+    val shiftNumber: Long,
     val timeStamp: Long,
-    val returnTimeStamp: Long,
-    val serviceIdOrigEmit: Int,
-    val serviceIdCurrEmit: Int,
+    val serviceOriginalEmit: Byte,
+    val serviceCurrentEmit: Byte,
     val totalVolume: Double,
     val price: Double,
     val totalSum: Double,
@@ -36,12 +39,11 @@ class TransactionRecordDto(
     val hasReturn: Boolean,
     val rollbackCode: Int,
     val debitToken: String,
-    val token: String,
     val terminalNumber: Int,
     val crc32: Int,
     val operationType: Int,
     val cardType: CardType,
     val clientSum: Double,
-    val DeltaBonus: Double,
-    val shiftNumber: Long
+    val deltaBonus: Double,
+    val returnTimeStamp: Long,
 )
