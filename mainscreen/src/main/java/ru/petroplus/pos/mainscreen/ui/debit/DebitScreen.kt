@@ -12,11 +12,10 @@ fun DebitScreen(
     onClickListener: (String) -> Unit,
     viewModel: DebitViewModel
 ) {
-
     when (viewModel.viewState.value) {
         DebitViewState.StartingState -> {
             InsertClientCardScreen() {
-
+                viewModel.someTest()
             }
         }
         else -> {
@@ -28,6 +27,7 @@ fun DebitScreen(
                 }
             }
         }
+
     }
 
 }

@@ -7,18 +7,31 @@ import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.savedstate.SavedStateRegistryOwner
+import kotlinx.coroutines.flow.onEach
+import ru.petroplus.pos.sdkapi.CardReaderRepository
 
 class DebitViewModel(
-//    private val sdkConnection: ServiceConnection,
+    private val sdkConnection: CardReaderRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _viewState = mutableStateOf<DebitViewState>(DebitViewState.StartingState)
     val viewState: State<DebitViewState> = _viewState
 
+    init {
+        sdkConnection.sdkRepository.eventBus.events
+            .onEach {
+                val b = 0
+            }
+    }
+
+    fun someTest() {
+        sdkConnection.sdkRepository.sendSDKCommand("5342520101")
+    }
+
     companion object {
         fun provideFactory(
-            //myRepository: ServiceConnection,
+            repository: CardReaderRepository,
             owner: SavedStateRegistryOwner,
             defaultArgs: Bundle? = null,
         ): AbstractSavedStateViewModelFactory =
@@ -29,8 +42,7 @@ class DebitViewModel(
                     modelClass: Class<T>,
                     handle: SavedStateHandle
                 ): T {
-//                    return DebitViewModel(myRepository, handle) as T
-                    return DebitViewModel(handle) as T
+                    return DebitViewModel(repository, handle) as T
                 }
             }
     }
