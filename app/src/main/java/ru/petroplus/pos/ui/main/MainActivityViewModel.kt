@@ -57,6 +57,7 @@ class MainActivityViewModel(
             return
         }
 
+
         val result = p7LibraryRepository.init(
             configurationReaderUtil.properties.toInitDataDto(),
             TransactionUUIDDto(),

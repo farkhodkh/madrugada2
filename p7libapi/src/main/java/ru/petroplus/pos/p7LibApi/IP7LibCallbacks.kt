@@ -24,7 +24,7 @@ interface IP7LibCallbacks {
      * @param answer - Ответ APDU
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun cardReset(answer: ApduAnswer): OperationResult
+    fun cardReset(answer: ApduAnswer): ResultCode
 
     /**
      * Обмен данными с картой
@@ -32,21 +32,21 @@ interface IP7LibCallbacks {
      * @param answer - Ответ APDU
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun sendDataToCard(data: ApduData, answer: ApduAnswer): OperationResult
+    fun sendDataToCard(data: ApduData, answer: ApduAnswer): ResultCode
 
     /**
      * Сброс SAM карты
      * @param answer - Ответ APDU
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun samReset(answer: ApduAnswer): OperationResult
+    fun samReset(answer: ApduAnswer): ResultCode
 
     /**
      * Обмен данными с SAM картой
      * @param data - Информационное сообщение для передачи на карту
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun sendToSamCard(data: ApduData, answer: ApduAnswer): OperationResult
+    fun sendDataToSam(data: ApduData, answer: ApduAnswer): ResultCode
 
     /**
      * Проверка наличия установленного соединения с "АС"
@@ -60,24 +60,24 @@ interface IP7LibCallbacks {
      * @param data - бинарное нешифрованное информационное сообщение для передачи в АС
      * @return Код результат выполнения операции
      */
-    fun sendToAS(data: ByteArray): OperationResult
+    fun doASDataExchange(data: ByteArray): OperationResult
 
     /**
      * Метод поиска последней транзакции по номеру карты
      * @param cardNumber - номер карты
      * @param transactionEntity - <=> Запись в базе данных
      */
-    fun findLastTransaction(cardNumber: Int, transactionEntity: TransactionInfoDto): ResultCode
+    fun findLastTransactionDB(cardNumber: Int, record: TransactionRecordDto): ResultCode
 
     /**
      * Обновление записей транзакции в БД
      * @param record - Содержание транзакции для печати
      */
-    fun updateTransaction(record: TransactionRecordDto)
+    fun completeTransactionDB(record: TransactionRecordDto): ResultCode
 
     /**
      * Распечатка чека по результатам транзакции
      * @param data - Данные для заполнения чека для печати
      */
-    fun printSimpleDoc(data: PrintDataDto)
+    fun printSimpleDoc(data: PrintDataDto): ResultCode
 }

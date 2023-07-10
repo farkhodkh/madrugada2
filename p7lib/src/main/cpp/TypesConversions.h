@@ -16,11 +16,23 @@ using namespace std;
 using namespace P7Lib;
 //---------------------------------------------------------------------------------------------------------------
 
-class TP7LibTypeConvertor {
+class TP7LibTypes {
 public:
+  static void JByteArrayToVector(JNIEnv *env, const jbyteArray &Array, std::vector<unsigned char> *Vector);
+  static void VectorToJByteArray(JNIEnv *env, const std::vector<unsigned char> &Vector, jbyteArray *Array);
+
   static void JStringToString(JNIEnv *env, const jstring &jStr,    std::string &Str);
   static void StringToJString(JNIEnv *env, const std::string &Str, jstring &jStr);
 
+  static void DeleteLocalRef(JNIEnv *env, jobject *ApduAnswerJObj);
+
+  static TP7ErrorType GetResultCode(JNIEnv *env, const jobject *ResultCodeJObj);
+
+  static void CreateApduAnswerJObj(JNIEnv *env, jobject *ApduAnswerJObj);
+  static void ConvertApduAnswerFromJObj(JNIEnv *env, const jobject *ApduAnswerJObj, TAPDUAnswer *APDUAnswer);
+
+  static void CreateApduDataJObj(JNIEnv *env, jobject *ApduDataJObj);
+  static void ConvertApduDataToJObj(JNIEnv *env, const TAPDUData &APDUData, jobject *ApduDataJObj);
 
 };
 //---------------------------------------------------------------------------------------------------------------

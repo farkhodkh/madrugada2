@@ -38,6 +38,8 @@ add_library( # Sets the name of the library.
         p7lib.cpp
         TypesConversions.h
         TypesConversions.cpp
+        CallbackController.h
+        CallbackController.cpp
 )
 
 ################################################################################

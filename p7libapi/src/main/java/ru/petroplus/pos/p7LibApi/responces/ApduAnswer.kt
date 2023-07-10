@@ -7,7 +7,7 @@ package ru.petroplus.pos.p7LibApi.responces
  * @property data -
  */
 class ApduAnswer(
-    sw1: Int,
-    sw2: Int,
-    data: ByteArray
+    var sw1: Int,
+    var sw2: Int,
+    var data: ByteArray
 )

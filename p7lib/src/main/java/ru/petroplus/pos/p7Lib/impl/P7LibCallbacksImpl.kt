@@ -7,6 +7,7 @@ import ru.petroplus.pos.p7LibApi.dto.ResultCode
 import ru.petroplus.pos.p7LibApi.dto.TransactionInfoDto
 import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petroplus.pos.p7LibApi.requests.ApduData
+import ru.petroplus.pos.p7LibApi.responces.ApduAnswer
 import ru.petroplus.pos.p7LibApi.responces.OperationResult
 
 class P7LibCallbacksImpl : IP7LibCallbacks {
@@ -14,44 +15,46 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
         val b = 0
     }
 
-    override fun cardReset(): OperationResult {
+    override fun cardReset(answer: ApduAnswer): ResultCode {
         val b = 0
-        return OperationResult(OK, byteArrayOf())
+        return OK
     }
 
-    override fun sendDataToCard(data: ApduData): OperationResult {
+    override fun sendDataToCard(data: ApduData, answer: ApduAnswer): ResultCode {
         val b = 0
-        return OperationResult(OK, byteArrayOf())
+        return OK
     }
 
-    override fun samReset(): OperationResult {
-        return OperationResult(OK, byteArrayOf())
+    override fun samReset(answer: ApduAnswer): ResultCode {
+        return OK
     }
 
-    override fun sendToSamCard(data: ApduData): OperationResult {
-        return OperationResult(OK, byteArrayOf())
+    override fun sendDataToSam(data: ApduData, answer: ApduAnswer): ResultCode {
+        return OK
     }
 
     override fun connectToAS(timeUnit: Long): Boolean {
         return false
     }
 
-    override fun sendToAS(data: ByteArray): OperationResult {
+    override fun doASDataExchange(data: ByteArray): OperationResult {
         return OperationResult(OK, byteArrayOf())
     }
 
-    override fun findLastTransaction(
+    override fun findLastTransactionDB(
         cardNumber: Int,
-        transactionEntity: TransactionInfoDto
+        record: TransactionRecordDto
     ): ResultCode {
         return OK
     }
 
-    override fun updateTransaction(record: TransactionRecordDto) {
+    override fun completeTransactionDB(record: TransactionRecordDto): ResultCode {
         val d = 0
+        return OK
     }
 
-    override fun printSimpleDoc(data: PrintDataDto) {
+    override fun printSimpleDoc(data: PrintDataDto): ResultCode {
         val f = 0
+        return OK
     }
 }
