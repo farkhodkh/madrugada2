@@ -2,6 +2,9 @@ package ru.petroplus.pos.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
 
+/**
+ * Элемент для отображения единицы BottomBar
+ */
 data class BottomBarItem(
     val name: String,
     val route: String,

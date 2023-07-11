@@ -1,7 +1,11 @@
 package ru.petroplus.pos.p7Lib.impl
 
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
-import ru.petroplus.pos.p7LibApi.dto.*
+import ru.petroplus.pos.p7LibApi.dto.OK
+import ru.petroplus.pos.p7LibApi.dto.PrintDataDto
+import ru.petroplus.pos.p7LibApi.dto.ResultCode
+import ru.petroplus.pos.p7LibApi.dto.TransactionInfoDto
+import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petroplus.pos.p7LibApi.requests.ApduData
 import ru.petroplus.pos.p7LibApi.responces.ApduAnswer
 import ru.petroplus.pos.p7LibApi.responces.OperationResult
