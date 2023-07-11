@@ -1,5 +1,6 @@
 package ru.petroplus.pos.blockingScreen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,10 +34,10 @@ fun InsertClientCardScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(16.dp).clickable { onClickListener.invoke() },
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.h4,
-                text = stringResource(R.string.insert_card_label_text)
+                text = stringResource(R.string.insert_card_label_text),
             )
         }
     }

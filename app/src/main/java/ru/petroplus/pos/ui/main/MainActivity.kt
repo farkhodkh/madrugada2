@@ -1,5 +1,6 @@
 package ru.petroplus.pos.ui.main
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -35,6 +36,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         App.appComponent.inject(this)
+
         setContent {
             val viewState by viewModel.viewState.collectAsState()
 
@@ -54,6 +56,7 @@ class MainActivity : ComponentActivity() {
 
                 MainScreenState.CheckingSuccessState -> {
                     val navController = rememberNavController()
+
                     BottomNavWithBadgesTheme {
                         Scaffold(
                             bottomBar = {
