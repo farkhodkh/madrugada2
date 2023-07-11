@@ -6,9 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectIndexed
+import kotlinx.coroutines.launch
 import ru.petroplus.pos.sdkapi.CardReaderRepository
+import ru.petroplus.pos.ui.BuildConfig
+import ru.petroplus.pos.util.ext.byteArrayToString
 
 class DebitViewModel(
     private val sdkConnection: CardReaderRepository,
@@ -19,14 +23,35 @@ class DebitViewModel(
     val viewState: State<DebitViewState> = _viewState
 
     init {
-        sdkConnection.sdkRepository.eventBus.events
-            .onEach {
-                val b = 0
-            }
+        viewModelScope.launch {
+            sdkConnection
+                .sdkRepository
+                .eventBus
+                .events
+                .collectIndexed { index, value ->
+                    _viewState.value = DebitViewState.CommandExecutionState(value.byteArrayToString())
+                }
+        }
+
+        if (BuildConfig.DEBUG) {
+            _viewState.value = DebitViewState.DebugState
+        }
     }
 
-    fun someTest() {
-        sdkConnection.sdkRepository.sendSDKCommand("5342520101")
+    fun sendAPDUCommand(command: String) {
+        //APDU для выбора апплета
+        //
+        //00A4040008A000000003000000
+        //
+        //cla 00
+        //ins a4
+        //p1 04
+        //p2 00
+        //Lc 08
+        //Data A000000003000000
+
+        //5342520101
+        sdkConnection.sdkRepository.sendSDKCommand(command)
     }
 
     companion object {

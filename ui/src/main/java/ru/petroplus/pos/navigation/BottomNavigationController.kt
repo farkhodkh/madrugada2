@@ -12,6 +12,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 
+/**
+ * Контролер навигации в Bottom Bar
+ */
 @ExperimentalMaterialApi
 @Composable
 fun BottomNavigationController(
