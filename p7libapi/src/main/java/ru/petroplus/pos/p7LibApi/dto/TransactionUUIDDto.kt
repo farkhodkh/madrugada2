@@ -2,14 +2,14 @@ package ru.petroplus.pos.p7LibApi.dto
 
 /**
  * TODO - Юрий добавь описание
- * @property onlineTmNumber -
+ * @property onlineTransNumber -
  * @property lastGenTime -
  * @property clockSequence -
  * @property hasNodeId -
  * @property nodeId -
  */
 class TransactionUUIDDto(
-    var onlineTmNumber: Int = 0,
+    var onlineTransNumber: Int = 0,
     var lastGenTime: Long = 0L,
     var clockSequence: Int = 0,
     var hasNodeId: Boolean = false,

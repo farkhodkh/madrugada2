@@ -18,21 +18,28 @@ using namespace P7Lib;
 
 class TP7LibTypes {
 public:
-  static void JByteArrayToVector(JNIEnv *env, const jbyteArray &Array, std::vector<unsigned char> *Vector);
-  static void VectorToJByteArray(JNIEnv *env, const std::vector<unsigned char> &Vector, jbyteArray *Array);
+  static bool JByteArrayToVector(JNIEnv *env, const jbyteArray &Array, std::vector<unsigned char> *Vector);
+  static bool VectorToJByteArray(JNIEnv *env, const std::vector<unsigned char> &Vector, jbyteArray *Array);
 
-  static void JStringToString(JNIEnv *env, const jstring &jStr,    std::string &Str);
-  static void StringToJString(JNIEnv *env, const std::string &Str, jstring &jStr);
+  static bool JStringToString(JNIEnv *env, const jstring &jStr,    std::string &Str);
+  static bool StringToJString(JNIEnv *env, const std::string &Str, jstring &jStr);
 
-  static void DeleteLocalRef(JNIEnv *env, jobject *ApduAnswerJObj);
+  static bool DeleteLocalRef(JNIEnv *env, jobject *ApduAnswerJObj);
 
   static TP7ErrorType GetResultCode(JNIEnv *env, const jobject *ResultCodeJObj);
+  static bool ConvertResultCodeToJObj(JNIEnv *env, TP7ErrorType ResultCode, jobject *ResultCodeJObj);
 
-  static void CreateApduAnswerJObj(JNIEnv *env, jobject *ApduAnswerJObj);
-  static void ConvertApduAnswerFromJObj(JNIEnv *env, const jobject *ApduAnswerJObj, TAPDUAnswer *APDUAnswer);
+  static bool CreateApduAnswerJObj(JNIEnv *env, jobject *ApduAnswerJObj);
+  static bool ConvertApduAnswerFromJObj(JNIEnv *env, const jobject *ApduAnswerJObj, TAPDUAnswer *APDUAnswer);
 
-  static void CreateApduDataJObj(JNIEnv *env, jobject *ApduDataJObj);
-  static void ConvertApduDataToJObj(JNIEnv *env, const TAPDUData &APDUData, jobject *ApduDataJObj);
+  static bool CreateApduDataJObj(JNIEnv *env, jobject *ApduDataJObj);
+  static bool ConvertApduDataToJObj(JNIEnv *env, const TAPDUData &APDUData, jobject *ApduDataJObj);
+
+  static bool ConvertIniDataFromJObj(JNIEnv *env, const jobject *ApduDataJObj, TIniData *IniData);
+
+  static bool ConvertTransactionUUIDFromJObj(JNIEnv *env, const jobject *UUIDJObj, TTransactionUUID *UUID);
+
+
 
 };
 //---------------------------------------------------------------------------------------------------------------

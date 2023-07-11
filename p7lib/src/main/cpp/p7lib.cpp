@@ -25,24 +25,32 @@ Java_ru_petroplus_pos_p7Lib_impl_P7LibRepositoryImpl_init(JNIEnv *env, jobject t
                                                           jobject init_data, jobject last_op_guid,
                                                           jobject callbacks, jstring temp_dir,
                                                           jstring data_dir) {
+  bool isOK = true;
 
-    TIniData         IniData;
-    TTransactionUUID LastOpGUID;
-    std::string      TempDir;
-    std::string      DataDir;
+  TIniData         IniData;
+  TTransactionUUID LastOpGUID;
+  std::string      TempDir;
+  std::string      DataDir;
 
-    TP7LibTypes::JStringToString(env, temp_dir, TempDir);
-    TP7LibTypes::JStringToString(env, data_dir, DataDir);
+  if (isOK)  { isOK = TP7LibTypes::ConvertIniDataFromJObj(env, &init_data, &IniData);  }
+  if (isOK)  { isOK = TP7LibTypes::ConvertTransactionUUIDFromJObj(env, &last_op_guid, &LastOpGUID);  }
+  if (isOK)  { isOK = TP7LibTypes::JStringToString(env, temp_dir, TempDir);  }
+  if (isOK)  { isOK = TP7LibTypes::JStringToString(env, data_dir, DataDir);  }
 
-    TP7ErrorType Err = TP7Lib::Init(IniData, LastOpGUID,
-                                    TCallbackController::GetCallbacks(env, callbacks),
-                                    TempDir, DataDir);
+  TP7ErrorType ResultCode;
+  if (isOK) {
+    ResultCode = TP7Lib::Init(IniData, LastOpGUID,
+                             TCallbackController::GetCallbacks(env, callbacks),
+                              TempDir, DataDir);
+  }
+  else {
+    ResultCode = TP7ErrorType::UndefinedError;
+  }
 
+  jobject ResultCodeJObj = nullptr;
+  TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
 
-
-    jclass resultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/OK");
-    jmethodID method = env->GetMethodID(resultClass, "<init>", "()V");
-    return env->NewObject(resultClass, method);
+  return ResultCodeJObj;
 }
 //-------------------------------------------------------------------
 

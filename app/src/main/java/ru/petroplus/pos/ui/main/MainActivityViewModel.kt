@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import ru.petroplus.pos.R
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
+import ru.petroplus.pos.p7LibApi.dto.OK
 import ru.petroplus.pos.p7LibApi.dto.ResultCode
 import ru.petroplus.pos.p7LibApi.dto.TransactionUUIDDto
 import ru.petroplus.pos.util.ConfigurationFileReader
@@ -57,16 +58,22 @@ class MainActivityViewModel(
             return
         }
 
+        val UUID = TransactionUUIDDto()
+        UUID.onlineTransNumber = 18
+        UUID.lastGenTime = 1690547808L
+        UUID.clockSequence = 61920
+        UUID.hasNodeId = true
+        UUID.nodeId = "01B5146FB4E3"
 
         val result = p7LibraryRepository.init(
             configurationReaderUtil.properties.toInitDataDto(),
-            TransactionUUIDDto(),
+            UUID,
             callbacks,
-            "",
-            ""
+            "123",
+            "654"
         )
 
-        if (result == ResultCode.OK) {
+        if (result.code == OK.code) {
             _viewState.value =
                 MainScreenState.CheckingSuccessState
         } else {
