@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import ru.petroplus.pos.R
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
-import ru.petroplus.pos.p7LibApi.dto.OK
+import ru.petroplus.pos.p7LibApi.dto.ResultCode
 import ru.petroplus.pos.p7LibApi.dto.TransactionUUIDDto
 import ru.petroplus.pos.util.ConfigurationFileReader
 import ru.petroplus.pos.util.constants.Constants.CONFIG_FILE_NAME
@@ -66,7 +66,7 @@ class MainActivityViewModel(
             ""
         )
 
-        if (result.code == OK.code) {
+        if (result == ResultCode.OK) {
             _viewState.value =
                 MainScreenState.CheckingSuccessState
         } else {
