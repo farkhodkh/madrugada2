@@ -2,16 +2,16 @@ package ru.petroplus.pos.p7LibApi.dto
 
 /**
  * TODO -  Юрий добавь описание
- * @property onlineTmNumber -
- * @property cardNumber -
- * @property terminalNumber -
- * @property terminalId -
- * @property issuerId -
+ * @property transNumber - номер последней транзауции
+ * @property cardNumber - номер карты
+ * @property terminalNumber - номер терминала
+ * @property terminalId - ID терминала
+ * @property issuerId - ID эмитента
  */
 class TransactionInfoDto(
-    var onlineTmNumber: Int = 0,
-    var cardNumber: String = "",
-    var terminalNumber: Int = 0,
-    var terminalId: Int = 0,
-    var issuerId: Int = 0
+    var transNumber:    UInt = 0u,
+    var cardNumber:     UInt = 0u,
+    var terminalNumber: UInt = 0u,
+    var terminalId:     UInt = 0u,
+    var issuerId:       UInt = 0u
 )

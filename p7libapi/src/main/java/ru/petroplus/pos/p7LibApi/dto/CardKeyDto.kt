@@ -10,6 +10,6 @@ package ru.petroplus.pos.p7LibApi.dto
  */
 class CardKeyDto(
     var publicKey: ByteArray = byteArrayOf(),
-    var publicExt: ByteArray = byteArrayOf(),
+    var publicExp: ByteArray = byteArrayOf(),
     var nonce: ByteArray = byteArrayOf()
 )

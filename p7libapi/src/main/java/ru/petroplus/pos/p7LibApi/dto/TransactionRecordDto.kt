@@ -26,24 +26,27 @@ import ru.petroplus.pos.p7LibApi.dto.card.CardType
 /**
  * TODO - Юрий, добавиь описание класса и типов
  */
+
 class TransactionRecordDto(
-    val cardNumber: Int,
-    val shiftNumber: Long,
-    val timeStamp: Long,
-    val serviceOriginalEmit: Byte,
-    val serviceCurrentEmit: Byte,
-    val totalVolume: Double,
-    val price: Double,
-    val totalSum: Double,
-    val cardTrzCounter: Int,
-    val hasReturn: Boolean,
-    val rollbackCode: Int,
-    val debitToken: String,
-    val terminalNumber: Int,
-    val crc32: Int,
-    val operationType: Int,
-    val cardType: CardType,
-    val clientSum: Double,
-    val deltaBonus: Double,
-    val returnTimeStamp: Long,
+    val cardNumber: UInt,            //!< Графический номер карты
+    val shiftNumber: Int,            //!< Номер смены
+    val timeStamp: Long,             //!< Время проведения операции, привести к структуре STCLOCK
+    val serviceIdOrigEmit: Byte,     //!< Вид топлива/услуги "за что платили" (в терминах ЭМИТЕНТА карты)
+    val serviceIdCurrEmit: Byte,     //!< Вид топлива/услуги "чем платили" (в терминах ЭМИТЕНТА карты)
+    val totalVolume: UInt,           //!< Количество топлива/услуги ("что покупали")
+    val price: UInt,                 //!< Цена за 1 ед. топлива/услуги ("что покупали")
+    val totalSum: UInt,              //!< Сумма (TotalVolume * Price)
+    val cardTrzCounter: UShort,      //!< Номер операции (в терминах карты)
+    val hasReturn: Boolean,          //!< Был ли возврат/отмена (0 - нет, 1 - да)
+    val rollbackCode: ByteArray,     //!< Код для возврата (получен от карты во время дебета)
+    val debitToken: ByteArray,       //!< GUID транзакции дебета в онлайне
+    val terminalNumber: UShort,      //!< Номер терминала/POS/поста
+    val crc32: UInt,                 //!< CRC32 для данной записи
+    val operationType: Byte,         //!< Тип транзакции (0 - дебет, 1 - кредит кошелька, 2 - онлайн-пополнение счета)
+                                     // не актуально, поле соответствует TrzBaseOperType
+
+    val cardType: Byte,              //!< Тип карты (1 - обычная петроловская, 2 - java, 0 - тип карты неизвестен)
+    val clientSum: UInt,             //!< Сумма с учётом скидки (для поддержки дебета с лояльностью по обычным петрольным картам)
+    val deltaBonus: UInt,            //!< Начисленные бонусы при транзакции с лояльностью
+    val returnTimeStamp: Long,       //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
 )

@@ -2,7 +2,7 @@ package ru.petroplus.pos.p7Lib.impl
 
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.dto.OK
-import ru.petroplus.pos.p7LibApi.dto.PrintDataDto
+import ru.petroplus.pos.p7LibApi.dto.SimpleDocDto
 import ru.petroplus.pos.p7LibApi.dto.ResultCode
 import ru.petroplus.pos.p7LibApi.dto.TransactionInfoDto
 import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
@@ -42,7 +42,7 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
     }
 
     override fun findLastTransactionDB(
-        cardNumber: Int,
+        cardNumber: UInt,
         record: TransactionRecordDto
     ): ResultCode {
         return OK
@@ -53,8 +53,13 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
         return OK
     }
 
-    override fun printSimpleDoc(data: PrintDataDto): ResultCode {
+    override fun printSimpleDoc(data: SimpleDocDto): ResultCode {
         val f = 0
+        return OK
+    }
+
+    override fun transferOOBToAS(OOBData: ByteArray): ResultCode {
+
         return OK
     }
 }

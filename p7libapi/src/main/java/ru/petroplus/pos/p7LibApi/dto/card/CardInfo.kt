@@ -3,16 +3,16 @@ package ru.petroplus.pos.p7LibApi.dto.card
 /**
  * Interface информации о карте
  * TODO -  Юрий добавь описание
- * @property isReactCard -
- * @property PTC -
- * @property cardId -
- * @property issuerId -
- * @property cardType -
+ * @property isRecalcCard - TRUE - карта не поддерживает дебет "услуга за услугу", только "услуга за рубли"
+ * @property PTC - Количество оставшихся попыток ввода PIN
+ * @property cardNumber - Номер карты
+ * @property issuerID - Эмитент карты
+ * @property cardType - Тип карты
  */
 interface CardInfo{
-    var isReactCard: Boolean
-    var PTC: Int
-    var cardId: Int
-    var issuerId: Int
+    var isRecalcCard: Boolean
+    var PTC: Byte
+    var cardNumber: UInt
+    var issuerID: UInt
     var cardType: CardType
 }

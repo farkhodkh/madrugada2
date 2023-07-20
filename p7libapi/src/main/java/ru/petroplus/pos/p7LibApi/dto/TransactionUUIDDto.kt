@@ -10,7 +10,7 @@ package ru.petroplus.pos.p7LibApi.dto
  */
 class TransactionUUIDDto(
     var onlineTransNumber: Int = 0,
-    var lastGenTime: Long = 0L,
+    var lastGenTime: Int = 0,
     var clockSequence: Int = 0,
     var hasNodeId: Boolean = false,
     var nodeId: String = ""

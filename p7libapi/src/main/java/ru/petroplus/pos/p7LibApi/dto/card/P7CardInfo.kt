@@ -10,9 +10,9 @@ package ru.petroplus.pos.p7LibApi.dto.card
  * @property cardType -
  */
 class P7CardInfo(
-    override var isReactCard: Boolean,
-    override var PTC: Int,
-    override var cardId: Int,
-    override var issuerId: Int,
-    override var cardType: CardType
+    override var isRecalcCard: Boolean = false,
+    override var PTC: Byte = 0,
+    override var cardNumber: UInt = 0u,
+    override var issuerID: UInt = 0u,
+    override var cardType: CardType = UnknownCardType
 ) : CardInfo

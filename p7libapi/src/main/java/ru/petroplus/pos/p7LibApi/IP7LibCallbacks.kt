@@ -1,6 +1,6 @@
 package ru.petroplus.pos.p7LibApi
 
-import ru.petroplus.pos.p7LibApi.dto.PrintDataDto
+import ru.petroplus.pos.p7LibApi.dto.SimpleDocDto
 import ru.petroplus.pos.p7LibApi.dto.ResultCode
 import ru.petroplus.pos.p7LibApi.dto.TransactionInfoDto
 import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
@@ -67,7 +67,7 @@ interface IP7LibCallbacks {
      * @param cardNumber - номер карты
      * @param transactionEntity - <=> Запись в базе данных
      */
-    fun findLastTransactionDB(cardNumber: Int, record: TransactionRecordDto): ResultCode
+    fun findLastTransactionDB(cardNumber: UInt, record: TransactionRecordDto): ResultCode
 
     /**
      * Обновление записей транзакции в БД
@@ -76,8 +76,15 @@ interface IP7LibCallbacks {
     fun completeTransactionDB(record: TransactionRecordDto): ResultCode
 
     /**
-     * Распечатка чека по результатам транзакции
+     * Распечатка чека с технической информацией и прочими данными
      * @param data - Данные для заполнения чека для печати
      */
-    fun printSimpleDoc(data: PrintDataDto): ResultCode
+    fun printSimpleDoc(data: SimpleDocDto): ResultCode
+
+    /**
+     * Передача отложенных документов (OOB) на АС
+     * @param data - Блок JJB в бинарном виде
+     */
+    fun transferOOBToAS(OOBData: ByteArray): ResultCode
+
 }

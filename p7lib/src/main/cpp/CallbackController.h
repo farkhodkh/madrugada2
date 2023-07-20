@@ -53,6 +53,9 @@ private:
   static jmethodID    PrintSimpleDocCallbackID;
   static TP7ErrorType PrintSimpleDoc(const TSimpleDoc &Doc);
 
+  static jmethodID    TransferOOBToASCallbackID;
+  static TP7ErrorType TransferOOBToAS(const vector<unsigned char> &OOB);
+
 public:
   static TCallbacksSet GetCallbacks(JNIEnv *jniEnv, jobject &CallbackObjectJava);
   static void Free(void);

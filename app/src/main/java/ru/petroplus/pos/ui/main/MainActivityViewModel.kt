@@ -60,7 +60,7 @@ class MainActivityViewModel(
 
         val UUID = TransactionUUIDDto()
         UUID.onlineTransNumber = 18
-        UUID.lastGenTime = 1690547808L
+        UUID.lastGenTime = 1690547808
         UUID.clockSequence = 61920
         UUID.hasNodeId = true
         UUID.nodeId = "01B5146FB4E3"
