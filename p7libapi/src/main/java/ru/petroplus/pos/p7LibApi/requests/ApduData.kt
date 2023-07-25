@@ -12,11 +12,11 @@ package ru.petroplus.pos.p7LibApi.requests
  * @property LE -
  */
 class ApduData(
-    var GLA: Byte,
-    var INS: Byte,
-    var P1: Byte,
-    var P2: Byte,
-    var LC: Byte,
-    var Data: ByteArray,
-    var LE: Byte
+    var GLA:  Byte = 0,
+    var INS:  Byte = 0,
+    var P1:   Byte = 0,
+    var P2:   Byte = 0,
+    var LC:   Byte = 0,
+    var Data: ByteArray = byteArrayOf(),
+    var LE:   Byte = 0
 )

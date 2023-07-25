@@ -1,6 +1,7 @@
 package ru.petroplus.pos.ui.main
 
 import android.content.Context
+import android.os.Environment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -12,12 +13,13 @@ import kotlinx.coroutines.launch
 import ru.petroplus.pos.R
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
-import ru.petroplus.pos.p7LibApi.dto.OK
-import ru.petroplus.pos.p7LibApi.dto.ResultCode
-import ru.petroplus.pos.p7LibApi.dto.TransactionUUIDDto
+import ru.petroplus.pos.p7LibApi.dto.*
+import ru.petroplus.pos.p7LibApi.dto.card.CardInfo
+import ru.petroplus.pos.p7LibApi.dto.card.P7CardInfo
 import ru.petroplus.pos.util.ConfigurationFileReader
 import ru.petroplus.pos.util.constants.Constants.CONFIG_FILE_NAME
 import ru.petroplus.pos.util.ext.toInitDataDto
+import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -58,20 +60,87 @@ class MainActivityViewModel(
             return
         }
 
-        val UUID = TransactionUUIDDto()
+
+        var UUID = TransactionUUIDDto()
+        var cardKey = CardKeyDto()
+        var cardData = P7CardInfo()
+
+        var debitParams = DebitParamsDto()
+        var transInfo = TransactionInfoDto()
+        var refundParam = RefundParamsDto()
+        var errorInfo = ErrorInfoDto()
+        var libInfo = LibInfoDto()
+
         UUID.onlineTransNumber = 18
         UUID.lastGenTime = 1690547808
         UUID.clockSequence = 61920
         UUID.hasNodeId = true
         UUID.nodeId = "01B5146FB4E3"
 
-        val result = p7LibraryRepository.init(
+        var DataDirectoryPath = String()
+
+//        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+//            DataDirectoryPath = Environment.getExternalStorageDirectory().getAbsolutePath();  }
+        DataDirectoryPath = Environment.getStorageDirectory().getAbsolutePath();
+        DataDirectoryPath += File.separator + "P7Lib";
+
+        var result = p7LibraryRepository.init(
             configurationReaderUtil.properties.toInitDataDto(),
             UUID,
             callbacks,
-            "123",
-            "654"
+            DataDirectoryPath,
+            DataDirectoryPath
         )
+
+        if (result.code != OK.code) {
+            throw RuntimeException("first init fail!")
+        }
+        result = p7LibraryRepository.deInit()
+        if (result.code != OK.code) {
+            throw RuntimeException("deInit fail!")
+        }
+        result = p7LibraryRepository.init(
+            configurationReaderUtil.properties.toInitDataDto(),
+            UUID,
+            callbacks,
+            DataDirectoryPath,
+            DataDirectoryPath
+        )
+        if (result.code != OK.code) {
+            throw RuntimeException("second init fail!")
+        }
+        result = p7LibraryRepository.detect(cardKey, cardData)
+        if (result.code != OK.code) {
+            throw RuntimeException("detect fail!")
+        }
+        debitParams.serviceWhat = 1
+        debitParams.serviceFrom = 0
+        debitParams.amount = 100u
+        debitParams.price  = 1000u
+        debitParams.sum    = 1000u
+        debitParams.pinBlock = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
+        result = p7LibraryRepository.debit(debitParams, transInfo, UUID)
+        if (result.code != OK.code) {
+            throw RuntimeException("debit fail!")
+        }
+        refundParam.serviceWhat = debitParams.serviceWhat
+        refundParam.price       = debitParams.price
+        refundParam.amount      = debitParams.amount
+        refundParam.sum         = debitParams.sum
+        result = p7LibraryRepository.refund(refundParam, transInfo, UUID)
+        if (result.code != OK.code) {
+            throw RuntimeException("refund fail!")
+        }
+        result = p7LibraryRepository.getErrorInfo(errorInfo)
+        if (result.code != OK.code) {
+            throw RuntimeException("getErrorInfo fail!")
+        }
+        result = p7LibraryRepository.getLibInfo(libInfo)
+        if (result.code != OK.code) {
+            throw RuntimeException("getLibInfo fail!")
+        }
+
+        
 
         if (result.code == OK.code) {
             _viewState.value =

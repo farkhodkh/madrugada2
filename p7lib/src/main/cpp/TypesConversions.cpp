@@ -232,9 +232,8 @@ bool TP7LibTypes::CreateApduAnswerJObj(JNIEnv *env, jobject *ApduAnswerJObj) {
       DeleteLocalRef(env, ApduAnswerJObj);  }
 
     jclass ApduAnswerClass = env->FindClass("ru/petroplus/pos/p7LibApi/responces/ApduAnswer");
-    jmethodID ApduAnswerConstructorID = env->GetMethodID(ApduAnswerClass, "<init>", "(II[B)V");
-    *ApduAnswerJObj = env->NewObject(ApduAnswerClass, ApduAnswerConstructorID,
-                                     0, 0, jbyteArray());
+    jmethodID ApduAnswerConstructorID = env->GetMethodID(ApduAnswerClass, "<init>", "()V");
+    *ApduAnswerJObj = env->NewObject(ApduAnswerClass, ApduAnswerConstructorID);
     Result = true;
   } // if env && ApduAnswerJObj
   return Result;
@@ -270,9 +269,8 @@ bool TP7LibTypes::CreateApduDataJObj(JNIEnv *env, jobject *ApduDataJObj) {
       ApduDataJObj = nullptr;  }
 
     jclass ApduDataClass = env->FindClass("ru/petroplus/pos/p7LibApi/requests/ApduData");
-    jmethodID ApduDataConstructorID = env->GetMethodID(ApduDataClass, "<init>", "(BBBBB[BB)V");
-    *ApduDataJObj = env->NewObject(ApduDataClass, ApduDataConstructorID,
-                                     0, 0,  0, 0, 0, jbyteArray(), 0);
+    jmethodID ApduDataConstructorID = env->GetMethodID(ApduDataClass, "<init>", "()V");
+    *ApduDataJObj = env->NewObject(ApduDataClass, ApduDataConstructorID);
     Result = true;
   } // if env && ApduDataJObj
   return Result;
@@ -422,11 +420,8 @@ bool TP7LibTypes::CreateTransDBRecordJObj(JNIEnv *env, jobject *DBRecordJObj) {
       DeleteLocalRef(env, DBRecordJObj);  }
 
     jclass DBRecordJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionRecordDto");
-    jmethodID ApduAnswerConstructorID = env->GetMethodID(DBRecordJObjClass, "<init>",
-                                                         "(IIJBBIIISZ[B[BSIBBIIJ)V");
-    *DBRecordJObj = env->NewObject(DBRecordJObjClass, ApduAnswerConstructorID,
-                                   0, 0, jlong(0), 0, 0, 0, 0, 0, 0, 0,
-                                   jbyteArray(), jbyteArray(), 0, 0, 0, 0, 0, 0, jlong(0));
+    jmethodID ApduAnswerConstructorID = env->GetMethodID(DBRecordJObjClass, "<init>", "()V");
+    *DBRecordJObj = env->NewObject(DBRecordJObjClass, ApduAnswerConstructorID);
     Result = (*DBRecordJObj != nullptr);
   } // if env && ApduAnswerJObj
   return Result;
@@ -617,10 +612,8 @@ bool TP7LibTypes::CreateSimpleDocJObj(JNIEnv *env, jobject *SimpleDocJObj) {
       DeleteLocalRef(env, SimpleDocJObj);  }
 
     jclass PrintDataJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/SimpleDocDto");
-    jmethodID SimpleDocConstructorID = env->GetMethodID(PrintDataJObjClass, "<init>",
-                                                        "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
-    *SimpleDocJObj = env->NewObject(PrintDataJObjClass, SimpleDocConstructorID,
-                                   jstring(), jstring(),jstring(),jstring());
+    jmethodID SimpleDocConstructorID = env->GetMethodID(PrintDataJObjClass, "<init>", "()V");
+    *SimpleDocJObj = env->NewObject(PrintDataJObjClass, SimpleDocConstructorID);
     Result = (*SimpleDocJObj != nullptr);
   } // if env && ApduAnswerJObj
   return Result;
@@ -677,9 +670,9 @@ bool TP7LibTypes::CreateCardKeyJObj(JNIEnv *env, jobject *CardKeyJObj) {
       DeleteLocalRef(env, CardKeyJObj);  }
 
     jclass CardKeyJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/CardKeyDto");
-    jmethodID CardKeyConstructorID = env->GetMethodID(CardKeyJObjClass, "<init>", "([B[B[B)V");
-    *CardKeyJObj = env->NewObject(CardKeyJObjClass, CardKeyConstructorID,
-                                  jbyteArray(), jbyteArray(),jbyteArray());
+    jmethodID CardKeyConstructorID = env->GetMethodID(CardKeyJObjClass, "<init>", "()V");
+
+    *CardKeyJObj = env->NewObject(CardKeyJObjClass, CardKeyConstructorID);
     Result = (*CardKeyJObj != nullptr);
   } // if env && ApduAnswerJObj
   return Result;
@@ -840,18 +833,21 @@ bool TP7LibTypes::ConvertCardTypeToJObj(JNIEnv *env, TCardType CardType, jobject
 }
 //--------------------------------------------------
 
-bool TP7LibTypes::CreateCardInfoJObj(JNIEnv *env, jobject *CardKeyJObj) {
+bool TP7LibTypes::CreateCardInfoJObj(JNIEnv *env, jobject *CardInfoJObj) {
   bool Result = false;
-  if (env &&  CardKeyJObj) {
-    if (*CardKeyJObj) {
-      DeleteLocalRef(env, CardKeyJObj);  }
+  if (env &&  CardInfoJObj) {
+    if (*CardInfoJObj) {
+      DeleteLocalRef(env, CardInfoJObj);  }
 
     jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7CardInfo");
-    jmethodID CardKeyConstructorID = env->GetMethodID(CardInfoJObjClass, "<init>", "()V");
-    *CardKeyJObj = env->NewObject(CardInfoJObjClass, CardKeyConstructorID);
 
-    Result = (*CardKeyJObj != nullptr);
-  } // if env && ApduAnswerJObj
+    jmethodID CardInfoConstructorID = env->GetMethodID(CardInfoJObjClass, "<init>", "()V");
+
+
+//    *CardKeyJObj = env->NewObject(CardInfoJObjClass, CardInfoConstructorID);
+
+    Result = (*CardInfoJObj != nullptr);
+  } // if env && CardInfoJObj
   return Result;
 }
 //--------------------------------------------------
@@ -863,31 +859,31 @@ bool TP7LibTypes::ConvertCardInfoToJObj(JNIEnv *env, const TCardInfo *CardInfo, 
     jbyteArray JBArray = nullptr;
 
     Result = CreateCardInfoJObj(env, CardInfoJObj);
-    jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7CardInfo");
-    Result = (Result && CardInfoJObjClass != nullptr);
-    if (!Result) {
-      return false;  }
+//    jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7CardInfo");
+//    Result = (Result && CardInfoJObjClass != nullptr);
+//    if (!Result) {
+//      return false;  }
 
-    jfieldID isRecalcCard_ID = env->GetFieldID(CardInfoJObjClass, "isRecalcCard", "Z");
-    jfieldID PTC_ID = env->GetFieldID(CardInfoJObjClass, "PTC", "B");
-    jfieldID cardNumber_ID = env->GetFieldID(CardInfoJObjClass, "cardNumber", "I");
-    jfieldID issuerID_ID = env->GetFieldID(CardInfoJObjClass, "issuerID", "I");
-    jfieldID cardType_ID = env->GetFieldID(CardInfoJObjClass, "cardType",
-                                           "Lru/petroplus/pos/p7LibApi/dto/card/CardType;");
-    Result = (isRecalcCard_ID && PTC_ID && cardNumber_ID && issuerID_ID && cardType_ID);
-
-    if (Result) {
-      env->SetBooleanField(*CardInfoJObj, isRecalcCard_ID, CardInfo->isRecalcCard);
-      env->SetByteField(*CardInfoJObj, PTC_ID, CardInfo->PTC);
-      env->SetIntField(*CardInfoJObj, cardNumber_ID, (int)CardInfo->CardNumber);
-      env->SetIntField(*CardInfoJObj, issuerID_ID, (int)CardInfo->IssuerID);
-      jobject CardTypeJObj = nullptr;
-      Result = ConvertCardTypeToJObj(env, CardInfo->CardType, &CardTypeJObj);
-      if (Result) {
-        env->SetObjectField(*CardInfoJObj, cardType_ID, CardTypeJObj);  }
-      env->DeleteLocalRef(CardTypeJObj);
-      CardTypeJObj = nullptr;
-    } // if Result
+//    jfieldID isRecalcCard_ID = env->GetFieldID(CardInfoJObjClass, "isRecalcCard", "Z");
+//    jfieldID PTC_ID = env->GetFieldID(CardInfoJObjClass, "PTC", "B");
+//    jfieldID cardNumber_ID = env->GetFieldID(CardInfoJObjClass, "cardNumber", "I");
+//    jfieldID issuerID_ID = env->GetFieldID(CardInfoJObjClass, "issuerID", "I");
+//    jfieldID cardType_ID = env->GetFieldID(CardInfoJObjClass, "cardType",
+//                                           "Lru/petroplus/pos/p7LibApi/dto/card/CardType;");
+//    Result = (isRecalcCard_ID && PTC_ID && cardNumber_ID && issuerID_ID && cardType_ID);
+//
+//    if (Result) {
+//      env->SetBooleanField(*CardInfoJObj, isRecalcCard_ID, CardInfo->isRecalcCard);
+//      env->SetByteField(*CardInfoJObj, PTC_ID, CardInfo->PTC);
+//      env->SetIntField(*CardInfoJObj, cardNumber_ID, (int)CardInfo->CardNumber);
+//      env->SetIntField(*CardInfoJObj, issuerID_ID, (int)CardInfo->IssuerID);
+//      jobject CardTypeJObj = nullptr;
+//      Result = ConvertCardTypeToJObj(env, CardInfo->CardType, &CardTypeJObj);
+//      if (Result) {
+//        env->SetObjectField(*CardInfoJObj, cardType_ID, CardTypeJObj);  }
+//      env->DeleteLocalRef(CardTypeJObj);
+//      CardTypeJObj = nullptr;
+//    } // if Result
   } // if env && CardKey && CardInfoJObj
 
   return Result;

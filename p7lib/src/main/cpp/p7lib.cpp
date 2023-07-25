@@ -37,15 +37,18 @@ Java_ru_petroplus_pos_p7Lib_impl_P7LibRepositoryImpl_init(JNIEnv *env, jobject t
   if (isOK)  { isOK = TP7LibTypes::JStringToString(env, temp_dir, TempDir);  }
   if (isOK)  { isOK = TP7LibTypes::JStringToString(env, data_dir, DataDir);  }
 
-  TP7ErrorType ResultCode;
-  if (isOK) {
-    ResultCode = TP7Lib::Init(IniData, LastOpGUID,
-                             TCallbackController::GetCallbacks(env, callbacks),
-                              TempDir, DataDir);
-  }
-  else {
-    ResultCode = TP7ErrorType::UndefinedError;
-  }
+//  TCallbackController::GetCallbacks(env, callbacks);
+
+
+  TP7ErrorType ResultCode = TP7ErrorType::OK;
+//  if (isOK) {
+//    ResultCode = TP7Lib::Init(IniData, LastOpGUID,
+//                             TCallbackController::GetCallbacks(env, callbacks),
+//                              TempDir, DataDir);
+//  }
+//  else {
+//    ResultCode = TP7ErrorType::UndefinedError;
+//  }
 
   jobject ResultCodeJObj = nullptr;
   TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
@@ -71,7 +74,7 @@ extern "C"
 JNIEXPORT jobject JNICALL
 Java_ru_petroplus_pos_p7Lib_impl_P7LibRepositoryImpl_detect(JNIEnv *env, jobject thiz,
                                                             jobject card_key, jobject card_data) {
-  TP7ErrorType ResultCode;
+  TP7ErrorType ResultCode = TP7ErrorType::OK;
   jobject      ResultCodeJObj = nullptr;
 
   TCardKey  CardKey;
@@ -81,8 +84,10 @@ Java_ru_petroplus_pos_p7Lib_impl_P7LibRepositoryImpl_detect(JNIEnv *env, jobject
 
   jobject CardKeyJObj = nullptr;
   jobject CardInfoJObj = nullptr;
+  
   TP7LibTypes::ConvertCardKeyToJObj(env, &CardKey, &CardKeyJObj);
   TP7LibTypes::ConvertCardInfoToJObj(env, &CardInfo, &CardInfoJObj);
+
   TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
 
   return ResultCodeJObj;
@@ -94,7 +99,7 @@ JNIEXPORT jobject JNICALL
 Java_ru_petroplus_pos_p7Lib_impl_P7LibRepositoryImpl_debit(JNIEnv *env, jobject thiz,
                                                            jobject params, jobject info,
                                                            jobject uuid) {
-  TP7ErrorType ResultCode;
+  TP7ErrorType ResultCode = TP7ErrorType::OK;;
   jobject      ResultCodeJObj = nullptr;
   bool isOK = true;
 
@@ -112,6 +117,7 @@ Java_ru_petroplus_pos_p7Lib_impl_P7LibRepositoryImpl_debit(JNIEnv *env, jobject 
     isOK = TP7LibTypes::ConvertTransactionUUIDToJObj(env, &UUID, &uuid);  }
   if (!isOK) {
     ResultCode = TP7ErrorType::UndefinedError;  }
+
   TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
 
   return ResultCodeJObj;
