@@ -4,7 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ru.petroplus.pos.core.AppScope
-import ru.petroplus.pos.evotorsdk.EvotorISDKRepository
+import ru.petroplus.pos.evotorsdk.EvotorSDKRepository
 import ru.petroplus.pos.p7Lib.impl.P7LibCallbacksImpl
 import ru.petroplus.pos.p7Lib.impl.P7LibRepositoryImpl
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
@@ -28,7 +28,7 @@ object AppModule{
     fun providesMainActivityViewModel(repository: IP7LibRepository, callBacks: IP7LibCallbacks): MainActivityViewModel = MainActivityViewModel(repository, callBacks)
 
     @[Provides AppScope]
-    fun providesEvotorSDKRepository(context: Context): ISDKRepository = EvotorISDKRepository(context)
+    fun providesEvotorSDKRepository(context: Context): ISDKRepository = EvotorSDKRepository(context)
 
     @[Provides AppScope]
     fun providesCardReaderRepository(sdkRepository: ISDKRepository): CardReaderRepository = object : CardReaderRepository {

@@ -8,8 +8,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
+import ru.petroplus.pos.mainscreen.ui.debit.http.SSLConnectionExample
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
 import ru.petroplus.pos.util.ext.byteArrayToString
@@ -29,7 +31,8 @@ class DebitViewModel(
                 .eventBus
                 .events
                 .collectIndexed { index, value ->
-                    _viewState.value = DebitViewState.CommandExecutionState(value.byteArrayToString())
+                    _viewState.value = DebitViewState
+                        .CommandExecutionState(value.byteArrayToString())
                 }
         }
 
@@ -38,7 +41,7 @@ class DebitViewModel(
         }
     }
 
-    fun sendAPDUCommand(command: String) {
+    fun sendCommand(command: String) {
         //APDU для выбора апплета
         //
         //00A4040008A000000003000000
@@ -51,7 +54,17 @@ class DebitViewModel(
         //Data A000000003000000
 
         //5342520101
-        sdkConnection.sdkRepository.sendSDKCommand(command)
+        sdkConnection.sdkRepository.sendCommand(command)
+    }
+
+    fun ping() {
+        viewModelScope.launch(Dispatchers.IO) {
+            androidSSLConnection()
+        }
+    }
+
+    private fun androidSSLConnection() {
+        SSLConnectionExample().doRequest()
     }
 
     companion object {

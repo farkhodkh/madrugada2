@@ -6,6 +6,7 @@ pluginManagement {
         maven { url 'https://jitpack.io' }
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -14,6 +15,7 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
+
 rootProject.name = "POS"
 include ':app'
 include ':ui'
@@ -21,6 +23,7 @@ include ':util'
 include ':core'
 include ':mainscreen'
 include ':p7lib'
+include ':network'
 include ':p7libapi'
 include ':evotorsdk'
 include ':sdkapi'

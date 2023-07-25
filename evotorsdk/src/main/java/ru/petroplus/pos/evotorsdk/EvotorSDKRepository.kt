@@ -14,11 +14,12 @@ import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiInterface
 import ru.petroplus.pos.evotorsdk.util.Hex
 import ru.petroplus.pos.sdkapi.ISDKRepository
 import ru.petroplus.pos.sdkapi.ReaderEventBus
+import ru.petroplus.pos.util.ResourceHelper
 
 /**
  *
  */
-class EvotorISDKRepository(context: Context) : ISDKRepository {
+class EvotorSDKRepository(context: Context) : ISDKRepository {
     private val scope = CoroutineScope(Dispatchers.IO)
     private var requestInterface: ExternalLowLevelApiInterface? = null
     override var eventBus: ReaderEventBus = ReaderEventBus()
@@ -46,9 +47,22 @@ class EvotorISDKRepository(context: Context) : ISDKRepository {
         }
     }
 
-    override fun sendSDKCommand(input: String) {
-        val commandBytes = Hex.decodeHex(input.toCharArray())
-        requestInterface?.sendCommand(commandBytes, sdkCallback)
+    override fun sendCommand(input: String) {
+        if (requestInterface == null) {
+            scope.launch {
+                onReceivedData(ResourceHelper.getStringResource(R.string.terminal_not_initialized_error).toByteArray(Charsets.UTF_8))
+            }
+            return
+        }
+
+        try {
+            val commandBytes = Hex.decodeHex(input.toCharArray())
+            requestInterface?.sendCommand(commandBytes, sdkCallback)
+        } catch (ex: Exception) {
+            scope.launch {
+                onReceivedData("{${ex.localizedMessage}}".toByteArray(Charsets.UTF_8))
+            }
+        }
     }
 
     private suspend fun onReceivedData(receivedData: ByteArray) {

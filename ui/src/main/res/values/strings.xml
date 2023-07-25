@@ -6,6 +6,10 @@
     <string name="ini_file_description_label_text">Файл настроек необходимо получить у службы поддержки и загрузить на терминале</string>
     <string name="Cancel">Отмена</string>
     <string name="OK">OK</string>
+    <string name="ping">Ping</string>
+    <string name="debit_label">Дебит</string>
+    <string name="refund_label">Возврат</string>
+    <string name="settings_label">Настройки</string>
     <string name="apdu_config_line">Команда APDU</string>
     <string name="apdu_command_result_line">Результат выполнения команды</string>
     <string name="add_configuration_content_label_text">Добавление конфигурации</string>

@@ -5,12 +5,13 @@ plugins {
 }
 
 android {
-    namespace = Dependencies.namespaceEvotorSdk
+    namespace = Dependencies.namespaceNetwork
     compileSdkVersion = Versions.compileSdkVersion
 
     defaultConfig {
         minSdk = Versions.minSdkVersion
         targetSdk = Versions.targetSdk
+
     }
 
     buildTypes {
@@ -27,6 +28,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
@@ -41,15 +43,23 @@ android {
 }
 
 dependencies {
-    //Lib
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*aar"))))
 
-    implementation("${Dependencies.composeRuntime}:${Versions.compose}")
+    //implementation(project(":p7libapi"))
 
-    //Evotor
-    implementation("${Dependencies.evotor}:${Versions.evotor}")
+    //Dagger 2
+    //implementation("${Dependencies.dagger}:${Versions.dagger}")
+    //implementation("${Dependencies.composeRuntime}:${Versions.compose}")
+
+    //implementation 'androidx.core:core-ktx:1.7.20'
+    //implementation 'androidx.appcompat:appcompat:1.6.1'
+    //implementation 'com.google.android.material:material:1.8.0'
+    //testImplementation 'junit:junit:4.13.2'
+    //androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    //androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    //implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
     //Modules
-    implementation(project(":sdkapi"))
-    implementation(project(":util"))
+    //implementation(project(":core"))
+    //implementation(project(":util"))
 }
