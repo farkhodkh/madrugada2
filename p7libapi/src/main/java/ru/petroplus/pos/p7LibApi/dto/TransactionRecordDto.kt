@@ -28,25 +28,25 @@ import ru.petroplus.pos.p7LibApi.dto.card.CardType
  */
 
 class TransactionRecordDto(
-    val cardNumber: UInt = 0u,                   //!< Графический номер карты
-    val shiftNumber: Int = 0,                    //!< Номер смены
-    val timeStamp: Long = 0L,                    //!< Время проведения операции, привести к структуре STCLOCK
-    val serviceIdOrigEmit: Byte = 0,             //!< Вид топлива/услуги "за что платили" (в терминах ЭМИТЕНТА карты)
-    val serviceIdCurrEmit: Byte = 0,             //!< Вид топлива/услуги "чем платили" (в терминах ЭМИТЕНТА карты)
-    val totalVolume: UInt = 0u,                  //!< Количество топлива/услуги ("что покупали")
-    val price: UInt = 0u,                        //!< Цена за 1 ед. топлива/услуги ("что покупали")
-    val totalSum: UInt = 0u,                     //!< Сумма (TotalVolume * Price)
-    val cardTrzCounter: UShort = 0u,             //!< Номер операции (в терминах карты)
-    val hasReturn: Boolean = false,              //!< Был ли возврат/отмена (0 - нет, 1 - да)
-    val rollbackCode: ByteArray = byteArrayOf(), //!< Код для возврата (получен от карты во время дебета)
-    val debitToken: ByteArray = byteArrayOf(),   //!< GUID транзакции дебета в онлайне
-    val terminalNumber: UShort = 0u,             //!< Номер терминала/POS/поста
-    val crc32: UInt = 0u,                        //!< CRC32 для данной записи
-    val operationType: Byte = 0,                 //!< Тип транзакции (0 - дебет, 1 - кредит кошелька, 2 - онлайн-пополнение счета)
+    var cardNumber: Long = 0L,                   //!< Графический номер карты
+    var shiftNumber: Long = 0,                   //!< Номер смены
+    var timeStamp: Long = 0L,                    //!< Время проведения операции, привести к структуре STCLOCK
+    var serviceIdOrigEmit: Byte = 0,             //!< Вид топлива/услуги "за что платили" (в терминах ЭМИТЕНТА карты)
+    var serviceIdCurrEmit: Byte = 0,             //!< Вид топлива/услуги "чем платили" (в терминах ЭМИТЕНТА карты)
+    var totalVolume: Long = 0L,                  //!< Количество топлива/услуги ("что покупали")
+    var price: Long = 0L,                        //!< Цена за 1 ед. топлива/услуги ("что покупали")
+    var totalSum: Long = 0L,                     //!< Сумма (TotalVolume * Price)
+    var cardTrzCounter: Int = 0,                 //!< Номер операции (в терминах карты)
+    var hasReturn: Boolean = false,              //!< Был ли возврат/отмена (0 - нет, 1 - да)
+    var rollbackCode: ByteArray = byteArrayOf(), //!< Код для возврата (получен от карты во время дебета)
+    var debitToken: ByteArray = byteArrayOf(),   //!< GUID транзакции дебета в онлайне
+    var terminalNumber: Int = 0,                 //!< Номер терминала/POS/поста
+    var crc32: Long = 0L,                        //!< CRC32 для данной записи
+    var operationType: Byte = 0,                 //!< Тип транзакции (0 - дебет, 1 - кредит кошелька, 2 - онлайн-пополнение счета)
                                                  // не актуально, поле соответствует TrzBaseOperType
 
-    val cardType: Byte = 0,                      //!< Тип карты (1 - обычная петроловская, 2 - java, 0 - тип карты неизвестен)
-    val clientSum: UInt = 0u,                    //!< Сумма с учётом скидки (для поддержки дебета с лояльностью по обычным петрольным картам)
-    val deltaBonus: UInt = 0u,                   //!< Начисленные бонусы при транзакции с лояльностью
-    val returnTimeStamp: Long = 0L,              //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
+    var cardType: Byte = 0,                      //!< Тип карты (1 - обычная петроловская, 2 - java, 0 - тип карты неизвестен)
+    var clientSum: Long = 0L,                    //!< Сумма с учётом скидки (для поддержки дебета с лояльностью по обычным петрольным картам)
+    var deltaBonus: Long = 0L,                   //!< Начисленные бонусы при транзакции с лояльностью
+    var returnTimeStamp: Long = 0L,              //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
 )

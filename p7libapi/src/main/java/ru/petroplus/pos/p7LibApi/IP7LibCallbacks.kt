@@ -67,7 +67,7 @@ interface IP7LibCallbacks {
      * @param cardNumber - номер карты
      * @param transactionEntity - <=> Запись в базе данных
      */
-    fun findLastTransactionDB(cardNumber: UInt, record: TransactionRecordDto): ResultCode
+    fun findLastTransactionDB(cardNumber: Long, record: TransactionRecordDto): ResultCode
 
     /**
      * Обновление записей транзакции в БД

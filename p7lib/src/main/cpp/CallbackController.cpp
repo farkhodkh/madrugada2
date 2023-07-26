@@ -137,7 +137,7 @@ bool TCallbackController::TryASConnection(int Timeout) {
 
   JNIEnv* jniEnv = getJniEnv();
   if (jniEnv && CallbackObject && TryASConnectionCallbackID) {
-    Result = jniEnv->CallBooleanMethod(CallbackObject, TryASConnectionCallbackID, Timeout);
+    Result = jniEnv->CallBooleanMethod(CallbackObject, TryASConnectionCallbackID, (long long)Timeout);
   }
   else {
     TCallbackController::Log("TCallbackController::TryASConnection: No instance.");
@@ -176,19 +176,23 @@ TOperationResult TCallbackController::DoASDataExchange(const vector<unsigned cha
 
 TP7ErrorType TCallbackController::FindLastTransDB(DWORD CardNumber, TTransDBRecord &DBRecord) {
   bool isOK = false;
-  TP7ErrorType Result = TP7ErrorType::UndefinedError;
+  TP7ErrorType Result = TP7ErrorType::OK;
 
   JNIEnv* jniEnv = getJniEnv();
   if (jniEnv && CallbackObject && FindLastTransDBCallbackID) {
     jobject DBRecordJObj = nullptr;
+
+    TP7LibTypes::CreateTransDBRecordJObj(jniEnv, &DBRecordJObj);
     jobject ResultCodeJObj = jniEnv->CallObjectMethod(CallbackObject, FindLastTransDBCallbackID,
-                                                      CardNumber, DBRecordJObj);
+                                                      (long long)CardNumber, DBRecordJObj);
     isOK = (ResultCodeJObj != nullptr);
     if (isOK) {
       Result = TP7LibTypes::GetResultCode(jniEnv, &ResultCodeJObj);
       isOK = TP7LibTypes::ConvertTransDBRecordFromJObj(jniEnv, &DBRecordJObj, &DBRecord);  }
     if (!isOK) {
       Result = TP7ErrorType::UndefinedError;  }
+
+    TP7LibTypes::DeleteLocalRef(jniEnv, &DBRecordJObj);
   } // if jniEnv && CallbackObject && FindLastTransDBCallbackID
   else {
     TCallbackController::Log("TCallbackController::FindLastTransDB: No instance.");
@@ -333,13 +337,14 @@ TCallbacksSet TCallbackController::GetCallbacks(JNIEnv *jniEnv, jobject &Callbac
     TryASConnectionCallbackID = jniEnv->GetMethodID(CallbackClass, "connectToAS", "(J)Z");   // (J)Z - bool(long)
     if (TryASConnectionCallbackID) {
       CallbacksSet.TryASConnection = &TryASConnection;  }
+
     DoASDataExchangeCallbackID = jniEnv->GetMethodID(CallbackClass, "doASDataExchange",
                                                      "([B)Lru/petroplus/pos/p7LibApi/responces/OperationResult;");
     if (DoASDataExchangeCallbackID) {
       CallbacksSet.DoASDataExchange = &DoASDataExchange;  }
 
     FindLastTransDBCallbackID = jniEnv->GetMethodID(CallbackClass, "findLastTransactionDB",
-                                                    "(ILru/petroplus/pos/p7LibApi/dto/TransactionRecordDto;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                                    "(JLru/petroplus/pos/p7LibApi/dto/TransactionRecordDto;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
     if (FindLastTransDBCallbackID) {
       CallbacksSet.FindLastTransDB = &FindLastTransDB;  }
 
@@ -349,7 +354,7 @@ TCallbacksSet TCallbackController::GetCallbacks(JNIEnv *jniEnv, jobject &Callbac
       CallbacksSet.CompleteTransDB = &CompleteTransDB;  }
 
     PrintSimpleDocCallbackID = jniEnv->GetMethodID(CallbackClass, "printSimpleDoc",
-                                                   "(Lru/petroplus/pos/p7LibApi/dto/PrintDataDto;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                                   "(Lru/petroplus/pos/p7LibApi/dto/SimpleDocDto;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
     if (PrintSimpleDocCallbackID) {
       CallbacksSet.PrintSimpleDoc = &PrintSimpleDoc;  }
 

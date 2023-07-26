@@ -20,7 +20,7 @@ package ru.petroplus.pos.p7LibApi.dto.card
 class P7CardInfo(
     var isRecalcCard: Boolean = false,
     var PTC: Byte = 0,
-    var cardNumber: UInt = 0u,
-    var issuerID: UInt = 0u,
+    var cardNumber: Long = 0L,
+    var issuerID: Long = 0L,
     var cardType: CardType = UnknownCardType
 )

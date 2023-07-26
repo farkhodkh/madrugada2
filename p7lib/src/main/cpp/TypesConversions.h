@@ -39,6 +39,7 @@ public:
 
   static bool ConvertIniDataFromJObj(JNIEnv *env, const jobject *ApduDataJObj, TIniData *IniData);
 
+  static bool CreateTransactionUUIDJObj(JNIEnv *env, jobject *UUIDJObj);
   static bool ConvertTransactionUUIDFromJObj(JNIEnv *env, const jobject *UUIDJObj, TTransactionUUID *UUID);
   static bool ConvertTransactionUUIDToJObj(JNIEnv *env, const TTransactionUUID *UUID, jobject *UUIDJObj);
 

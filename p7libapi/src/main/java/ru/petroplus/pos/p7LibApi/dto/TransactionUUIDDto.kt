@@ -13,5 +13,5 @@ class TransactionUUIDDto(
     var lastGenTime: Int = 0,
     var clockSequence: Int = 0,
     var hasNodeId: Boolean = false,
-    var nodeId: String = ""
+    var nodeId: ByteArray = byteArrayOf()
 )

@@ -12,7 +12,7 @@ package ru.petroplus.pos.p7LibApi.dto.card
 interface CardInfo{
     var isRecalcCard: Boolean
     var PTC: Byte
-    var cardNumber: UInt
-    var issuerID: UInt
+    var cardNumber: Long
+    var issuerID: Long
     var cardType: CardType
 }

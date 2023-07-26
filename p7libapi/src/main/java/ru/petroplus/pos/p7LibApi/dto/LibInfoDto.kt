@@ -9,8 +9,8 @@ package ru.petroplus.pos.p7LibApi.dto
  * @property minerVersion - Младший номер версии бибилиотеки
  */
 class LibInfoDto(
-    var acquirerId:   UInt = 0u,
-    var terminalNum:  UInt = 0u,
-    var majorVersion: UInt = 0u,
-    var minerVersion: UInt = 0u
+    var acquirerId:   Long = 0,
+    var terminalNum:  Long = 0,
+    var majorVersion: Long = 0,
+    var minerVersion: Long = 0
 )

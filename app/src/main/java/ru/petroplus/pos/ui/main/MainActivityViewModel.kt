@@ -75,8 +75,7 @@ class MainActivityViewModel(
         UUID.lastGenTime = 1690547808
         UUID.clockSequence = 61920
         UUID.hasNodeId = true
-        UUID.nodeId = "01B5146FB4E3"
-
+        UUID.nodeId = ubyteArrayOf(0x01u, 0xB5u, 0x14u, 0x6Fu, 0xB4u, 0xE3u).toByteArray()
         var DataDirectoryPath = String()
 
 //        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -115,9 +114,9 @@ class MainActivityViewModel(
         }
         debitParams.serviceWhat = 1
         debitParams.serviceFrom = 0
-        debitParams.amount = 100u
-        debitParams.price  = 1000u
-        debitParams.sum    = 1000u
+        debitParams.amount = 100L
+        debitParams.price  = 1000L
+        debitParams.sum    = 1000L
         debitParams.pinBlock = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
         result = p7LibraryRepository.debit(debitParams, transInfo, UUID)
         if (result.code != OK.code) {

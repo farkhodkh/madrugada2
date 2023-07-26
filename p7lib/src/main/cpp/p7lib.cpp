@@ -37,18 +37,15 @@ Java_ru_petroplus_pos_p7Lib_impl_P7LibRepositoryImpl_init(JNIEnv *env, jobject t
   if (isOK)  { isOK = TP7LibTypes::JStringToString(env, temp_dir, TempDir);  }
   if (isOK)  { isOK = TP7LibTypes::JStringToString(env, data_dir, DataDir);  }
 
-//  TCallbackController::GetCallbacks(env, callbacks);
-
-
   TP7ErrorType ResultCode = TP7ErrorType::OK;
-//  if (isOK) {
-//    ResultCode = TP7Lib::Init(IniData, LastOpGUID,
-//                             TCallbackController::GetCallbacks(env, callbacks),
-//                              TempDir, DataDir);
-//  }
-//  else {
-//    ResultCode = TP7ErrorType::UndefinedError;
-//  }
+  if (isOK) {
+    ResultCode = TP7Lib::Init(IniData, LastOpGUID,
+                              TCallbackController::GetCallbacks(env, callbacks),
+                              TempDir, DataDir);
+  }
+  else {
+    ResultCode = TP7ErrorType::UndefinedError;
+  }
 
   jobject ResultCodeJObj = nullptr;
   TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);

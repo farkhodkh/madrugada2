@@ -7,6 +7,7 @@ set(LIB_NAME P7Lib_lib)
 set(Self
     "${P7LIB_LIB_DIR}/P7Lib_lib.h"
     "${P7LIB_LIB_DIR}/P7Lib_lib.cpp"
+    "${P7LIB_LIB_DIR}/P7Lib_types.h"
 )
 source_group("Self" FILES ${Self})
 

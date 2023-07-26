@@ -17,6 +17,7 @@ bool TP7LibTypes::JByteArrayToVector(JNIEnv *env, const jbyteArray &Array, std::
   if (env && Vector) {
     Vector->clear();
     const size_t DataLen = env->GetArrayLength(Array);
+    Vector->resize(DataLen);
     if (DataLen) {
       env->GetByteArrayRegion(Array, 0, DataLen, reinterpret_cast<jbyte *>(Vector->data()));  }
     Result = true;
@@ -283,9 +284,9 @@ bool TP7LibTypes::ConvertApduDataToJObj(JNIEnv *env, const TAPDUData *APDUData, 
     if (*ApduDataJObj) {
       DeleteLocalRef(env, ApduDataJObj);
       ApduDataJObj = nullptr;  }
+    CreateApduDataJObj(env, ApduDataJObj);
 
     jclass ApduDataClass = env->FindClass("ru/petroplus/pos/p7LibApi/requests/ApduData");
-    CreateApduDataJObj(env, ApduDataJObj);
 
     jfieldID GLA_ID  = env->GetFieldID(ApduDataClass, "GLA", "B");
     jfieldID INS_ID  = env->GetFieldID(ApduDataClass, "INS", "B");
@@ -333,6 +334,22 @@ bool TP7LibTypes::ConvertIniDataFromJObj(JNIEnv *env, const jobject *IniDataJObj
 }
 //--------------------------------------------------
 
+bool TP7LibTypes::CreateTransactionUUIDJObj(JNIEnv *env, jobject *UUIDJObj) {
+  bool Result = false;
+  if (env && UUIDJObj) {
+    if (*UUIDJObj) {
+      DeleteLocalRef(env, UUIDJObj);
+      *UUIDJObj = nullptr;  }
+
+    jclass UUIDClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionUUIDDto");
+    jmethodID UUIDConstructorID = env->GetMethodID(UUIDClass, "<init>", "()V");
+    *UUIDJObj = env->NewObject(UUIDClass, UUIDConstructorID);
+    Result = true;
+  } // if env && UUIDJObj
+  return Result;
+}
+//--------------------------------------------------
+
 bool TP7LibTypes::ConvertTransactionUUIDFromJObj(JNIEnv *env, const jobject *UUIDJObj, TTransactionUUID *UUID) {
   bool Result = false;
   if (env && UUIDJObj && UUID) {
@@ -342,7 +359,7 @@ bool TP7LibTypes::ConvertTransactionUUIDFromJObj(JNIEnv *env, const jobject *UUI
     jfieldID lastGenTime_ID       = env->GetFieldID(UUIDDClass, "lastGenTime", "I");  // "J"
     jfieldID clockSequence_ID     = env->GetFieldID(UUIDDClass, "clockSequence", "I");
     jfieldID hasNodeId_ID         = env->GetFieldID(UUIDDClass, "hasNodeId", "Z");
-    jfieldID nodeId_ID            = env->GetFieldID(UUIDDClass, "nodeId", "Ljava/lang/String;");
+    jfieldID nodeId_ID            = env->GetFieldID(UUIDDClass, "nodeId", "[B");
     Result = (onlineTransNumber_ID && lastGenTime_ID && clockSequence_ID && hasNodeId_ID && nodeId_ID);
 
     if (Result) {
@@ -351,13 +368,13 @@ bool TP7LibTypes::ConvertTransactionUUIDFromJObj(JNIEnv *env, const jobject *UUI
       UUID->ClockSequence = env->GetIntField(*UUIDJObj, clockSequence_ID);
       UUID->hasNodeID = env->GetBooleanField(*UUIDJObj, hasNodeId_ID);
 
-      std::string NodeIDStr;
-      Result = JStringToString(env, (jstring) (env->GetObjectField(*UUIDJObj, nodeId_ID)),
-                               NodeIDStr);
+      std::vector<unsigned char> NodeID;
+      Result = JByteArrayToVector(env, (jbyteArray) (env->GetObjectField(*UUIDJObj, nodeId_ID)),
+                                  &NodeID);
       if (Result) {
         memset(UUID->NodeID, 0x00, sizeof(UUID->NodeID));
-        memcpy(UUID->NodeID, NodeIDStr.data(),
-               ((sizeof(UUID->NodeID) < NodeIDStr.length()) ? sizeof(UUID->NodeID) : NodeIDStr.length()));
+        memcpy(UUID->NodeID, NodeID.data(),
+               ((sizeof(UUID->NodeID) < NodeID.size()) ? sizeof(UUID->NodeID) : NodeID.size()));
       } // if Result
     } // if Result
   } // if env && IniDataJObj && IniData
@@ -369,13 +386,17 @@ bool TP7LibTypes::ConvertTransactionUUIDFromJObj(JNIEnv *env, const jobject *UUI
 bool TP7LibTypes::ConvertTransactionUUIDToJObj(JNIEnv *env, const TTransactionUUID *UUID, jobject *UUIDJObj) {
   bool Result = false;
   if (env && UUIDJObj && UUID) {
+    Result = CreateTransactionUUIDJObj(env, UUIDJObj);
     jclass UUIDDClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionUUIDDto");
+    Result = (Result && UUIDDClass != nullptr);
+    if (!Result) {
+      return false;  }
 
     jfieldID onlineTransNumber_ID = env->GetFieldID(UUIDDClass, "onlineTransNumber", "I");
     jfieldID lastGenTime_ID       = env->GetFieldID(UUIDDClass, "lastGenTime", "I"); // "J"
     jfieldID clockSequence_ID     = env->GetFieldID(UUIDDClass, "clockSequence", "I");
     jfieldID hasNodeId_ID         = env->GetFieldID(UUIDDClass, "hasNodeId", "Z");
-    jfieldID nodeId_ID            = env->GetFieldID(UUIDDClass, "nodeId", "Ljava/lang/String;");
+    jfieldID nodeId_ID            = env->GetFieldID(UUIDDClass, "nodeId", "[B");
     Result = (onlineTransNumber_ID && lastGenTime_ID && clockSequence_ID && hasNodeId_ID && nodeId_ID);
 
     if (Result) {
@@ -384,14 +405,17 @@ bool TP7LibTypes::ConvertTransactionUUIDToJObj(JNIEnv *env, const TTransactionUU
       env->SetIntField(*UUIDJObj, clockSequence_ID, UUID->ClockSequence);
       env->SetBooleanField(*UUIDJObj, hasNodeId_ID, UUID->hasNodeID);
 
-      jstring jStr = nullptr;
-      Result = StringToJString(env, std::string((char *)(UUID->NodeID), sizeof(UUID->NodeID)), jStr);
-      env->SetObjectField(*UUIDJObj, nodeId_ID, jStr);
-      env->DeleteLocalRef(jStr);
+      jbyteArray JBArr = nullptr;
+      Result = ArrayToJByteArray(env, UUID->NodeID, sizeof(UUID->NodeID), &JBArr);
+      if (Result) {
+        env->SetObjectField(*UUIDJObj, nodeId_ID, JBArr);
+        env->DeleteLocalRef(JBArr);
+      }
     } // if Result
   } // if env && IniDataJObj && IniData
 
-  return Result;}
+  return Result;
+}
 //--------------------------------------------------
 
 bool TP7LibTypes::ConvertOperationResultFromJObj(JNIEnv *env, const jobject *OperationResultObj, TOperationResult *OperationResult) {
@@ -442,29 +466,29 @@ bool TP7LibTypes::ConvertTransDBRecordFromJObj(JNIEnv *env, const jobject *DBRec
     if (!Result) {
       return false;  }
 
-    jfieldID cardNumber_ID = env->GetFieldID(DBRecordClass, "cardNumber", "I");
-    jfieldID shiftNumber_ID = env->GetFieldID(DBRecordClass, "shiftNumber", "I");
+    jfieldID cardNumber_ID = env->GetFieldID(DBRecordClass, "cardNumber", "J");
+    jfieldID shiftNumber_ID = env->GetFieldID(DBRecordClass, "shiftNumber", "J");
     jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "J");
     jfieldID serviceIdOrigEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdOrigEmit", "B");
     jfieldID serviceIdCurrEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdCurrEmit", "B");
-    jfieldID totalVolume_ID = env->GetFieldID(DBRecordClass, "totalVolume", "I");
-    jfieldID price_ID = env->GetFieldID(DBRecordClass, "price", "I");
-    jfieldID totalSum_ID = env->GetFieldID(DBRecordClass, "totalSum", "I");
-    jfieldID cardTrzCounter_ID = env->GetFieldID(DBRecordClass, "cardTrzCounter", "S");
+    jfieldID totalVolume_ID = env->GetFieldID(DBRecordClass, "totalVolume", "J");
+    jfieldID price_ID = env->GetFieldID(DBRecordClass, "price", "J");
+    jfieldID totalSum_ID = env->GetFieldID(DBRecordClass, "totalSum", "J");
+    jfieldID cardTrzCounter_ID = env->GetFieldID(DBRecordClass, "cardTrzCounter", "I");
     jfieldID hasReturn_ID = env->GetFieldID(DBRecordClass, "hasReturn", "Z");
     jfieldID rollbackCode_ID = env->GetFieldID(DBRecordClass, "rollbackCode", "[B");
     jfieldID debitToken_ID = env->GetFieldID(DBRecordClass, "debitToken", "[B");
-    jfieldID terminalNumber_ID = env->GetFieldID(DBRecordClass, "terminalNumber", "S");
-    jfieldID crc32_ID = env->GetFieldID(DBRecordClass, "crc32", "I");
+    jfieldID terminalNumber_ID = env->GetFieldID(DBRecordClass, "terminalNumber", "I");
+    jfieldID crc32_ID = env->GetFieldID(DBRecordClass, "crc32", "J");
     jfieldID operationType_ID = env->GetFieldID(DBRecordClass, "operationType", "B");
     jfieldID cardType_ID = env->GetFieldID(DBRecordClass, "cardType", "B");
-    jfieldID clientSum_ID = env->GetFieldID(DBRecordClass, "clientSum", "I");
-    jfieldID deltaBonus_ID = env->GetFieldID(DBRecordClass, "deltaBonus", "I");
+    jfieldID clientSum_ID = env->GetFieldID(DBRecordClass, "clientSum", "J");
+    jfieldID deltaBonus_ID = env->GetFieldID(DBRecordClass, "deltaBonus", "J");
     jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "J");
 
 
-    DBRecord->CardNumber = env->GetIntField(*DBRecordJObj, cardNumber_ID);
-    DBRecord->SiftNumber = env->GetIntField(*DBRecordJObj, shiftNumber_ID);
+    DBRecord->CardNumber = (DWORD)env->GetLongField(*DBRecordJObj, cardNumber_ID);
+    DBRecord->SiftNumber = (DWORD)env->GetLongField(*DBRecordJObj, shiftNumber_ID);
 
     Time = (long long)(env->GetLongField(*DBRecordJObj, timeStamp_ID));
     ptm = nullptr;
@@ -479,10 +503,10 @@ bool TP7LibTypes::ConvertTransDBRecordFromJObj(JNIEnv *env, const jobject *DBRec
 
     DBRecord->ServiceIdOrigEmit = env->GetByteField(*DBRecordJObj, serviceIdOrigEmit_ID);
     DBRecord->ServiceIdCurrEmit = env->GetByteField(*DBRecordJObj, serviceIdCurrEmit_ID);
-    DBRecord->TotalVolume = env->GetIntField(*DBRecordJObj, totalVolume_ID);
-    DBRecord->Price = env->GetIntField(*DBRecordJObj, price_ID);
-    DBRecord->TotalSum = env->GetIntField(*DBRecordJObj, totalSum_ID);
-    DBRecord->CardTrzCounter = env->GetShortField(*DBRecordJObj, cardTrzCounter_ID);
+    DBRecord->TotalVolume = (DWORD)env->GetLongField(*DBRecordJObj, totalVolume_ID);
+    DBRecord->Price = (DWORD)env->GetLongField(*DBRecordJObj, price_ID);
+    DBRecord->TotalSum = (DWORD)env->GetLongField(*DBRecordJObj, totalSum_ID);
+    DBRecord->CardTrzCounter = (WORD)env->GetIntField(*DBRecordJObj, cardTrzCounter_ID);
     DBRecord->HasReturn = env->GetBooleanField(*DBRecordJObj, hasReturn_ID);
     StdByteArr.clear();
     Result = JByteArrayToVector(env, (jbyteArray)(env->GetObjectField(*DBRecordJObj, rollbackCode_ID)), &StdByteArr);
@@ -494,12 +518,12 @@ bool TP7LibTypes::ConvertTransDBRecordFromJObj(JNIEnv *env, const jobject *DBRec
     Result = (Result && (StdByteArr.size() == sizeof(DBRecord->DebitToken)));
     if (Result) {
       memcpy(DBRecord->DebitToken, StdByteArr.data(), sizeof(DBRecord->DebitToken));  }
-    DBRecord->TerminalNumber = env->GetShortField(*DBRecordJObj, terminalNumber_ID);
-    DBRecord->Crc32 = env->GetIntField(*DBRecordJObj, crc32_ID);
+    DBRecord->TerminalNumber = (WORD)env->GetIntField(*DBRecordJObj, terminalNumber_ID);
+    DBRecord->Crc32 = (DWORD)env->GetLongField(*DBRecordJObj, crc32_ID);
     DBRecord->OperationType = env->GetByteField(*DBRecordJObj, operationType_ID);
     DBRecord->CardType = env->GetByteField(*DBRecordJObj, cardType_ID);
-    DBRecord->ClientSum = env->GetIntField(*DBRecordJObj, clientSum_ID);
-    DBRecord->DeltaBonus = env->GetIntField(*DBRecordJObj, deltaBonus_ID);
+    DBRecord->ClientSum = (DWORD)env->GetLongField(*DBRecordJObj, clientSum_ID);
+    DBRecord->DeltaBonus = (DWORD)env->GetLongField(*DBRecordJObj, deltaBonus_ID);
 
     Time = (long long)(env->GetLongField(*DBRecordJObj, returnTimeStamp_ID));
     ptm = gmtime(&Time); // возможны гонки
@@ -531,29 +555,31 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
     if (!Result) {
       return false;  }
 
-    jfieldID cardNumber_ID = env->GetFieldID(DBRecordClass, "cardNumber", "I");
-    jfieldID shiftNumber_ID = env->GetFieldID(DBRecordClass, "shiftNumber", "I");
+    jfieldID cardNumber_ID = env->GetFieldID(DBRecordClass, "cardNumber", "J");
+    jfieldID shiftNumber_ID = env->GetFieldID(DBRecordClass, "shiftNumber", "J");
     jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "J");
     jfieldID serviceIdOrigEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdOrigEmit", "B");
     jfieldID serviceIdCurrEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdCurrEmit", "B");
-    jfieldID totalVolume_ID = env->GetFieldID(DBRecordClass, "totalVolume", "I");
-    jfieldID price_ID = env->GetFieldID(DBRecordClass, "price", "I");
-    jfieldID totalSum_ID = env->GetFieldID(DBRecordClass, "totalSum", "I");
-    jfieldID cardTrzCounter_ID = env->GetFieldID(DBRecordClass, "cardTrzCounter", "S");
+    jfieldID totalVolume_ID = env->GetFieldID(DBRecordClass, "totalVolume", "J");
+    jfieldID price_ID = env->GetFieldID(DBRecordClass, "price", "J");
+    jfieldID totalSum_ID = env->GetFieldID(DBRecordClass, "totalSum", "J");
+    jfieldID cardTrzCounter_ID = env->GetFieldID(DBRecordClass, "cardTrzCounter", "I");
     jfieldID hasReturn_ID = env->GetFieldID(DBRecordClass, "hasReturn", "Z");
     jfieldID rollbackCode_ID = env->GetFieldID(DBRecordClass, "rollbackCode", "[B");
     jfieldID debitToken_ID = env->GetFieldID(DBRecordClass, "debitToken", "[B");
-    jfieldID terminalNumber_ID = env->GetFieldID(DBRecordClass, "terminalNumber", "S");
-    jfieldID crc32_ID = env->GetFieldID(DBRecordClass, "crc32", "I");
+    jfieldID terminalNumber_ID = env->GetFieldID(DBRecordClass, "terminalNumber", "I");
+    jfieldID crc32_ID = env->GetFieldID(DBRecordClass, "crc32", "J");
     jfieldID operationType_ID = env->GetFieldID(DBRecordClass, "operationType", "B");
     jfieldID cardType_ID = env->GetFieldID(DBRecordClass, "cardType", "B");
-    jfieldID clientSum_ID = env->GetFieldID(DBRecordClass, "clientSum", "I");
-    jfieldID deltaBonus_ID = env->GetFieldID(DBRecordClass, "deltaBonus", "I");
+    jfieldID clientSum_ID = env->GetFieldID(DBRecordClass, "clientSum", "J");
+    jfieldID deltaBonus_ID = env->GetFieldID(DBRecordClass, "deltaBonus", "J");
     jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "J");
 
-
-    env->SetIntField(*DBRecordJObj, cardNumber_ID, (int)DBRecord->CardNumber);
-    env->SetIntField(*DBRecordJObj, shiftNumber_ID, (int)DBRecord->SiftNumber);
+    long long LongVal = 0;
+    LongVal = DBRecord->CardNumber;
+    env->SetLongField(*DBRecordJObj, cardNumber_ID, LongVal);
+    LongVal = DBRecord->SiftNumber;
+    env->SetLongField(*DBRecordJObj, shiftNumber_ID, LongVal);
 
     memset(&tm, 0x00, sizeof(tm));
     tm.tm_year = DBRecord->TimeStamp.year;
@@ -567,10 +593,13 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
 
     env->SetByteField(*DBRecordJObj, serviceIdOrigEmit_ID, DBRecord->ServiceIdOrigEmit);
     env->SetByteField(*DBRecordJObj, serviceIdCurrEmit_ID, DBRecord->ServiceIdCurrEmit);
-    env->SetIntField(*DBRecordJObj, totalVolume_ID, (int)DBRecord->TotalVolume);
-    env->SetIntField(*DBRecordJObj, price_ID, (int)DBRecord->Price);
-    env->SetIntField(*DBRecordJObj, totalSum_ID, (int)DBRecord->TotalSum);
-    env->SetShortField(*DBRecordJObj, cardTrzCounter_ID, DBRecord->CardTrzCounter);
+    LongVal = DBRecord->TotalVolume;
+    env->SetLongField(*DBRecordJObj, totalVolume_ID, LongVal);
+    LongVal = DBRecord->Price;
+    env->SetLongField(*DBRecordJObj, price_ID, LongVal);
+    LongVal = DBRecord->TotalSum;
+    env->SetLongField(*DBRecordJObj, totalSum_ID, LongVal);
+    env->SetIntField(*DBRecordJObj, cardTrzCounter_ID, DBRecord->CardTrzCounter);
     env->SetBooleanField(*DBRecordJObj, hasReturn_ID, DBRecord->HasReturn);
 
     ArrayToJByteArray(env, DBRecord->RollbackCode, sizeof(DBRecord->RollbackCode), &JObjByteArr);
@@ -583,12 +612,15 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
     env->DeleteLocalRef(JObjByteArr);
     JObjByteArr = nullptr;
 
-    env->SetShortField(*DBRecordJObj, terminalNumber_ID, DBRecord->TerminalNumber);
-    env->SetIntField(*DBRecordJObj, crc32_ID, (int)DBRecord->Crc32);
+    env->SetIntField(*DBRecordJObj, terminalNumber_ID, DBRecord->TerminalNumber);
+    LongVal = DBRecord->Crc32;
+    env->SetLongField(*DBRecordJObj, crc32_ID, LongVal);
     env->SetByteField(*DBRecordJObj, operationType_ID, DBRecord->OperationType);
     env->SetByteField(*DBRecordJObj, cardType_ID, DBRecord->CardType);
-    env->SetIntField(*DBRecordJObj, clientSum_ID, (int)DBRecord->ClientSum);
-    env->SetIntField(*DBRecordJObj, deltaBonus_ID, (int)DBRecord->DeltaBonus);
+    LongVal = DBRecord->ClientSum;
+    env->SetLongField(*DBRecordJObj, clientSum_ID, LongVal);
+    LongVal = DBRecord->DeltaBonus;
+    env->SetLongField(*DBRecordJObj, deltaBonus_ID, LongVal);
 
     memset(&tm, 0x00, sizeof(tm));
     tm.tm_year = DBRecord->ReturnTimeStamp.year;
@@ -840,11 +872,8 @@ bool TP7LibTypes::CreateCardInfoJObj(JNIEnv *env, jobject *CardInfoJObj) {
       DeleteLocalRef(env, CardInfoJObj);  }
 
     jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7CardInfo");
-
     jmethodID CardInfoConstructorID = env->GetMethodID(CardInfoJObjClass, "<init>", "()V");
-
-
-//    *CardKeyJObj = env->NewObject(CardInfoJObjClass, CardInfoConstructorID);
+    *CardInfoJObj = env->NewObject(CardInfoJObjClass, CardInfoConstructorID);
 
     Result = (*CardInfoJObj != nullptr);
   } // if env && CardInfoJObj
@@ -859,31 +888,34 @@ bool TP7LibTypes::ConvertCardInfoToJObj(JNIEnv *env, const TCardInfo *CardInfo, 
     jbyteArray JBArray = nullptr;
 
     Result = CreateCardInfoJObj(env, CardInfoJObj);
-//    jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7CardInfo");
-//    Result = (Result && CardInfoJObjClass != nullptr);
-//    if (!Result) {
-//      return false;  }
+    jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7CardInfo");
+    Result = (Result && CardInfoJObjClass != nullptr);
+    if (!Result) {
+      return false;  }
 
-//    jfieldID isRecalcCard_ID = env->GetFieldID(CardInfoJObjClass, "isRecalcCard", "Z");
-//    jfieldID PTC_ID = env->GetFieldID(CardInfoJObjClass, "PTC", "B");
-//    jfieldID cardNumber_ID = env->GetFieldID(CardInfoJObjClass, "cardNumber", "I");
-//    jfieldID issuerID_ID = env->GetFieldID(CardInfoJObjClass, "issuerID", "I");
-//    jfieldID cardType_ID = env->GetFieldID(CardInfoJObjClass, "cardType",
-//                                           "Lru/petroplus/pos/p7LibApi/dto/card/CardType;");
-//    Result = (isRecalcCard_ID && PTC_ID && cardNumber_ID && issuerID_ID && cardType_ID);
-//
-//    if (Result) {
-//      env->SetBooleanField(*CardInfoJObj, isRecalcCard_ID, CardInfo->isRecalcCard);
-//      env->SetByteField(*CardInfoJObj, PTC_ID, CardInfo->PTC);
-//      env->SetIntField(*CardInfoJObj, cardNumber_ID, (int)CardInfo->CardNumber);
-//      env->SetIntField(*CardInfoJObj, issuerID_ID, (int)CardInfo->IssuerID);
-//      jobject CardTypeJObj = nullptr;
-//      Result = ConvertCardTypeToJObj(env, CardInfo->CardType, &CardTypeJObj);
-//      if (Result) {
-//        env->SetObjectField(*CardInfoJObj, cardType_ID, CardTypeJObj);  }
-//      env->DeleteLocalRef(CardTypeJObj);
-//      CardTypeJObj = nullptr;
-//    } // if Result
+    jfieldID isRecalcCard_ID = env->GetFieldID(CardInfoJObjClass, "isRecalcCard", "Z");
+    jfieldID PTC_ID = env->GetFieldID(CardInfoJObjClass, "PTC", "B");
+    jfieldID cardNumber_ID = env->GetFieldID(CardInfoJObjClass, "cardNumber", "J");
+    jfieldID issuerID_ID = env->GetFieldID(CardInfoJObjClass, "issuerID", "J");
+    jfieldID cardType_ID = env->GetFieldID(CardInfoJObjClass, "cardType",
+                                           "Lru/petroplus/pos/p7LibApi/dto/card/CardType;");
+    Result = (isRecalcCard_ID && PTC_ID && cardNumber_ID && issuerID_ID && cardType_ID);
+
+    if (Result) {
+      long long LongVal = 0;
+      env->SetBooleanField(*CardInfoJObj, isRecalcCard_ID, CardInfo->isRecalcCard);
+      env->SetByteField(*CardInfoJObj, PTC_ID, CardInfo->PTC);
+      LongVal = CardInfo->CardNumber;
+      env->SetLongField(*CardInfoJObj, cardNumber_ID, LongVal);
+      LongVal = CardInfo->IssuerID;
+      env->SetLongField(*CardInfoJObj, issuerID_ID, LongVal);
+      jobject CardTypeJObj = nullptr;
+      Result = ConvertCardTypeToJObj(env, CardInfo->CardType, &CardTypeJObj);
+      if (Result) {
+        env->SetObjectField(*CardInfoJObj, cardType_ID, CardTypeJObj);  }
+      env->DeleteLocalRef(CardTypeJObj);
+      CardTypeJObj = nullptr;
+    } // if Result
   } // if env && CardKey && CardInfoJObj
 
   return Result;
@@ -918,19 +950,25 @@ bool TP7LibTypes::ConvertTransactionInfoToJObj(JNIEnv *env, const TTransactionIn
     if (!Result) {
       return false;  }
 
-    jfieldID cardNumber_ID = env->GetFieldID(TransInfoJObjClass, "cardNumber", "I");
-    jfieldID transNumber_ID = env->GetFieldID(TransInfoJObjClass, "transNumber", "I");
-    jfieldID terminalNumber_ID = env->GetFieldID(TransInfoJObjClass, "terminalNumber", "I");
-    jfieldID terminalId_ID = env->GetFieldID(TransInfoJObjClass, "terminalId", "I");
-    jfieldID issuerId_ID = env->GetFieldID(TransInfoJObjClass, "issuerId", "I");
-    Result = (transNumber_ID && cardNumber_ID && cardNumber_ID && terminalNumber_ID && terminalId_ID && issuerId_ID);
+    jfieldID cardNumber_ID = env->GetFieldID(TransInfoJObjClass, "cardNumber", "J");
+    jfieldID transNumber_ID = env->GetFieldID(TransInfoJObjClass, "transNumber", "J");
+    jfieldID terminalNumber_ID = env->GetFieldID(TransInfoJObjClass, "terminalNumber", "J");
+    jfieldID terminalId_ID = env->GetFieldID(TransInfoJObjClass, "terminalId", "J");
+    jfieldID issuerId_ID = env->GetFieldID(TransInfoJObjClass, "issuerId", "J");
+    Result = (transNumber_ID && cardNumber_ID && terminalNumber_ID && terminalId_ID && issuerId_ID);
 
     if (Result) {
-      env->SetIntField(*TransInfoJObj, cardNumber_ID, (int)TransInfo->CardNumber);
-      env->SetIntField(*TransInfoJObj, transNumber_ID, (int)TransInfo->TransNumber);
-      env->SetIntField(*TransInfoJObj, terminalNumber_ID, (int)TransInfo->TerminalNumber);
-      env->SetIntField(*TransInfoJObj, terminalId_ID, (int)TransInfo->TerminalID);
-      env->SetIntField(*TransInfoJObj, issuerId_ID, (int)TransInfo->IssuerID);
+      long long LongVal = 0;
+      LongVal = TransInfo->CardNumber;
+      env->SetLongField(*TransInfoJObj, cardNumber_ID, LongVal);
+      LongVal = TransInfo->TransNumber;
+      env->SetLongField(*TransInfoJObj, transNumber_ID, LongVal);
+      LongVal = TransInfo->TerminalNumber;
+      env->SetLongField(*TransInfoJObj, terminalNumber_ID, LongVal);
+      LongVal = TransInfo->TerminalID;
+      env->SetLongField(*TransInfoJObj, terminalId_ID, LongVal);
+      LongVal = TransInfo->IssuerID;
+      env->SetLongField(*TransInfoJObj, issuerId_ID, LongVal);
     } // if Result
   } // if env && CardKey && CardInfoJObj
 
@@ -949,18 +987,18 @@ bool TP7LibTypes::ConvertDebetParamsFromJObj(JNIEnv *env, const jobject *DebetPa
 
     jfieldID serviceWhat_ID = env->GetFieldID(DebitJObjClass, "serviceWhat", "I");
     jfieldID serviceFrom_ID = env->GetFieldID(DebitJObjClass, "serviceFrom", "I");
-    jfieldID amount_ID = env->GetFieldID(DebitJObjClass, "amount", "I");
-    jfieldID price_ID = env->GetFieldID(DebitJObjClass, "price", "I");
-    jfieldID sum_ID = env->GetFieldID(DebitJObjClass, "sum", "I");
+    jfieldID amount_ID = env->GetFieldID(DebitJObjClass, "amount", "J");
+    jfieldID price_ID = env->GetFieldID(DebitJObjClass, "price", "J");
+    jfieldID sum_ID = env->GetFieldID(DebitJObjClass, "sum", "J");
     jfieldID pinBlock_ID = env->GetFieldID(DebitJObjClass, "pinBlock", "[B");
     Result = (serviceWhat_ID && serviceFrom_ID && amount_ID && price_ID && sum_ID && pinBlock_ID);
 
     if (Result) {
       DebetParams->service_what = env->GetIntField(*DebetParamsJObj, serviceWhat_ID);
       DebetParams->service_from = env->GetIntField(*DebetParamsJObj, serviceFrom_ID);
-      DebetParams->amount       = env->GetIntField(*DebetParamsJObj, amount_ID);
-      DebetParams->price        = env->GetIntField(*DebetParamsJObj, price_ID);
-      DebetParams->sum          = env->GetIntField(*DebetParamsJObj, sum_ID);
+      DebetParams->amount       = (DWORD)env->GetLongField(*DebetParamsJObj, amount_ID);
+      DebetParams->price        = (DWORD)env->GetLongField(*DebetParamsJObj, price_ID);
+      DebetParams->sum          = (DWORD)env->GetLongField(*DebetParamsJObj, sum_ID);
       jbyteArray JBArr = nullptr;
       JBArr = (jbyteArray)(env->GetObjectField(*DebetParamsJObj, pinBlock_ID));
       Result = JByteArrayToVector(env, JBArr, &DebetParams->pinblock);
@@ -981,16 +1019,16 @@ bool TP7LibTypes::ConvertRefundParamsFromJObj(JNIEnv *env, const jobject *Refund
       return false;  }
 
     jfieldID serviceWhat_ID = env->GetFieldID(RefundJObjClass, "serviceWhat", "I");
-    jfieldID amount_ID = env->GetFieldID(RefundJObjClass, "amount", "I");
-    jfieldID price_ID = env->GetFieldID(RefundJObjClass, "price", "I");
-    jfieldID sum_ID = env->GetFieldID(RefundJObjClass, "sum", "I");
+    jfieldID amount_ID = env->GetFieldID(RefundJObjClass, "amount", "J");
+    jfieldID price_ID = env->GetFieldID(RefundJObjClass, "price", "J");
+    jfieldID sum_ID = env->GetFieldID(RefundJObjClass, "sum", "J");
     Result = (serviceWhat_ID && amount_ID && price_ID && sum_ID);
 
     if (Result) {
       RefundParams->service_what = env->GetIntField(*RefundParamsJObj, serviceWhat_ID);
-      RefundParams->amount       = env->GetIntField(*RefundParamsJObj, amount_ID);
-      RefundParams->price        = env->GetIntField(*RefundParamsJObj, price_ID);
-      RefundParams->sum          = env->GetIntField(*RefundParamsJObj, sum_ID);
+      RefundParams->amount       = (DWORD)env->GetLongField(*RefundParamsJObj, amount_ID);
+      RefundParams->price        = (DWORD)env->GetLongField(*RefundParamsJObj, price_ID);
+      RefundParams->sum          = (DWORD)env->GetLongField(*RefundParamsJObj, sum_ID);
     } // if Result
   } // if env && RefundParamsJObj && RefundParams
 
@@ -1076,23 +1114,23 @@ bool TP7LibTypes::ConvertLibInfoToJObj(JNIEnv *env, const TLibInfo *LibInfo, job
   if (env && LibInfo && LibInfoJObj) {
     jbyteArray JBArray = nullptr;
 
-    Result = CreateTransactionInfoJObj(env, LibInfoJObj);
+    Result = CreateLibInfoJObj(env, LibInfoJObj);
     jclass TransInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/LibInfoDto");
     Result = (Result && TransInfoJObjClass != nullptr);
     if (!Result) {
       return false;  }
 
-    jfieldID acquirerId_ID = env->GetFieldID(TransInfoJObjClass, "acquirerId", "I");
-    jfieldID terminalNum_ID = env->GetFieldID(TransInfoJObjClass, "terminalNum", "I");
-    jfieldID majorVersion_ID = env->GetFieldID(TransInfoJObjClass, "majorVersion", "I");
-    jfieldID minerVersion_ID = env->GetFieldID(TransInfoJObjClass, "minerVersion", "I");
+    jfieldID acquirerId_ID = env->GetFieldID(TransInfoJObjClass, "acquirerId", "J");
+    jfieldID terminalNum_ID = env->GetFieldID(TransInfoJObjClass, "terminalNum", "J");
+    jfieldID majorVersion_ID = env->GetFieldID(TransInfoJObjClass, "majorVersion", "J");
+    jfieldID minerVersion_ID = env->GetFieldID(TransInfoJObjClass, "minerVersion", "J");
     Result = (acquirerId_ID && terminalNum_ID && majorVersion_ID && minerVersion_ID);
 
     if (Result) {
-      env->SetIntField(*LibInfoJObj, acquirerId_ID, (int)LibInfo->AquireID);
-      env->SetIntField(*LibInfoJObj, terminalNum_ID, (int)LibInfo->TerminalNum);
-      env->SetIntField(*LibInfoJObj, majorVersion_ID, (int)LibInfo->MajorVersion);
-      env->SetIntField(*LibInfoJObj, minerVersion_ID, (int)LibInfo->MinorVersion);
+      env->SetLongField(*LibInfoJObj, acquirerId_ID, (long long)LibInfo->AquireID);
+      env->SetLongField(*LibInfoJObj, terminalNum_ID, (long long)LibInfo->TerminalNum);
+      env->SetLongField(*LibInfoJObj, majorVersion_ID, (long long)LibInfo->MajorVersion);
+      env->SetLongField(*LibInfoJObj, minerVersion_ID, (long long)LibInfo->MinorVersion);
     } // if Result
   } // if env && LibInfo && LibInfoJObj
 
