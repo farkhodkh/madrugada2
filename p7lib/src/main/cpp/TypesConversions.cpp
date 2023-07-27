@@ -7,9 +7,6 @@
 
 #include "TypesConversions.h"
 
-#include <ctime>
-
-using namespace std;
 //---------------------------------------------------------------------------------------------------------------
 
 bool TP7LibTypes::JByteArrayToVector(JNIEnv *env, const jbyteArray &Array, std::vector<unsigned char> *Vector) {
@@ -460,6 +457,7 @@ bool TP7LibTypes::ConvertTransDBRecordFromJObj(JNIEnv *env, const jobject *DBRec
 
   if (env && DBRecordJObj && DBRecord) {
     std::vector<unsigned char> StdByteArr;
+    jobject timeStampJObj = nullptr;
 
     jclass DBRecordClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionRecordDto");
     Result = (DBRecordClass != nullptr);
@@ -468,7 +466,7 @@ bool TP7LibTypes::ConvertTransDBRecordFromJObj(JNIEnv *env, const jobject *DBRec
 
     jfieldID cardNumber_ID = env->GetFieldID(DBRecordClass, "cardNumber", "J");
     jfieldID shiftNumber_ID = env->GetFieldID(DBRecordClass, "shiftNumber", "J");
-    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "J");
+    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "Lru/petroplus/pos/p7LibApi/dto/StClockDto;");
     jfieldID serviceIdOrigEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdOrigEmit", "B");
     jfieldID serviceIdCurrEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdCurrEmit", "B");
     jfieldID totalVolume_ID = env->GetFieldID(DBRecordClass, "totalVolume", "J");
@@ -479,61 +477,51 @@ bool TP7LibTypes::ConvertTransDBRecordFromJObj(JNIEnv *env, const jobject *DBRec
     jfieldID rollbackCode_ID = env->GetFieldID(DBRecordClass, "rollbackCode", "[B");
     jfieldID debitToken_ID = env->GetFieldID(DBRecordClass, "debitToken", "[B");
     jfieldID terminalNumber_ID = env->GetFieldID(DBRecordClass, "terminalNumber", "I");
-    jfieldID crc32_ID = env->GetFieldID(DBRecordClass, "crc32", "J");
+    jfieldID crc32_ID = env->GetFieldID(DBRecordClass, "crc32", "[B");
     jfieldID operationType_ID = env->GetFieldID(DBRecordClass, "operationType", "B");
     jfieldID cardType_ID = env->GetFieldID(DBRecordClass, "cardType", "B");
     jfieldID clientSum_ID = env->GetFieldID(DBRecordClass, "clientSum", "J");
     jfieldID deltaBonus_ID = env->GetFieldID(DBRecordClass, "deltaBonus", "J");
-    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "J");
+    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "Lru/petroplus/pos/p7LibApi/dto/StClockDto;");
 
 
     DBRecord->CardNumber = (DWORD)env->GetLongField(*DBRecordJObj, cardNumber_ID);
     DBRecord->SiftNumber = (DWORD)env->GetLongField(*DBRecordJObj, shiftNumber_ID);
-
-    Time = (long long)(env->GetLongField(*DBRecordJObj, timeStamp_ID));
-    ptm = nullptr;
-    ptm = gmtime(&Time); // возможны гонки
-    DBRecord->TimeStamp.year    = ptm->tm_year;
-    DBRecord->TimeStamp.month   = ptm->tm_mon;
-    DBRecord->TimeStamp.day     = ptm->tm_mday;
-    DBRecord->TimeStamp.hour    = ptm->tm_hour;
-    DBRecord->TimeStamp.minute  = ptm->tm_min;
-    DBRecord->TimeStamp.second  = ptm->tm_sec;
-    DBRecord->TimeStamp.weekDay = ptm->tm_wday;
-
-    DBRecord->ServiceIdOrigEmit = env->GetByteField(*DBRecordJObj, serviceIdOrigEmit_ID);
-    DBRecord->ServiceIdCurrEmit = env->GetByteField(*DBRecordJObj, serviceIdCurrEmit_ID);
-    DBRecord->TotalVolume = (DWORD)env->GetLongField(*DBRecordJObj, totalVolume_ID);
-    DBRecord->Price = (DWORD)env->GetLongField(*DBRecordJObj, price_ID);
-    DBRecord->TotalSum = (DWORD)env->GetLongField(*DBRecordJObj, totalSum_ID);
-    DBRecord->CardTrzCounter = (WORD)env->GetIntField(*DBRecordJObj, cardTrzCounter_ID);
-    DBRecord->HasReturn = env->GetBooleanField(*DBRecordJObj, hasReturn_ID);
+    timeStampJObj = env->GetObjectField(*DBRecordJObj, timeStamp_ID);
+    Result = ConvertStTimeFromJObj(env, &timeStampJObj, &DBRecord->TimeStamp);
+    timeStampJObj = nullptr;
     StdByteArr.clear();
-    Result = JByteArrayToVector(env, (jbyteArray)(env->GetObjectField(*DBRecordJObj, rollbackCode_ID)), &StdByteArr);
-    Result = (Result && (StdByteArr.size() == sizeof(DBRecord->RollbackCode)));
     if (Result) {
-      memcpy(DBRecord->RollbackCode, StdByteArr.data(), sizeof(DBRecord->RollbackCode));  }
-    StdByteArr.clear();
-    Result = JByteArrayToVector(env, (jbyteArray)(env->GetObjectField(*DBRecordJObj, debitToken_ID)), &StdByteArr);
-    Result = (Result && (StdByteArr.size() == sizeof(DBRecord->DebitToken)));
+      DBRecord->ServiceIdOrigEmit = env->GetByteField(*DBRecordJObj, serviceIdOrigEmit_ID);
+      DBRecord->ServiceIdCurrEmit = env->GetByteField(*DBRecordJObj, serviceIdCurrEmit_ID);
+      DBRecord->TotalVolume = (DWORD)env->GetLongField(*DBRecordJObj, totalVolume_ID);
+      DBRecord->Price = (DWORD)env->GetLongField(*DBRecordJObj, price_ID);
+      DBRecord->TotalSum = (DWORD)env->GetLongField(*DBRecordJObj, totalSum_ID);
+      DBRecord->CardTrzCounter = (WORD)env->GetIntField(*DBRecordJObj, cardTrzCounter_ID);
+      DBRecord->HasReturn = env->GetBooleanField(*DBRecordJObj, hasReturn_ID);
+      Result = JByteArrayToVector(env, (jbyteArray)(env->GetObjectField(*DBRecordJObj, rollbackCode_ID)),
+                                  &StdByteArr);
+      Result = (Result && (StdByteArr.size() == sizeof(DBRecord->RollbackCode)));  }
     if (Result) {
-      memcpy(DBRecord->DebitToken, StdByteArr.data(), sizeof(DBRecord->DebitToken));  }
-    DBRecord->TerminalNumber = (WORD)env->GetIntField(*DBRecordJObj, terminalNumber_ID);
-    DBRecord->Crc32 = (DWORD)env->GetLongField(*DBRecordJObj, crc32_ID);
-    DBRecord->OperationType = env->GetByteField(*DBRecordJObj, operationType_ID);
-    DBRecord->CardType = env->GetByteField(*DBRecordJObj, cardType_ID);
-    DBRecord->ClientSum = (DWORD)env->GetLongField(*DBRecordJObj, clientSum_ID);
-    DBRecord->DeltaBonus = (DWORD)env->GetLongField(*DBRecordJObj, deltaBonus_ID);
-
-    Time = (long long)(env->GetLongField(*DBRecordJObj, returnTimeStamp_ID));
-    ptm = gmtime(&Time); // возможны гонки
-    DBRecord->ReturnTimeStamp.year    = ptm->tm_year;
-    DBRecord->ReturnTimeStamp.month   = ptm->tm_mon;
-    DBRecord->ReturnTimeStamp.day     = ptm->tm_mday;
-    DBRecord->ReturnTimeStamp.hour    = ptm->tm_hour;
-    DBRecord->ReturnTimeStamp.minute  = ptm->tm_min;
-    DBRecord->ReturnTimeStamp.second  = ptm->tm_sec;
-    DBRecord->ReturnTimeStamp.weekDay = ptm->tm_wday;
+      memcpy(DBRecord->RollbackCode, StdByteArr.data(), sizeof(DBRecord->RollbackCode));
+      Result = JByteArrayToVector(env, (jbyteArray)(env->GetObjectField(*DBRecordJObj, debitToken_ID)),
+                                  &StdByteArr);
+      Result = (Result && (StdByteArr.size() == sizeof(DBRecord->DebitToken)));  }
+    if (Result) {
+      memcpy(DBRecord->DebitToken, StdByteArr.data(), sizeof(DBRecord->DebitToken));
+      DBRecord->TerminalNumber = (WORD)env->GetIntField(*DBRecordJObj, terminalNumber_ID);
+      Result = JByteArrayToVector(env, (jbyteArray)(env->GetObjectField(*DBRecordJObj, crc32_ID)),
+                                  &StdByteArr);
+      Result = (Result && (StdByteArr.size() == sizeof(DBRecord->Crc32)));  }
+    if (Result) {
+      memcpy(DBRecord->Crc32, StdByteArr.data(), sizeof(DBRecord->Crc32));
+      DBRecord->OperationType = (TrzBaseOperType)env->GetByteField(*DBRecordJObj, operationType_ID);
+      DBRecord->CardType = env->GetByteField(*DBRecordJObj, cardType_ID);
+      DBRecord->ClientSum = (DWORD)env->GetLongField(*DBRecordJObj, clientSum_ID);
+      DBRecord->DeltaBonus = (DWORD)env->GetLongField(*DBRecordJObj, deltaBonus_ID);
+      timeStampJObj = env->GetObjectField(*DBRecordJObj, returnTimeStamp_ID);
+      Result = ConvertStTimeFromJObj(env, &timeStampJObj, &DBRecord->ReturnTimeStamp);
+      timeStampJObj = nullptr;  }
   } // env && DBRecordJObj && DBRecord
 
   return Result;
@@ -546,6 +534,7 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
   std::tm     tm {0};
   jbyteArray  JObjByteArr = nullptr;
   std::vector<unsigned char> StdByteArr;
+  jobject timeStampJObj = nullptr;
 
   if (env && DBRecord && DBRecordJObj) {
     Result = CreateTransDBRecordJObj(env, DBRecordJObj);
@@ -557,7 +546,7 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
 
     jfieldID cardNumber_ID = env->GetFieldID(DBRecordClass, "cardNumber", "J");
     jfieldID shiftNumber_ID = env->GetFieldID(DBRecordClass, "shiftNumber", "J");
-    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "J");
+    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "Lru/petroplus/pos/p7LibApi/dto/StClockDto;");
     jfieldID serviceIdOrigEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdOrigEmit", "B");
     jfieldID serviceIdCurrEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdCurrEmit", "B");
     jfieldID totalVolume_ID = env->GetFieldID(DBRecordClass, "totalVolume", "J");
@@ -568,69 +557,46 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
     jfieldID rollbackCode_ID = env->GetFieldID(DBRecordClass, "rollbackCode", "[B");
     jfieldID debitToken_ID = env->GetFieldID(DBRecordClass, "debitToken", "[B");
     jfieldID terminalNumber_ID = env->GetFieldID(DBRecordClass, "terminalNumber", "I");
-    jfieldID crc32_ID = env->GetFieldID(DBRecordClass, "crc32", "J");
+    jfieldID crc32_ID = env->GetFieldID(DBRecordClass, "crc32", "[B");
     jfieldID operationType_ID = env->GetFieldID(DBRecordClass, "operationType", "B");
     jfieldID cardType_ID = env->GetFieldID(DBRecordClass, "cardType", "B");
     jfieldID clientSum_ID = env->GetFieldID(DBRecordClass, "clientSum", "J");
     jfieldID deltaBonus_ID = env->GetFieldID(DBRecordClass, "deltaBonus", "J");
-    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "J");
+    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "Lru/petroplus/pos/p7LibApi/dto/StClockDto;");
 
-    long long LongVal = 0;
-    LongVal = DBRecord->CardNumber;
-    env->SetLongField(*DBRecordJObj, cardNumber_ID, LongVal);
-    LongVal = DBRecord->SiftNumber;
-    env->SetLongField(*DBRecordJObj, shiftNumber_ID, LongVal);
 
-    memset(&tm, 0x00, sizeof(tm));
-    tm.tm_year = DBRecord->TimeStamp.year;
-    tm.tm_mon  = DBRecord->TimeStamp.month;
-    tm.tm_mday = DBRecord->TimeStamp.day;
-    tm.tm_hour = DBRecord->TimeStamp.hour;
-    tm.tm_min  = DBRecord->TimeStamp.minute;
-    tm.tm_sec  = DBRecord->TimeStamp.second;
-    tm.tm_wday = DBRecord->TimeStamp.weekDay;
-    env->SetLongField(*DBRecordJObj, timeStamp_ID, (long long)mktime(&tm));
-
+    env->SetLongField(*DBRecordJObj, cardNumber_ID, (long long)DBRecord->CardNumber);
+    env->SetLongField(*DBRecordJObj, shiftNumber_ID, (long long)DBRecord->SiftNumber);
+    Result = ConvertStTimeToJObj(env, &DBRecord->TimeStamp, &timeStampJObj);
+    env->SetObjectField(*DBRecordJObj, timeStamp_ID, timeStampJObj);
+    DeleteLocalRef(env, &timeStampJObj);
     env->SetByteField(*DBRecordJObj, serviceIdOrigEmit_ID, DBRecord->ServiceIdOrigEmit);
     env->SetByteField(*DBRecordJObj, serviceIdCurrEmit_ID, DBRecord->ServiceIdCurrEmit);
-    LongVal = DBRecord->TotalVolume;
-    env->SetLongField(*DBRecordJObj, totalVolume_ID, LongVal);
-    LongVal = DBRecord->Price;
-    env->SetLongField(*DBRecordJObj, price_ID, LongVal);
-    LongVal = DBRecord->TotalSum;
-    env->SetLongField(*DBRecordJObj, totalSum_ID, LongVal);
+    env->SetLongField(*DBRecordJObj, totalVolume_ID, (long long)DBRecord->TotalVolume);
+    env->SetLongField(*DBRecordJObj, price_ID, (long long)DBRecord->Price);
+    env->SetLongField(*DBRecordJObj, totalSum_ID, (long long)DBRecord->TotalSum);
     env->SetIntField(*DBRecordJObj, cardTrzCounter_ID, DBRecord->CardTrzCounter);
     env->SetBooleanField(*DBRecordJObj, hasReturn_ID, DBRecord->HasReturn);
-
-    ArrayToJByteArray(env, DBRecord->RollbackCode, sizeof(DBRecord->RollbackCode), &JObjByteArr);
+    Result = ArrayToJByteArray(env, DBRecord->RollbackCode, sizeof(DBRecord->RollbackCode), &JObjByteArr);
     env->SetObjectField(*DBRecordJObj, rollbackCode_ID, JObjByteArr);
     env->DeleteLocalRef(JObjByteArr);
     JObjByteArr = nullptr;
-
-    ArrayToJByteArray(env, DBRecord->DebitToken, sizeof(DBRecord->DebitToken), &JObjByteArr);
+    Result = ArrayToJByteArray(env, DBRecord->DebitToken, sizeof(DBRecord->DebitToken), &JObjByteArr);
     env->SetObjectField(*DBRecordJObj, debitToken_ID, JObjByteArr);
     env->DeleteLocalRef(JObjByteArr);
     JObjByteArr = nullptr;
-
     env->SetIntField(*DBRecordJObj, terminalNumber_ID, DBRecord->TerminalNumber);
-    LongVal = DBRecord->Crc32;
-    env->SetLongField(*DBRecordJObj, crc32_ID, LongVal);
-    env->SetByteField(*DBRecordJObj, operationType_ID, DBRecord->OperationType);
+    Result = ArrayToJByteArray(env, DBRecord->Crc32, sizeof(DBRecord->Crc32), &JObjByteArr);
+    env->SetObjectField(*DBRecordJObj, crc32_ID, JObjByteArr);
+    env->DeleteLocalRef(JObjByteArr);
+    JObjByteArr = nullptr;
+    env->SetByteField(*DBRecordJObj, operationType_ID, (BYTE)DBRecord->OperationType);
     env->SetByteField(*DBRecordJObj, cardType_ID, DBRecord->CardType);
-    LongVal = DBRecord->ClientSum;
-    env->SetLongField(*DBRecordJObj, clientSum_ID, LongVal);
-    LongVal = DBRecord->DeltaBonus;
-    env->SetLongField(*DBRecordJObj, deltaBonus_ID, LongVal);
-
-    memset(&tm, 0x00, sizeof(tm));
-    tm.tm_year = DBRecord->ReturnTimeStamp.year;
-    tm.tm_mon  = DBRecord->ReturnTimeStamp.month;
-    tm.tm_mday = DBRecord->ReturnTimeStamp.day;
-    tm.tm_hour = DBRecord->ReturnTimeStamp.hour;
-    tm.tm_min  = DBRecord->ReturnTimeStamp.minute;
-    tm.tm_sec  = DBRecord->ReturnTimeStamp.second;
-    tm.tm_wday = DBRecord->ReturnTimeStamp.weekDay;
-    env->SetLongField(*DBRecordJObj, returnTimeStamp_ID, (long long)mktime(&tm));
+    env->SetLongField(*DBRecordJObj, clientSum_ID, (long long)DBRecord->ClientSum);
+    env->SetLongField(*DBRecordJObj, deltaBonus_ID, (long long)DBRecord->DeltaBonus);
+    Result = ConvertStTimeToJObj(env, &DBRecord->ReturnTimeStamp, &timeStampJObj);
+    env->SetObjectField(*DBRecordJObj, returnTimeStamp_ID, timeStampJObj);
+    DeleteLocalRef(env, &timeStampJObj);
   } // if env && DBRecord && DBRecordJObj
 
   return Result;
@@ -1138,7 +1104,90 @@ bool TP7LibTypes::ConvertLibInfoToJObj(JNIEnv *env, const TLibInfo *LibInfo, job
 }
 //--------------------------------------------------
 
+bool TP7LibTypes::CreateStTimeJObj(JNIEnv *env, jobject *StTimeJObj) {
+  bool Result = false;
+  if (env &&  StTimeJObj) {
+    if (*StTimeJObj) {
+      DeleteLocalRef(env, StTimeJObj);  }
 
+    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/StClockDto");
+    jmethodID TransInfoConstructorID = env->GetMethodID(StTimeJObjClass, "<init>", "()V");
+    *StTimeJObj = env->NewObject(StTimeJObjClass, TransInfoConstructorID);
+
+    Result = (*StTimeJObj != nullptr);
+  } // if env && ErrorInfoJObj
+  return Result;}
+//--------------------------------------------------
+
+bool TP7LibTypes::ConvertStTimeToJObj(JNIEnv *env, const TSTTime *StTime, jobject *StTimeJObj) {
+  bool Result = false;
+
+  if (env && StTime && StTimeJObj) {
+    jbyteArray JBArray = nullptr;
+
+    Result = CreateStTimeJObj(env, StTimeJObj);
+    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/StClockDto");
+    Result = (Result && StTimeJObjClass != nullptr);
+    if (!Result) {
+      if (*StTimeJObj) {
+        env->DeleteLocalRef(*StTimeJObj);
+        *StTimeJObj = nullptr;  }
+      return false;  }
+
+    jfieldID year_ID = env->GetFieldID(StTimeJObjClass, "year", "S");
+    jfieldID month_ID = env->GetFieldID(StTimeJObjClass, "month", "S");
+    jfieldID day_ID = env->GetFieldID(StTimeJObjClass, "day", "S");
+    jfieldID hour_ID = env->GetFieldID(StTimeJObjClass, "hour", "S");
+    jfieldID minute_ID = env->GetFieldID(StTimeJObjClass, "minute", "S");
+    jfieldID second_ID = env->GetFieldID(StTimeJObjClass, "second", "S");
+    jfieldID weekDay_ID = env->GetFieldID(StTimeJObjClass, "weekDay", "S");
+    Result = (year_ID && month_ID && day_ID && hour_ID && minute_ID && second_ID && weekDay_ID);
+
+    if (Result) {
+      env->SetShortField(*StTimeJObj, year_ID, (short)StTime->year);
+      env->SetShortField(*StTimeJObj, month_ID, (short)StTime->month);
+      env->SetShortField(*StTimeJObj, day_ID, (short)StTime->day);
+      env->SetShortField(*StTimeJObj, hour_ID, (short)StTime->hour);
+      env->SetShortField(*StTimeJObj, minute_ID, (short)StTime->minute);
+      env->SetShortField(*StTimeJObj, second_ID, (short)StTime->second);
+      env->SetShortField(*StTimeJObj,weekDay_ID, (short)StTime->weekDay);
+    } // if Result
+  } // if env && StTime && StTimeJObj
+
+  return Result;
+}
+//--------------------------------------------------
+
+bool TP7LibTypes::ConvertStTimeFromJObj(JNIEnv *env, const jobject *StTimeJObj, TSTTime *StTime) {
+  bool Result = false;
+
+  if (env && StTime && StTimeJObj) {
+    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/StClockDto");
+    Result = (StTimeJObjClass != nullptr);
+    if (!Result) {
+      return false;  }
+
+    jfieldID year_ID = env->GetFieldID(StTimeJObjClass, "year", "S");
+    jfieldID month_ID = env->GetFieldID(StTimeJObjClass, "month", "S");
+    jfieldID day_ID = env->GetFieldID(StTimeJObjClass, "day", "S");
+    jfieldID hour_ID = env->GetFieldID(StTimeJObjClass, "hour", "S");
+    jfieldID minute_ID = env->GetFieldID(StTimeJObjClass, "minute", "S");
+    jfieldID second_ID = env->GetFieldID(StTimeJObjClass, "second", "S");
+    jfieldID weekDay_ID = env->GetFieldID(StTimeJObjClass, "weekDay", "S");
+    Result = (year_ID && month_ID && day_ID && hour_ID && minute_ID && second_ID && weekDay_ID);
+
+    if (Result) {
+      StTime->year = (BYTE)env->GetShortField(*StTimeJObj,  year_ID);
+      StTime->month = (BYTE)env->GetShortField(*StTimeJObj, month_ID);
+      StTime->day = (BYTE)env->GetShortField(*StTimeJObj, day_ID);
+      StTime->hour = (BYTE)env->GetShortField(*StTimeJObj, hour_ID);
+      StTime->minute = (BYTE)env->GetShortField(*StTimeJObj, minute_ID);
+      StTime->second = (BYTE)env->GetShortField(*StTimeJObj, second_ID);
+      StTime->weekDay = (BYTE)env->GetShortField(*StTimeJObj, weekDay_ID);
+    } // if Result
+  } // if env && StTime && StTimeJObj
+}
+//--------------------------------------------------
 
 
 

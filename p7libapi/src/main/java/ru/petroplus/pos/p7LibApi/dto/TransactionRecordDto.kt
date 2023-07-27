@@ -23,30 +23,27 @@ import ru.petroplus.pos.p7LibApi.dto.card.CardType
 //ключ - DebitToken или просто Token
 //+ номер смены
 //+ тип операции (дебет/возврат)
-/**
- * TODO - Юрий, добавиь описание класса и типов
- */
 
 class TransactionRecordDto(
-    var cardNumber: Long = 0L,                   //!< Графический номер карты
-    var shiftNumber: Long = 0,                   //!< Номер смены
-    var timeStamp: Long = 0L,                    //!< Время проведения операции, привести к структуре STCLOCK
-    var serviceIdOrigEmit: Byte = 0,             //!< Вид топлива/услуги "за что платили" (в терминах ЭМИТЕНТА карты)
-    var serviceIdCurrEmit: Byte = 0,             //!< Вид топлива/услуги "чем платили" (в терминах ЭМИТЕНТА карты)
-    var totalVolume: Long = 0L,                  //!< Количество топлива/услуги ("что покупали")
-    var price: Long = 0L,                        //!< Цена за 1 ед. топлива/услуги ("что покупали")
-    var totalSum: Long = 0L,                     //!< Сумма (TotalVolume * Price)
-    var cardTrzCounter: Int = 0,                 //!< Номер операции (в терминах карты)
-    var hasReturn: Boolean = false,              //!< Был ли возврат/отмена (0 - нет, 1 - да)
-    var rollbackCode: ByteArray = byteArrayOf(), //!< Код для возврата (получен от карты во время дебета)
-    var debitToken: ByteArray = byteArrayOf(),   //!< GUID транзакции дебета в онлайне
-    var terminalNumber: Int = 0,                 //!< Номер терминала/POS/поста
-    var crc32: Long = 0L,                        //!< CRC32 для данной записи
-    var operationType: Byte = 0,                 //!< Тип транзакции (0 - дебет, 1 - кредит кошелька, 2 - онлайн-пополнение счета)
-                                                 // не актуально, поле соответствует TrzBaseOperType
+    var cardNumber: Long = 0L,                      //!< Графический номер карты
+    var shiftNumber: Long = 0,                      //!< Номер смены
+    var timeStamp: StClockDto = StClockDto(),       //!< Время проведения операции, привести к структуре STCLOCK
+    var serviceIdOrigEmit: Byte = 0,                //!< Вид топлива/услуги "за что платили" (в терминах ЭМИТЕНТА карты)
+    var serviceIdCurrEmit: Byte = 0,                //!< Вид топлива/услуги "чем платили" (в терминах ЭМИТЕНТА карты)
+    var totalVolume: Long = 0L,                     //!< Количество топлива/услуги ("что покупали")
+    var price: Long = 0L,                           //!< Цена за 1 ед. топлива/услуги ("что покупали")
+    var totalSum: Long = 0L,                        //!< Сумма (TotalVolume * Price)
+    var cardTrzCounter: Int = 0,                    //!< Номер операции (в терминах карты)
+    var hasReturn: Boolean = false,                 //!< Был ли возврат/отмена (0 - нет, 1 - да)
+    var rollbackCode: ByteArray = byteArrayOf(),    //!< Код для возврата (получен от карты во время дебета)
+    var debitToken: ByteArray = byteArrayOf(),      //!< GUID транзакции дебета в онлайне
+    var terminalNumber: Int = 0,                    //!< Номер терминала/POS/поста
+    var crc32: ByteArray = byteArrayOf(),           //!< CRC32 для данной записи
+    var operationType: Byte = 0,                    //!< Тип транзакции (0 - дебет, 1 - кредит кошелька, 2 - онлайн-пополнение счета)
+                                                    // не актуально, поле соответствует TrzBaseOperType
 
-    var cardType: Byte = 0,                      //!< Тип карты (1 - обычная петроловская, 2 - java, 0 - тип карты неизвестен)
-    var clientSum: Long = 0L,                    //!< Сумма с учётом скидки (для поддержки дебета с лояльностью по обычным петрольным картам)
-    var deltaBonus: Long = 0L,                   //!< Начисленные бонусы при транзакции с лояльностью
-    var returnTimeStamp: Long = 0L,              //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
+    var cardType: Byte = 0,                         //!< Тип карты (1 - обычная петроловская, 2 - java, 0 - тип карты неизвестен)
+    var clientSum: Long = 0L,                       //!< Сумма с учётом скидки (для поддержки дебета с лояльностью по обычным петрольным картам)
+    var deltaBonus: Long = 0L,                      //!< Начисленные бонусы при транзакции с лояльностью
+    var returnTimeStamp: StClockDto = StClockDto(), //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
 )

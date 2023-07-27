@@ -75,6 +75,9 @@ public:
   static bool CreateLibInfoJObj(JNIEnv *env, jobject *LibInfoJObj);
   static bool ConvertLibInfoToJObj(JNIEnv *env, const TLibInfo *LibInfo, jobject *LibInfoJObj);
 
+  static bool CreateStTimeJObj(JNIEnv *env, jobject *StTimeJObj);
+  static bool ConvertStTimeToJObj(JNIEnv *env, const TSTTime *StTime, jobject *StTimeJObj);
+  static bool ConvertStTimeFromJObj(JNIEnv *env, const jobject *StTimeJObj, TSTTime *StTime);
 
 
 

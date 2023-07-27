@@ -51,7 +51,8 @@ add_library( # Sets the name of the library.
 #set (P7LIB_LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../P7Lib;")
 
 include_directories(p7lib
-        "${P7LIB_LIB_DIR};"
+        "${P7LIB_LIB_DIR}"
+        "${P7LIB_LIB_DIR}/P7LibSrc"
 )
 
 

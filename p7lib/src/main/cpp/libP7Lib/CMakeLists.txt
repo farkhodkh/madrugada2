@@ -17,6 +17,10 @@ set(P7LibSrc
     "${P7LIB_LIB_DIR}/P7LibSrc/ERR/p7_errors.h"
     "${P7LIB_LIB_DIR}/P7LibSrc/ERR/p7_errors_res.cpp"
     "${P7LIB_LIB_DIR}/P7LibSrc/ERR/p7_errors_res.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/_time.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/_time.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/Tpc_comp.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/Tpc_comp.cpp"
 )
 source_group("P7LibSrc" FILES ${P7LibSrc})
 
@@ -45,10 +49,11 @@ ADD_LIBRARY(${LIB_NAME} ${ALL_FILES})
 # Include directories
 ################################################################################
 target_include_directories(${LIB_NAME} PUBLIC
-    "${CMAKE_CURRENT_SOURCE_DIR}/P7LibSrc;"
+    #"${CMAKE_CURRENT_SOURCE_DIR}/P7LibSrc"
+    "${P7LIB_LIB_DIR}/P7LibSrc"
 
     #Временно для отладки (до переезда проекта LIB)
-    "${P7LIB_DLL_DIR}/P7Lib;"
+    "${P7LIB_DLL_DIR}/P7Lib"
 )
 
 

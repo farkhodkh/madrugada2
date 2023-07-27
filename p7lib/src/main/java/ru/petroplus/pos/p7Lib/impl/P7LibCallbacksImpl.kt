@@ -1,11 +1,7 @@
 package ru.petroplus.pos.p7Lib.impl
 
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
-import ru.petroplus.pos.p7LibApi.dto.OK
-import ru.petroplus.pos.p7LibApi.dto.SimpleDocDto
-import ru.petroplus.pos.p7LibApi.dto.ResultCode
-import ru.petroplus.pos.p7LibApi.dto.TransactionInfoDto
-import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
+import ru.petroplus.pos.p7LibApi.dto.*
 import ru.petroplus.pos.p7LibApi.requests.ApduData
 import ru.petroplus.pos.p7LibApi.responces.ApduAnswer
 import ru.petroplus.pos.p7LibApi.responces.OperationResult
@@ -57,27 +53,27 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
         cardNumber: Long,
         record: TransactionRecordDto
     ): ResultCode {
-        record.cardNumber = 3005876014L                   //!< Графический номер карты
-        record.shiftNumber = 0                   //!< Номер смены
-        record.timeStamp = 0L                    //!< Время проведения операции, привести к структуре STCLOCK
-        record.serviceIdOrigEmit = 0             //!< Вид топлива/услуги "за что платили" (в терминах ЭМИТЕНТА карты)
-        record.serviceIdCurrEmit = 0             //!< Вид топлива/услуги "чем платили" (в терминах ЭМИТЕНТА карты)
-        record.totalVolume = 0L                  //!< Количество топлива/услуги ("что покупали")
-        record.price = 0L                        //!< Цена за 1 ед. топлива/услуги ("что покупали")
-        record.totalSum = 0L                     //!< Сумма (TotalVolume * Price)
-        record.cardTrzCounter = 0                 //!< Номер операции (в терминах карты)
-        record.hasReturn = false              //!< Был ли возврат/отмена (0 - нет, 1 - да)
-        record.rollbackCode = byteArrayOf() //!< Код для возврата (получен от карты во время дебета)
-        record.debitToken = byteArrayOf()   //!< GUID транзакции дебета в онлайне
-        record.terminalNumber = 0                 //!< Номер терминала/POS/поста
-        record.crc32 = 0L                         //!< CRC32 для данной записи
-        record.operationType = 0                  //!< Тип транзакции (0 - дебет, 1 - кредит кошелька, 2 - онлайн-пополнение счета)
-                                                  // не актуально, поле соответствует TrzBaseOperType
+        record.cardNumber = 3005876014L         //!< Графический номер карты
+        record.shiftNumber = 0                  //!< Номер смены
+        record.timeStamp = StClockDto()         //!< Время проведения операции, привести к структуре STCLOCK
+        record.serviceIdOrigEmit = 0            //!< Вид топлива/услуги "за что платили" (в терминах ЭМИТЕНТА карты)
+        record.serviceIdCurrEmit = 0            //!< Вид топлива/услуги "чем платили" (в терминах ЭМИТЕНТА карты)
+        record.totalVolume = 0L                 //!< Количество топлива/услуги ("что покупали")
+        record.price = 0L                       //!< Цена за 1 ед. топлива/услуги ("что покупали")
+        record.totalSum = 0L                    //!< Сумма (TotalVolume * Price)
+        record.cardTrzCounter = 0               //!< Номер операции (в терминах карты)
+        record.hasReturn = false                //!< Был ли возврат/отмена (0 - нет, 1 - да)
+        record.rollbackCode = byteArrayOf()     //!< Код для возврата (получен от карты во время дебета)
+        record.debitToken = byteArrayOf()       //!< GUID транзакции дебета в онлайне
+        record.terminalNumber = 0               //!< Номер терминала/POS/поста
+        record.crc32 = byteArrayOf()            //!< CRC32 для данной записи
+        record.operationType = 0                //!< Тип транзакции (0 - дебет, 1 - кредит кошелька, 2 - онлайн-пополнение счета)
+                                                // не актуально, поле соответствует TrzBaseOperType
 
-        record.cardType = 0                      //!< Тип карты (1 - обычная петроловская, 2 - java, 0 - тип карты неизвестен)
-        record.clientSum = 0L                    //!< Сумма с учётом скидки (для поддержки дебета с лояльностью по обычным петрольным картам)
-        record.deltaBonus = 0L                   //!< Начисленные бонусы при транзакции с лояльностью
-        record.returnTimeStamp = 0L              //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
+        record.cardType = 0                     //!< Тип карты (1 - обычная петроловская, 2 - java, 0 - тип карты неизвестен)
+        record.clientSum = 0L                   //!< Сумма с учётом скидки (для поддержки дебета с лояльностью по обычным петрольным картам)
+        record.deltaBonus = 0L                  //!< Начисленные бонусы при транзакции с лояльностью
+        record.returnTimeStamp = StClockDto()   //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
 
         return OK
     }
