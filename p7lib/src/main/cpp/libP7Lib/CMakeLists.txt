@@ -19,15 +19,40 @@ set(P7LibSrc
     "${P7LIB_LIB_DIR}/P7LibSrc/ERR/p7_errors_res.h"
     "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/_time.h"
     "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/_time.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/StTime.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/StTime.cpp"
     "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/Tpc_comp.h"
     "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/Tpc_comp.cpp"
 )
 source_group("P7LibSrc" FILES ${P7LibSrc})
 
+set(Cripto
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/aescrypto.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/aescrypto.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/ocb.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/ocb.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/rijndael-alg-fst.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/rijndael-alg-fst.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/rijndael-api-fst.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/rijndael-api-fst.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/srng.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/srng.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/curve25519_i64.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/curve25519_i64.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/ecdh.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/ecdh.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/pp_uuid.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/pp_uuid.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/crc32.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/CRIPTO/crc32.c"
+)
+source_group("Cripto" FILES ${Cripto})
+
 
 set(ALL_FILES
     ${Self}
     ${P7LibSrc}
+    ${Cripto}
 )
 
 ################################################################################
@@ -50,6 +75,7 @@ ADD_LIBRARY(${LIB_NAME} ${ALL_FILES})
 ################################################################################
 target_include_directories(${LIB_NAME} PUBLIC
     #"${CMAKE_CURRENT_SOURCE_DIR}/P7LibSrc"
+    "${P7LIB_LIB_DIR}"
     "${P7LIB_LIB_DIR}/P7LibSrc"
 
     #Временно для отладки (до переезда проекта LIB)
