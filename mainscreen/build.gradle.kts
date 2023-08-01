@@ -73,4 +73,5 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":util"))
     implementation(project(":ui"))
+    implementation(project(":sdkapi"))
 }

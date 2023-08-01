@@ -50,6 +50,6 @@ dependencies {
     implementation("${Dependencies.evotor}:${Versions.evotor}")
 
     //Modules
-//    implementation(project(":sdkapi"))
+    implementation(project(":sdkapi"))
 
 }

@@ -22,8 +22,5 @@ include ':core'
 include ':mainscreen'
 include ':p7lib'
 include ':p7libapi'
-/**
- * Reserved
- */
-//include ':evotorsdk'
-//include ':sdkapi'
+include ':evotorsdk'
+include ':sdkapi'

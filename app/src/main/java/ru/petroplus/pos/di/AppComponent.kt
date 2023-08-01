@@ -7,6 +7,7 @@ import ru.petroplus.pos.core.AppScope
 import ru.petroplus.pos.ui.main.MainActivity
 import ru.petroplus.pos.mainscreen.di.MainScreenComponentDependencies
 import ru.petroplus.pos.p7Lib.di.P7LibComponentDependencies
+import ru.petroplus.pos.sdkapi.CardReaderRepository
 
 @Component(
     modules = [AppModule::class],
@@ -16,7 +17,7 @@ import ru.petroplus.pos.p7Lib.di.P7LibComponentDependencies
 interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies
 //    , EvotorComponentDependencies
 {
-//    override val sdkConnection: ServiceConnection
+    val readerRepository: CardReaderRepository
 
     @Component.Builder
     interface Builder {

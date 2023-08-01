@@ -7,6 +7,7 @@ import ru.petroplus.pos.p7LibApi.dto.ResultCode
 import ru.petroplus.pos.p7LibApi.dto.TransactionInfoDto
 import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petroplus.pos.p7LibApi.requests.ApduData
+import ru.petroplus.pos.p7LibApi.responces.ApduAnswer
 import ru.petroplus.pos.p7LibApi.responces.OperationResult
 
 class P7LibCallbacksImpl : IP7LibCallbacks {
@@ -14,22 +15,20 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
         val b = 0
     }
 
-    override fun cardReset(): OperationResult {
-        val b = 0
-        return OperationResult(OK, byteArrayOf())
+    override fun cardReset(answer: ApduAnswer): OperationResult {
+        TODO("Not yet implemented")
     }
 
-    override fun sendDataToCard(data: ApduData): OperationResult {
-        val b = 0
-        return OperationResult(OK, byteArrayOf())
+    override fun sendDataToCard(data: ApduData, answer: ApduAnswer): OperationResult {
+        TODO("Not yet implemented")
     }
 
-    override fun samReset(): OperationResult {
-        return OperationResult(OK, byteArrayOf())
+    override fun samReset(answer: ApduAnswer): OperationResult {
+        TODO("Not yet implemented")
     }
 
-    override fun sendToSamCard(data: ApduData): OperationResult {
-        return OperationResult(OK, byteArrayOf())
+    override fun sendToSamCard(data: ApduData, answer: ApduAnswer): OperationResult {
+        TODO("Not yet implemented")
     }
 
     override fun connectToAS(timeUnit: Long): Boolean {

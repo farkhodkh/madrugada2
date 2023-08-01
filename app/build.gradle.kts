@@ -91,6 +91,6 @@ dependencies {
     implementation(project(":mainscreen"))
     implementation(project(":p7lib"))
     implementation(project(":p7libapi"))
-//    implementation(project(":evotorsdk"))
-//    implementation(project(":sdkapi"))
+    implementation(project(":evotorsdk"))
+    implementation(project(":sdkapi"))
 }
