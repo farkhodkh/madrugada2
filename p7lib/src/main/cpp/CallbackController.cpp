@@ -354,7 +354,7 @@ TCallbacksSet TCallbackController::GetCallbacks(JNIEnv *jniEnv, jobject &Callbac
       CallbacksSet.CompleteTransDB = &CompleteTransDB;  }
 
     PrintSimpleDocCallbackID = jniEnv->GetMethodID(CallbackClass, "printSimpleDoc",
-                                                   "(Lru/petroplus/pos/p7LibApi/dto/SimpleDocDto;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                                   "(Lru/petroplus/pos/p7LibApi/dto/PrintableDataDto;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
     if (PrintSimpleDocCallbackID) {
       CallbacksSet.PrintSimpleDoc = &PrintSimpleDoc;  }
 

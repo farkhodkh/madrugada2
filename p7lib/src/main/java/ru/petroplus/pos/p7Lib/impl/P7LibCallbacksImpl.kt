@@ -55,7 +55,7 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
     ): ResultCode {
         record.cardNumber = 3005876014L         //!< Графический номер карты
         record.shiftNumber = 0                  //!< Номер смены
-        record.timeStamp = StClockDto()         //!< Время проведения операции, привести к структуре STCLOCK
+        record.timeStamp = ClockDto()           //!< Время проведения операции, привести к структуре STCLOCK
         record.serviceIdOrigEmit = 0            //!< Вид топлива/услуги "за что платили" (в терминах ЭМИТЕНТА карты)
         record.serviceIdCurrEmit = 0            //!< Вид топлива/услуги "чем платили" (в терминах ЭМИТЕНТА карты)
         record.totalVolume = 0L                 //!< Количество топлива/услуги ("что покупали")
@@ -73,7 +73,7 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
         record.cardType = 0                     //!< Тип карты (1 - обычная петроловская, 2 - java, 0 - тип карты неизвестен)
         record.clientSum = 0L                   //!< Сумма с учётом скидки (для поддержки дебета с лояльностью по обычным петрольным картам)
         record.deltaBonus = 0L                  //!< Начисленные бонусы при транзакции с лояльностью
-        record.returnTimeStamp = StClockDto()   //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
+        record.returnTimeStamp = ClockDto()     //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
 
         return OK
     }
@@ -83,7 +83,7 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
         return OK
     }
 
-    override fun printSimpleDoc(data: SimpleDocDto): ResultCode {
+    override fun printSimpleDoc(data: PrintableDataDto): ResultCode {
         val f = 0
         return OK
     }

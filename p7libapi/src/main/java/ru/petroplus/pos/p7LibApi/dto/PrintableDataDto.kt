@@ -1,6 +1,6 @@
 package ru.petroplus.pos.p7LibApi.dto
 
-class SimpleDocDto (
+class PrintableDataDto (
     var header : String = String(),
     var title : String = String(),
     var body : String = String(),

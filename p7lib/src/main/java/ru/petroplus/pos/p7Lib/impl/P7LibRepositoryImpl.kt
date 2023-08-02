@@ -4,7 +4,6 @@ import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
 import ru.petroplus.pos.p7LibApi.dto.*
 import ru.petroplus.pos.p7LibApi.dto.card.CardInfo
-import ru.petroplus.pos.p7LibApi.dto.card.P7CardInfo
 
 class P7LibRepositoryImpl : IP7LibRepository {
     init {
@@ -21,7 +20,7 @@ class P7LibRepositoryImpl : IP7LibRepository {
 
     external override fun deInit(): ResultCode
 
-    external override fun detect(cardKey: CardKeyDto, cardData: P7CardInfo): ResultCode
+    external override fun detect(cardKey: CardKeyDto, cardData: CardInfo): ResultCode
 
     external override fun debit(
         params: DebitParamsDto,

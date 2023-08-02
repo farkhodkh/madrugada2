@@ -1,8 +1,7 @@
 package ru.petroplus.pos.p7LibApi
 
-import ru.petroplus.pos.p7LibApi.dto.SimpleDocDto
+import ru.petroplus.pos.p7LibApi.dto.PrintableDataDto
 import ru.petroplus.pos.p7LibApi.dto.ResultCode
-import ru.petroplus.pos.p7LibApi.dto.TransactionInfoDto
 import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petroplus.pos.p7LibApi.requests.ApduData
 import ru.petroplus.pos.p7LibApi.responces.ApduAnswer
@@ -79,7 +78,7 @@ interface IP7LibCallbacks {
      * Распечатка чека с технической информацией и прочими данными
      * @param data - Данные для заполнения чека для печати
      */
-    fun printSimpleDoc(data: SimpleDocDto): ResultCode
+    fun printSimpleDoc(data: PrintableDataDto): ResultCode
 
     /**
      * Передача отложенных документов (OOB) на АС

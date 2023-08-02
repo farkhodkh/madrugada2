@@ -10,7 +10,7 @@ package ru.petroplus.pos.p7LibApi.dto
  */
 class RefundParamsDto(
     var serviceWhat: Int = 0,
-    var amount:      Long = 0,
-    var price:       Long = 0,
-    var sum:         Long = 0,
+    var amount: Long = 0,
+    var price: Long = 0,
+    var sum: Long = 0,
 )

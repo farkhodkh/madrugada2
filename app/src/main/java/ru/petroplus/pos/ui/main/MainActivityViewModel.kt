@@ -15,7 +15,6 @@ import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
 import ru.petroplus.pos.p7LibApi.dto.*
 import ru.petroplus.pos.p7LibApi.dto.card.CardInfo
-import ru.petroplus.pos.p7LibApi.dto.card.P7CardInfo
 import ru.petroplus.pos.util.ConfigurationFileReader
 import ru.petroplus.pos.util.constants.Constants.CONFIG_FILE_NAME
 import ru.petroplus.pos.util.ext.toInitDataDto
@@ -60,22 +59,13 @@ class MainActivityViewModel(
             return
         }
 
-
         var UUID = TransactionUUIDDto()
-        var cardKey = CardKeyDto()
-        var cardData = P7CardInfo()
-
-        var debitParams = DebitParamsDto()
-        var transInfo = TransactionInfoDto()
-        var refundParam = RefundParamsDto()
-        var errorInfo = ErrorInfoDto()
-        var libInfo = LibInfoDto()
-
         UUID.onlineTransNumber = 18
         UUID.lastGenTime = 1690547808
         UUID.clockSequence = 61920
         UUID.hasNodeId = true
         UUID.nodeId = ubyteArrayOf(0x01u, 0xB5u, 0x14u, 0x6Fu, 0xB4u, 0xE3u).toByteArray()
+
         var DataDirectoryPath = String()
 
 //        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -94,6 +84,21 @@ class MainActivityViewModel(
         if (result.code != OK.code) {
             throw RuntimeException("first init fail!")
         }
+
+        
+//==================================================================================================
+//todo: Тестовые вызовы прочих методов библиотеки. Их слежует убрать при финальной проработке
+//      взаимодействия с библиотекой.
+
+        var cardKey = CardKeyDto()
+        var cardData = CardInfo()
+
+        var debitParams = DebitParamsDto()
+        var transInfo = TransactionInfoDto()
+        var refundParam = RefundParamsDto()
+        var errorInfo = ErrorInfoDto()
+        var libInfo = LibInfoDto()
+
         result = p7LibraryRepository.deInit()
         if (result.code != OK.code) {
             throw RuntimeException("deInit fail!")
@@ -138,9 +143,10 @@ class MainActivityViewModel(
         if (result.code != OK.code) {
             throw RuntimeException("getLibInfo fail!")
         }
+        
+//==================================================================================================
 
         
-
         if (result.code == OK.code) {
             _viewState.value =
                 MainScreenState.CheckingSuccessState

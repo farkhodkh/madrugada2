@@ -1,7 +1,5 @@
 package ru.petroplus.pos.p7LibApi.dto
 
-import ru.petroplus.pos.p7LibApi.dto.card.CardType
-
 //        RecordData->CardNumber = RECORD(ONLINE_TRANZ_BASE)->CardNumber;
 //        memcpy(&RecordData->TimeStamp, &RECORD(ONLINE_TRANZ_BASE)->TimeStamp, sizeof(RECORD(ONLINE_TRANZ_BASE)->TimeStamp));
 //        RecordData->ServiceIdOrigEmit = RECORD(ONLINE_TRANZ_BASE)->ServiceIdOrigEmit;
@@ -27,7 +25,7 @@ import ru.petroplus.pos.p7LibApi.dto.card.CardType
 class TransactionRecordDto(
     var cardNumber: Long = 0L,                      //!< Графический номер карты
     var shiftNumber: Long = 0,                      //!< Номер смены
-    var timeStamp: StClockDto = StClockDto(),       //!< Время проведения операции, привести к структуре STCLOCK
+    var timeStamp: ClockDto = ClockDto(),           //!< Время проведения операции, привести к структуре STCLOCK
     var serviceIdOrigEmit: Byte = 0,                //!< Вид топлива/услуги "за что платили" (в терминах ЭМИТЕНТА карты)
     var serviceIdCurrEmit: Byte = 0,                //!< Вид топлива/услуги "чем платили" (в терминах ЭМИТЕНТА карты)
     var totalVolume: Long = 0L,                     //!< Количество топлива/услуги ("что покупали")
@@ -45,5 +43,5 @@ class TransactionRecordDto(
     var cardType: Byte = 0,                         //!< Тип карты (1 - обычная петроловская, 2 - java, 0 - тип карты неизвестен)
     var clientSum: Long = 0L,                       //!< Сумма с учётом скидки (для поддержки дебета с лояльностью по обычным петрольным картам)
     var deltaBonus: Long = 0L,                      //!< Начисленные бонусы при транзакции с лояльностью
-    var returnTimeStamp: StClockDto = StClockDto(), //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
+    var returnTimeStamp: ClockDto = ClockDto()      //!< Время проведения операции возврата/отмены по данному дебету/кредиту, привести к структуре STCLOCK
 )

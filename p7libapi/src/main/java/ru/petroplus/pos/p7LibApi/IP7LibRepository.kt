@@ -2,7 +2,6 @@ package ru.petroplus.pos.p7LibApi
 
 import ru.petroplus.pos.p7LibApi.dto.*
 import ru.petroplus.pos.p7LibApi.dto.card.CardInfo
-import ru.petroplus.pos.p7LibApi.dto.card.P7CardInfo
 
 /**
  * Interface описывает методы и апарметры для взаимодействия с библиотекой P7Lib (C++)
@@ -42,7 +41,7 @@ interface IP7LibRepository {
      */
     fun detect(
         cardKey: CardKeyDto,
-        cardData: P7CardInfo,
+        cardData: CardInfo,
     ): ResultCode
 
     /**

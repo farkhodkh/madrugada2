@@ -1,5 +1,6 @@
 package ru.petroplus.pos.p7LibApi.responces
 
+import ru.petroplus.pos.p7LibApi.dto.OK
 import ru.petroplus.pos.p7LibApi.dto.ResultCode
 
 /**
@@ -8,6 +9,6 @@ import ru.petroplus.pos.p7LibApi.dto.ResultCode
  * @property data - данные с карты
  */
 class OperationResult(
-    var resultCode: ResultCode,
-    var data: ByteArray
+    var resultCode: ResultCode = OK,
+    var data: ByteArray = byteArrayOf()
 )

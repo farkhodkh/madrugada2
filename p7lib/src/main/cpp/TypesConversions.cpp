@@ -466,7 +466,7 @@ bool TP7LibTypes::ConvertTransDBRecordFromJObj(JNIEnv *env, const jobject *DBRec
 
     jfieldID cardNumber_ID = env->GetFieldID(DBRecordClass, "cardNumber", "J");
     jfieldID shiftNumber_ID = env->GetFieldID(DBRecordClass, "shiftNumber", "J");
-    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "Lru/petroplus/pos/p7LibApi/dto/StClockDto;");
+    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "Lru/petroplus/pos/p7LibApi/dto/ClockDto;");
     jfieldID serviceIdOrigEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdOrigEmit", "B");
     jfieldID serviceIdCurrEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdCurrEmit", "B");
     jfieldID totalVolume_ID = env->GetFieldID(DBRecordClass, "totalVolume", "J");
@@ -482,7 +482,7 @@ bool TP7LibTypes::ConvertTransDBRecordFromJObj(JNIEnv *env, const jobject *DBRec
     jfieldID cardType_ID = env->GetFieldID(DBRecordClass, "cardType", "B");
     jfieldID clientSum_ID = env->GetFieldID(DBRecordClass, "clientSum", "J");
     jfieldID deltaBonus_ID = env->GetFieldID(DBRecordClass, "deltaBonus", "J");
-    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "Lru/petroplus/pos/p7LibApi/dto/StClockDto;");
+    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "Lru/petroplus/pos/p7LibApi/dto/ClockDto;");
 
 
     DBRecord->CardNumber = (DWORD)env->GetLongField(*DBRecordJObj, cardNumber_ID);
@@ -546,7 +546,7 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
 
     jfieldID cardNumber_ID = env->GetFieldID(DBRecordClass, "cardNumber", "J");
     jfieldID shiftNumber_ID = env->GetFieldID(DBRecordClass, "shiftNumber", "J");
-    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "Lru/petroplus/pos/p7LibApi/dto/StClockDto;");
+    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "Lru/petroplus/pos/p7LibApi/dto/ClockDto;");
     jfieldID serviceIdOrigEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdOrigEmit", "B");
     jfieldID serviceIdCurrEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdCurrEmit", "B");
     jfieldID totalVolume_ID = env->GetFieldID(DBRecordClass, "totalVolume", "J");
@@ -562,7 +562,7 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
     jfieldID cardType_ID = env->GetFieldID(DBRecordClass, "cardType", "B");
     jfieldID clientSum_ID = env->GetFieldID(DBRecordClass, "clientSum", "J");
     jfieldID deltaBonus_ID = env->GetFieldID(DBRecordClass, "deltaBonus", "J");
-    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "Lru/petroplus/pos/p7LibApi/dto/StClockDto;");
+    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "Lru/petroplus/pos/p7LibApi/dto/ClockDto;");
 
 
     env->SetLongField(*DBRecordJObj, cardNumber_ID, (long long)DBRecord->CardNumber);
@@ -609,7 +609,7 @@ bool TP7LibTypes::CreateSimpleDocJObj(JNIEnv *env, jobject *SimpleDocJObj) {
     if (*SimpleDocJObj) {
       DeleteLocalRef(env, SimpleDocJObj);  }
 
-    jclass PrintDataJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/SimpleDocDto");
+    jclass PrintDataJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/PrintableDataDto");
     jmethodID SimpleDocConstructorID = env->GetMethodID(PrintDataJObjClass, "<init>", "()V");
     *SimpleDocJObj = env->NewObject(PrintDataJObjClass, SimpleDocConstructorID);
     Result = (*SimpleDocJObj != nullptr);
@@ -624,7 +624,7 @@ bool TP7LibTypes::ConvertSimpleDocToJObj(JNIEnv *env, const TSimpleDoc *SimpleDo
   if (env && SimpleDoc && SimpleDocJObj) {
     jstring JStr = nullptr;
     Result = CreateSimpleDocJObj(env, SimpleDocJObj);
-    jclass SimpleDocJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/SimpleDocDto");
+    jclass SimpleDocJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/PrintableDataDto");
     Result = (Result && SimpleDocJObjClass != nullptr);
     if (!Result) {
       return false;  }
@@ -837,7 +837,7 @@ bool TP7LibTypes::CreateCardInfoJObj(JNIEnv *env, jobject *CardInfoJObj) {
     if (*CardInfoJObj) {
       DeleteLocalRef(env, CardInfoJObj);  }
 
-    jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7CardInfo");
+    jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/CardInfo");
     jmethodID CardInfoConstructorID = env->GetMethodID(CardInfoJObjClass, "<init>", "()V");
     *CardInfoJObj = env->NewObject(CardInfoJObjClass, CardInfoConstructorID);
 
@@ -854,7 +854,7 @@ bool TP7LibTypes::ConvertCardInfoToJObj(JNIEnv *env, const TCardInfo *CardInfo, 
     jbyteArray JBArray = nullptr;
 
     Result = CreateCardInfoJObj(env, CardInfoJObj);
-    jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7CardInfo");
+    jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/CardInfo");
     Result = (Result && CardInfoJObjClass != nullptr);
     if (!Result) {
       return false;  }
@@ -1110,7 +1110,7 @@ bool TP7LibTypes::CreateStTimeJObj(JNIEnv *env, jobject *StTimeJObj) {
     if (*StTimeJObj) {
       DeleteLocalRef(env, StTimeJObj);  }
 
-    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/StClockDto");
+    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ClockDto");
     jmethodID TransInfoConstructorID = env->GetMethodID(StTimeJObjClass, "<init>", "()V");
     *StTimeJObj = env->NewObject(StTimeJObjClass, TransInfoConstructorID);
 
@@ -1126,7 +1126,7 @@ bool TP7LibTypes::ConvertStTimeToJObj(JNIEnv *env, const TSTTime *StTime, jobjec
     jbyteArray JBArray = nullptr;
 
     Result = CreateStTimeJObj(env, StTimeJObj);
-    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/StClockDto");
+    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ClockDto");
     Result = (Result && StTimeJObjClass != nullptr);
     if (!Result) {
       if (*StTimeJObj) {
@@ -1162,7 +1162,7 @@ bool TP7LibTypes::ConvertStTimeFromJObj(JNIEnv *env, const jobject *StTimeJObj, 
   bool Result = false;
 
   if (env && StTime && StTimeJObj) {
-    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/StClockDto");
+    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ClockDto");
     Result = (StTimeJObjClass != nullptr);
     if (!Result) {
       return false;  }

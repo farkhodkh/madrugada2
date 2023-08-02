@@ -14,7 +14,7 @@ class DebitParamsDto(
     var serviceWhat: Int = 0,
     var serviceFrom: Int = 0,
     var amount: Long = 0,
-    var price:  Long = 0,
-    var sum:    Long = 0,
-    var pinBlock: ByteArray = byteArrayOf(),
+    var price: Long = 0,
+    var sum: Long = 0,
+    var pinBlock: ByteArray = byteArrayOf()
 )
