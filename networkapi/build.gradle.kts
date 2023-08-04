@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = Dependencies.namespaceNetwork
+    namespace = Dependencies.namespaceNetworkApi
     compileSdkVersion = Versions.compileSdkVersion
 
     defaultConfig {
@@ -70,5 +70,5 @@ dependencies {
 
     //Modules
     //implementation(project(":core"))
-    //implementation(project(":util"))
+    implementation(project(":network"))
 }

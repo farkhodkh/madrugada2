@@ -18,6 +18,7 @@
 /util/build
 /p7lib/build
 /network/build
+/networkapi/build
 /p7libapi/build
 /evotorsdk/build
 /sdkapi/build

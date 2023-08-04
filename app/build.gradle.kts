@@ -94,6 +94,7 @@ dependencies {
     implementation(project(":evotorsdk"))
     implementation(project(":sdkapi"))
     implementation(project(":network"))
+    implementation(project(":networkapi"))
 
     implementation ("com.google.android.gms:play-services-auth:20.6.0")
     implementation ("org.bouncycastle:bcprov-jdk15on:1.67")

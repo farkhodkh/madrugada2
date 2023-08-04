@@ -82,6 +82,7 @@ dependencies {
     implementation(project(":util"))
     implementation(project(":ui"))
     implementation(project(":sdkapi"))
+    implementation(project(":networkapi"))
 
     implementation ("com.localebro:okhttpprofiler:1.0.8")
     implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")

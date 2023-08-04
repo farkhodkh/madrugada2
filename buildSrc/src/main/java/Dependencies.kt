@@ -7,6 +7,7 @@ object Dependencies {
     const val namespaceMainScreen = "ru.petroplus.pos.mainscreen"
     const val namespaceP7Lib = "ru.petroplus.pos.p7Lib"
     const val namespaceNetwork = "ru.petroplus.pos.network"
+    const val namespaceNetworkApi = "ru.petroplus.pos.networkApi"
     const val namespaceP7LibApi = "ru.petroplus.pos.p7LibApi"
     const val namespaceEvotorSdk = "ru.petroplus.pos.evotorsdk"
     const val namespaceSdkApi = "ru.petroplus.pos.sdkapi"
