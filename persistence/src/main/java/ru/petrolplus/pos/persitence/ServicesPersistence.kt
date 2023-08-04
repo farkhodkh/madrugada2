@@ -9,7 +9,17 @@ import ru.petrolplus.pos.room.entities.ServiceDB
  * Интерфейс для доступа к сервисам и услугам
  */
 interface ServicesPersistence {
+
+    /**
+     * метод для получения списка сервисов
+     * @return список сервисов или услуг
+     */
     suspend fun getAll(): List<ServiceDTO>
+
+    /**
+     * метод для добавления или замены сервиса или услуги
+     * @param service сервис или услуга
+     */
     suspend fun addOrReplace(service: ServiceDTO)
 }
 

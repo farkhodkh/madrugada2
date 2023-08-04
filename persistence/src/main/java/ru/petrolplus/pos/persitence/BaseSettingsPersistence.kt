@@ -11,7 +11,16 @@ import java.lang.IllegalArgumentException
  * Интерфейс для доступа к базовым настройкам устройства
  */
 interface BaseSettingsPersistence {
+    /**
+     * Получение базовых настроек терминала
+     * @return базовые настройки терминала
+     */
     suspend fun getBaseSettings(): BaseSettingsDTO
+
+    /**
+     * Сохранение базовых настроек терминала
+     * @param baseSetting базовые настройки терминала
+     */
     suspend fun setBaseSettings(baseSetting: BaseSettingsDTO)
 }
 

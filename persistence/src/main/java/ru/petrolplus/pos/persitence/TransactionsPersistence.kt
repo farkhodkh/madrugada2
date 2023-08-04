@@ -6,10 +6,20 @@ import ru.petrolplus.pos.room.dao.TransactionsDao
 import ru.petrolplus.pos.room.entities.TransactionDB
 
 /**
- * Интерфейс для доступа к транзакциям
+ * Интерфейс для доступа к совершенным транзакциям
  */
 interface TransactionsPersistence {
+
+    /**
+     * метод для получения списка транзакций
+     * @return список совершенных транзакций
+     */
     suspend fun getAll(): List<TransactionDTO>
+
+    /**
+     * метод для добавление транзакции в хранилище
+     * @param transaction добавляемая транзакция
+     */
     suspend fun add(transaction: TransactionDTO)
 }
 

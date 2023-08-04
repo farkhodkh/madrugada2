@@ -29,6 +29,7 @@ class DatabaseStoreStrategy : StoreStrategy {
      */
     @Throws(IllegalArgumentException::class)
     override suspend fun <DTO : IdentifiableDTO, ST> store(dao: BaseDao<ST>, mapper: Mapper<DTO, ST>, entity: DTO) {
+        //TODO перести текст в строковые ресурсы после слияния с веткое где есть утилиты для получения строк без прямого доступа к context
         require(entity.id == 1) { "Id настройки должен равнятья единице, т.к храним всего лишь одну запись в таблице" }
         dao.insert(mapper.fromDTO(entity))
     }

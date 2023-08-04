@@ -12,7 +12,17 @@ import kotlin.jvm.Throws
  * Интерфейс для доступа к параметрам GUID (небходимые параметры для генерации GUID транзакции)
  */
 interface GUIDparamsPersistence {
+
+    /**
+     * Получение GUID параметров терминала
+     * @return GUID параметры терминала
+     */
     suspend fun getGUIDparams(): GUIDparamsDTO
+
+    /**
+     * сохранение GUID параметров терминала
+     * @param guidParams GUID параметры терминала
+     */
     suspend fun setGUIDparams(guidParams: GUIDparamsDTO)
 }
 

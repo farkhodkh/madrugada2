@@ -12,7 +12,17 @@ import kotlin.jvm.Throws
  * Интерфейс для доступа к параметрам смены
  */
 interface ShiftParamsPersistence {
+
+    /**
+     * Получение парметров смены
+     * @return параметры смены
+     */
     suspend fun getShiftSettings(): ShiftParamsDTO
+
+    /**
+     * Сохранение парметров смены
+     * @param shiftParams параметры смены
+     */
     suspend fun setShiftParams(shiftParams: ShiftParamsDTO)
 }
 

@@ -12,7 +12,17 @@ import kotlin.jvm.Throws
  * Интерфейс для доступа к общим настройкам устройства
  */
 interface CommonSettingsPersistence {
+
+    /**
+     * Получение общих настроек терминала
+     * @return общие настройки терминала
+     */
     suspend fun getCommonSettings(): CommonSettingsDTO
+
+    /**
+     * Сохранение общих настроек терминала
+     * @param commonSettings общие настройки терминала
+     */
     suspend fun setCommonSetting(commonSettings: CommonSettingsDTO)
 }
 
