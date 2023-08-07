@@ -34,16 +34,16 @@ class GatewayServerImpl : IGatewayServerApi {
     }
 
     init {
-        val clientCertFile = authParams.clientCertificate
-        sslContext = SSLContextFactory
-            .getFactoryInstance()
-            .makeContext(
-                clientCertFile,
-                authParams.clientCertificatePassword,
-                authParams.caCertificate
-            )
-
-        lastResponseCode = 0
+//        val clientCertFile = authParams.clientCertificate
+//        sslContext = SSLContextFactory
+//            .getFactoryInstance()
+//            .makeContext(
+//                clientCertFile,
+//                authParams.clientCertificatePassword,
+//                authParams.caCertificate
+//            )
+//
+//        lastResponseCode = 0
 
         CookieHandler.setDefault(CookieManager())
     }

@@ -6,6 +6,7 @@ import dagger.Provides
 import ru.petroplus.pos.core.AppScope
 import ru.petroplus.pos.evotorsdk.EvotorSDKRepository
 import ru.petroplus.pos.networkapi.GatewayServerImpl
+import ru.petroplus.pos.networkapi.IGatewayServerApi
 import ru.petroplus.pos.p7Lib.impl.P7LibCallbacksImpl
 import ru.petroplus.pos.p7Lib.impl.P7LibRepositoryImpl
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
@@ -16,9 +17,6 @@ import ru.petroplus.pos.ui.main.MainActivityViewModel
 
 @Module
 object AppModule {
-//    @[Provides AppScope]
-//    fun provideContext(context: Context): Context = context
-
     @[Provides AppScope]
     fun providesP7LibRepository(): IP7LibRepository = P7LibRepositoryImpl()
 
@@ -42,5 +40,5 @@ object AppModule {
         }
 
     @[Provides AppScope]
-    fun providesCardReaderRepository(): Any = GatewayServerImpl.getInstance()
+    fun providesGatewayServerRepository(): IGatewayServerApi = GatewayServerImpl.getInstance()
 }

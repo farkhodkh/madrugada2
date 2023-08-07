@@ -5,13 +5,9 @@ import javax.net.ssl.X509TrustManager
 
 class TrustAllX509TrustManager: X509TrustManager {
 
-    override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-        //Not required, trust all
-    }
+    override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
 
-    override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
-        //Not required, trust all
-    }
+    override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
 
     override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
 }
