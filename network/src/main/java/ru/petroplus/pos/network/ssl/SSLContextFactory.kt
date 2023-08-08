@@ -14,6 +14,9 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.KeyManagerFactory
 import javax.net.ssl.SSLContext
 
+/**
+ *   Factory для создания SSL соединения со шлюзом (F5)
+ */
 class SSLContextFactory {
 
     private val sslContextProtocolType = "TLS"
@@ -35,12 +38,11 @@ class SSLContextFactory {
     }
 
     /**
-     * Creates an SSLContext with the client and server certificates
-     * @param clientCertFile A File containing the client certificate
-     * @param clientCertPassword Password for the client certificate
-     * @param caCertString A String containing the server certificate
-     * @return An initialized SSLContext
-     * @throws Exception
+     * Создание SSLContext с клиентскими и серверными сертификатами
+     * @param clientCertFile Файл содержащий клиентский сертификат
+     * @param clientCertPassword Пароль для клиентского сертификата
+     * @param caCertString Строка содержащая серверный сертификат
+     * @return Инициализированный SSLContext
      */
     fun makeContext(clientCertFile: File, clientCertPassword: String, caCertString: String): SSLContext {
         val keyStore = loadPKCS12KeyStore(clientCertFile, clientCertPassword)

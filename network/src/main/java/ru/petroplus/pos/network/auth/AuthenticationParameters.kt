@@ -3,10 +3,13 @@ package ru.petroplus.pos.network.auth
 import java.io.File
 
 /**
- * Класс для идентификации по SSL
+ * Класс с параметрами для идентификации по SSL
+ * @param clientCertificate файл с клиентским сертификатом
+ * @param clientCertificatePassword пароль от клиентского сертификата
+ * @param caCertificate Строка содержащая серверный сертификат
  */
-class AuthenticationParameters {
-    lateinit var clientCertificate: File
-    val clientCertificatePassword: String = "1234"
-    var caCertificate: String = ""
-}
+class AuthenticationParameters(
+    val clientCertificate: File,
+    val clientCertificatePassword: String,
+    val caCertificate: String
+)

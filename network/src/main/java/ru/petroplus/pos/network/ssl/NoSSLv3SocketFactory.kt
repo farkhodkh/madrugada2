@@ -12,6 +12,12 @@ import javax.net.ssl.SSLSession
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory
 
+/**
+ * При работе по SSL сокету Андроид использует по умолчанию версию протокола №3 для подключения
+ * На нашем балансировщике используется версия сокета №2
+ * В этой реализации переопределены все методы и поля для работы с SSL с одним лишь изменением
+ * Отключение протокола №3 с подстановкой только №2
+ */
 class NoSSLv3SocketFactory(socketFactory: SSLSocketFactory) : SSLSocketFactory() {
     private var delegate: SSLSocketFactory = HttpsURLConnection.getDefaultSSLSocketFactory()
 
@@ -51,33 +57,22 @@ class NoSSLv3SocketFactory(socketFactory: SSLSocketFactory) : SSLSocketFactory()
         return socket
     }
 
+    /**
+     * Реализация Socket без SSL 3 методом делегирования свойств
+     */
     internal class NoSSLv3SSLSocket(delegate: SSLSocket) : DelegateSSLSocket(delegate) {
-        //        private NoSSLv3SSLSocket(SSLSocket delegate) {
-        //            super(delegate);
-        //        }
-        //
-        //        @Override
-        //        public void setEnabledProtocols(String[] protocols) {
-        ////            if (protocols != null && protocols.length == 1 && "SSLv3".equals(protocols[0])) {
-        ////
-        ////                List<String> enabledProtocols = new ArrayList<String>(Arrays.asList(delegate.getEnabledProtocols()));
-        ////                if (enabledProtocols.size() > 1) {
-        ////                    enabledProtocols.remove("SSLv3");
-        ////                    System.out.println("Removed SSLv3 from enabled protocols");
-        ////                } else {
-        ////                    System.out.println("SSL stuck with protocol available for " + String.valueOf(enabledProtocols));
-        ////                }
-        ////                protocols = enabledProtocols.toArray(new String[enabledProtocols.size()]);
-        ////            }
-        //
-        ////            super.setEnabledProtocols(protocols);
-        //
-        //            String[] prots = new String[1];
-        //            prots[0] = "TLSv1.2";
-        //            super.setEnabledProtocols(prots);
-        //        }
+        /**
+         * Использование SSL протокола №2 в соответствии с версией протокола на стороне шлюза
+         */
+        override fun setEnabledProtocols(protocols: Array<out String>?) {
+            val prots = arrayOf("TLSv1.2")
+            super.setEnabledProtocols(prots)
+        }
     }
 
+    /**
+     *  SSL для делегирования свойств и методов сокета
+     */
     internal open class DelegateSSLSocket(private val delegate: SSLSocket) : SSLSocket() {
 
         override fun bind(bindpoint: SocketAddress?) {
