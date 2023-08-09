@@ -12,13 +12,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
 import ru.petroplus.pos.mainscreen.ui.debit.http.SSLConnectionExample
-import ru.petroplus.pos.networkapi.IGatewayServerApi
+import ru.petroplus.pos.networkapi.GatewayServerApi
+import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
 
 class DebitViewModel(
     private val cardReaderRepository: CardReaderRepository,
-    private val gatewayServer: IGatewayServerApi,
+    private val gatewayServer: GatewayServerRepositoryApi,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -129,14 +130,10 @@ class DebitViewModel(
         cardReaderRepository.sdkRepository.sendCommand(command)
     }
 
-    private fun androidSSLConnection() {
-        SSLConnectionExample().doRequest()
-    }
-
     companion object {
         fun provideFactory(
             cardReaderRepository: CardReaderRepository,
-            gatewayServer: IGatewayServerApi,
+            gatewayServer: GatewayServerRepositoryApi,
             owner: SavedStateRegistryOwner,
             defaultArgs: Bundle? = null,
         ): AbstractSavedStateViewModelFactory =

@@ -80,6 +80,15 @@ dependencies {
     implementation("${Dependencies.dagger}:${Versions.dagger}")
     kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
 
+    //Okhttp
+    implementation("${Dependencies.gson}:${Versions.gson}")
+    implementation("${Dependencies.okhttpProfiler}:${Versions.okhttpProfiler}")
+    implementation("${Dependencies.okhttLoggingInterceptor}:${Versions.okhttLoggingInterceptor}")
+
+    //Retrofit
+    implementation("${Dependencies.retrofit}:${Versions.retrofit}")
+    implementation("${Dependencies.gsonConverter}:${Versions.gsonConverter}")
+
     //Testing
     implementation("${Dependencies.junit}:${Versions.junit}")
     implementation("${Dependencies.extJunit}:${Versions.extJunit}")

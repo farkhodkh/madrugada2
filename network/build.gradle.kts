@@ -50,15 +50,19 @@ dependencies {
     //implementation(project(":p7libapi"))
 
     //Dagger 2
-    //implementation("${Dependencies.dagger}:${Versions.dagger}")
+    implementation("${Dependencies.dagger}:${Versions.dagger}")
     implementation("${Dependencies.composeRuntime}:${Versions.compose}")
 
     //Okhttp
-    implementation ("com.localebro:okhttpprofiler:1.0.8")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
-    implementation ("com.localebro:okhttpprofiler:1.0.8")
-    implementation ("com.google.android.gms:play-services-auth:20.6.0")
+    implementation("${Dependencies.okhttpProfiler}:${Versions.okhttpProfiler}")
+    implementation("${Dependencies.okhttLoggingInterceptor}:${Versions.okhttLoggingInterceptor}")
+//    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+//    implementation ("com.localebro:okhttpprofiler:1.0.8")
+//    implementation ("com.localebro:okhttpprofiler:1.0.8")
+//    implementation ("com.google.android.gms:play-services-auth:20.6.0")
 
+    //Retrofit
+    implementation("${Dependencies.retrofit}:${Versions.retrofit}")
     //implementation 'androidx.core:core-ktx:1.7.20'
     //implementation 'androidx.appcompat:appcompat:1.6.1'
     //implementation 'com.google.android.material:material:1.8.0'
@@ -71,4 +75,7 @@ dependencies {
     //Modules
     //implementation(project(":core"))
     //implementation(project(":util"))
+    implementation(project(":util"))
+    implementation(project(":networkapi"))
+
 }

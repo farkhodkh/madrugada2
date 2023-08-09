@@ -5,8 +5,8 @@ import dagger.Module
 import dagger.Provides
 import ru.petroplus.pos.core.AppScope
 import ru.petroplus.pos.evotorsdk.EvotorSDKRepository
-import ru.petroplus.pos.networkapi.GatewayServerImpl
-import ru.petroplus.pos.networkapi.IGatewayServerApi
+import ru.petroplus.pos.network.repository.GatewayServerRepositoryImpl
+import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.p7Lib.impl.P7LibCallbacksImpl
 import ru.petroplus.pos.p7Lib.impl.P7LibRepositoryImpl
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
@@ -40,5 +40,27 @@ object AppModule {
         }
 
     @[Provides AppScope]
-    fun providesGatewayServerRepository(): IGatewayServerApi = GatewayServerImpl.getInstance()
+    fun providesGatewayServerRepositoryApi(): GatewayServerRepositoryApi = GatewayServerRepositoryImpl()
+
+//    @[Provides AppScope]
+//    internal fun provideRetrofitBuilder(client: OkHttpClient): Retrofit.Builder {
+//        return Retrofit.Builder()
+//            .client(client)
+//            .addConverterFactory(
+//                GsonConverterFactory
+//                    .create(
+//                        GsonBuilder()
+//                            .serializeNulls()
+//                            .setLenient()
+//                            .create()
+//                    )
+//            )
+////            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//    }
+//
+//    @[Provides AppScope]
+//    internal fun provideGatewayServerApi(builder: Retrofit): GatewayServerApi = builder.create(GatewayServerApi::class.java)
+//
+//    @[Provides AppScope]
+//        fun providesGatewayServerRepository(): GatewayServerApi = GatewayServerRepositoryImpl.getInstance()
 }

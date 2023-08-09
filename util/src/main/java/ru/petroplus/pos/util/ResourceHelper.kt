@@ -1,17 +1,10 @@
 package ru.petroplus.pos.util
 
-import android.annotation.SuppressLint
 import android.content.Context
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.lang.ref.WeakReference
-import java.security.SecureRandom
-import java.security.cert.CertificateFactory
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLContext
-import javax.net.ssl.X509TrustManager
 
 object ResourceHelper {
     private lateinit var weakContext: WeakReference<Context>
@@ -29,11 +22,24 @@ object ResourceHelper {
         it.resources.getString(resourceId)
     } ?: ""
 
-    fun getClientCertAssetFile(): File? =
+    fun getAssetFile(certName: String): File? =
         weakContext.get()?.let {
-            val inputStream = it.assets.open("client_cert.pfx")
+            val inputStream = it.assets.open(certName)//("client_cert.pfx")
             return@let writeBytesToFile(inputStream)
         }
+
+    fun getCaCertAssetContent(certName: String): String? =
+        weakContext.get()?.let {
+            val inputStream = it.assets.open(certName)
+            return@let IOUtil.readInputStreamFully(inputStream)
+        }
+
+    fun getPingBinFile(certName: String): String? =
+        weakContext.get()?.let {
+            val inputStream = it.assets.open(certName)
+            return@let IOUtil.readInputStreamFully(inputStream)
+        }
+
 
     private fun writeBytesToFile(inputStream: InputStream): File {
         val file = File.createTempFile("PingP7", ".bin")

@@ -88,7 +88,7 @@ public class SSLConnectionExample {
     }
 
     private File getClientCertFile() {
-        return ResourceHelper.INSTANCE.getClientCertAssetFile();
+        return ResourceHelper.INSTANCE.getAssetFile("client_cert.pfx");
     }
 
     private String readCaCert() throws Exception {

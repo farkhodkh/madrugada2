@@ -2,10 +2,7 @@ package ru.petroplus.pos.networkapi
 
 import javax.net.ssl.SSLContext
 
-/**
- * Интерфейс для работы с сервером (балансировщиком) F5 (AC)
- */
-interface IGatewayServerApi {
+interface GatewayServerRepositoryApi {
 
     /**
      * SSL контекcт подключения
@@ -19,4 +16,5 @@ interface IGatewayServerApi {
     var lastResponseCode: Int
 
     fun doPing()
+
 }
