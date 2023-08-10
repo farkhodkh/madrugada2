@@ -23,7 +23,6 @@ class SSLContextFactory {
     private val ketStoreType = "PKCS12"
     private val keyManagerAlgorithm = "X509"
     private val certificateFactoryType = "X.509"
-    private val trustAllCerts = arrayOf(TrustAllX509TrustManager())
 
     companion object {
         private var instance: SSLContextFactory? = null
@@ -44,13 +43,21 @@ class SSLContextFactory {
      * @param caCertString Строка содержащая серверный сертификат
      * @return Инициализированный SSLContext
      */
-    fun makeContext(clientCertFile: File, clientCertPassword: String, caCertString: String): SSLContext {
+    fun makeContext(
+        clientCertFile: File,
+        clientCertPassword: String,
+        caCertString: String,
+        trustAllCerts: Array<TrustAllX509TrustManager>
+    ): SSLContext {
         val keyStore = loadPKCS12KeyStore(clientCertFile, clientCertPassword)
         val kmf = KeyManagerFactory.getInstance(keyManagerAlgorithm)
 
         kmf.init(keyStore, clientCertPassword.toCharArray())
         val keyManagers = kmf.keyManagers
 
+        /**
+         * Для отладки пока нужен
+         */
         val trustStore = loadPEMTrustStore(caCertString)
 
         val sslContext = SSLContext.getInstance(sslContextProtocolType)

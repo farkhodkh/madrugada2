@@ -6,9 +6,6 @@ import ru.petroplus.pos.core.MainScreenScope
 @MainScreenScope
 @Component(dependencies = [MainScreenComponentDependencies::class])
 interface MainScreenComponent {
-
-    //    fun inject(fragment: TestFragment)
-    //
     @Component.Builder
     interface Builder {
 

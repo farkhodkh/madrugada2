@@ -7,7 +7,6 @@ import java.net.Socket
 import java.net.SocketAddress
 import java.nio.channels.SocketChannel
 import javax.net.ssl.HandshakeCompletedListener
-import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.SSLSession
 import javax.net.ssl.SSLSocket
 import javax.net.ssl.SSLSocketFactory

@@ -11,19 +11,24 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiCallbackInterface
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiInterface
-import ru.petroplus.pos.evotorsdk.util.Hex
+import ru.petroplus.pos.evotorsdk.util.HexUtil
 import ru.petroplus.pos.sdkapi.ISDKRepository
 import ru.petroplus.pos.sdkapi.ReaderEventBus
 import ru.petroplus.pos.util.ResourceHelper
+import ru.petroplus.pos.util.ext.getNextCommandNumber
 import java.math.BigInteger
 
 /**
- *
+ * Репозиторий для работы с SDK терминалов от поставщика "Эвотор"
  */
 class EvotorSDKRepository(context: Context) : ISDKRepository {
+    /**
+     * TODO - Нужно переписать под Flow
+     */
+    override var eventBus: ReaderEventBus = ReaderEventBus()
+
     private val scope = CoroutineScope(Dispatchers.IO)
     private var requestInterface: ExternalLowLevelApiInterface? = null
-    override var eventBus: ReaderEventBus = ReaderEventBus()
     private val requestHeader: String by lazy {
         String.format("%04x", BigInteger(1, "SBR".toByteArray(Charsets.UTF_8)))
     }
@@ -42,7 +47,6 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
 
         val connection = EvotorServiceConnection()
         context.bindService(intent, connection, Context.BIND_AUTO_CREATE)
-
     }
 
     private val sdkCallback = object : ExternalLowLevelApiCallbackInterface.Stub() {
@@ -63,7 +67,7 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
      * с установкой необходимых ключей.
      * То есть, в этой схеме инициализация/синхронизация вызывается по необходимости.
      */
-    override fun sendCommand(input: String) {
+    override fun sendCommand(bytesString: String) {
         if (requestInterface == null) {
             scope.launch {
                 onReceivedData(
@@ -77,14 +81,14 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
         commandNumber += 1
 
         try {
-            val commandLine = "$requestHeader${commandNumber.getNextCommandNumber()}$input"
+            val commandLine = "$requestHeader${commandNumber.getNextCommandNumber()}$bytesString"
             if (BuildConfig.DEBUG) {
                 scope.launch {
                     onReceivedData("Отправил команду: $commandLine")
                 }
             }
             val charArray = "$commandLine".toCharArray()
-            val commandBytes = Hex.decodeHex(charArray)
+            val commandBytes = HexUtil.decodeHex(charArray)
             requestInterface?.sendCommand(commandBytes, sdkCallback)
         } catch (ex: Exception) {
             scope.launch {
@@ -98,7 +102,7 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
     }
 
     private fun onReceivedData(receivedData: ByteArray) {
-        parseReceivedData(receivedData.map { Hex.toHexString(it) })
+        parseReceivedData(receivedData.map { HexUtil.toHexString(it) })
     }
 
     private suspend fun onReceivedData(receivedData: String) {
@@ -131,17 +135,20 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
         }
 
         override fun onServiceDisconnected(className: ComponentName) {
-            Log.e("TAG", "Service has unexpectedly disconnected")
+            Log.e("TAG","Service has unexpectedly disconnected")
             requestInterface = null
         }
     }
 
+    /**
+     * 1) При запуске приложения вызывать команду 00 (пакет будет выглядеть так: 00)
+     * 2) В процессе работы проверять результат работы команды 25, и если код ошибки = 08,
+     * то делать вывод, что произошла рассинхронизация драйвера и модуля эквайринга и делать повтор 00.
+     * Если вы в дальнейшем захотите работать с онлайн пин, то к команде 00 добавите команду 0A с
+     * установкой необходимых ключей.
+     * То есть, в этой схеме инициализация/синхронизация вызывается по необходимости.
+     */
     private fun initDevice() {
-//        sendCommand("0A4200000000000006")
-        sendCommand("000000000006")
+        sendCommand("00")
     }
-}
-
-fun Int.getNextCommandNumber(): String {
-    return Integer.toHexString(this).padStart(2, '0')
 }

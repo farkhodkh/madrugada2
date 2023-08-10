@@ -69,27 +69,10 @@ dependencies {
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
 
-    //OKHttp
-    // define a BOM and its version
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.11.0"))
-
-    // define any required OkHttp artifacts without version
-    implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.squareup.okhttp3:logging-interceptor")
-
     //Modules
     implementation(project(":core"))
     implementation(project(":util"))
     implementation(project(":ui"))
     implementation(project(":sdkapi"))
     implementation(project(":networkapi"))
-
-    implementation ("com.localebro:okhttpprofiler:1.0.8")
-    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
-
-    implementation ("com.localebro:okhttpprofiler:1.0.8")
-    implementation ("com.google.android.gms:play-services-auth:20.6.0")
-//    implementation ("org.bouncycastle:bcpkix-jdk15to18:1.68")
-//    implementation ("org.bouncycastle:bcprov-jdk15to18:1.68")
-//    implementation ("org.bouncycastle:bcprov-jdk15on:1.67")
 }

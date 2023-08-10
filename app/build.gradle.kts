@@ -53,6 +53,10 @@ dependencies {
     //Lib
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*aar"))))
 
+    //SSL Authentification
+    implementation ("com.google.android.gms:play-services-auth:20.6.0")
+    implementation ("org.bouncycastle:bcprov-jdk15on:1.67")
+
     //Core
     implementation("${Dependencies.coreKtx}:${Versions.coreKtx}")
     implementation("${Dependencies.appcompat}:${Versions.appcompat}")
@@ -71,7 +75,6 @@ dependencies {
     implementation("${Dependencies.composeNavigation}:${Versions.composeNavigation}")
     implementation("${Dependencies.composeFoundation}:${Versions.compose}")
 
-    //Lifecycle
     //Lifecycle
     implementation("${Dependencies.lifecycleViewModel}:${Versions.lifecycle}")
     implementation("${Dependencies.lifecycleRuntime}:${Versions.lifecycle}")
@@ -105,7 +108,5 @@ dependencies {
     implementation(project(":network"))
     implementation(project(":networkapi"))
 
-    implementation ("com.google.android.gms:play-services-auth:20.6.0")
-    implementation ("org.bouncycastle:bcprov-jdk15on:1.67")
 
 }

@@ -18,29 +18,34 @@ object ResourceHelper {
         weakContext = WeakReference(context)
     }
 
+    /**
+     * Метод для получение строки из ресурсов
+     */
     fun getStringResource(resourceId: Int) = weakContext.get()?.let {
         it.resources.getString(resourceId)
     } ?: ""
 
-    fun getAssetFile(certName: String): File? =
+    /**
+     * Метод для получения файлов из assets
+     */
+    fun getAssetFile(fileName: String): File? =
         weakContext.get()?.let {
-            val inputStream = it.assets.open(certName)//("client_cert.pfx")
+            val inputStream = it.assets.open(fileName)
             return@let writeBytesToFile(inputStream)
         }
 
-    fun getCaCertAssetContent(certName: String): String? =
+    /**
+     * Метод для чтения содержимого файла из assets
+     */
+    fun readAssetContent(fileName: String): String? =
         weakContext.get()?.let {
-            val inputStream = it.assets.open(certName)
+            val inputStream = it.assets.open(fileName)
             return@let IOUtil.readInputStreamFully(inputStream)
         }
 
-    fun getPingBinFile(certName: String): String? =
-        weakContext.get()?.let {
-            val inputStream = it.assets.open(certName)
-            return@let IOUtil.readInputStreamFully(inputStream)
-        }
-
-
+    /**
+     * Метод для записи InputStream в файл для Ping запроса
+     */
     private fun writeBytesToFile(inputStream: InputStream): File {
         val file = File.createTempFile("PingP7", ".bin")
         var data = ByteArray(inputStream.available())
