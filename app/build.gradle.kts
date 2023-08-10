@@ -97,4 +97,5 @@ dependencies {
     implementation(project(":evotorsdk"))
     implementation(project(":sdkapi"))
     implementation(project(":room"))
+    implementation(project(":persistence"))
 }
