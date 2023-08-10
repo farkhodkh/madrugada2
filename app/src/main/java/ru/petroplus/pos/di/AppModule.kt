@@ -3,6 +3,7 @@ package ru.petroplus.pos.di
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import ru.petrolplus.pos.room.database.AppDatabase
 import ru.petroplus.pos.core.AppScope
 import ru.petroplus.pos.evotorsdk.EvotorISDKRepository
 import ru.petroplus.pos.p7Lib.impl.P7LibCallbacksImpl
@@ -35,4 +36,7 @@ object AppModule{
         override val sdkRepository: ISDKRepository
             get() = sdkRepository
     }
+
+    @[Provides AppScope]
+    fun providesAppDatabase(context: Context) = AppDatabase.getInstance(context)
 }

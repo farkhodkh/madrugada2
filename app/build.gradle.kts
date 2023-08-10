@@ -80,6 +80,9 @@ dependencies {
     implementation("${Dependencies.dagger}:${Versions.dagger}")
     kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
 
+    //Room
+    implementation("${Dependencies.roomKtx}:${Versions.room}")
+
     //Testing
     implementation("${Dependencies.junit}:${Versions.junit}")
     implementation("${Dependencies.extJunit}:${Versions.extJunit}")
@@ -93,4 +96,6 @@ dependencies {
     implementation(project(":p7libapi"))
     implementation(project(":evotorsdk"))
     implementation(project(":sdkapi"))
+    implementation(project(":room"))
+    implementation(project(":persistence"))
 }
