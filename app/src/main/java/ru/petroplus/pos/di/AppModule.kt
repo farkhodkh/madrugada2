@@ -120,4 +120,7 @@ object AppModule {
     @[Provides AppScope]
     fun providesGatewayServerRepositoryApi(gatewayServer: GatewayServerApi): GatewayServerRepositoryApi =
         GatewayServerRepositoryImpl(gatewayServer)
+
+    @[Provides AppScope]
+    fun providesAppDatabase(context: Context) = AppDatabase.getInstance(context)
 }

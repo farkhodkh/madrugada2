@@ -76,12 +76,16 @@ dependencies {
     implementation("${Dependencies.composeFoundation}:${Versions.compose}")
 
     //Lifecycle
+    //Lifecycle
     implementation("${Dependencies.lifecycleViewModel}:${Versions.lifecycle}")
     implementation("${Dependencies.lifecycleRuntime}:${Versions.lifecycle}")
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
     kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
+
+    //Room
+    implementation("${Dependencies.roomKtx}:${Versions.room}")
 
     //Okhttp
     implementation("${Dependencies.gson}:${Versions.gson}")
@@ -105,6 +109,7 @@ dependencies {
     implementation(project(":p7libapi"))
     implementation(project(":evotorsdk"))
     implementation(project(":sdkapi"))
+    implementation(project(":room"))
     implementation(project(":network"))
     implementation(project(":networkapi"))
 
