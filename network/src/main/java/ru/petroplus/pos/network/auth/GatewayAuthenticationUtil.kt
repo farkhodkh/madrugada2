@@ -7,7 +7,7 @@ import java.io.IOException
 /**
  * Класс для инициализации параметров для аутентификации на шлюзе (F5)
  */
-class GatewayAuthenticationUtil {
+object GatewayAuthenticationUtil {
     private val clientCertificatePassword = "1234"
     private val caCertificateName = "master-cacert.pem"
     private val clientCertificateName = "client_cert.pfx"

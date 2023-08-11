@@ -30,7 +30,7 @@ class DebitViewModel(
                 .sdkRepository
                 .eventBus
                 .events
-                .collectIndexed { index, value ->
+                .collectIndexed { _, value ->
                     _viewState.value = DebitViewState
                         .CommandExecutionState(value)
                 }

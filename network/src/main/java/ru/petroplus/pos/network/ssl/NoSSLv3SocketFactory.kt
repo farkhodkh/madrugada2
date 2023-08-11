@@ -18,8 +18,6 @@ import javax.net.ssl.SSLSocketFactory
  * Отключение протокола №3 с подстановкой только №2
  */
 class NoSSLv3SocketFactory(private val delegate: SSLSocketFactory) : SSLSocketFactory() {
-//    private var delegate: SSLSocketFactory = sslSocketFactory//HttpsURLConnection.getDefaultSSLSocketFactory()
-
     override fun createSocket(s: Socket?, host: String?, port: Int, autoClose: Boolean): Socket =
         makeSocketSafe(delegate.createSocket(s, host, port, autoClose))
 

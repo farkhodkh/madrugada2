@@ -110,6 +110,7 @@ dependencies {
     implementation(project(":evotorsdk"))
     implementation(project(":sdkapi"))
     implementation(project(":room"))
+    implementation(project(":persistence"))
     implementation(project(":network"))
     implementation(project(":networkapi"))
 

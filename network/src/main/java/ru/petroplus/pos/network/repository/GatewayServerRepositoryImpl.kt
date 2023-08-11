@@ -8,16 +8,11 @@ import java.net.CookieHandler
 import java.net.CookieManager
 
 class GatewayServerRepositoryImpl(private val gatewayServer: GatewayServerApi): GatewayServerRepositoryApi {
-
-    init {
-        CookieHandler.setDefault(CookieManager())
-    }
-
     override suspend fun doPing() {
         /**
          * Это временное, данные будут приходить от P7Lib
          */
-        val body = GatewayAuthenticationUtil()
+        val body = GatewayAuthenticationUtil
             .getPingBinFile()
             .asRequestBody()
 

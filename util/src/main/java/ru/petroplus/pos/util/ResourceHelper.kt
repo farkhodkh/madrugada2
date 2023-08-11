@@ -47,8 +47,8 @@ object ResourceHelper {
      * Метод для записи InputStream в файл для Ping запроса
      */
     private fun writeBytesToFile(inputStream: InputStream): File {
-        val file = File.createTempFile("PingP7", ".bin")
-        var data = ByteArray(inputStream.available())
+        val file = File.createTempFile("P7Data", ".bin")
+        val data = ByteArray(inputStream.available())
         val bread = 0
         val fos = FileOutputStream(file)
 

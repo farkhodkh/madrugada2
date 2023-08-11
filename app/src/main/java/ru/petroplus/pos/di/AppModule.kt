@@ -8,6 +8,7 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.petrolplus.pos.room.database.AppDatabase
 import ru.petroplus.pos.core.AppScope
 import ru.petroplus.pos.evotorsdk.EvotorSDKRepository
 import ru.petroplus.pos.network.auth.GatewayAuthenticationUtil
@@ -60,7 +61,7 @@ object AppModule {
     fun provideSSLContextFactory(
         trustAllCerts: Array<TrustAllX509TrustManager>
     ): SSLSocketFactory {
-        val authParams = GatewayAuthenticationUtil().gateGatewayAuthenticationParams()
+        val authParams = GatewayAuthenticationUtil.gateGatewayAuthenticationParams()
 
         return SSLContextFactory
             .getFactoryInstance()
