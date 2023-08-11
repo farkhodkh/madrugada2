@@ -10,6 +10,7 @@ import java.util.*
  * Класс для проверки файла конвигурации терминала и для его чтения
  */
 class ConfigurationFileReader() {
+
     var properties: Properties = Properties()
     private lateinit var inputStream: InputStream
 

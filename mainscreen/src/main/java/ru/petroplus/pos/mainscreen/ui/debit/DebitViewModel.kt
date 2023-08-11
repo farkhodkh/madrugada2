@@ -8,14 +8,16 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
+import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
-import ru.petroplus.pos.util.ext.byteArrayToString
 
 class DebitViewModel(
-    private val sdkConnection: CardReaderRepository,
+    private val cardReaderRepository: CardReaderRepository,
+    private val gatewayServer: GatewayServerRepositoryApi,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -24,12 +26,13 @@ class DebitViewModel(
 
     init {
         viewModelScope.launch {
-            sdkConnection
+            cardReaderRepository
                 .sdkRepository
                 .eventBus
                 .events
-                .collectIndexed { index, value ->
-                    _viewState.value = DebitViewState.CommandExecutionState(value.byteArrayToString())
+                .collectIndexed { _, value ->
+                    _viewState.value = DebitViewState
+                        .CommandExecutionState(value)
                 }
         }
 
@@ -38,25 +41,20 @@ class DebitViewModel(
         }
     }
 
-    fun sendAPDUCommand(command: String) {
-        //APDU для выбора апплета
-        //
-        //00A4040008A000000003000000
-        //
-        //cla 00
-        //ins a4
-        //p1 04
-        //p2 00
-        //Lc 08
-        //Data A000000003000000
+    fun ping() {
+        viewModelScope.launch(Dispatchers.IO) {
+            gatewayServer.doPing()
+        }
+    }
 
-        //5342520101
-        sdkConnection.sdkRepository.sendSDKCommand(command)
+    fun sendCommand(command: String) {
+        cardReaderRepository.sdkRepository.sendCommand(command)
     }
 
     companion object {
         fun provideFactory(
-            repository: CardReaderRepository,
+            cardReaderRepository: CardReaderRepository,
+            gatewayServer: GatewayServerRepositoryApi,
             owner: SavedStateRegistryOwner,
             defaultArgs: Bundle? = null,
         ): AbstractSavedStateViewModelFactory =
@@ -67,7 +65,7 @@ class DebitViewModel(
                     modelClass: Class<T>,
                     handle: SavedStateHandle
                 ): T {
-                    return DebitViewModel(repository, handle) as T
+                    return DebitViewModel(cardReaderRepository, gatewayServer, handle) as T
                 }
             }
     }

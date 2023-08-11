@@ -3,6 +3,7 @@ package ru.petroplus.pos.debug
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.petroplus.pos.ui.R
@@ -31,7 +33,8 @@ import ru.petroplus.pos.ui.R
 @Composable
 fun DebugScreen(
     commandResult: String = "Результат выполнения",
-    onClickListener: (String) -> Unit
+    onCommandClickListener: (String) -> Unit,
+    onClickListener: () -> Unit,
 ) {
     Surface(
         modifier = Modifier
@@ -53,6 +56,8 @@ fun DebugScreen(
                 onValueChange = { newText ->
                     message = newText
                 },
+                maxLines = 100,
+                singleLine = false,
                 textStyle = TextStyle(
                     fontSize = 18.sp,
                 ),
@@ -83,13 +88,35 @@ fun DebugScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button(
-                modifier = Modifier.width(75.dp),
-                onClick = {
-                    onClickListener.invoke(message)
+            Row {
+
+                Button(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(8.dp)
+                    ,
+                    onClick = {
+                        onCommandClickListener.invoke(message)
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.OK)
+                    )
                 }
-            ) {
-                Text(text = stringResource(id = R.string.OK))
+
+                Button(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(8.dp)
+                    ,
+                    onClick = {
+                        onClickListener.invoke()
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.ping)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -97,9 +124,11 @@ fun DebugScreen(
             Text(
                 modifier = Modifier
                     .height(150.dp)
+                    .padding(start = 16.dp, end = 16.dp)
                     .fillMaxWidth(),
                 text = commandResult,
             )
+
         }
     }
 }

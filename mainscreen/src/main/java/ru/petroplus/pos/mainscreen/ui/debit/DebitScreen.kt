@@ -21,17 +21,25 @@ fun DebitScreen(
             }
         }
         DebitViewState.DebugState -> {
-            DebugScreen() {
-                viewModel.sendAPDUCommand(it)
-            }
+            DebugScreen(
+                onCommandClickListener = {
+                    viewModel.sendCommand(it)
+                },
+                onClickListener = {
+                    viewModel.ping()
+                }
+            )
         }
-
         is DebitViewState.CommandExecutionState -> {
             DebugScreen(
-                viewState.commandResult
-            ) {
-                viewModel.sendAPDUCommand(it)
-            }
+                viewState.commandResult,
+                onCommandClickListener = {
+                    viewModel.sendCommand(it)
+                },
+                onClickListener = {
+                    viewModel.ping()
+                }
+            )
         }
         else -> {
             Surface {

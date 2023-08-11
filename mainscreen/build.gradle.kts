@@ -74,4 +74,5 @@ dependencies {
     implementation(project(":util"))
     implementation(project(":ui"))
     implementation(project(":sdkapi"))
+    implementation(project(":networkapi"))
 }

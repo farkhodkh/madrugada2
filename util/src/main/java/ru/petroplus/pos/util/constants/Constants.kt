@@ -1,6 +1,7 @@
 package ru.petroplus.pos.util.constants
 
 object Constants {
+    const val GATEWAY_SERVER_ADDRESS_AND_PORT = "https://91.240.172.195:6567"
     const val CONFIG_FILE_NAME = "config.ini"
     const val DEMO_CONFIGURATION = "AcquireID = 4000\n" +
             "TerminalID = 12\n" +
