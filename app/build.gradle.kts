@@ -115,4 +115,5 @@ dependencies {
     implementation(project(":networkapi"))
 
 
+    implementation(project(":persistence"))
 }
