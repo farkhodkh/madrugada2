@@ -7,7 +7,6 @@ import java.util.Properties
  * Переобразование Map с переметрами в DTO объект
  */
 fun Properties.toInitDataDto(): InitDataDto {
-    //"AcquireID", "TerminalID", "Host1_ip", "Host1_port"
     val acquirerId = this.getValue("AcquireID") as String
     val terminalId = this.getValue("TerminalID") as String
     val hostIp = this.getValue("Host1_ip") as String

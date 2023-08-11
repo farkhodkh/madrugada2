@@ -6,6 +6,8 @@ import dagger.Component
 import ru.petroplus.pos.core.AppScope
 import ru.petroplus.pos.ui.main.MainActivity
 import ru.petroplus.pos.mainscreen.di.MainScreenComponentDependencies
+import ru.petroplus.pos.network.di.NetworkComponentDependencies
+import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.p7Lib.di.P7LibComponentDependencies
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 
@@ -14,10 +16,10 @@ import ru.petroplus.pos.sdkapi.CardReaderRepository
     dependencies = [AppComponentDependencies::class]
 )
 @AppScope
-interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies
-//    , EvotorComponentDependencies
+interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies, NetworkComponentDependencies
 {
     val readerRepository: CardReaderRepository
+    val gatewayServerRepository: GatewayServerRepositoryApi
 
     @Component.Builder
     interface Builder {
