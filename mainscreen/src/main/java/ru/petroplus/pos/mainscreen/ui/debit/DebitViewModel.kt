@@ -13,15 +13,16 @@ import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
+import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.persitence.entities.GUIDparamsDTO
 import ru.petrolplus.pos.persitence.entities.TransactionDTO
 import ru.petroplus.pos.debug.DebitDebugGroup
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
-import ru.petroplus.pos.util.ext.byteArrayToString
 
 class DebitViewModel(
-    private val sdkConnection: CardReaderRepository,
+    private val cardReaderRepository: CardReaderRepository,
+    private val gatewayServer: GatewayServerRepositoryApi,
     private val transactionsPersistence: TransactionsPersistence,
     private val settingsPersistence: SettingsPersistence,
     private val savedStateHandle: SavedStateHandle
@@ -32,12 +33,13 @@ class DebitViewModel(
 
     init {
         viewModelScope.launch {
-            sdkConnection
+            cardReaderRepository
                 .sdkRepository
                 .eventBus
                 .events
-                .collectIndexed { index, value ->
-                    _viewState.value = DebitViewState.CommandExecutionState(value.byteArrayToString())
+                .collectIndexed { _, value ->
+                    _viewState.value = DebitViewState
+                        .CommandExecutionState(value)
                 }
         }
 
@@ -94,25 +96,20 @@ class DebitViewModel(
         }
     }
 
-    fun sendAPDUCommand(command: String) {
-        //APDU для выбора апплета
-        //
-        //00A4040008A000000003000000
-        //
-        //cla 00
-        //ins a4
-        //p1 04
-        //p2 00
-        //Lc 08
-        //Data A000000003000000
+    fun ping() {
+        viewModelScope.launch(Dispatchers.IO) {
+            gatewayServer.doPing()
+        }
+    }
 
-        //5342520101
-        sdkConnection.sdkRepository.sendSDKCommand(command)
+    fun sendCommand(command: String) {
+        cardReaderRepository.sdkRepository.sendCommand(command)
     }
 
     companion object {
         fun provideFactory(
-            repository: CardReaderRepository,
+            cardReaderRepository: CardReaderRepository,
+            gatewayServer: GatewayServerRepositoryApi,
             transactionsPersistence: TransactionsPersistence,
             settingsPersistence: SettingsPersistence,
             owner: SavedStateRegistryOwner,
@@ -125,7 +122,7 @@ class DebitViewModel(
                     modelClass: Class<T>,
                     handle: SavedStateHandle
                 ): T {
-                    return DebitViewModel(repository, transactionsPersistence, settingsPersistence, handle) as T
+                    return DebitViewModel(cardReaderRepository, gatewayServer, transactionsPersistence, settingsPersistence, handle) as T
                 }
             }
     }

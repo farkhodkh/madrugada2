@@ -2,9 +2,13 @@ package ru.petroplus.pos
 
 import android.app.Application
 import android.content.Context
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 import ru.petroplus.pos.di.AppComponent
 import ru.petroplus.pos.di.AppComponentDependencies
 import ru.petroplus.pos.di.DaggerAppComponent
+import java.net.CookieHandler
+import java.net.CookieManager
+import java.security.Security
 
 class App : Application() {
 
@@ -20,21 +24,27 @@ class App : Application() {
             .application(this)
             .appComponentDependencies(AppComponentDependenciesImpl())
             .build()
+
+        initSSLDependencies()
     }
 
     private inner class AppComponentDependenciesImpl: AppComponentDependencies {
         override val context: Context = this@App
     }
+
+    private fun initSSLDependencies() {
+        /**
+         * Инжект провайдера для SSL
+         */
+        Security.removeProvider("BC")
+        Security.addProvider(BouncyCastleProvider())
+
+        /**
+         * Инициализация менеджера по умолчания для Cookie
+         */
+        CookieHandler.setDefault(CookieManager())
+    }
 }
 
 val Context.appComponent: AppComponent
     get() = App.appComponent
-//    = when (this) {
-//        is MainActivity -> {
-//            App.appComponent
-//        }
-//        else -> {
-//            App.appComponent
-////            this.applicationContext.appComponent
-//        }
-//    }

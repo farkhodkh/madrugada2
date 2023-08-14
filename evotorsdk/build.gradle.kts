@@ -51,5 +51,5 @@ dependencies {
 
     //Modules
     implementation(project(":sdkapi"))
-
+    implementation(project(":util"))
 }

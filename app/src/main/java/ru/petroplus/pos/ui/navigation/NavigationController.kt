@@ -27,16 +27,17 @@ fun NavigationController(navController: NavHostController) {
             val mainScreenComponent = (LocalContext.current as MainActivity).mainScreenSubcomponent
             DebitScreen(
                 onClickListener = { screen ->
-                    navController.navigate(screen)
-                },
-                viewModel = viewModel(
-                    factory = DebitViewModel.provideFactory(
-                        (LocalContext.current.applicationContext as App).appComponent.readerRepository,
-                        owner = LocalSavedStateRegistryOwner.current,
-                        transactionsPersistence = mainScreenComponent.transactionsPersistence,
-                        settingsPersistence = mainScreenComponent.settingsPersistence
-                    )
+                navController.navigate(screen)
+            },
+            viewModel = viewModel(
+                factory = DebitViewModel.provideFactory(
+                    cardReaderRepository = (LocalContext.current.applicationContext as App).appComponent.readerRepository,
+                    gatewayServer = (LocalContext.current.applicationContext as App).appComponent.gatewayServerRepository,
+                    owner = LocalSavedStateRegistryOwner.current,
+                    transactionsPersistence = mainScreenComponent.transactionsPersistence,
+                    settingsPersistence = mainScreenComponent.settingsPersistence
                 )
+            )
             )
         }
 

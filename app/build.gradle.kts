@@ -53,6 +53,10 @@ dependencies {
     //Lib
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*aar"))))
 
+    //SSL Authentification
+    implementation ("com.google.android.gms:play-services-auth:20.6.0")
+    implementation ("org.bouncycastle:bcprov-jdk15on:1.67")
+
     //Core
     implementation("${Dependencies.coreKtx}:${Versions.coreKtx}")
     implementation("${Dependencies.appcompat}:${Versions.appcompat}")
@@ -83,6 +87,15 @@ dependencies {
     //Room
     implementation("${Dependencies.roomKtx}:${Versions.room}")
 
+    //Okhttp
+    implementation("${Dependencies.gson}:${Versions.gson}")
+    implementation("${Dependencies.okhttpProfiler}:${Versions.okhttpProfiler}")
+    implementation("${Dependencies.okhttLoggingInterceptor}:${Versions.okhttLoggingInterceptor}")
+
+    //Retrofit
+    implementation("${Dependencies.retrofit}:${Versions.retrofit}")
+    implementation("${Dependencies.gsonConverter}:${Versions.gsonConverter}")
+
     //Testing
     implementation("${Dependencies.junit}:${Versions.junit}")
     implementation("${Dependencies.extJunit}:${Versions.extJunit}")
@@ -98,4 +111,6 @@ dependencies {
     implementation(project(":sdkapi"))
     implementation(project(":room"))
     implementation(project(":persistence"))
+    implementation(project(":network"))
+    implementation(project(":networkapi"))
 }

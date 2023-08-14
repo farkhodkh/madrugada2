@@ -20,31 +20,43 @@ fun DebitScreen(
 
             }
         }
-        is DebitViewState.DebugState -> {
-            when(viewState) {
-                is DebitViewState.DebugState.Debit -> {
-                    DebugScreen(
-                        onClickListener = {},
-                        debitDebugGroup = viewState.debitDebugGroup,
-                        debitCallback = { viewModel.onTransactionDataChanges(it)},
-                        saveTransactionCallback = { viewModel.testDebit(it) },
-                        getTransactionsCallback = { viewModel.fetchTransactions()},
-                        saveGuidCallback = { viewModel.saveGUIDparams(it)}
-                    )
-                }
-                else -> {
-                    DebugScreen {
-                        viewModel.sendAPDUCommand(it)
+        DebitViewState.DebugState -> {
+            is DebitViewState.DebugState.Debit -> {
+                DebugScreen(
+                    onCommandClickListener = {
+                        viewModel.sendCommand(it)
+                    },
+                    onClickListener = {
+                        viewModel.ping()
+                    },
+                    debitDebugGroup = viewState.debitDebugGroup,
+                    debitCallback = { viewModel.onTransactionDataChanges(it)},
+                    saveTransactionCallback = { viewModel.testDebit(it) },
+                    getTransactionsCallback = { viewModel.fetchTransactions()},
+                    saveGuidCallback = { viewModel.saveGUIDparams(it)}
+                )
+            }
+            else -> {
+                DebugScreen(
+                    onCommandClickListener = {
+                        viewModel.sendCommand(it)
+                    },
+                    onClickListener = {
+                        viewModel.ping()
                     }
-                }
+                )
             }
         }
         is DebitViewState.CommandExecutionState -> {
             DebugScreen(
-                commandResult = viewState.commandResult
-            ) {
-                viewModel.sendAPDUCommand(it)
-            }
+                viewState.commandResult,
+                onCommandClickListener = {
+                    viewModel.sendCommand(it)
+                },
+                onClickListener = {
+                    viewModel.ping()
+                }
+            )
         }
         else -> {
             Surface {

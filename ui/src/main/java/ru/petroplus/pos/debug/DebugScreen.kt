@@ -41,6 +41,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -64,7 +65,8 @@ fun DebugScreen(
     saveTransactionCallback: (TransactionDTO) -> Unit = {},
     getTransactionsCallback: () -> Unit = {},
     saveGuidCallback: (GUIDparamsDTO) -> Unit = {},
-    onClickListener: (String) -> Unit,
+    nCommandClickListener: (String) -> Unit,
+    onClickListener: () -> Unit,
 ) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     val tabs = listOf("APDU","DATABASE")
@@ -117,6 +119,8 @@ fun APDUScreen(onClickListener: (String) -> Unit, commandResult: String) {
                 onValueChange = { newText ->
                     message = newText
                 },
+                maxLines = 100,
+                singleLine = false,
                 textStyle = TextStyle(
                     fontSize = 18.sp,
                 ),
@@ -147,13 +151,35 @@ fun APDUScreen(onClickListener: (String) -> Unit, commandResult: String) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button(
-                modifier = Modifier.width(75.dp),
-                onClick = {
-                    onClickListener.invoke(message)
+            Row {
+
+                Button(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(8.dp)
+                    ,
+                    onClick = {
+                        onCommandClickListener.invoke(message)
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.OK)
+                    )
                 }
-            ) {
-                Text(text = stringResource(id = R.string.OK))
+
+                Button(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(8.dp)
+                    ,
+                    onClick = {
+                        onClickListener.invoke()
+                    }
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.ping)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -161,9 +187,11 @@ fun APDUScreen(onClickListener: (String) -> Unit, commandResult: String) {
             Text(
                 modifier = Modifier
                     .height(150.dp)
+                    .padding(start = 16.dp, end = 16.dp)
                     .fillMaxWidth(),
                 text = commandResult,
             )
+
         }
     }
 }
