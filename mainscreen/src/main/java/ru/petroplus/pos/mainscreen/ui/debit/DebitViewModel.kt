@@ -28,8 +28,7 @@ class DebitViewModel(
         viewModelScope.launch {
             cardReaderRepository
                 .sdkRepository
-                .eventBus
-                .events
+                .latestCommands
                 .collectIndexed { _, value ->
                     _viewState.value = DebitViewState
                         .CommandExecutionState(value)
