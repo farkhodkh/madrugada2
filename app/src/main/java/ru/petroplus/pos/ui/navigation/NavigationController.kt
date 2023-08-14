@@ -14,6 +14,7 @@ import ru.petroplus.pos.mainscreen.ui.debit.DebitScreen
 import ru.petroplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petroplus.pos.navigation.Screens
 import ru.petroplus.pos.navigation.SettingsScreen
+import ru.petroplus.pos.ui.main.MainActivity
 import ru.petroplus.pos.ui.views.RefundScreen
 
 @Composable
@@ -23,16 +24,19 @@ fun NavigationController(navController: NavHostController) {
         composable(
             route = Screens.DebitScreen.route
         ) {
+            val mainScreenComponent = (LocalContext.current as MainActivity).mainScreenSubcomponent
             DebitScreen(
                 onClickListener = { screen ->
-                navController.navigate(screen)
-            },
-            viewModel = viewModel(
-                factory = DebitViewModel.provideFactory(
-                    (LocalContext.current.applicationContext as App).appComponent.readerRepository,
-                    owner = LocalSavedStateRegistryOwner.current
+                    navController.navigate(screen)
+                },
+                viewModel = viewModel(
+                    factory = DebitViewModel.provideFactory(
+                        (LocalContext.current.applicationContext as App).appComponent.readerRepository,
+                        owner = LocalSavedStateRegistryOwner.current,
+                        transactionsPersistence = mainScreenComponent.transactionsPersistence,
+                        settingsPersistence = mainScreenComponent.settingsPersistence
+                    )
                 )
-            )
             )
         }
 

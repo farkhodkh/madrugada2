@@ -9,25 +9,26 @@ import ru.petrolplus.pos.room.dao.ServicesDao
 import ru.petrolplus.pos.room.dao.ShiftParamsDao
 import ru.petrolplus.pos.room.dao.TransactionsDao
 import ru.petrolplus.pos.room.database.AppDatabase
+import ru.petroplus.pos.core.MainScreenScope
 
 @Module
 class RoomModule {
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideBaseSettingsDao(appDatabase: AppDatabase): BaseSettingsDao = appDatabase.baseSettingsDao()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideCommonSettingsDao(appDatabase: AppDatabase): CommonSettingsDao = appDatabase.commonSettingsDao()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideShiftParamsDao(appDatabase: AppDatabase): ShiftParamsDao = appDatabase.shiftParamsDao()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideGUIDparamsDao(appDatabase: AppDatabase): GUIDparamsDao = appDatabase.guidParamsDao()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideServicesDao(appDatabase: AppDatabase): ServicesDao = appDatabase.servicesDao()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideTransactionsDao(appDatabase: AppDatabase): TransactionsDao = appDatabase.transactionDao()
 }

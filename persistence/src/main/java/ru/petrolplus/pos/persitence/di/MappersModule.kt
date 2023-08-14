@@ -21,26 +21,27 @@ import ru.petrolplus.pos.room.entities.GUIDparamsDB
 import ru.petrolplus.pos.room.entities.ServiceDB
 import ru.petrolplus.pos.room.entities.ShiftParamsDB
 import ru.petrolplus.pos.room.entities.TransactionDB
+import ru.petroplus.pos.core.MainScreenScope
 
 @Module
 class MappersModule {
 
-    @Provides
+    @[Provides MainScreenScope]
     fun providesBaseSettingsMapper(): Mapper<BaseSettingsDTO, BaseSettingsDB> = BaseSettingsMapper()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun providesCommonSettingsMapper(): Mapper<CommonSettingsDTO, CommonSettingsDB> = CommonSettingsMapper()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun providesGUIDparamsMapper(): Mapper<GUIDparamsDTO, GUIDparamsDB> = GUIDparamsMapper()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun providesShiftParamsMapper(): Mapper<ShiftParamsDTO, ShiftParamsDB> = ShiftParamsMapper()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun providesServicesMapper(): Mapper<ServiceDTO, ServiceDB> = ServicesMapper()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun providesTransactionsMapper(): Mapper<TransactionDTO, TransactionDB> = TransactionsMapper()
 
 }

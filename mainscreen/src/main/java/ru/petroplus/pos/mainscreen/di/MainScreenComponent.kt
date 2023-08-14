@@ -1,19 +1,30 @@
 package ru.petroplus.pos.mainscreen.di
 
-import dagger.Component
+import dagger.Subcomponent
+import ru.petrolplus.pos.persitence.SettingsPersistence
+import ru.petrolplus.pos.persitence.TransactionsPersistence
+import ru.petrolplus.pos.persitence.di.MappersModule
+import ru.petrolplus.pos.persitence.di.PersistenceModule
+import ru.petrolplus.pos.room.di.RoomModule
 import ru.petroplus.pos.core.MainScreenScope
 
 @MainScreenScope
-@Component(dependencies = [MainScreenComponentDependencies::class])
+@Subcomponent(
+    modules = [
+        RoomModule::class,
+        PersistenceModule::class,
+        MappersModule::class
+    ]
+)
 interface MainScreenComponent {
 
-    //    fun inject(fragment: TestFragment)
-    //
-    @Component.Builder
+    val transactionsPersistence: TransactionsPersistence
+    val settingsPersistence: SettingsPersistence
+    @Subcomponent.Builder
     interface Builder {
-
-        fun deps(deps: MainScreenComponentDependencies): Builder
-
+        fun roomModule(module: RoomModule): Builder
+        fun mappersModule(module: MappersModule): Builder
+        fun persistenceModule(module: PersistenceModule): Builder
         fun build(): MainScreenComponent
     }
 }

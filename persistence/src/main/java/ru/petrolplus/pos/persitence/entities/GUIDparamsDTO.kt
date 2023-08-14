@@ -14,7 +14,7 @@ package ru.petrolplus.pos.persitence.entities
 
 data class GUIDparamsDTO(
     override val id: Int = 1,
-    val lastOnlineTransaction: Int,
+    val lastOnlineTransaction: Long,
     val lastGeneratedTime: Long,
     val clockSequence: Int,
     val hasNodeId: Boolean,

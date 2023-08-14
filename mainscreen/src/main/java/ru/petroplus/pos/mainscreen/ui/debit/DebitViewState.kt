@@ -1,9 +1,14 @@
 package ru.petroplus.pos.mainscreen.ui.debit
 
+import ru.petroplus.pos.debug.DebitDebugGroup
+
 sealed class DebitViewState {
     object StartingState: DebitViewState()
-    object DebugState: DebitViewState()
-    object InsertCartState: DebitViewState()
+    sealed class DebugState: DebitViewState() {
+        object APDU : DebugState()
+        data class Debit(val debitDebugGroup: DebitDebugGroup) : DebugState()
 
-    class CommandExecutionState(val commandResult: String): DebitViewState()
+    }
+    object InsertCartState: DebitViewState()
+    data class CommandExecutionState(val commandResult: String): DebitViewState()
 }

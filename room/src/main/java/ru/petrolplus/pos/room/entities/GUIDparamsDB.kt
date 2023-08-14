@@ -22,7 +22,7 @@ data class GUIDparamsDB(
     val id: Int = 1,
 
     @ColumnInfo("last_online_transaction")
-    val lastOnlineTransaction: Int,
+    val lastOnlineTransaction: Long,
 
     @ColumnInfo("last_generated_time")
     val lastGeneratedTime: Long,
