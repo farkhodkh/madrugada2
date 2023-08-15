@@ -20,8 +20,8 @@ fun DebitScreen(
 
             }
         }
-        DebitViewState.DebugState -> {
-            is DebitViewState.DebugState.Debit -> {
+        is DebitViewState.DebugState -> {
+            if (viewState is DebitViewState.DebugState.Debit) {
                 DebugScreen(
                     onCommandClickListener = {
                         viewModel.sendCommand(it)
@@ -35,8 +35,7 @@ fun DebitScreen(
                     getTransactionsCallback = { viewModel.fetchTransactions()},
                     saveGuidCallback = { viewModel.saveGUIDparams(it)}
                 )
-            }
-            else -> {
+            } else {
                 DebugScreen(
                     onCommandClickListener = {
                         viewModel.sendCommand(it)

@@ -43,7 +43,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.petrolplus.pos.persitence.entities.GUIDparamsDTO
@@ -65,7 +64,7 @@ fun DebugScreen(
     saveTransactionCallback: (TransactionDTO) -> Unit = {},
     getTransactionsCallback: () -> Unit = {},
     saveGuidCallback: (GUIDparamsDTO) -> Unit = {},
-    nCommandClickListener: (String) -> Unit,
+    onCommandClickListener: (String) -> Unit,
     onClickListener: () -> Unit,
 ) {
     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -83,7 +82,7 @@ fun DebugScreen(
 
         }
         when (selectedTabIndex) {
-            0 -> APDUScreen(onClickListener, commandResult)
+            0 -> APDUScreen(onClickListener, onCommandClickListener, commandResult)
             else -> DatabaseScreen(
                 debitDebugGroup = debitDebugGroup,
                 debitCallback = debitCallback,
@@ -97,7 +96,7 @@ fun DebugScreen(
 }
 
 @Composable
-fun APDUScreen(onClickListener: (String) -> Unit, commandResult: String) {
+fun APDUScreen(onClickListener: () -> Unit, onCommandClickListener: (String) -> Unit, commandResult: String) {
     Surface(
         modifier = Modifier
             .padding(top = 16.dp)
