@@ -223,7 +223,7 @@ fun DatabaseScreen(
             } ?: getTestData(
                 context = LocalContext.current,
                 fileName = "guid_fields.json"
-            )
+            ) { if (it.first == "clockSequence") Pair(it.first, (it.second as Int).toShort()) else it }
 
             Form(list = guidFields) {
                 debitCallback(debitDebugGroup.copy(guidParams = it))
@@ -285,7 +285,11 @@ fun DatabaseScreen(
  * @param fileName имя ассета в формате json
  * @return список пар ключ значение где значение может быть произвольного типа
  */
-private fun getTestData(context: Context, fileName: String): SnapshotStateList<Pair<String, Any>> {
+private fun getTestData(
+    context: Context,
+    fileName: String,
+    additionalMapper: ((Pair<String, Any>) -> Pair<String, Any>)? = null
+): SnapshotStateList<Pair<String, Any>> {
     val inputStream = context.assets.open(fileName)
     val scanner: Scanner = Scanner(inputStream, StandardCharsets.UTF_8.displayName()).useDelimiter("\\A")
     val text = if (scanner.hasNext()) scanner.next() else ""
@@ -295,6 +299,7 @@ private fun getTestData(context: Context, fileName: String): SnapshotStateList<P
         .split(",")
         .map { it.split(" : ") }
         .map { it[0].replace("\"", "").replace("\\r\\n ", "").trim() to parseTyped(it[1].trim().replace("\"", "")) }
+        .map { if (additionalMapper != null) additionalMapper(it) else it }
         .toTypedArray()
     return mutableStateListOf(*list)
 }
@@ -313,6 +318,19 @@ private fun Form(
 ) {
     list.forEachIndexed { index,(k, v) ->
         when (v) {
+            is Short -> OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(text = k) },
+                value = v.toString(),
+                onValueChange = { value: String ->
+                    onValueChanged(
+                        list.apply {
+                            this[index] = Pair(k, value.zeroIfEmpty().toShortOrNull() ?: Short.MAX_VALUE)
+                        }
+                    )
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+            )
             is Int -> OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 label = { Text(text = k) },
@@ -424,7 +442,7 @@ private fun SnapshotStateList<Pair<String, Any>>.toGUIDparamsDTO(): GUIDparamsDT
     return GUIDparamsDTO(
         lastOnlineTransaction = map.getOrThrow("lastOnlineTransaction") as Long,
         lastGeneratedTime = map.getOrThrow("lastGeneratedTime") as Long,
-        clockSequence = map.getOrThrow("clockSequence") as Int,
+        clockSequence = map.getOrThrow("clockSequence") as Short,
         hasNodeId = map.getOrThrow("hasNodeId") as Boolean,
         nodeId = map.getOrThrow("nodeId") as String,
     )

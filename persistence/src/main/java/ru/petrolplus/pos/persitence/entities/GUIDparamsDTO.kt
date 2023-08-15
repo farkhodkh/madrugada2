@@ -16,7 +16,7 @@ data class GUIDparamsDTO(
     override val id: Int = 1,
     val lastOnlineTransaction: Long,
     val lastGeneratedTime: Long,
-    val clockSequence: Int,
+    val clockSequence: Short,
     val hasNodeId: Boolean,
     val nodeId: String,
 ): IdentifiableDTO

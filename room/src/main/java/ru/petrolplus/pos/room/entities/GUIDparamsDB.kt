@@ -28,7 +28,7 @@ data class GUIDparamsDB(
     val lastGeneratedTime: Long,
 
     @ColumnInfo("clock_sequence")
-    val clockSequence: Int,
+    val clockSequence: Short,
 
     @ColumnInfo("has_node_id")
     val hasNodeId: Boolean,
