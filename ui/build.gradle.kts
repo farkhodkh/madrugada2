@@ -61,6 +61,11 @@ dependencies {
     implementation("${Dependencies.composeNavigation}:${Versions.composeNavigation}")
     implementation("${Dependencies.composeFoundation}:${Versions.compose}")
 
+    //Json
+    implementation("${Dependencies.gson}:${Versions.gson}")
+
     //Modules
     implementation(project(":util"))
+    implementation(project(":persistence"))
+    implementation(kotlin("reflect"))
 }

@@ -18,7 +18,7 @@ interface TransactionsDao : BaseDao<TransactionDB> {
      * транзакцию
      */
     @Query("SELECT * FROM transactions WHERE id = :id LIMIT 1")
-    suspend fun getById(id: Int): TransactionDB?
+    suspend fun getById(id: String): TransactionDB?
 
     /**
      * Получение списка совершенных транзакций

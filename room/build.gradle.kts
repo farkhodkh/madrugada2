@@ -35,12 +35,15 @@ android {
 }
 
 dependencies {
+    //Modules
+    implementation(project(":core"))
     //Room
     implementation("${Dependencies.roomKtx}:${Versions.room}")
     kapt("${Dependencies.roomCompiler}:${Versions.room}")
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
+    kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
 
     //Testing
     testImplementation("${Dependencies.junit}:${Versions.junit}")

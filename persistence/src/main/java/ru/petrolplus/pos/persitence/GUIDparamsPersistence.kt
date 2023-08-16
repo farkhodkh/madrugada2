@@ -1,10 +1,10 @@
 package ru.petrolplus.pos.persitence
 
-import ru.petrolplus.pos.persitence.entities.GUIDparamsDTO
+import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.exceptions.NoRecordsException
 import ru.petrolplus.pos.persitence.mappers.Mapper
 import ru.petrolplus.pos.room.dao.GUIDparamsDao
-import ru.petrolplus.pos.room.entities.GUIDparamsDB
+import ru.petrolplus.pos.room.entities.GUIDParamsDB
 import java.lang.IllegalArgumentException
 import kotlin.jvm.Throws
 
@@ -17,18 +17,18 @@ interface GUIDparamsPersistence {
      * Получение GUID параметров терминала
      * @return GUID параметры терминала
      */
-    suspend fun getGUIDparams(): GUIDparamsDTO
+    suspend fun getGUIDparams(): GUIDParamsDTO
 
     /**
      * сохранение GUID параметров терминала
      * @param guidParams GUID параметры терминала
      */
-    suspend fun setGUIDparams(guidParams: GUIDparamsDTO)
+    suspend fun setGUIDparams(guidParams: GUIDParamsDTO)
 }
 
 class GUIDparamsPersistenceImpl(
     private val guiDparamsDao: GUIDparamsDao,
-    private val mapper: Mapper<GUIDparamsDTO, GUIDparamsDB>,
+    private val mapper: Mapper<GUIDParamsDTO, GUIDParamsDB>,
     private val persistenceStoreStrategy: StoreStrategy
 ) : GUIDparamsPersistence {
 
@@ -38,7 +38,7 @@ class GUIDparamsPersistenceImpl(
      * @return DTO описывающую GUID параметры
      */
     @Throws(IllegalStateException::class)
-    override suspend fun getGUIDparams(): GUIDparamsDTO {
+    override suspend fun getGUIDparams(): GUIDParamsDTO {
         return guiDparamsDao.getById(1)?.let(mapper::toDTO) ?: throw NoRecordsException
     }
 
@@ -48,7 +48,7 @@ class GUIDparamsPersistenceImpl(
      * @throws IllegalArgumentException в случае если id записи не равно 1
      */
     @Throws(IllegalArgumentException::class)
-    override suspend fun setGUIDparams(guidParams: GUIDparamsDTO) {
+    override suspend fun setGUIDparams(guidParams: GUIDParamsDTO) {
         persistenceStoreStrategy.store(guiDparamsDao, mapper, guidParams)
     }
 

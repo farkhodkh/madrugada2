@@ -20,7 +20,7 @@ import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistenceImpl
 import ru.petrolplus.pos.persitence.entities.BaseSettingsDTO
 import ru.petrolplus.pos.persitence.entities.CommonSettingsDTO
-import ru.petrolplus.pos.persitence.entities.GUIDparamsDTO
+import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.entities.ServiceDTO
 import ru.petrolplus.pos.persitence.entities.ShiftParamsDTO
 import ru.petrolplus.pos.persitence.entities.TransactionDTO
@@ -33,25 +33,26 @@ import ru.petrolplus.pos.room.dao.ShiftParamsDao
 import ru.petrolplus.pos.room.dao.TransactionsDao
 import ru.petrolplus.pos.room.entities.BaseSettingsDB
 import ru.petrolplus.pos.room.entities.CommonSettingsDB
-import ru.petrolplus.pos.room.entities.GUIDparamsDB
+import ru.petrolplus.pos.room.entities.GUIDParamsDB
 import ru.petrolplus.pos.room.entities.ServiceDB
 import ru.petrolplus.pos.room.entities.ShiftParamsDB
 import ru.petrolplus.pos.room.entities.TransactionDB
+import ru.petroplus.pos.core.MainScreenScope
 
 @Module
 class PersistenceModule {
 
-    @Provides
+    @[Provides MainScreenScope]
     fun providesStoreStrategy(): StoreStrategy = DatabaseStoreStrategy()
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideBaseSettingsPersistence(
         baseSettingsDao: BaseSettingsDao,
         mapper: Mapper<BaseSettingsDTO, BaseSettingsDB>,
         storeStrategy: StoreStrategy
     ): BaseSettingsPersistence = BaseSettingsPersistenceImpl(baseSettingsDao, mapper, storeStrategy)
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideCommonSettingsPersistence(
         commonSettingsDao: CommonSettingsDao,
         mapper: Mapper<CommonSettingsDTO, CommonSettingsDB>,
@@ -59,21 +60,21 @@ class PersistenceModule {
     ): CommonSettingsPersistence =
         CommonSettingsPersistenceImpl(commonSettingsDao, mapper, storeStrategy)
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideGUIDparamsPersistence(
         guidParamsDao: GUIDparamsDao,
-        mapper: Mapper<GUIDparamsDTO, GUIDparamsDB>,
+        mapper: Mapper<GUIDParamsDTO, GUIDParamsDB>,
         storeStrategy: StoreStrategy
     ): GUIDparamsPersistence = GUIDparamsPersistenceImpl(guidParamsDao, mapper, storeStrategy)
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideShiftParamsPersistence(
         shiftParamsDao: ShiftParamsDao,
         mapper: Mapper<ShiftParamsDTO, ShiftParamsDB>,
         storeStrategy: StoreStrategy
     ): ShiftParamsPersistence = ShiftParamsPersistenceImpl(shiftParamsDao, mapper, storeStrategy)
 
-    @Provides
+    @[Provides MainScreenScope]
     fun providesSettingsPersistence(
         baseSettingsPersistence: BaseSettingsPersistence,
         commonSettingsPersistence: CommonSettingsPersistence,
@@ -86,13 +87,13 @@ class PersistenceModule {
         shiftParamsPersistence
     )
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideServicesPersistence(
         servicesDao: ServicesDao,
         mapper: Mapper<ServiceDTO, ServiceDB>
     ): ServicesPersistence = ServicesPersistenceImpl(servicesDao, mapper)
 
-    @Provides
+    @[Provides MainScreenScope]
     fun provideTransactionsPersistence(
         transactionsDao: TransactionsDao,
         mapper: Mapper<TransactionDTO, TransactionDB>

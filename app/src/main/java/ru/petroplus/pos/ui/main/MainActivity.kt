@@ -15,6 +15,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
+import ru.petrolplus.pos.persitence.di.MappersModule
+import ru.petrolplus.pos.persitence.di.PersistenceModule
+import ru.petrolplus.pos.room.di.RoomModule
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.common.GooglePlayServicesUtil
@@ -24,6 +27,7 @@ import ru.petroplus.pos.ui.R
 import ru.petroplus.pos.blockingScreen.StartingApplicationBlockingScreen
 import ru.petroplus.pos.dialogs.ConfigurationFileRequiredDialog
 import ru.petroplus.pos.dialogs.FilePickerDialog
+import ru.petroplus.pos.mainscreen.di.MainScreenComponent
 import ru.petroplus.pos.navigation.BottomBarItem
 import ru.petroplus.pos.navigation.BottomNavigationController
 import ru.petroplus.pos.navigation.Screens
@@ -39,11 +43,19 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var viewModel: MainActivityViewModel
 
+    lateinit var mainScreenSubcomponent: MainScreenComponent
+
     @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         App.appComponent.inject(this)
+
+        mainScreenSubcomponent = App.appComponent.mainScreenComponentBuilder()
+            .roomModule(RoomModule())
+            .mappersModule(MappersModule())
+            .persistenceModule(PersistenceModule())
+            .build()
 
         setContent {
             val viewState by viewModel.viewState.collectAsState()

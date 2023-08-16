@@ -1,10 +1,10 @@
 package ru.petrolplus.pos.persitence.mappers
 
-import ru.petrolplus.pos.persitence.entities.GUIDparamsDTO
-import ru.petrolplus.pos.room.entities.GUIDparamsDB
+import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
+import ru.petrolplus.pos.room.entities.GUIDParamsDB
 
-class GUIDparamsMapper : Mapper<GUIDparamsDTO, GUIDparamsDB> {
-    override fun toDTO(input: GUIDparamsDB): GUIDparamsDTO = GUIDparamsDTO(
+class GUIDparamsMapper : Mapper<GUIDParamsDTO, GUIDParamsDB> {
+    override fun toDTO(input: GUIDParamsDB): GUIDParamsDTO = GUIDParamsDTO(
         id = input.id,
         lastOnlineTransaction = input.lastOnlineTransaction,
         lastGeneratedTime = input.lastGeneratedTime,
@@ -13,7 +13,7 @@ class GUIDparamsMapper : Mapper<GUIDparamsDTO, GUIDparamsDB> {
         nodeId = input.nodeId
     )
 
-    override fun fromDTO(input: GUIDparamsDTO): GUIDparamsDB = GUIDparamsDB(
+    override fun fromDTO(input: GUIDParamsDTO): GUIDParamsDB = GUIDParamsDB(
         id = input.id,
         lastOnlineTransaction = input.lastOnlineTransaction,
         lastGeneratedTime = input.lastGeneratedTime,

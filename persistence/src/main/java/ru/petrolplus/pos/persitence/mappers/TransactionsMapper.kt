@@ -8,13 +8,15 @@ class TransactionsMapper : Mapper<TransactionDTO, TransactionDB> {
         id = input.id,
         acquirerId = input.acquirerId,
         terminalId = input.terminalId,
+        cardNumber = input.cardNumber,
+        operatorNumber = input.operatorNumber,
         terminalDate = input.terminalDate,
         serviceIdWhat = input.serviceIdWhat,
         serviceIdFrom = input.serviceIdFrom,
         amount = input.amount,
         price = input.price,
         sum = input.sum,
-        operationCounter = input.operationCounter,
+        cardTransactionCounter = input.cardTransactionCounter,
         hasReturn = input.hasReturn,
         crs32 = input.crs32,
         operationType = input.operationType,
@@ -24,20 +26,24 @@ class TransactionsMapper : Mapper<TransactionDTO, TransactionDB> {
         originalDebitTransactionId = input.originalDebitTransactionId,
         shiftNumber = input.shiftNumber,
         hasRecalculationTransaction = input.hasRecalculationTransaction,
-        rollbackCode = input.rollbackCode
+        rollbackCode = input.rollbackCode,
+        receiptNumber = input.receiptNumber,
+        responseCode = input.responseCode
     )
 
     override fun fromDTO(input: TransactionDTO): TransactionDB = TransactionDB(
         id = input.id,
         acquirerId = input.acquirerId,
         terminalId = input.terminalId,
+        cardNumber = input.cardNumber,
+        operatorNumber = input.operatorNumber,
         terminalDate = input.terminalDate,
         serviceIdWhat = input.serviceIdWhat,
         serviceIdFrom = input.serviceIdFrom,
         amount = input.amount,
         price = input.price,
         sum = input.sum,
-        operationCounter = input.operationCounter,
+        cardTransactionCounter = input.cardTransactionCounter,
         hasReturn = input.hasReturn,
         crs32 = input.crs32,
         operationType = input.operationType,
@@ -47,7 +53,9 @@ class TransactionsMapper : Mapper<TransactionDTO, TransactionDB> {
         originalDebitTransactionId = input.originalDebitTransactionId,
         shiftNumber = input.shiftNumber,
         hasRecalculationTransaction = input.hasRecalculationTransaction,
-        rollbackCode = input.rollbackCode
+        rollbackCode = input.rollbackCode,
+        receiptNumber = input.receiptNumber,
+        responseCode = input.responseCode
     )
 
 }

@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -35,9 +36,11 @@ android {
 dependencies {
     //Modules
     implementation(project(":room"))
+    implementation(project(":core"))
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
+    kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
 
     //Testing
     testImplementation("${Dependencies.junit}:${Versions.junit}")
