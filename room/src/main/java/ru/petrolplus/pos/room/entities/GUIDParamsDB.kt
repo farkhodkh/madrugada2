@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
  * @param nodeId параметр для генерации GUID
  */
 @Entity(tableName = "guid_params")
-data class GUIDparamsDB(
+data class GUIDParamsDB(
     @PrimaryKey
     @ColumnInfo("id")
     val id: Int = 1,

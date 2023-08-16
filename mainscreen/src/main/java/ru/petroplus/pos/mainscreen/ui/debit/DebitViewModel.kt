@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
-import ru.petrolplus.pos.persitence.entities.GUIDparamsDTO
+import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.entities.TransactionDTO
 import ru.petroplus.pos.debug.DebitDebugGroup
 import ru.petroplus.pos.sdkapi.CardReaderRepository
@@ -84,7 +84,7 @@ class DebitViewModel(
 
     //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
     //добавляет GUID параметры в бд и подгружает ее из бд
-    fun saveGUIDparams(guidParams: GUIDparamsDTO) {
+    fun saveGUIDParams(guidParams: GUIDParamsDTO) {
         viewModelScope.launch(Dispatchers.IO) {
             settingsPersistence.setGUIDparams(guidParams)
             val oldState = _viewState.value as DebitViewState.DebugState.Debit

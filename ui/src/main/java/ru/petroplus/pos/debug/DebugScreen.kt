@@ -45,16 +45,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.petrolplus.pos.persitence.entities.GUIDparamsDTO
+import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.entities.TransactionDTO
 import ru.petroplus.pos.ui.R
+import ru.petroplus.pos.util.ResourceHelper
 import java.lang.IllegalStateException
 import java.lang.StringBuilder
-import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import java.util.Scanner
 
 @Composable
 fun DebugScreen(
@@ -63,7 +62,7 @@ fun DebugScreen(
     debitCallback: (DebitDebugGroup) -> Unit = {},
     saveTransactionCallback: (TransactionDTO) -> Unit = {},
     getTransactionsCallback: () -> Unit = {},
-    saveGuidCallback: (GUIDparamsDTO) -> Unit = {},
+    saveGuidCallback: (GUIDParamsDTO) -> Unit = {},
     onCommandClickListener: (String) -> Unit,
     onClickListener: () -> Unit,
 ) {
@@ -201,7 +200,7 @@ fun DatabaseScreen(
     debitCallback: (DebitDebugGroup) -> Unit,
     saveTransactionCallback: (TransactionDTO) -> Unit,
     getTransactionsCallback: () -> Unit = {},
-    saveGuidCallback: (GUIDparamsDTO) -> Unit = {},
+    saveGuidCallback: (GUIDParamsDTO) -> Unit = {},
 ) {
     Surface {
         Column(
@@ -233,7 +232,7 @@ fun DatabaseScreen(
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { saveGuidCallback(guidFields.toGUIDparamsDTO()) }) {
+                onClick = { saveGuidCallback(guidFields.toGUIDParamsDTO()) }) {
                 Text(text = "Сохранить")
             }
 
@@ -290,9 +289,9 @@ private fun getTestData(
     fileName: String,
     additionalMapper: ((Pair<String, Any>) -> Pair<String, Any>)? = null
 ): SnapshotStateList<Pair<String, Any>> {
-    val inputStream = context.assets.open(fileName)
-    val scanner: Scanner = Scanner(inputStream, StandardCharsets.UTF_8.displayName()).useDelimiter("\\A")
-    val text = if (scanner.hasNext()) scanner.next() else ""
+    val file = ResourceHelper.getAssetFile(fileName)
+    require(file != null) { "отсутствует файл $fileName" }
+    val text = file.readText()
 
     val list = text.trim()
         .removeSurrounding("{", "}")
@@ -437,9 +436,9 @@ private fun Output(title: String, listItems: List<String>) {
     }
 }
 
-private fun SnapshotStateList<Pair<String, Any>>.toGUIDparamsDTO(): GUIDparamsDTO {
+private fun SnapshotStateList<Pair<String, Any>>.toGUIDParamsDTO(): GUIDParamsDTO {
     val map = this.associate { it }
-    return GUIDparamsDTO(
+    return GUIDParamsDTO(
         lastOnlineTransaction = map.getOrThrow("lastOnlineTransaction") as Long,
         lastGeneratedTime = map.getOrThrow("lastGeneratedTime") as Long,
         clockSequence = map.getOrThrow("clockSequence") as Short,

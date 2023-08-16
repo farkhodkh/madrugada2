@@ -12,7 +12,7 @@ package ru.petrolplus.pos.persitence.entities
  * @param nodeId параметр для генерации GUID
  */
 
-data class GUIDparamsDTO(
+data class GUIDParamsDTO(
     override val id: Int = 1,
     val lastOnlineTransaction: Long,
     val lastGeneratedTime: Long,

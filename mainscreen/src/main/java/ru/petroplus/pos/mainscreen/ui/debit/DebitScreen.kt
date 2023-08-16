@@ -33,7 +33,7 @@ fun DebitScreen(
                     debitCallback = { viewModel.onTransactionDataChanges(it)},
                     saveTransactionCallback = { viewModel.testDebit(it) },
                     getTransactionsCallback = { viewModel.fetchTransactions()},
-                    saveGuidCallback = { viewModel.saveGUIDparams(it)}
+                    saveGuidCallback = { viewModel.saveGUIDParams(it)}
                 )
             } else {
                 DebugScreen(

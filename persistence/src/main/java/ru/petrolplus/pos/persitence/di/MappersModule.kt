@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import ru.petrolplus.pos.persitence.entities.BaseSettingsDTO
 import ru.petrolplus.pos.persitence.entities.CommonSettingsDTO
-import ru.petrolplus.pos.persitence.entities.GUIDparamsDTO
+import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.entities.ServiceDTO
 import ru.petrolplus.pos.persitence.entities.ShiftParamsDTO
 import ru.petrolplus.pos.persitence.entities.TransactionDTO
@@ -17,7 +17,7 @@ import ru.petrolplus.pos.persitence.mappers.ShiftParamsMapper
 import ru.petrolplus.pos.persitence.mappers.TransactionsMapper
 import ru.petrolplus.pos.room.entities.BaseSettingsDB
 import ru.petrolplus.pos.room.entities.CommonSettingsDB
-import ru.petrolplus.pos.room.entities.GUIDparamsDB
+import ru.petrolplus.pos.room.entities.GUIDParamsDB
 import ru.petrolplus.pos.room.entities.ServiceDB
 import ru.petrolplus.pos.room.entities.ShiftParamsDB
 import ru.petrolplus.pos.room.entities.TransactionDB
@@ -33,7 +33,7 @@ class MappersModule {
     fun providesCommonSettingsMapper(): Mapper<CommonSettingsDTO, CommonSettingsDB> = CommonSettingsMapper()
 
     @[Provides MainScreenScope]
-    fun providesGUIDparamsMapper(): Mapper<GUIDparamsDTO, GUIDparamsDB> = GUIDparamsMapper()
+    fun providesGUIDparamsMapper(): Mapper<GUIDParamsDTO, GUIDParamsDB> = GUIDparamsMapper()
 
     @[Provides MainScreenScope]
     fun providesShiftParamsMapper(): Mapper<ShiftParamsDTO, ShiftParamsDB> = ShiftParamsMapper()

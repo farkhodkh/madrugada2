@@ -20,7 +20,7 @@ import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistenceImpl
 import ru.petrolplus.pos.persitence.entities.BaseSettingsDTO
 import ru.petrolplus.pos.persitence.entities.CommonSettingsDTO
-import ru.petrolplus.pos.persitence.entities.GUIDparamsDTO
+import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.entities.ServiceDTO
 import ru.petrolplus.pos.persitence.entities.ShiftParamsDTO
 import ru.petrolplus.pos.persitence.entities.TransactionDTO
@@ -33,7 +33,7 @@ import ru.petrolplus.pos.room.dao.ShiftParamsDao
 import ru.petrolplus.pos.room.dao.TransactionsDao
 import ru.petrolplus.pos.room.entities.BaseSettingsDB
 import ru.petrolplus.pos.room.entities.CommonSettingsDB
-import ru.petrolplus.pos.room.entities.GUIDparamsDB
+import ru.petrolplus.pos.room.entities.GUIDParamsDB
 import ru.petrolplus.pos.room.entities.ServiceDB
 import ru.petrolplus.pos.room.entities.ShiftParamsDB
 import ru.petrolplus.pos.room.entities.TransactionDB
@@ -63,7 +63,7 @@ class PersistenceModule {
     @[Provides MainScreenScope]
     fun provideGUIDparamsPersistence(
         guidParamsDao: GUIDparamsDao,
-        mapper: Mapper<GUIDparamsDTO, GUIDparamsDB>,
+        mapper: Mapper<GUIDParamsDTO, GUIDParamsDB>,
         storeStrategy: StoreStrategy
     ): GUIDparamsPersistence = GUIDparamsPersistenceImpl(guidParamsDao, mapper, storeStrategy)
 
