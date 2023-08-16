@@ -21,6 +21,13 @@ interface TransactionsPersistence {
      * @param transaction добавляемая транзакция
      */
     suspend fun add(transaction: TransactionDTO)
+
+    /**
+     * метод для получение транзакции по идентификатору
+     * @param transactionId идентификатор транзакции
+     * @return возвращает DTO транзакции, может быть null если не найдено ни одной подходящей
+     */
+    suspend fun getById(transactionId: String): TransactionDTO?
 }
 
 class TransactionsPersistenceImpl(
@@ -34,6 +41,10 @@ class TransactionsPersistenceImpl(
 
     override suspend fun add(transaction: TransactionDTO) {
         transactionsDao.insert(mapper.fromDTO(transaction))
+    }
+
+    override suspend fun getById(transactionId: String): TransactionDTO? {
+        return transactionsDao.getById(transactionId)?.let(mapper::toDTO)
     }
 
 }

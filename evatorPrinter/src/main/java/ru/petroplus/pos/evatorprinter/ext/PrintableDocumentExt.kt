@@ -29,7 +29,7 @@ private fun Int.toResponseText(): String = when(this) {
 
 const val SUCCESS_RESPONSE_CODE = 0
 
-@SuppressLint("SimpleDateFormat")
+@SuppressLint   ("SimpleDateFormat")
 fun TransactionDTO.toPrinterDoc(): PrinterDocument { val receiptNum = 10
     val responseCode = SUCCESS_RESPONSE_CODE
     return when(responseCode) {

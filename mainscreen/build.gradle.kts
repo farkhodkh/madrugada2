@@ -75,6 +75,7 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":sdkapi"))
     implementation(project(":networkapi"))
+    implementation(project(":room"))
+    implementation(project(":persistence"))
     implementation(project(":printerApi"))
-    implementation(project(mapOf("path" to ":persistence")))
 }

@@ -12,18 +12,22 @@ import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
+import ru.petrolplus.pos.persitence.SettingsPersistence
+import ru.petrolplus.pos.persitence.TransactionsPersistence
+import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.entities.TransactionDTO
+import ru.petroplus.pos.debug.DebitDebugGroup
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.printerapi.PrinterApi
-import ru.petroplus.pos.printerapi.printable.documents.PrintableReceipt
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
-import java.util.Calendar
 
 class DebitViewModel(
     private val cardReaderRepository: CardReaderRepository,
     private val printer: PrinterApi,
     private val gatewayServer: GatewayServerRepositoryApi,
+    private val transactionsPersistence: TransactionsPersistence,
+    private val settingsPersistence: SettingsPersistence,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -43,7 +47,55 @@ class DebitViewModel(
         }
 
         if (BuildConfig.DEBUG) {
-            _viewState.value = DebitViewState.DebugState
+            //Тестовое состояние экрана в случае если тип сборки DEBUG
+            _viewState.value = DebitViewState.DebugState.Debit(DebitDebugGroup())
+        }
+    }
+
+    //FIXME: Метод тестовый, по хорошему заменится тестами или переедет в тестовую вью модель
+    //меняет текущий вьюстейт на тестовый или подменяет текущее тестовое состояние новым
+    fun onTransactionDataChanges(debitDebugGroup: DebitDebugGroup) {
+        _viewState.value = DebitViewState.DebugState.Debit(debitDebugGroup)
+    }
+
+    //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
+    //добавляет транзакцию в бд и подгружает все остальные транзакции
+    fun testDebit(transactionDTO: TransactionDTO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            transactionsPersistence.add(transactionDTO)
+            loadTransactions()
+        }
+    }
+
+    //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
+    //Загружает все транзакции из бд в IO планировщике
+    fun fetchTransactions() {
+        viewModelScope.launch(Dispatchers.IO) {
+            loadTransactions()
+        }
+    }
+
+    //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
+    //Загружает все транзакции из бд
+    private suspend fun loadTransactions() {
+        val oldState = _viewState.value as DebitViewState.DebugState.Debit
+        _viewState.value = oldState.copy(
+            debitDebugGroup = oldState.debitDebugGroup.copy(
+                transactionsOutput = transactionsPersistence.getAll().map { it.toString() })
+        )
+    }
+
+    //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
+    //добавляет GUID параметры в бд и подгружает ее из бд
+    fun saveGUIDParams(guidParams: GUIDParamsDTO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            settingsPersistence.setGUIDparams(guidParams)
+            val oldState = _viewState.value as DebitViewState.DebugState.Debit
+            _viewState.value = oldState.copy(
+                debitDebugGroup = oldState.debitDebugGroup.copy(
+                    guidParamsOutput = listOf(settingsPersistence.getGUIDparams().toString())
+                )
+            )
         }
     }
 
@@ -59,7 +111,7 @@ class DebitViewModel(
 
     fun print() {
         Log.d("Printer_2", "document: viewModel")
-        val transaction = TransactionDTO(
+        /*val transaction = TransactionDTO(
             "123",
             "123",
             "123",
@@ -81,7 +133,7 @@ class DebitViewModel(
             true,
             "121")
         val doc = PrintableReceipt.Debit(transaction)
-        printer.print(doc)
+        printer.print(doc)*/
     }
 
     companion object {
@@ -89,6 +141,8 @@ class DebitViewModel(
             cardReaderRepository: CardReaderRepository,
             printerService: PrinterApi,
             gatewayServer: GatewayServerRepositoryApi,
+            transactionsPersistence: TransactionsPersistence,
+            settingsPersistence: SettingsPersistence,
             owner: SavedStateRegistryOwner,
             defaultArgs: Bundle? = null,
         ): AbstractSavedStateViewModelFactory =
@@ -99,12 +153,7 @@ class DebitViewModel(
                     modelClass: Class<T>,
                     handle: SavedStateHandle
                 ): T {
-                    return DebitViewModel(
-                        cardReaderRepository,
-                        printerService,
-                        gatewayServer,
-                        handle
-                    ) as T
+                    return DebitViewModel(cardReaderRepository, printerService, gatewayServer, transactionsPersistence, settingsPersistence, handle) as T
                 }
             }
     }
