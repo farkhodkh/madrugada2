@@ -30,6 +30,7 @@ fun NavigationController(navController: NavHostController) {
             viewModel = viewModel(
                 factory = DebitViewModel.provideFactory(
                     (LocalContext.current.applicationContext as App).appComponent.readerRepository,
+                    (LocalContext.current.applicationContext as App).appComponent.printer,
                     (LocalContext.current.applicationContext as App).appComponent.gatewayServerRepository,
                     owner = LocalSavedStateRegistryOwner.current
                 )

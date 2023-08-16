@@ -35,6 +35,7 @@ fun DebugScreen(
     commandResult: String = "Результат выполнения",
     onCommandClickListener: (String) -> Unit,
     onClickListener: () -> Unit,
+    print: () -> Unit = {}
 ) {
     Surface(
         modifier = Modifier
@@ -89,6 +90,19 @@ fun DebugScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             Row {
+                Button(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(8.dp)
+                    ,
+                    onClick = {
+                        print()
+                    }
+                ) {
+                    Text(
+                        text = "Print"
+                    )
+                }
 
                 Button(
                     modifier = Modifier

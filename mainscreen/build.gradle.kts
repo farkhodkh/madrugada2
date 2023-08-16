@@ -75,4 +75,5 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":sdkapi"))
     implementation(project(":networkapi"))
+    implementation(project(":printerApi"))
 }

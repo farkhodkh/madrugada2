@@ -9,6 +9,7 @@ import ru.petroplus.pos.mainscreen.di.MainScreenComponentDependencies
 import ru.petroplus.pos.network.di.NetworkComponentDependencies
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.p7Lib.di.P7LibComponentDependencies
+import ru.petroplus.pos.printerapi.PrinterApi
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 
 @Component(
@@ -18,6 +19,7 @@ import ru.petroplus.pos.sdkapi.CardReaderRepository
 @AppScope
 interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies, NetworkComponentDependencies
 {
+    val printer: PrinterApi
     val readerRepository: CardReaderRepository
     val gatewayServerRepository: GatewayServerRepositoryApi
 

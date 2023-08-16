@@ -113,7 +113,7 @@ dependencies {
     implementation(project(":persistence"))
     implementation(project(":network"))
     implementation(project(":networkapi"))
-
-
+    implementation(project(":printerApi"))
+    implementation(project(":evatorPrinter"))
     implementation(project(":persistence"))
 }

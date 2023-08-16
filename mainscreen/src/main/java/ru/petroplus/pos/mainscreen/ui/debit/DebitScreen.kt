@@ -27,6 +27,9 @@ fun DebitScreen(
                 },
                 onClickListener = {
                     viewModel.ping()
+                },
+                print = {
+                    viewModel.print()
                 }
             )
         }
