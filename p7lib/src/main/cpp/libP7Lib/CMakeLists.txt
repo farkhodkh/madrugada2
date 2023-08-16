@@ -17,12 +17,21 @@ set(P7LibSrc
     "${P7LIB_LIB_DIR}/P7LibSrc/ERR/p7_errors.h"
     "${P7LIB_LIB_DIR}/P7LibSrc/ERR/p7_errors_res.cpp"
     "${P7LIB_LIB_DIR}/P7LibSrc/ERR/p7_errors_res.h"
+
     "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/_time.h"
     "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/_time.cpp"
     "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/StTime.h"
     "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/StTime.cpp"
     "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/Tpc_comp.h"
     "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/Tpc_comp.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/Timer.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/Timer.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/TimeProc.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/TimeProc.cpp"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TIME/tm_dt.h"
+
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TLV/tlv_parser.h"
+    "${P7LIB_LIB_DIR}/P7LibSrc/UTILS/TLV/tlv_parser.cpp"
 )
 source_group("P7LibSrc" FILES ${P7LibSrc})
 
@@ -48,11 +57,84 @@ set(Cripto
 )
 source_group("Cripto" FILES ${Cripto})
 
+# PolarSSL 1.3.22
+set(PolarSSL
+    "${PolarSSL_SRC}/aes.c"
+    "${PolarSSL_SRC}/aesni.c"
+    "${PolarSSL_SRC}/arc4.c"
+    "${PolarSSL_SRC}/asn1parse.c"
+    "${PolarSSL_SRC}/asn1write.c"
+    "${PolarSSL_SRC}/base64.c"
+    "${PolarSSL_SRC}/bignum.c"
+    "${PolarSSL_SRC}/blowfish.c"
+    "${PolarSSL_SRC}/camellia.c"
+    "${PolarSSL_SRC}/ccm.c"
+    "${PolarSSL_SRC}/certs.c"
+    "${PolarSSL_SRC}/cipher.c"
+    "${PolarSSL_SRC}/cipher_wrap.c"
+    "${PolarSSL_SRC}/ctr_drbg.c"
+    "${PolarSSL_SRC}/debug.c"
+    "${PolarSSL_SRC}/des.c"
+    "${PolarSSL_SRC}/dhm.c"
+    "${PolarSSL_SRC}/ecp.c"
+    "${PolarSSL_SRC}/ecp_curves.c"
+    "${PolarSSL_SRC}/ecdh.c"
+    "${PolarSSL_SRC}/ecdsa.c"
+    "${PolarSSL_SRC}/entropy.c"
+    "${PolarSSL_SRC}/entropy_poll.c"
+    "${PolarSSL_SRC}/error.c"
+    "${PolarSSL_SRC}/gcm.c"
+    "${PolarSSL_SRC}/havege.c"
+    "${PolarSSL_SRC}/hmac_drbg.c"
+    "${PolarSSL_SRC}/md.c"
+    "${PolarSSL_SRC}/md_wrap.c"
+    "${PolarSSL_SRC}/md2.c"
+    "${PolarSSL_SRC}/md4.c"
+    "${PolarSSL_SRC}/md5.c"
+    "${PolarSSL_SRC}/memory_buffer_alloc.c"
+    "${PolarSSL_SRC}/net.c"
+    "${PolarSSL_SRC}/oid.c"
+    "${PolarSSL_SRC}/padlock.c"
+    "${PolarSSL_SRC}/pbkdf2.c"
+    "${PolarSSL_SRC}/pem.c"
+    "${PolarSSL_SRC}/pkcs5.c"
+    "${PolarSSL_SRC}/pkcs11.c"
+    "${PolarSSL_SRC}/pkcs12.c"
+    "${PolarSSL_SRC}/pk.c"
+    "${PolarSSL_SRC}/pk_wrap.c"
+    "${PolarSSL_SRC}/pkparse.c"
+    "${PolarSSL_SRC}/pkwrite.c"
+    "${PolarSSL_SRC}/platform.c"
+    "${PolarSSL_SRC}/ripemd160.c"
+    "${PolarSSL_SRC}/rsa.c"
+    "${PolarSSL_SRC}/sha1.c"
+    "${PolarSSL_SRC}/sha256.c"
+    "${PolarSSL_SRC}/sha512.c"
+    "${PolarSSL_SRC}/ssl_cache.c"
+    "${PolarSSL_SRC}/ssl_ciphersuites.c"
+    "${PolarSSL_SRC}/ssl_cli.c"
+    "${PolarSSL_SRC}/ssl_srv.c"
+    "${PolarSSL_SRC}/ssl_tls.c"
+    "${PolarSSL_SRC}/threading.c"
+    "${PolarSSL_SRC}/timing.c"
+    "${PolarSSL_SRC}/version.c"
+    "${PolarSSL_SRC}/version_features.c"
+    "${PolarSSL_SRC}/x509.c"
+    "${PolarSSL_SRC}/x509_crt.c"
+    "${PolarSSL_SRC}/x509_crl.c"
+    "${PolarSSL_SRC}/x509_csr.c"
+    "${PolarSSL_SRC}/x509_create.c"
+    "${PolarSSL_SRC}/x509write_crt.c"
+    "${PolarSSL_SRC}/x509write_csr.c"
+    "${PolarSSL_SRC}/xtea.c"
+)
+source_group("PolarSSL" FILES ${PolarSSL})
 
 set(ALL_FILES
     ${Self}
     ${P7LibSrc}
     ${Cripto}
+    ${PolarSSL}
 )
 
 ################################################################################
@@ -62,45 +144,47 @@ set(ALL_FILES
 ADD_LIBRARY(${LIB_NAME} ${ALL_FILES})
 
 # set_target_properties(${LIB_NAME} PROPERTIES
-    # LIBRARY_OUTPUT_DIRECTORY_DEBUG "${PROJECT_SOURCE_DIR}/Debug"
-    # RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_SOURCE_DIR}/Debug"
-	# # ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECT_SOURCE_DIR}/Debug"
-    # LIBRARY_OUTPUT_DIRECTORY_RELEASE "${PROJECT_SOURCE_DIR}/Release"
-    # RUNTIME_OUTPUT_DIRECTORY_RELEASE "${PROJECT_SOURCE_DIR}/Release"
-	# # ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${PROJECT_SOURCE_DIR}/Release"
+# LIBRARY_OUTPUT_DIRECTORY_DEBUG "${PROJECT_SOURCE_DIR}/Debug"
+# RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_SOURCE_DIR}/Debug"
+# # ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECT_SOURCE_DIR}/Debug"
+# LIBRARY_OUTPUT_DIRECTORY_RELEASE "${PROJECT_SOURCE_DIR}/Release"
+# RUNTIME_OUTPUT_DIRECTORY_RELEASE "${PROJECT_SOURCE_DIR}/Release"
+# # ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${PROJECT_SOURCE_DIR}/Release"
 # )
 
 ################################################################################
 # Include directories
 ################################################################################
 target_include_directories(${LIB_NAME} PUBLIC
-    #"${CMAKE_CURRENT_SOURCE_DIR}/P7LibSrc"
     "${P7LIB_LIB_DIR}"
     "${P7LIB_LIB_DIR}/P7LibSrc"
+    "${PolarSSL_INC}"
 
     #Временно для отладки (до переезда проекта LIB)
-    "${P7LIB_DLL_DIR}/P7Lib"
+    "${P7LIB_DLL_DIR}"
 )
 
 
-# ################################################################################
-# # Dependencies
-# ################################################################################
-# set(ADDITIONAL_LIBRARY_DEPENDENCIES
-    # "kernel32;"
-    # "user32;"
-    # "gdi32;"
-    # "winspool;"
-    # "comdlg32;"
-    # "advapi32;"
-    # "shell32;"
-    # "ole32;"
-    # "oleaut32;"
-    # "uuid;"
-    # "odbc32;"
-    # "odbccp32;"
-    # "comctl32;"
-    # "shlwapi"
-# )
-# target_link_libraries(${LIB_NAME} PRIVATE "${ADDITIONAL_LIBRARY_DEPENDENCIES}")
+if(MSVC)
+    # Использование /Zp1 весьма нежелательно, но необхлдимо из-за его задания в P7Lib.dll.
+    # Выделить классы, которые должны быть упаковыны в P7Lib с выравниванием на 1 байт
+    # и обозначить их соответсвующей прагмой, на данный момент возможжным не представляется.
 
+    target_compile_options(${LIB_NAME} PRIVATE
+            /Od
+            /Zp1;
+            )
+    string(CONCAT FILE_CL_OPTIONS
+            "$<$<CONFIG:Release>:"
+            "/Od"
+            ">"
+            )
+
+    # ####### !!!
+    # #    source_file_compile_options(JavaCards/ppj_secsam.cpp ${FILE_CL_OPTIONS})
+    # ####### !!!
+
+    target_link_options(${LIB_NAME} PRIVATE
+            /SUBSYSTEM:WINDOWS
+            )
+endif()
