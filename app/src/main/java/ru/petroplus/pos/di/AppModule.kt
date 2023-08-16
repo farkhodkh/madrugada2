@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.petrolplus.pos.room.database.AppDatabase
 import ru.petroplus.pos.core.AppScope
 import ru.petroplus.pos.evatorprinter.EvotorDocumentInflater
-import ru.petroplus.pos.evatorprinter.EvatorPrinterApiImpl
+import ru.petroplus.pos.evatorprinter.EvotorPrinterApiImpl
 import ru.petroplus.pos.evotorsdk.EvotorSDKRepository
 import ru.petroplus.pos.network.auth.GatewayAuthenticationUtil
 import ru.petroplus.pos.network.repository.GatewayServerRepositoryImpl
@@ -41,7 +41,7 @@ object AppModule {
     fun providesP7LibCallbacks(): IP7LibCallbacks = P7LibCallbacksImpl()
 
     @[Provides AppScope]
-    fun providePrinter(context: Context): PrinterApi = EvatorPrinterApiImpl(context, EvotorDocumentInflater())
+    fun providePrinter(context: Context): PrinterApi = EvotorPrinterApiImpl(context, EvotorDocumentInflater())
 
 
     @[Provides AppScope]

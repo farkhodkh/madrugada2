@@ -43,4 +43,5 @@ dependencies {
 
     // Modules
     implementation(project(":printerApi"))
+    implementation(project(":persistence"))
 }

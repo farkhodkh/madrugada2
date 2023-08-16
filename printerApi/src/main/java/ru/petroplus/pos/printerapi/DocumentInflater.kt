@@ -1,12 +1,12 @@
 package ru.petroplus.pos.printerapi
 
-import ru.petroplus.pos.printerapi.printable.documents.DebitReceipt
-import ru.petroplus.pos.printerapi.printable.documents.PrintableDocument
+import ru.petrolplus.pos.persitence.entities.TransactionDTO
+import ru.petroplus.pos.printerapi.printable.documents.PrintableReceipt
 
 abstract class DocumentInflater <T> {
-    fun inflatePrinterDocument(document: PrintableDocument): T = when (document) {
-        is PrintableDocument.Debit -> inflateDebit(document.data)
+    fun inflatePrinterDocument(document: PrintableReceipt): T = when (document) {
+        is PrintableReceipt.Debit -> inflateDebit(document.data)
     }
 
-    abstract fun inflateDebit(data: DebitReceipt): T
+    abstract fun inflateDebit(data: TransactionDTO): T
 }

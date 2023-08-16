@@ -76,4 +76,5 @@ dependencies {
     implementation(project(":sdkapi"))
     implementation(project(":networkapi"))
     implementation(project(":printerApi"))
+    implementation(project(mapOf("path" to ":persistence")))
 }
