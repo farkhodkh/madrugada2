@@ -16,19 +16,19 @@ import androidx.room.PrimaryKey
  * @param nodeId параметр для генерации GUID
  */
 @Entity(tableName = "guid_params")
-data class GUIDparamsDB(
+data class GUIDParamsDB(
     @PrimaryKey
     @ColumnInfo("id")
     val id: Int = 1,
 
     @ColumnInfo("last_online_transaction")
-    val lastOnlineTransaction: Int,
+    val lastOnlineTransaction: Long,
 
     @ColumnInfo("last_generated_time")
     val lastGeneratedTime: Long,
 
     @ColumnInfo("clock_sequence")
-    val clockSequence: Int,
+    val clockSequence: Short,
 
     @ColumnInfo("has_node_id")
     val hasNodeId: Boolean,

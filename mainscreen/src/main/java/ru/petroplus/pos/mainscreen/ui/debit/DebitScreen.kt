@@ -20,15 +20,31 @@ fun DebitScreen(
 
             }
         }
-        DebitViewState.DebugState -> {
-            DebugScreen(
-                onCommandClickListener = {
-                    viewModel.sendCommand(it)
-                },
-                onClickListener = {
-                    viewModel.ping()
-                }
-            )
+        is DebitViewState.DebugState -> {
+            if (viewState is DebitViewState.DebugState.Debit) {
+                DebugScreen(
+                    onCommandClickListener = {
+                        viewModel.sendCommand(it)
+                    },
+                    onClickListener = {
+                        viewModel.ping()
+                    },
+                    debitDebugGroup = viewState.debitDebugGroup,
+                    debitCallback = { viewModel.onTransactionDataChanges(it)},
+                    saveTransactionCallback = { viewModel.testDebit(it) },
+                    getTransactionsCallback = { viewModel.fetchTransactions()},
+                    saveGuidCallback = { viewModel.saveGUIDParams(it)}
+                )
+            } else {
+                DebugScreen(
+                    onCommandClickListener = {
+                        viewModel.sendCommand(it)
+                    },
+                    onClickListener = {
+                        viewModel.ping()
+                    }
+                )
+            }
         }
         is DebitViewState.CommandExecutionState -> {
             DebugScreen(

@@ -11,13 +11,15 @@ import java.util.Calendar
  * @param id GUID транзакции дебета/возврата, 32 ASCII_HEX символа, первичный ключ
  * @param acquirerId Номер эквайера (эмитент терминала)
  * @param terminalId Номер терминала
+ * @param cardNumber Графический номер карты в терминах Петрол Плюс
+ * @param operatorNumber Графический номер карты оператора в терминах Петрол Плюс
  * @param terminalDate Дата/время транзакции по времени терминала, храниться в базе в виде строки через конвертер типов
  * @param serviceIdWhat Вид топлива/услуги "за что платили" (в терминах эмитента карты)
  * @param serviceIdFrom Вид топлива/услуги "чем платили" (в терминах эмитента карты)
  * @param amount Кол-во услуги, представленная в целочисленном виде, с точностью 2 знака после запятой (250 = 2.5л)
  * @param price Цена услуги в рублях, представленная в целочисленном виде, с точностью 3 знака после запятой (10000 = 10.0р)
  * @param sum Сумма заказа в рублях, представленная в целочисленном виде, с точностью 3 знака после запятой (25000 = 25.0р)
- * @param operationCounter Номер операции (в терминах карты CARD_TRZ_COUNTER)
+ * @param cardTransactionCounter Номер операции (в терминах карты CARD_TRZ_COUNTER)
  * @param hasReturn Признак совершения успешного возврата по данному дебету (0 - нет, 1 - да)
  * @param crs32 CRC32 для данной записи, 4 байта
  * @param operationType Тип транзакции (0 - неизвестная операция, 1 - дебет, 2 - кредит кошелька,
@@ -32,6 +34,8 @@ import java.util.Calendar
  * (зависит от флага IsRecalcCard, от типа карты и от того, осуществлялось ли обслуживание
  * “Услуга за услугу“ (false - не пересчетное) или “Услуга за рубли“ (true- пересчетное))
  * @param rollbackCode Код для осуществления операции возврата (получен от карты во время дебета), 8 байт
+ * @param receiptNumber Номер чека
+ * @param responseCode Результат выполнения операции (0 - успех, N - ошибка)
  */
 
 
@@ -42,10 +46,16 @@ data class TransactionDB(
     val id: String,
 
     @ColumnInfo("acquirer_id")
-    val acquirerId: String,
+    val acquirerId: Int,
 
     @ColumnInfo("terminal_id")
-    val terminalId: String,
+    val terminalId: Int,
+
+    @ColumnInfo("card_number")
+    val cardNumber: String,
+
+    @ColumnInfo("operator_number")
+    val operatorNumber: String,
 
     @ColumnInfo("terminal_date")
     val terminalDate: Calendar,
@@ -57,7 +67,7 @@ data class TransactionDB(
     val serviceIdFrom: Int,
 
     @ColumnInfo("amount")
-    val amount: Int,
+    val amount: Long,
 
     @ColumnInfo("price")
     val price: Long,
@@ -65,8 +75,8 @@ data class TransactionDB(
     @ColumnInfo("sum")
     val sum: Long,
 
-    @ColumnInfo("operation_counter")
-    val operationCounter: Long,
+    @ColumnInfo("card_transaction_counter")
+    val cardTransactionCounter: Long,
 
     @ColumnInfo("has_return")
     val hasReturn: Boolean,
@@ -96,5 +106,11 @@ data class TransactionDB(
     val hasRecalculationTransaction: Boolean,
 
     @ColumnInfo("rollback_code")
-    val rollbackCode: String
+    val rollbackCode: String,
+
+    @ColumnInfo("receipt_number")
+    val receiptNumber: Long,
+
+    @ColumnInfo("response_code")
+    val responseCode: Int
 )

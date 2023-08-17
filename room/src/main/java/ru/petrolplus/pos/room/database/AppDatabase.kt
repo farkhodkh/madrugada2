@@ -13,7 +13,7 @@ import ru.petrolplus.pos.room.dao.ShiftParamsDao
 import ru.petrolplus.pos.room.dao.TransactionsDao
 import ru.petrolplus.pos.room.entities.BaseSettingsDB
 import ru.petrolplus.pos.room.entities.CommonSettingsDB
-import ru.petrolplus.pos.room.entities.GUIDparamsDB
+import ru.petrolplus.pos.room.entities.GUIDParamsDB
 import ru.petrolplus.pos.room.entities.ServiceDB
 import ru.petrolplus.pos.room.entities.ShiftParamsDB
 import ru.petrolplus.pos.room.entities.TransactionDB
@@ -23,7 +23,7 @@ import ru.petrolplus.pos.room.typeconverters.CalendarConverter
     BaseSettingsDB::class,
     CommonSettingsDB::class,
     ShiftParamsDB::class,
-    GUIDparamsDB::class,
+    GUIDParamsDB::class,
     ServiceDB::class,
     TransactionDB::class
 ], version = 1, exportSchema = false)

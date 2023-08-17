@@ -1,5 +1,7 @@
 package ru.petrolplus.pos.persitence.entities
 
+import java.util.Calendar
+
 /**
  * Содержит данные о текущем номере смены
  * @param id идентификатор
@@ -9,4 +11,5 @@ package ru.petrolplus.pos.persitence.entities
 data class ShiftParamsDTO(
     override val id: Int = 1,
     val currentShiftNumber: Int,
+    val currentShiftStartsTimestamp: Calendar
 ): IdentifiableDTO

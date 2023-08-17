@@ -12,11 +12,11 @@ package ru.petrolplus.pos.persitence.entities
  * @param nodeId параметр для генерации GUID
  */
 
-data class GUIDparamsDTO(
+data class GUIDParamsDTO(
     override val id: Int = 1,
-    val lastOnlineTransaction: Int,
+    val lastOnlineTransaction: Long,
     val lastGeneratedTime: Long,
-    val clockSequence: Int,
+    val clockSequence: Short,
     val hasNodeId: Boolean,
     val nodeId: String,
 ): IdentifiableDTO
