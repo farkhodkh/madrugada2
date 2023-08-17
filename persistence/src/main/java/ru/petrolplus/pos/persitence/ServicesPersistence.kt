@@ -17,10 +17,23 @@ interface ServicesPersistence {
     suspend fun getAll(): List<ServiceDTO>
 
     /**
+     * метод для определенного сервиса
+     * @param serviceId идентификатор сервиса (первичный ключ)
+     * @return сервис или услуга, либо null если ничего не найдено
+     */
+    suspend fun getById(serviceId: Int): ServiceDTO?
+
+    /**
      * метод для добавления или замены сервиса или услуги
      * @param service сервис или услуга
      */
     suspend fun addOrReplace(service: ServiceDTO)
+
+    /**
+     * метод для добавления или замены списка сервисов или услуг
+     * @param services список сервисов или услуг
+     */
+    suspend fun addOrReplace(services: List<ServiceDTO>)
 }
 
 class ServicesPersistenceImpl(
@@ -31,8 +44,16 @@ class ServicesPersistenceImpl(
         return servicesDao.getAll().map(mapper::toDTO)
     }
 
+    override suspend fun getById(serviceId: Int): ServiceDTO? {
+        return servicesDao.getById(serviceId)?.let(mapper::toDTO)
+    }
+
     override suspend fun addOrReplace(service: ServiceDTO) {
         servicesDao.insert(mapper.fromDTO(service))
+    }
+
+    override suspend fun addOrReplace(services: List<ServiceDTO>) {
+        servicesDao.insert(services.map(mapper::fromDTO))
     }
 
 }

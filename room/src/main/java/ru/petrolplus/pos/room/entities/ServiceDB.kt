@@ -25,5 +25,5 @@ data class ServiceDB(
     val unit: String,
 
     @ColumnInfo("price")
-    val price: Long,
+    val price: Long?,
 )

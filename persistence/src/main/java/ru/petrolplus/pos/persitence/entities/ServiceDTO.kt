@@ -12,5 +12,5 @@ data class ServiceDTO(
     override val id: Int,
     val name: String,
     val unit: String,
-    val price: Long,
+    val price: Long?,
 ) : IdentifiableDTO
