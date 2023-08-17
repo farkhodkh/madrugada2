@@ -14,7 +14,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/evatorPrinter" />
+            <option value="$PROJECT_DIR$/evotorPrinter" />
             <option value="$PROJECT_DIR$/evotorsdk" />
             <option value="$PROJECT_DIR$/mainscreen" />
             <option value="$PROJECT_DIR$/network" />
