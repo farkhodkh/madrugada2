@@ -114,6 +114,6 @@ dependencies {
     implementation(project(":network"))
     implementation(project(":networkapi"))
     implementation(project(":printerApi"))
-    implementation(project(":evatorPrinter"))
+    implementation(project(":evotorPrinter"))
     implementation(project(":persistence"))
 }

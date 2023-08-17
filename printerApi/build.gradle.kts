@@ -33,5 +33,7 @@ android {
 }
 
 dependencies {
+    // Modules
     implementation(project(":persistence"))
+    implementation(project(":util"))
 }

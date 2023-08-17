@@ -10,8 +10,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.petrolplus.pos.room.database.AppDatabase
 import ru.petroplus.pos.core.AppScope
-import ru.petroplus.pos.evatorprinter.EvotorDocumentInflater
-import ru.petroplus.pos.evatorprinter.EvotorPrinterApiImpl
+import ru.petroplus.pos.evotorprinter.EvotorDocumentInflater
+import ru.petroplus.pos.evotorprinter.EvotorPrinterApiImpl
 import ru.petroplus.pos.evotorsdk.EvotorSDKRepository
 import ru.petroplus.pos.network.auth.GatewayAuthenticationUtil
 import ru.petroplus.pos.network.repository.GatewayServerRepositoryImpl

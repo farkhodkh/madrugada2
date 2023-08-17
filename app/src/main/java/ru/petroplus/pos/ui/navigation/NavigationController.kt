@@ -37,6 +37,7 @@ fun NavigationController(navController: NavHostController) {
                     transactionsPersistence = mainScreenComponent.transactionsPersistence,
                     settingsPersistence = mainScreenComponent.settingsPersistence,
                     printerService = (LocalContext.current.applicationContext as App).appComponent.printer,
+                    servicesPersistence = mainScreenComponent.servicesPersistence,
                 )
             )
             )

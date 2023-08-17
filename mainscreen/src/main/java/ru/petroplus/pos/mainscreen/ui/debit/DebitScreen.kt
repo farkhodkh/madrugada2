@@ -10,59 +10,51 @@ import ru.petroplus.pos.debug.DebugScreen
 
 @Composable
 fun DebitScreen(
-    onClickListener: (String) -> Unit,
-    viewModel: DebitViewModel
+    onClickListener: (String) -> Unit, viewModel: DebitViewModel
 ) {
 
     when (val viewState = viewModel.viewState.value) {
         DebitViewState.StartingState -> {
-            InsertClientCardScreen() {
+            InsertClientCardScreen {
 
             }
         }
+
         is DebitViewState.DebugState -> {
             if (viewState is DebitViewState.DebugState.Debit) {
-                DebugScreen(
-                    onCommandClickListener = {
-                        viewModel.sendCommand(it)
-                    },
-                    onClickListener = {
-                        viewModel.ping()
-                    },
-                    debitDebugGroup = viewState.debitDebugGroup,
-                    debitCallback = { viewModel.onTransactionDataChanges(it)},
-                    saveTransactionCallback = { viewModel.testDebit(it) },
-                    getTransactionsCallback = { viewModel.fetchTransactions()},
-                    saveGuidCallback = { viewModel.saveGUIDParams(it)}
-                )
-            } else {
-                DebugScreen(
-                    onCommandClickListener = {
-                        viewModel.sendCommand(it)
-                    },
-                    onClickListener = {
-                        viewModel.ping()
-                    },
-                    print = {
-                        viewModel.print()
-                    }
-                )
-            }
-        }
-        is DebitViewState.CommandExecutionState -> {
-            DebugScreen(
-                viewState.commandResult,
-                onCommandClickListener = {
+                DebugScreen(onCommandClickListener = {
                     viewModel.sendCommand(it)
                 },
-                onClickListener = {
+                    onClickListener = {
+                        viewModel.ping()
+                    },
+                    printCallback = { transactionId -> viewModel.printTestDebit(transactionId) },
+                    debitDebugGroup = viewState.debitDebugGroup,
+                    debitCallback = { viewModel.onTransactionDataChanges(it) },
+                    saveTransactionCallback = { viewModel.testDebit(it) },
+                    getTransactionsCallback = { viewModel.fetchTransactions() },
+                    saveGuidCallback = { viewModel.saveGUIDParams(it) })
+            } else {
+                DebugScreen(onCommandClickListener = {
+                    viewModel.sendCommand(it)
+                }, onClickListener = {
                     viewModel.ping()
-                },
-                print = {
-                    viewModel.print()
-                }
-            )
+                }, printCallback = {
+                    viewModel.printTestDebit(it)
+                })
+            }
         }
+
+        is DebitViewState.CommandExecutionState -> {
+            DebugScreen(viewState.commandResult, onCommandClickListener = {
+                viewModel.sendCommand(it)
+            }, onClickListener = {
+                viewModel.ping()
+            }, printCallback = {
+                viewModel.printTestDebit(it)
+            })
+        }
+
         else -> {
             Surface {
                 Column(

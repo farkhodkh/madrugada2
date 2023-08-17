@@ -65,7 +65,7 @@ fun DebugScreen(
     saveGuidCallback: (GUIDParamsDTO) -> Unit = {},
     onCommandClickListener: (String) -> Unit,
     onClickListener: () -> Unit,
-    print: () -> Unit = {}
+    printCallback: (String) -> Unit = {}
 ) {
     var selectedTabIndex by remember { mutableStateOf(0) }
     val tabs = listOf("APDU","DATABASE")
@@ -82,8 +82,9 @@ fun DebugScreen(
 
         }
         when (selectedTabIndex) {
-            0 -> APDUScreen(onClickListener, onCommandClickListener, print, commandResult)
+            0 -> APDUScreen(onClickListener, onCommandClickListener, commandResult)
             else -> DatabaseScreen(
+                printCallback = printCallback,
                 debitDebugGroup = debitDebugGroup,
                 debitCallback = debitCallback,
                 saveTransactionCallback = saveTransactionCallback,
@@ -96,7 +97,7 @@ fun DebugScreen(
 }
 
 @Composable
-fun APDUScreen(onClickListener: () -> Unit, onCommandClickListener: (String) -> Unit, print: () -> Unit, commandResult: String) {
+fun APDUScreen(onClickListener: () -> Unit, onCommandClickListener: (String) -> Unit, commandResult: String) {
     Surface(
         modifier = Modifier
             .padding(top = 16.dp)
@@ -157,20 +158,6 @@ fun APDUScreen(onClickListener: () -> Unit, onCommandClickListener: (String) -> 
                         .padding(8.dp)
                     ,
                     onClick = {
-                        print()
-                    }
-                ) {
-                    Text(
-                        text = "Print"
-                    )
-                }
-
-                Button(
-                    modifier = Modifier
-                        .width(100.dp)
-                        .padding(8.dp)
-                    ,
-                    onClick = {
                         onCommandClickListener.invoke(message)
                     }
                 ) {
@@ -215,7 +202,12 @@ fun DatabaseScreen(
     saveTransactionCallback: (TransactionDTO) -> Unit,
     getTransactionsCallback: () -> Unit = {},
     saveGuidCallback: (GUIDParamsDTO) -> Unit = {},
+    printCallback: (String) -> Unit,
 ) {
+    var transactionId by remember {
+        mutableStateOf("")
+    }
+
     Surface {
         Column(
             Modifier
@@ -283,6 +275,26 @@ fun DatabaseScreen(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { saveTransactionCallback(transactionFields.toTransactionDto()) }) {
                 Text(text = "Добавить")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text(text = "Transaction ID") },
+                value = transactionId,
+                onValueChange = { newValue: String ->
+                    transactionId = newValue
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { printCallback(transactionId) }) {
+                Text(text = "Распечатать")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
