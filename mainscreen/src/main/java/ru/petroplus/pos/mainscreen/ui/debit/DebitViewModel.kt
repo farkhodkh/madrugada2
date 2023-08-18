@@ -16,7 +16,7 @@ import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.entities.TransactionDTO
-import ru.petroplus.pos.debug.DebitDebugGroup
+import ru.petroplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
 
@@ -45,7 +45,7 @@ class DebitViewModel(
 
         if (BuildConfig.DEBUG) {
             //Тестовое состояние экрана в случае если тип сборки DEBUG
-            _viewState.value = DebitViewState.DebugState.Debit(DebitDebugGroup())
+            _viewState.value = DebitViewState.DebugState.APDU
         }
     }
 
@@ -75,11 +75,13 @@ class DebitViewModel(
     //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
     //Загружает все транзакции из бд
     private suspend fun loadTransactions() {
-        val oldState = _viewState.value as DebitViewState.DebugState.Debit
-        _viewState.value = oldState.copy(
+        val oldState = _viewState.value as? DebitViewState.DebugState.Debit
+        val transactions = transactionsPersistence.getAll().map { it.toString() }
+        _viewState.value = oldState?.copy(
             debitDebugGroup = oldState.debitDebugGroup.copy(
-                transactionsOutput = transactionsPersistence.getAll().map { it.toString() })
-        )
+                transactionsOutput = transactions
+            )
+        ) ?: DebitViewState.DebugState.Debit(DebitDebugGroup(transactionsOutput = transactions))
     }
 
     //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
@@ -93,6 +95,15 @@ class DebitViewModel(
                     guidParamsOutput = listOf(settingsPersistence.getGUIDparams().toString())
                 )
             )
+        }
+    }
+
+    //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
+    //Изза бага с рассинхроном состояния экрана и отображения, при переключении вкладок так-же меняем стейты
+    fun setTab(index: Int) {
+        when(index) {
+            0 -> _viewState.value = DebitViewState.DebugState.APDU
+            else -> _viewState.value = DebitViewState.DebugState.Debit()
         }
     }
 

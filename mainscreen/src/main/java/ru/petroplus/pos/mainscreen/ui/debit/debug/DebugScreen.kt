@@ -1,4 +1,4 @@
-package ru.petroplus.pos.debug
+package ru.petroplus.pos.mainscreen.ui.debit.debug
 
 import android.content.Context
 import androidx.compose.foundation.border
@@ -47,6 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.entities.TransactionDTO
+import ru.petroplus.pos.mainscreen.ui.debit.DebitViewModel
+import ru.petroplus.pos.mainscreen.ui.debit.DebitViewState
 import ru.petroplus.pos.ui.R
 import ru.petroplus.pos.util.ResourceHelper
 import java.lang.IllegalStateException
@@ -57,45 +59,36 @@ import java.util.Locale
 
 @Composable
 fun DebugScreen(
-    commandResult: String = "Результат выполнения",
-    debitDebugGroup: DebitDebugGroup = DebitDebugGroup(),
-    debitCallback: (DebitDebugGroup) -> Unit = {},
-    saveTransactionCallback: (TransactionDTO) -> Unit = {},
-    getTransactionsCallback: () -> Unit = {},
-    saveGuidCallback: (GUIDParamsDTO) -> Unit = {},
-    onCommandClickListener: (String) -> Unit,
-    onClickListener: () -> Unit,
+    viewModel: DebitViewModel
 ) {
-    var selectedTabIndex by remember { mutableStateOf(0) }
     val tabs = listOf("APDU","DATABASE")
+    val tabIndex = when(viewModel.viewState.value) {
+        is DebitViewState.DebugState.Debit -> 1
+        else -> 0
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        TabRow(selectedTabIndex = selectedTabIndex) {
+        TabRow(selectedTabIndex = tabIndex) {
             tabs.forEachIndexed { index, tab ->
                 Tab(
-                    selected = selectedTabIndex == index,
-                    onClick = { selectedTabIndex = index },
+                    selected = tabIndex == index,
+                    onClick = { viewModel.setTab(index) },
                     text = { Text(text = tab) }
                 )
             }
 
         }
-        when (selectedTabIndex) {
-            0 -> APDUScreen(onClickListener, onCommandClickListener, commandResult)
-            else -> DatabaseScreen(
-                debitDebugGroup = debitDebugGroup,
-                debitCallback = debitCallback,
-                saveTransactionCallback = saveTransactionCallback,
-                getTransactionsCallback = getTransactionsCallback,
-                saveGuidCallback = saveGuidCallback
-            )
+        when (val viewState = viewModel.viewState.value) {
+            DebitViewState.DebugState.APDU, is DebitViewState.CommandExecutionState -> APDUScreen(viewModel, viewState)
+            is DebitViewState.DebugState.Debit -> DatabaseScreen(viewModel, viewState)
+            else -> Surface { }
         }
     }
 
 }
 
 @Composable
-fun APDUScreen(onClickListener: () -> Unit, onCommandClickListener: (String) -> Unit, commandResult: String) {
+fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
     Surface(
         modifier = Modifier
             .padding(top = 16.dp)
@@ -157,7 +150,7 @@ fun APDUScreen(onClickListener: () -> Unit, onCommandClickListener: (String) -> 
                         .padding(8.dp)
                     ,
                     onClick = {
-                        onCommandClickListener.invoke(message)
+                        viewModel.sendCommand(message)
                     }
                 ) {
                     Text(
@@ -171,7 +164,7 @@ fun APDUScreen(onClickListener: () -> Unit, onCommandClickListener: (String) -> 
                         .padding(8.dp)
                     ,
                     onClick = {
-                        onClickListener.invoke()
+                        viewModel.ping()
                     }
                 ) {
                     Text(
@@ -187,7 +180,7 @@ fun APDUScreen(onClickListener: () -> Unit, onCommandClickListener: (String) -> 
                     .height(150.dp)
                     .padding(start = 16.dp, end = 16.dp)
                     .fillMaxWidth(),
-                text = commandResult,
+                text = (viewState as? DebitViewState.CommandExecutionState)?.commandResult ?: "",
             )
 
         }
@@ -195,13 +188,7 @@ fun APDUScreen(onClickListener: () -> Unit, onCommandClickListener: (String) -> 
 }
 
 @Composable
-fun DatabaseScreen(
-    debitDebugGroup: DebitDebugGroup,
-    debitCallback: (DebitDebugGroup) -> Unit,
-    saveTransactionCallback: (TransactionDTO) -> Unit,
-    getTransactionsCallback: () -> Unit = {},
-    saveGuidCallback: (GUIDParamsDTO) -> Unit = {},
-) {
+fun DatabaseScreen(viewModel: DebitViewModel, viewState: DebitViewState.DebugState.Debit) {
     Surface {
         Column(
             Modifier
@@ -217,7 +204,7 @@ fun DatabaseScreen(
                 style = MaterialTheme.typography.h5
             )
 
-            val guidFields = debitDebugGroup.guidParams.takeIf {
+            val guidFields = viewState.debitDebugGroup.guidParams.takeIf {
                 it.isNotEmpty()
             } ?: getTestData(
                 context = LocalContext.current,
@@ -225,20 +212,20 @@ fun DatabaseScreen(
             ) { if (it.first == "clockSequence") Pair(it.first, (it.second as Int).toShort()) else it }
 
             Form(list = guidFields) {
-                debitCallback(debitDebugGroup.copy(guidParams = it))
+                viewModel.onTransactionDataChanges(viewState.debitDebugGroup.copy(guidParams = it))
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { saveGuidCallback(guidFields.toGUIDParamsDTO()) }) {
+                onClick = { viewModel.saveGUIDParams(guidFields.toGUIDParamsDTO()) }) {
                 Text(text = "Сохранить")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Output(title = "GUID", listItems = debitDebugGroup.guidParamsOutput)
+            Output(title = "GUID", listItems = viewState.debitDebugGroup.guidParamsOutput)
 
 
             Text(
@@ -248,18 +235,18 @@ fun DatabaseScreen(
                 style = MaterialTheme.typography.h5
             )
 
-            val transactionFields = debitDebugGroup.transaction.takeIf { it.isNotEmpty() } ?: getTestData(
+            val transactionFields = viewState.debitDebugGroup.transaction.takeIf { it.isNotEmpty() } ?: getTestData(
                 context = LocalContext.current,
                 fileName = "transaction_fields.json"
             )
 
-            Form(list = transactionFields) { debitCallback(debitDebugGroup.copy(transaction = it)) }
+            Form(list = transactionFields) { viewModel.onTransactionDataChanges(viewState.debitDebugGroup.copy(transaction = it)) }
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { getTransactionsCallback() }) {
+                onClick = { viewModel.fetchTransactions() }) {
                 Text(text = "Загрузить")
             }
 
@@ -267,13 +254,13 @@ fun DatabaseScreen(
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { saveTransactionCallback(transactionFields.toTransactionDto()) }) {
+                onClick = { viewModel.testDebit(transactionFields.toTransactionDto()) }) {
                 Text(text = "Добавить")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Output("Все транзакции", listItems = debitDebugGroup.transactionsOutput)
+            Output("Все транзакции", listItems = viewState.debitDebugGroup.transactionsOutput)
         }
     }
 }
