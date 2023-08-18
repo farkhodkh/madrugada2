@@ -19,7 +19,7 @@ interface GatewayExchangeExecutorApi {
     /**
      * Метод для отправки Ping
      */
-    fun makePing()
+    suspend fun makePing()
 
     /**
      * Метод для отправки данных

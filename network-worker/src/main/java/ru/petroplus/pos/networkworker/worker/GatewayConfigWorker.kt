@@ -1,30 +1,21 @@
 package ru.petroplus.pos.networkworker.worker
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import ru.petroplus.pos.networkworker.executor.GatewayExchangeExecutorApi
+import ru.petroplus.pos.networkworker.model.GatewayAction
+import ru.petroplus.pos.networkworker.model.GatewayConfiguration
 
 class GatewayConfigWorker(
     appContext: Context,
     workerParams: WorkerParameters,
     private val executorTerminal: GatewayExchangeExecutorApi
-): CoroutineWorker(appContext, workerParams)  {
+) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-
-        if (ContextCompat.checkSelfPermission(
-                applicationContext,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return Result.failure()
-        }
-
-        executorTerminal.makePing()
+        executorTerminal
+            .execute(configuration = GatewayConfiguration("001", listOf(GatewayAction.Ping)))
 
         return Result.success()
     }

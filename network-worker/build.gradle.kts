@@ -45,4 +45,15 @@ dependencies {
     //coroutines dependencies
     implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
     implementation("${Dependencies.kotlinxCoroutinesCore}:${Versions.kotlinxCoroutines}")
+
+    //Okhttp
+    implementation("${Dependencies.okhttpProfiler}:${Versions.okhttpProfiler}")
+    implementation("${Dependencies.okhttLoggingInterceptor}:${Versions.okhttLoggingInterceptor}")
+
+    //Retrofit
+    implementation("${Dependencies.retrofit}:${Versions.retrofit}")
+
+    //Modules
+    implementation(project(":networkapi"))
+    implementation(project(":p7libapi"))
 }

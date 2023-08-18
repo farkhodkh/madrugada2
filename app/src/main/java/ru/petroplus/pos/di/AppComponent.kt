@@ -3,6 +3,7 @@ package ru.petroplus.pos.di
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
+import ru.petroplus.pos.App
 import ru.petroplus.pos.core.AppScope
 import ru.petroplus.pos.mainscreen.di.MainScreenComponent
 import ru.petroplus.pos.mainscreen.di.MainScreenComponentDependencies
@@ -33,7 +34,7 @@ interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependen
         fun build(): AppComponent
     }
 
-    fun inject(application: Application)
+    fun inject(application: App)
 
     fun inject(activity: MainActivity)
 

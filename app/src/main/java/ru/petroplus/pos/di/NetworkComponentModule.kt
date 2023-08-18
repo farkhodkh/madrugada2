@@ -1,6 +1,5 @@
 package ru.petroplus.pos.di
 
-import android.content.Context
 import androidx.work.DelegatingWorkerFactory
 import com.google.gson.GsonBuilder
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
@@ -9,19 +8,20 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.petrolplus.pos.room.database.AppDatabase
 import ru.petroplus.pos.core.AppScope
-import ru.petroplus.pos.network.auth.GatewayAuthenticationUtil
 import ru.petroplus.pos.network.repository.GatewayServerRepositoryImpl
 import ru.petroplus.pos.network.ssl.NoSSLv3SocketFactory
 import ru.petroplus.pos.network.ssl.SSLContextFactory
 import ru.petroplus.pos.network.ssl.TrustAllX509TrustManager
 import ru.petroplus.pos.networkapi.GatewayServerApi
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
+import ru.petroplus.pos.networkapi.auth.GatewayAuthenticationUtil
 import ru.petroplus.pos.networkworker.executor.GatewayExchangeExecutor
 import ru.petroplus.pos.networkworker.executor.GatewayExchangeExecutorApi
 import ru.petroplus.pos.networkworker.worker.GatewayConfigFactory
 import ru.petroplus.pos.networkworker.worker.GatewayConfigScheduler
+import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
+import ru.petroplus.pos.p7LibApi.IP7LibRepository
 import ru.petroplus.pos.util.constants.Constants
 import java.util.concurrent.TimeUnit
 import javax.net.ssl.SSLSocketFactory
@@ -99,8 +99,12 @@ object NetworkComponentModule {
         GatewayServerRepositoryImpl(gatewayServer)
 
     @[Provides AppScope]
-    fun providesGatewayExchangeExecutor(context: Context): GatewayExchangeExecutorApi =
-        GatewayExchangeExecutor(context)
+    fun providesGatewayExchangeExecutor(
+        gatewayServer: GatewayServerApi,
+        p7LibCallbacks: IP7LibCallbacks,
+        p7LibRepository: IP7LibRepository
+    ): GatewayExchangeExecutorApi =
+        GatewayExchangeExecutor(gatewayServer, p7LibCallbacks, p7LibRepository)
 
     @[Provides AppScope]
     fun providesGatewayConfigScheduler(): GatewayConfigScheduler = GatewayConfigScheduler()

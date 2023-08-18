@@ -10,6 +10,7 @@ import ru.petroplus.pos.di.AppComponent
 import ru.petroplus.pos.di.AppComponentDependencies
 import ru.petroplus.pos.di.DaggerAppComponent
 import ru.petroplus.pos.networkworker.worker.GatewayConfigScheduler
+import ru.petroplus.pos.util.ResourceHelper
 import java.net.CookieHandler
 import java.net.CookieManager
 import java.security.Security
@@ -36,9 +37,11 @@ class App : Application() {
             .appComponentDependencies(AppComponentDependenciesImpl())
             .build()
 
-        appComponent.inject(this)
+        ResourceHelper.setContext(applicationContext)
 
         initSSLDependencies()
+
+        appComponent.inject(this)
 
         initWorkManager()
     }
