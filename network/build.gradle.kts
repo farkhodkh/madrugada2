@@ -32,14 +32,14 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = Versions.kotlinCompilerExtensionVersion
-    }
+//
+//    buildFeatures {
+//        compose = true
+//    }
+//
+//    composeOptions {
+//        kotlinCompilerExtensionVersion = Versions.kotlinCompilerExtensionVersion
+//    }
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -49,7 +49,7 @@ dependencies {
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
-    implementation("${Dependencies.composeRuntime}:${Versions.compose}")
+//    implementation("${Dependencies.composeRuntime}:${Versions.compose}")
 
     //Okhttp
     implementation("${Dependencies.okhttpProfiler}:${Versions.okhttpProfiler}")

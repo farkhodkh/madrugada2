@@ -13,7 +13,7 @@ import ru.petroplus.pos.p7Lib.di.P7LibComponentDependencies
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 
 @Component(
-    modules = [AppModule::class, SubcomponentModule::class],
+    modules = [AppModule::class, SubcomponentModule::class, NetworkComponentModule::class],
     dependencies = [AppComponentDependencies::class]
 )
 @AppScope
@@ -33,7 +33,9 @@ interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependen
         fun build(): AppComponent
     }
 
-    fun mainScreenComponentBuilder(): MainScreenComponent.Builder
+    fun inject(application: Application)
 
-    fun inject(application: MainActivity)
+    fun inject(activity: MainActivity)
+
+    fun mainScreenComponentBuilder(): MainScreenComponent.Builder
 }
