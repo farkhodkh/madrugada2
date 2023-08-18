@@ -1,5 +1,7 @@
 package ru.petroplus.pos.sdkapi
 
+import kotlinx.coroutines.flow.Flow
+
 /**
  * Репозитор для обработки команд и коллекции ответов от Reader
  */
@@ -11,8 +13,7 @@ interface ISDKRepository {
     fun sendCommand(bytesString: String)
 
     /**
-     * EventBus для обработки команд от терминала
-     * TODO - переписать под Flow
+     *  Flow для обработки команд от терминала
      */
-    var eventBus: ReaderEventBus
+    val latestCommands: Flow<String>
 }
