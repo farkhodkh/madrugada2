@@ -1,11 +1,9 @@
 package ru.petroplus.pos.network.repository
 
 import okhttp3.RequestBody.Companion.asRequestBody
-import ru.petroplus.pos.network.auth.GatewayAuthenticationUtil
+import ru.petroplus.pos.networkapi.auth.GatewayAuthenticationUtil
 import ru.petroplus.pos.networkapi.GatewayServerApi
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
-import java.net.CookieHandler
-import java.net.CookieManager
 
 class GatewayServerRepositoryImpl(private val gatewayServer: GatewayServerApi): GatewayServerRepositoryApi {
     override suspend fun doPing() {

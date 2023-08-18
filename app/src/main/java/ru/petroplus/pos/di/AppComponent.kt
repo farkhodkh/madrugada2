@@ -3,6 +3,7 @@ package ru.petroplus.pos.di
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
+import ru.petroplus.pos.App
 import ru.petroplus.pos.core.AppScope
 import ru.petroplus.pos.mainscreen.di.MainScreenComponent
 import ru.petroplus.pos.mainscreen.di.MainScreenComponentDependencies
@@ -13,7 +14,7 @@ import ru.petroplus.pos.p7Lib.di.P7LibComponentDependencies
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 
 @Component(
-    modules = [AppModule::class, SubcomponentModule::class],
+    modules = [AppModule::class, SubcomponentModule::class, NetworkComponentModule::class],
     dependencies = [AppComponentDependencies::class]
 )
 @AppScope
@@ -33,7 +34,9 @@ interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependen
         fun build(): AppComponent
     }
 
-    fun mainScreenComponentBuilder(): MainScreenComponent.Builder
+    fun inject(application: App)
 
-    fun inject(application: MainActivity)
+    fun inject(activity: MainActivity)
+
+    fun mainScreenComponentBuilder(): MainScreenComponent.Builder
 }

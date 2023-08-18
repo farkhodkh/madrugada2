@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = Dependencies.namespaceNetwork
+    namespace = Dependencies.namespaceNetworkWorker
     compileSdkVersion = Versions.compileSdkVersion
 
     defaultConfig {
@@ -18,8 +18,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
@@ -32,24 +32,19 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-//
-//    buildFeatures {
-//        compose = true
-//    }
-//
-//    composeOptions {
-//        kotlinCompilerExtensionVersion = Versions.kotlinCompilerExtensionVersion
-//    }
 }
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-}
+
 dependencies {
 
-    //Dagger 2
-    implementation("${Dependencies.dagger}:${Versions.dagger}")
-//    implementation("${Dependencies.composeRuntime}:${Versions.compose}")
+    //Android Core
+    implementation("${Dependencies.coreKtx}:${Versions.coreKtx}")
+
+    //Android worker
+    implementation("${Dependencies.workKtx}:${Versions.workKtx}")
+
+    //coroutines dependencies
+    implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
+    implementation("${Dependencies.kotlinxCoroutinesCore}:${Versions.kotlinxCoroutines}")
 
     //Okhttp
     implementation("${Dependencies.okhttpProfiler}:${Versions.okhttpProfiler}")
@@ -59,7 +54,6 @@ dependencies {
     implementation("${Dependencies.retrofit}:${Versions.retrofit}")
 
     //Modules
-    implementation(project(":util"))
     implementation(project(":networkapi"))
-
+    implementation(project(":p7libapi"))
 }

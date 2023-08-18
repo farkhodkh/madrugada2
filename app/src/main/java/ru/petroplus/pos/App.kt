@@ -2,15 +2,27 @@ package ru.petroplus.pos
 
 import android.app.Application
 import android.content.Context
+import androidx.work.Configuration
+import androidx.work.DelegatingWorkerFactory
+import androidx.work.WorkManager
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import ru.petroplus.pos.di.AppComponent
 import ru.petroplus.pos.di.AppComponentDependencies
 import ru.petroplus.pos.di.DaggerAppComponent
+import ru.petroplus.pos.networkworker.worker.GatewayConfigScheduler
+import ru.petroplus.pos.util.ResourceHelper
 import java.net.CookieHandler
 import java.net.CookieManager
 import java.security.Security
+import javax.inject.Inject
 
 class App : Application() {
+
+    @Inject
+    lateinit var workerFactory: DelegatingWorkerFactory
+
+    @Inject
+    lateinit var workerScheduler: GatewayConfigScheduler
 
     companion object {
         lateinit var appComponent: AppComponent
@@ -25,7 +37,13 @@ class App : Application() {
             .appComponentDependencies(AppComponentDependenciesImpl())
             .build()
 
+        ResourceHelper.setContext(applicationContext)
+
         initSSLDependencies()
+
+        appComponent.inject(this)
+
+        initWorkManager()
     }
 
     private inner class AppComponentDependenciesImpl: AppComponentDependencies {
@@ -43,6 +61,20 @@ class App : Application() {
          * Инициализация менеджера по умолчания для Cookie
          */
         CookieHandler.setDefault(CookieManager())
+    }
+
+    /**
+     * Инициализация Worker для регулярной отправки данных в Шлюз
+     */
+    private fun initWorkManager() {
+        WorkManager.initialize(
+            this,
+            Configuration.Builder()
+                .setWorkerFactory(workerFactory)
+                .build()
+        )
+
+        workerScheduler.scheduleWorker(this)
     }
 }
 
