@@ -15,13 +15,16 @@ import java.net.CookieHandler
 import java.net.CookieManager
 import java.security.Security
 import javax.inject.Inject
+import javax.inject.Named
 
 class App : Application() {
 
     @Inject
+    @Named(GatewayConfigScheduler.REMOTE_CONFIG_WORKER)
     lateinit var workerFactory: DelegatingWorkerFactory
 
     @Inject
+    @Named(GatewayConfigScheduler.REMOTE_CONFIG_WORKER)
     lateinit var workerScheduler: GatewayConfigScheduler
 
     companion object {

@@ -6,6 +6,10 @@ import androidx.work.WorkerFactory
 import androidx.work.WorkerParameters
 import ru.petroplus.pos.networkworker.executor.GatewayExchangeExecutorApi
 
+/**
+ *
+ * Фактори для инициализации Worker
+ */
 class GatewayConfigFactory(private val executor: GatewayExchangeExecutorApi) : WorkerFactory() {
 
     override fun createWorker(

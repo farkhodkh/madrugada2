@@ -1,5 +1,8 @@
 package ru.petroplus.pos.networkworker.model
 
+/**
+ * Действия для планировщика
+ */
 sealed class GatewayAction {
     /**
      * Инициализауия соединение со шлюзом

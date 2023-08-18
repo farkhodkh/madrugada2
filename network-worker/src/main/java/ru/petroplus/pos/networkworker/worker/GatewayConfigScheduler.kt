@@ -7,6 +7,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * Планировщик для инициализации Worker по пингу шлюза
+ */
 class GatewayConfigScheduler {
 
     companion object {

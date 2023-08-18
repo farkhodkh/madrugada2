@@ -7,6 +7,9 @@ import ru.petroplus.pos.networkworker.executor.GatewayExchangeExecutorApi
 import ru.petroplus.pos.networkworker.model.GatewayAction
 import ru.petroplus.pos.networkworker.model.GatewayConfiguration
 
+/**
+ * Worker для выполнения работ планировщика
+ */
 class GatewayConfigWorker(
     appContext: Context,
     workerParams: WorkerParameters,
@@ -14,8 +17,9 @@ class GatewayConfigWorker(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
+
         executorTerminal
-            .execute(configuration = GatewayConfiguration("001", listOf(GatewayAction.Ping)))
+            .execute(configuration = GatewayConfiguration(GatewayConfiguration.VERSION_1, listOf(GatewayAction.Ping)))
 
         return Result.success()
     }

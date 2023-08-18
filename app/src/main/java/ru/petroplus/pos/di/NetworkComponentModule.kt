@@ -20,10 +20,12 @@ import ru.petroplus.pos.networkworker.executor.GatewayExchangeExecutor
 import ru.petroplus.pos.networkworker.executor.GatewayExchangeExecutorApi
 import ru.petroplus.pos.networkworker.worker.GatewayConfigFactory
 import ru.petroplus.pos.networkworker.worker.GatewayConfigScheduler
+import ru.petroplus.pos.networkworker.worker.GatewayConfigScheduler.Companion.REMOTE_CONFIG_WORKER
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
 import ru.petroplus.pos.util.constants.Constants
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.net.ssl.SSLSocketFactory
 
 @Module
@@ -99,6 +101,7 @@ object NetworkComponentModule {
         GatewayServerRepositoryImpl(gatewayServer)
 
     @[Provides AppScope]
+    @Named(REMOTE_CONFIG_WORKER)
     fun providesGatewayExchangeExecutor(
         gatewayServer: GatewayServerApi,
         p7LibCallbacks: IP7LibCallbacks,
@@ -107,14 +110,17 @@ object NetworkComponentModule {
         GatewayExchangeExecutor(gatewayServer, p7LibCallbacks, p7LibRepository)
 
     @[Provides AppScope]
+    @Named(REMOTE_CONFIG_WORKER)
     fun providesGatewayConfigScheduler(): GatewayConfigScheduler = GatewayConfigScheduler()
 
     @[Provides AppScope]
-    fun providesGatewayConfigFactory(gatewayExchangeExecutor: GatewayExchangeExecutorApi): GatewayConfigFactory =
+    @Named(REMOTE_CONFIG_WORKER)
+    fun providesGatewayConfigFactory(@Named(REMOTE_CONFIG_WORKER) gatewayExchangeExecutor: GatewayExchangeExecutorApi): GatewayConfigFactory =
         GatewayConfigFactory(gatewayExchangeExecutor)
 
     @[Provides AppScope]
-    fun providesDelegatingWorkerFactory(remoteConfigFactory: GatewayConfigFactory): DelegatingWorkerFactory =
+    @Named(REMOTE_CONFIG_WORKER)
+    fun providesDelegatingWorkerFactory(@Named(REMOTE_CONFIG_WORKER) remoteConfigFactory: GatewayConfigFactory): DelegatingWorkerFactory =
         DelegatingWorkerFactory().apply {
             addFactory(remoteConfigFactory)
         }

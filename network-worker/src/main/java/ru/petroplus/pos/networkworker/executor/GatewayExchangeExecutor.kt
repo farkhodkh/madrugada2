@@ -19,6 +19,9 @@ import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
 import kotlin.time.Duration
 
+/**
+ * Класс executor для выполнения действий worker
+ */
 class GatewayExchangeExecutor(
     private val gatewayServer: GatewayServerApi,
     private val p7LibCallbacks: IP7LibCallbacks,
