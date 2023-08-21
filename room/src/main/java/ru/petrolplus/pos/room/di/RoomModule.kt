@@ -5,6 +5,8 @@ import dagger.Provides
 import ru.petrolplus.pos.room.dao.BaseSettingsDao
 import ru.petrolplus.pos.room.dao.CommonSettingsDao
 import ru.petrolplus.pos.room.dao.GUIDparamsDao
+import ru.petrolplus.pos.room.dao.ReceiptDao
+import ru.petrolplus.pos.room.dao.ReceiptParamsDao
 import ru.petrolplus.pos.room.dao.ServicesDao
 import ru.petrolplus.pos.room.dao.ShiftParamsDao
 import ru.petrolplus.pos.room.dao.TransactionsDao
@@ -31,4 +33,10 @@ class RoomModule {
 
     @[Provides MainScreenScope]
     fun provideTransactionsDao(appDatabase: AppDatabase): TransactionsDao = appDatabase.transactionDao()
+
+    @[Provides MainScreenScope]
+    fun provideReceiptParamsDao(appDatabase: AppDatabase): ReceiptParamsDao = appDatabase.receiptParamsDao()
+
+    @[Provides MainScreenScope]
+    fun provideReceiptDao(appDatabase: AppDatabase): ReceiptDao = appDatabase.receiptDao()
 }
