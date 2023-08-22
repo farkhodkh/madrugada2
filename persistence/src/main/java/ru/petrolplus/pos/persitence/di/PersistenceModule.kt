@@ -22,8 +22,8 @@ import ru.petrolplus.pos.persitence.ShiftParamsPersistenceImpl
 import ru.petrolplus.pos.persitence.StoreStrategy
 import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistenceImpl
-import ru.petrolplus.pos.persitence.entities.DebitReceiptDTO
-import ru.petrolplus.pos.persitence.entities.ReceiptParamsDTO
+import ru.petrolplus.pos.persitence.dto.DebitReceiptDTO
+import ru.petrolplus.pos.persitence.dto.ReceiptParamsDTO
 import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
 import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
 import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO

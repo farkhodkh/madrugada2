@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence.mappers
 
-import ru.petrolplus.pos.persitence.entities.DebitReceiptDTO
+import ru.petrolplus.pos.persitence.dto.DebitReceiptDTO
 import ru.petrolplus.pos.room.projections.ReceiptProjection
 
 class DebitReceiptMapper : ProjectionMapper<ReceiptProjection, DebitReceiptDTO> {

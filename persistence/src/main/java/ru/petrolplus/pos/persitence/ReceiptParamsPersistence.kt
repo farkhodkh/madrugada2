@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence
 
-import ru.petrolplus.pos.persitence.entities.ReceiptParamsDTO
+import ru.petrolplus.pos.persitence.dto.ReceiptParamsDTO
 import ru.petrolplus.pos.persitence.mappers.Mapper
 import ru.petrolplus.pos.room.dao.ReceiptParamsDao
 import ru.petrolplus.pos.room.entities.ReceiptParamsDB

@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence
 
-import ru.petrolplus.pos.persitence.entities.DebitReceiptDTO
+import ru.petrolplus.pos.persitence.dto.DebitReceiptDTO
 import ru.petrolplus.pos.persitence.mappers.ProjectionMapper
 import ru.petrolplus.pos.room.dao.ReceiptDao
 import ru.petrolplus.pos.room.projections.ReceiptProjection
