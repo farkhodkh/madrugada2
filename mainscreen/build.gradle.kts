@@ -69,9 +69,6 @@ dependencies {
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
 
-    //Json
-    implementation("${Dependencies.gson}:${Versions.gson}")
-
     //Modules
     implementation(project(":core"))
     implementation(project(":util"))

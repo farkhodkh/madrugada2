@@ -1,4 +1,4 @@
-package ru.petrolplus.pos.persitence.entities
+package ru.petrolplus.pos.persitence.dto
 
 /**
  * Обертка для списка сервисов

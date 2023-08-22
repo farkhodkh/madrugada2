@@ -45,8 +45,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
-import ru.petrolplus.pos.persitence.entities.TransactionDTO
+import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
+import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petroplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petroplus.pos.mainscreen.ui.debit.DebitViewState
 import ru.petroplus.pos.ui.R

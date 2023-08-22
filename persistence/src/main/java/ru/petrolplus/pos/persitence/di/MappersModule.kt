@@ -2,12 +2,12 @@ package ru.petrolplus.pos.persitence.di
 
 import dagger.Module
 import dagger.Provides
-import ru.petrolplus.pos.persitence.entities.BaseSettingsDTO
-import ru.petrolplus.pos.persitence.entities.CommonSettingsDTO
-import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
-import ru.petrolplus.pos.persitence.entities.ServiceDTO
-import ru.petrolplus.pos.persitence.entities.ShiftParamsDTO
-import ru.petrolplus.pos.persitence.entities.TransactionDTO
+import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
+import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
+import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
+import ru.petrolplus.pos.persitence.dto.ServiceDTO
+import ru.petrolplus.pos.persitence.dto.ShiftParamsDTO
+import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petrolplus.pos.persitence.mappers.BaseSettingsMapper
 import ru.petrolplus.pos.persitence.mappers.CommonSettingsMapper
 import ru.petrolplus.pos.persitence.mappers.GUIDparamsMapper

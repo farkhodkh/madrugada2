@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
-import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
-import ru.petrolplus.pos.persitence.entities.TransactionDTO
+import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
+import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petroplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig

@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence
 
-import ru.petrolplus.pos.persitence.entities.ServiceDTO
+import ru.petrolplus.pos.persitence.dto.ServiceDTO
 import ru.petrolplus.pos.persitence.mappers.Mapper
 import ru.petrolplus.pos.room.dao.ServicesDao
 import ru.petrolplus.pos.room.entities.ServiceDB

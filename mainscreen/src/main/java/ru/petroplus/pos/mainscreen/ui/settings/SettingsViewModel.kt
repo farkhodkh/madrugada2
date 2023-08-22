@@ -11,7 +11,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.petrolplus.pos.persitence.ServicesPersistence
-import ru.petrolplus.pos.persitence.entities.ServicesDTO
+import ru.petrolplus.pos.persitence.dto.ServicesDTO
 
 class SettingsViewModel(
     private val servicesPersistence: ServicesPersistence,

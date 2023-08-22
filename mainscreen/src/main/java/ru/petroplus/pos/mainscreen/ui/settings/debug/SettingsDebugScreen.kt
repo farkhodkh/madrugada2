@@ -16,8 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.gson.Gson
-import ru.petrolplus.pos.persitence.entities.ServicesDTO
+import ru.petrolplus.pos.persitence.dto.ServicesDTO
 import ru.petroplus.pos.mainscreen.ui.settings.SettingsViewModel
 import ru.petroplus.pos.util.ResourceHelper
 import java.lang.StringBuilder
@@ -36,8 +35,8 @@ fun SettingsDebugScreen(viewModel: SettingsViewModel) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(onClick = {
-                val file = ResourceHelper.getAssetFile("services.json")?.readText()
-                val importedServices = Gson().fromJson(file, ServicesDTO::class.java)
+                val file = ResourceHelper.getAssetFile("services.json")?.readText() ?: ""
+                val importedServices = ResourceHelper.parseJson(file, ServicesDTO::class.java)
                 val servicesStringBuilder = StringBuilder()
                 importedServices.services.forEach {
                     servicesStringBuilder.append(it.toString())
