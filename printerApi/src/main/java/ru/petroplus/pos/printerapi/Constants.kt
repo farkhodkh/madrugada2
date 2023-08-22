@@ -1,7 +1,12 @@
 package ru.petroplus.pos.printerapi
 
+
+object ReceiptFormatting {
+    const val RECEIPT_MASK_SIZE = 10
+    const val TERMINAL_NUMBER_MASK_SIZE = 5
+}
 object IntroductoryConstruction {
-    const val SERVICE_SUM = "Итог"
+    const val SERVICE_SUM = "Итого"
     const val SERVICE_PRICE = "Цена за"
     const val SERVICE_AMOUNT = "Кол-во"
     const val SERVICE = "Услуга"
@@ -15,12 +20,14 @@ object IntroductoryConstruction {
     const val TRANSACTION_CONFIRMED_BY_PIN_PART_II = "вводом ПИН кода"
     const val OPERATOR_NUMBER = "Оператор No."
     const val FOOTER_TEXT = "Добро пожаловать"
-    const val PRICE_UNIT = "P"
+    const val PRICE_UNIT = "Pуб"
     const val DENIAL = "ОТКАЗ"
     const val DENIAL_CODE = "Код отказа"
 }
 sealed class ResponseCode(val code: Int, val description: String) {
     object Success: ResponseCode(SUCCESS, "ОДОБРЕНО")
+
+
 
     object Canceled: ResponseCode(CANCELED, "Операция отменена на терминале")
     object Timeout: ResponseCode(TIMEOUT, "Тайм-аут операции")

@@ -139,10 +139,10 @@ class DebitViewModel(
             val settings = settingsPersistence.getCommonSettings()
             val transaction = transactionsPersistence.getById(transactionId)
 
-            var service: ServiceDTO? = null
+            var service: ServiceDTO = ServiceDTO(0, "", "", 0)
             if (transaction?.responseCode == ResponseCode.SUCCESS) {
                 val serviceId = transaction.serviceIdWhat
-                service = servicesPersistence.getAll().firstOrNull { it.id == serviceId }
+                servicesPersistence.getAll().firstOrNull { it.id == serviceId }?.let { service = it }
             }
 
             if (transaction == null) {

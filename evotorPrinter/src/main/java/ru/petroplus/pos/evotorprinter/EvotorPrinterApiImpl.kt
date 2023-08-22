@@ -10,6 +10,7 @@ import ru.petroplus.pos.printerapi.DocumentInflater
 import ru.petroplus.pos.printerapi.PrintableDocument
 import ru.petroplus.pos.printerapi.PrinterApi
 import kotlinx.coroutines.flow.Flow
+import ru.evotor.devices.commons.kkm.KkmInfoRequest
 import ru.petroplus.pos.printerapi.BuildConfig
 import kotlin.random.Random
 
@@ -22,8 +23,11 @@ class EvotorPrinterApiImpl(
             try {
                 val kkm = KKM()
                 kkm.connect(applicationContext)
+
+                val printerWidth = kkm.getKkmInfo(KkmInfoRequest()).printerWidthInChar
+
                 val doc = PrintableDocument.Debit(document)
-                val printerDocument = inflater.inflatePrinterDocument(doc)
+                val printerDocument = inflater.inflatePrinterDocument(doc, printerWidth)
 
                 // Симуляция ошибки во время печати
                 if (BuildConfig.DEBUG) {
@@ -35,7 +39,7 @@ class EvotorPrinterApiImpl(
                     }
                 }
 
-                kkm.printDocument(printerDocument, printCliche = true)
+                kkm.printDocument(printerDocument)
                 delay(3000) // TODO: найди другой способ отследить момент окончания печати
                 emit(true)
             } catch (e: Exception) {

@@ -6,7 +6,7 @@ import ru.petroplus.pos.printerapi.DocumentData
 import ru.petroplus.pos.printerapi.DocumentInflater
 
 class EvotorDocumentInflater : DocumentInflater<PrinterDocument>() {
-    override fun inflateDebit(data: DocumentData): PrinterDocument {
-        return data.toPrinterDoc()
+    override fun inflateDebit(data: DocumentData, printerWidth: Int): PrinterDocument {
+        return data.toPrinterDoc(printerWidth)
     }
 }
