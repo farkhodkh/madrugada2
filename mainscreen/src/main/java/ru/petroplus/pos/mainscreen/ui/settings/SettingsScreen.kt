@@ -1,4 +1,4 @@
-package ru.petroplus.pos.navigation
+package ru.petroplus.pos.mainscreen.ui.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,21 +8,31 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ru.petroplus.pos.mainscreen.ui.settings.debug.SettingsDebugScreen
 
 @Composable
 fun SettingsScreen(
+    viewModel: SettingsViewModel,
     onClickListener: (String) -> Unit
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    when(viewModel.viewState.value) {
+        SettingsViewState.DebugState -> {
+            SettingsDebugScreen(viewModel)
+        }
+        else -> {
+            Column(
+                    modifier = Modifier.fillMaxSize()
+                ) {
 
-        Text(
-            text ="Настройки приложения",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        )
+                    Text(
+                        text ="Настройки приложения",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    )
 
+                }
+        }
     }
+
 }

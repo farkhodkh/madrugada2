@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence.mappers
 
-import ru.petrolplus.pos.persitence.entities.ShiftParamsDTO
+import ru.petrolplus.pos.persitence.dto.ShiftParamsDTO
 import ru.petrolplus.pos.room.entities.ShiftParamsDB
 
 class ShiftParamsMapper : Mapper<ShiftParamsDTO, ShiftParamsDB> {

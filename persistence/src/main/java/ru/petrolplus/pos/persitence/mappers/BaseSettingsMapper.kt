@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence.mappers
 
-import ru.petrolplus.pos.persitence.entities.BaseSettingsDTO
+import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
 import ru.petrolplus.pos.room.entities.BaseSettingsDB
 
 class BaseSettingsMapper : Mapper<BaseSettingsDTO, BaseSettingsDB> {

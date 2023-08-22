@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence.mappers
 
-import ru.petrolplus.pos.persitence.entities.CommonSettingsDTO
+import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
 import ru.petrolplus.pos.room.entities.CommonSettingsDB
 
 class CommonSettingsMapper : Mapper<CommonSettingsDTO, CommonSettingsDB> {
