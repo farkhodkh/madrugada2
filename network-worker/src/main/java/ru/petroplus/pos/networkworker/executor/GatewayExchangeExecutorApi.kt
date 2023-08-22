@@ -12,11 +12,6 @@ interface GatewayExchangeExecutorApi {
     fun execute(configuration: GatewayConfiguration)
 
     /**
-     * Метод для инициализации
-     */
-    fun makeInit()
-
-    /**
      * Метод для отправки Ping
      */
     suspend fun makePing()

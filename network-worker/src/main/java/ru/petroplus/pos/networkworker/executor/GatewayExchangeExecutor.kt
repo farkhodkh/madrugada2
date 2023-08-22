@@ -35,11 +35,15 @@ class GatewayExchangeExecutor(
     private val pingInterval = Duration.parse("15s")
     private val executorScope: CoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
+    /**
+     * Количество повторов отправки пинга с интервалом 15 сек. Равено году
+     */
+    private val yearInSeconds = 31_536_000
+
     override fun execute(configuration: GatewayConfiguration) {
         executorScope.launch {
             configuration.actions.forEach { action ->
                 when (action) {
-                    GatewayAction.Init -> makeInit()
                     GatewayAction.Ping -> makePing()
                     GatewayAction.SendData -> sendData()
                     else -> {
@@ -50,17 +54,15 @@ class GatewayExchangeExecutor(
         }
     }
 
-    override fun makeInit() {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun makePing() {
-        repeat(31_536_000) { i ->
+        repeat(yearInSeconds) { i ->
+            //TODO - Переделать на запрос OOB от P7Lib когда такое будет реализовано
 //            val requestBody = p7LibCallbacks.getPingData()
             val requestBody = GatewayAuthenticationUtil.getPingBinFile()
 
             gatewayServerPinger(requestBody.asRequestBody())
                 .onEach {
+                    //TODO - Реализовать передачу признака успешного обмена в p7lib
                     val b = this
                     val f = it
                 }
@@ -71,6 +73,7 @@ class GatewayExchangeExecutor(
     }
 
     override fun sendData() {
+        //TODO - Переделать на запрос OOB от P7Lib когда такое будет реализовано
         TODO("Not yet implemented")
     }
 

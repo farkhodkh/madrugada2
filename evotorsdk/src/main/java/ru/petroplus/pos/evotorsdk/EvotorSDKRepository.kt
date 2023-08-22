@@ -134,7 +134,6 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
         }
 
         override fun onServiceDisconnected(className: ComponentName) {
-            Log.e("TAG", "Service has unexpectedly disconnected")
             requestInterface = null
         }
 
