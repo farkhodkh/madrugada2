@@ -28,10 +28,7 @@ fun DocumentData.toPrinterDoc(printerWidth: Int): PrinterDocument =
         ResponseCode.Success -> generateSuccessfulTransactionDocument(
             this, responseCode, printerWidth
         )
-
-        ResponseCode.Canceled, ResponseCode.ServiceProhibited, ResponseCode.Timeout -> generateFailedTransactionDocument(
-            this, responseCode, printerWidth
-        )
+        is ResponseCode.Error -> generateFailedTransactionDocument(this, responseCode, printerWidth)
     }
 
 fun generateFailedTransactionDocument(

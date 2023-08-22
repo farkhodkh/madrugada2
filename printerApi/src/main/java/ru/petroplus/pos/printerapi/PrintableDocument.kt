@@ -1,7 +1,7 @@
 package ru.petroplus.pos.printerapi
 
-import ru.petrolplus.pos.persitence.entities.TransactionDTO
 
+// TODO: избавится от прослойки
 sealed class PrintableDocument() {
     class Debit(val data: DocumentData): PrintableDocument()
 
