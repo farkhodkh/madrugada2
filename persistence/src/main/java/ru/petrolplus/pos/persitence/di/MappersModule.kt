@@ -2,7 +2,7 @@ package ru.petrolplus.pos.persitence.di
 
 import dagger.Module
 import dagger.Provides
-import ru.petrolplus.pos.persitence.dto.DebitReceiptDTO
+import ru.petrolplus.pos.persitence.dto.ReceiptDTO
 import ru.petrolplus.pos.persitence.dto.ReceiptParamsDTO
 import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
 import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
@@ -12,7 +12,7 @@ import ru.petrolplus.pos.persitence.dto.ShiftParamsDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petrolplus.pos.persitence.mappers.BaseSettingsMapper
 import ru.petrolplus.pos.persitence.mappers.CommonSettingsMapper
-import ru.petrolplus.pos.persitence.mappers.DebitReceiptMapper
+import ru.petrolplus.pos.persitence.mappers.ReceiptMapper
 import ru.petrolplus.pos.persitence.mappers.GUIDparamsMapper
 import ru.petrolplus.pos.persitence.mappers.Mapper
 import ru.petrolplus.pos.persitence.mappers.ProjectionMapper
@@ -55,7 +55,7 @@ class MappersModule {
     fun providesReceiptParamsMapper(): Mapper<ReceiptParamsDTO, ReceiptParamsDB> = ReceiptParamsMapper()
 
     @[Provides MainScreenScope]
-    fun providesReceiptMapper(): ProjectionMapper<ReceiptProjection, DebitReceiptDTO> = DebitReceiptMapper()
+    fun providesReceiptMapper(): ProjectionMapper<ReceiptProjection, ReceiptDTO> = ReceiptMapper()
 
 
 }

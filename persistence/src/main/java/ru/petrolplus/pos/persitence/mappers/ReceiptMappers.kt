@@ -1,10 +1,10 @@
 package ru.petrolplus.pos.persitence.mappers
 
-import ru.petrolplus.pos.persitence.dto.DebitReceiptDTO
+import ru.petrolplus.pos.persitence.dto.ReceiptDTO
 import ru.petrolplus.pos.room.projections.ReceiptProjection
 
-class DebitReceiptMapper : ProjectionMapper<ReceiptProjection, DebitReceiptDTO> {
-    override fun fromProjection(input: ReceiptProjection): DebitReceiptDTO = DebitReceiptDTO(
+class ReceiptMapper : ProjectionMapper<ReceiptProjection, ReceiptDTO> {
+    override fun fromProjection(input: ReceiptProjection): ReceiptDTO = ReceiptDTO(
         receiptNumber = input.receiptParamsDB.receiptNumber,
         organizationName = input.commonSettingsDB.organizationName,
         organizationInn = input.commonSettingsDB.organizationInn,

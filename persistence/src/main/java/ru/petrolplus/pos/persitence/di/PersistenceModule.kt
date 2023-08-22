@@ -22,7 +22,7 @@ import ru.petrolplus.pos.persitence.ShiftParamsPersistenceImpl
 import ru.petrolplus.pos.persitence.StoreStrategy
 import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistenceImpl
-import ru.petrolplus.pos.persitence.dto.DebitReceiptDTO
+import ru.petrolplus.pos.persitence.dto.ReceiptDTO
 import ru.petrolplus.pos.persitence.dto.ReceiptParamsDTO
 import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
 import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
@@ -122,6 +122,6 @@ class PersistenceModule {
     @[Provides MainScreenScope]
     fun provideReceiptMapper(
         receiptDao: ReceiptDao,
-        mapper: ProjectionMapper<ReceiptProjection, DebitReceiptDTO>
+        mapper: ProjectionMapper<ReceiptProjection, ReceiptDTO>
     ): ReceiptPersistence = ReceiptPersistenceImpl(receiptDao, mapper)
 }

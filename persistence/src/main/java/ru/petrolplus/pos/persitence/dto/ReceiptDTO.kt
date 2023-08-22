@@ -22,7 +22,7 @@ import java.util.Calendar
  *@param sum Сумма заказа в рублях, представленная в целочисленном виде, с точностью 3 знака после запятой (25000 = 25.0р)
  *@param responseCode Результат выполнения операции (0 - успех, N - ошибка)
  */
-data class DebitReceiptDTO(
+data class ReceiptDTO(
     val receiptNumber: Long,
     val organizationName: String,
     val organizationInn: String,
