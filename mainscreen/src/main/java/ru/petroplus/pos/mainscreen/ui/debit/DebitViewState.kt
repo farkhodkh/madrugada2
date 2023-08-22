@@ -6,6 +6,7 @@ sealed class DebitViewState {
     object StartingState: DebitViewState()
     sealed class DebugState: DebitViewState() {
         object APDU : DebugState()
+        object Print: DebugState()
         data class Debit(val debitDebugGroup: DebitDebugGroup = DebitDebugGroup()) : DebugState()
 
     }

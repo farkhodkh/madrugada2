@@ -33,6 +33,10 @@ android {
 }
 
 dependencies {
+    //Coroutines
+    implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
+
+
     // Modules
     implementation(project(":persistence"))
     implementation(project(":util"))

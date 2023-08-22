@@ -35,6 +35,9 @@ dependencies {
     implementation("${Dependencies.coreKtx}:${Versions.coreKtx}")
     implementation("${Dependencies.appcompat}:${Versions.appcompat}")
 
+    //Coroutines
+    implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
+
     // Lib
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*aar"))))
 

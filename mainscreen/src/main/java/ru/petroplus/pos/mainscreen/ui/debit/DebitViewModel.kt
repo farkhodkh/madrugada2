@@ -1,7 +1,6 @@
 package ru.petroplus.pos.mainscreen.ui.debit
 
 import android.os.Bundle
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
@@ -11,11 +10,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectIndexed
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.petrolplus.pos.persitence.ServicesPersistence
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
-import ru.petrolplus.pos.persitence.entities.CommonSettingsDTO
 import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.entities.ServiceDTO
 import ru.petrolplus.pos.persitence.entities.TransactionDTO
@@ -23,7 +23,8 @@ import ru.petroplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.printerapi.DocumentData
 import ru.petroplus.pos.printerapi.PrinterApi
-import ru.petroplus.pos.printerapi.PrintableDocument
+import ru.petroplus.pos.printerapi.PrinterState
+import ru.petroplus.pos.printerapi.ResponseCode
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
 
@@ -40,16 +41,17 @@ class DebitViewModel(
     private val _viewState = mutableStateOf<DebitViewState>(DebitViewState.StartingState)
     val viewState: State<DebitViewState> = _viewState
 
+    private val _printerState = mutableStateOf(PrinterState.WAIT_DOCUMENT)
+    val printerState: State<PrinterState> = _printerState
+
+    private var _transactionId = mutableStateOf("")
+    var transactionId: State<String> = _transactionId
+
     init {
         viewModelScope.launch {
-            cardReaderRepository
-                .sdkRepository
-                .eventBus
-                .events
-                .collectIndexed { _, value ->
-                    _viewState.value = DebitViewState
-                        .CommandExecutionState(value)
-                }
+            cardReaderRepository.sdkRepository.eventBus.events.collectIndexed { _, value ->
+                _viewState.value = DebitViewState.CommandExecutionState(value)
+            }
         }
 
         if (BuildConfig.DEBUG) {
@@ -110,7 +112,7 @@ class DebitViewModel(
     //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
     //Изза бага с рассинхроном состояния экрана и отображения, при переключении вкладок так-же меняем стейты
     fun setTab(index: Int) {
-        when(index) {
+        when (index) {
             0 -> _viewState.value = DebitViewState.DebugState.APDU
             else -> _viewState.value = DebitViewState.DebugState.Debit()
         }
@@ -126,25 +128,58 @@ class DebitViewModel(
         cardReaderRepository.sdkRepository.sendCommand(command)
     }
 
-    fun printTestDebit(transactionId: String) {
+    //FIXME: Метод тестовый. Распечатывает чек по ввенному ID
+    fun printTransactionTest() {
+        val transactionId = _transactionId.value.trim()
+        if (!preprintCheck(transactionId)) return
+
+        toPreparePrinter()
+
         viewModelScope.launch {
-            val transaction = transactionsPersistence.getById(transactionId) ?: return@launch
-
-            val serviceId = transaction.serviceIdWhat
-            val service =
-                servicesPersistence.getAll().firstOrNull() { it.id == serviceId } ?: return@launch
-            Log.d("printTestDebit", "Service: ${service.id} | ${service.name} | ${service.unit} | ${service.price}")
-
             val settings = settingsPersistence.getCommonSettings()
-            Log.d("printTestDebit", "CommonSettings: INN ${settings.organizationInn} ${settings.organizationName}")
+            val transaction = transactionsPersistence.getById(transactionId)
 
-            val document = DocumentData(transaction, service, settings)
-            val doc = PrintableDocument.Debit(document)
-            printer.print(doc)
+            var service: ServiceDTO? = null
+            if (transaction?.responseCode == ResponseCode.SUCCESS) {
+                val serviceId = transaction.serviceIdWhat
+                service = servicesPersistence.getAll().firstOrNull { it.id == serviceId }
+            }
+
+            if (transaction == null) {
+                onFailPrint()
+            } else {
+                val document = DocumentData(transaction, service, settings)
+                printer.print(document).onEach { isSuccess ->
+                    when (isSuccess) {
+                        false -> onFailPrint()
+                        true -> {
+                            _transactionId.value = ""
+                            resetPrinter()
+                        }
+                    }
+                }.launchIn(viewModelScope)
+            }
         }
     }
 
+    private fun toPreparePrinter() {
+        _printerState.value = PrinterState.PRINTING
+    }
 
+    fun resetPrinter() {
+        _printerState.value = PrinterState.WAIT_DOCUMENT
+    }
+
+    private fun onFailPrint() {
+        _printerState.value = PrinterState.PRINT_FAILED
+    }
+
+    private fun preprintCheck(transactionId: String) =
+        (transactionId.isNotEmpty() && _printerState.value != PrinterState.PRINTING)
+
+    fun updateTransactionId(newId: String) {
+        _transactionId.value = newId
+    }
 
     companion object {
         fun provideFactory(
@@ -160,11 +195,17 @@ class DebitViewModel(
             object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(
-                    key: String,
-                    modelClass: Class<T>,
-                    handle: SavedStateHandle
+                    key: String, modelClass: Class<T>, handle: SavedStateHandle
                 ): T {
-                    return DebitViewModel(cardReaderRepository, printerService, gatewayServer, transactionsPersistence, settingsPersistence, servicesPersistence, handle) as T
+                    return DebitViewModel(
+                        cardReaderRepository,
+                        printerService,
+                        gatewayServer,
+                        transactionsPersistence,
+                        settingsPersistence,
+                        servicesPersistence,
+                        handle
+                    ) as T
                 }
             }
     }

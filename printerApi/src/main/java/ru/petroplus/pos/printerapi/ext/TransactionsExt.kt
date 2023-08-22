@@ -1,6 +1,8 @@
 package ru.petroplus.pos.printerapi.ext
 
+import ru.petroplus.pos.printerapi.ResponseCode
 import ru.petroplus.pos.util.ext.roundTo
+import java.lang.IllegalArgumentException
 
 fun Int.toCardType(): String = when (this) {
     1 -> "Петрол5"
@@ -17,9 +19,12 @@ fun Int.toOperationType(): String = when (this) {
     else -> "НЕИЗВЕСТНАЯ ОПЕРАЦИЯ"
 }
 
-fun Int.toResponseText(): String = when (this) {
-    0 -> "ОДОБРЕНО"
-    else -> "TODO"  // TODO: Добавить коды ответов
+fun Int.toResponseCode(): ResponseCode = when(this) {
+    ResponseCode.SUCCESS -> ResponseCode.Success
+    ResponseCode.TIMEOUT -> ResponseCode.Timeout
+    ResponseCode.CANCELED -> ResponseCode.Canceled
+    ResponseCode.SERVICE_PROHIBITED -> ResponseCode.ServiceProhibited
+    else -> throw IllegalArgumentException("Код ответа не обработан")
 }
 
 fun Long.toAmountString(): String {
