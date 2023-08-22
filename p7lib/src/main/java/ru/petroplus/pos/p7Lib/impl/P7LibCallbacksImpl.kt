@@ -9,6 +9,7 @@ import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petroplus.pos.p7LibApi.requests.ApduData
 import ru.petroplus.pos.p7LibApi.responces.ApduAnswer
 import ru.petroplus.pos.p7LibApi.responces.OperationResult
+import java.io.File
 
 class P7LibCallbacksImpl : IP7LibCallbacks {
     override fun log(message: String) {
@@ -52,5 +53,9 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
 
     override fun printSimpleDoc(data: PrintDataDto) {
         val f = 0
+    }
+
+    override fun getPingData(): File {
+        return File("")
     }
 }

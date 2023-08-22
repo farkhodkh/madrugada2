@@ -146,8 +146,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        ResourceHelper.setContext(applicationContext)
-
         try {
             ProviderInstaller.installIfNeeded(this)
         } catch (e: GooglePlayServicesRepairableException) {

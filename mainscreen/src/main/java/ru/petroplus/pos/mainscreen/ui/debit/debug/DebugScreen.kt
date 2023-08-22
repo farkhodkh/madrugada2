@@ -45,8 +45,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
-import ru.petrolplus.pos.persitence.entities.TransactionDTO
+import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
+import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petroplus.pos.blockingScreen.FailedPrintScreen
 import ru.petroplus.pos.blockingScreen.PrintProgressScreen
 import ru.petroplus.pos.mainscreen.ui.debit.DebitViewModel
@@ -297,11 +297,13 @@ private fun getTestData(
     require(file != null) { "отсутствует файл $fileName" }
     val text = file.readText()
 
-    val list = text.trim().removeSurrounding("{", "}").split(",").map { it.split(" : ") }.map {
-        it[0].replace("\"", "").replace("\\r\\n ", "").trim() to parseTyped(
-            it[1].trim().replace("\"", "")
-        )
-    }.map { if (additionalMapper != null) additionalMapper(it) else it }.toTypedArray()
+    val list = text.trim()
+        .removeSurrounding("{", "}")
+        .split(",")
+        .map { it.split(" : ") }
+        .map { it[0].replace("\"", "").replace("\\r\\n ", "").trim() to parseTyped(it[1].trim().replace("\"", "")) }
+        .map { if (additionalMapper != null) additionalMapper(it) else it }
+        .toTypedArray()
     return mutableStateListOf(*list)
 }
 

@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence
 
-import ru.petrolplus.pos.persitence.entities.IdentifiableDTO
+import ru.petrolplus.pos.persitence.dto.IdentifiableDTO
 import ru.petrolplus.pos.persitence.mappers.Mapper
 import ru.petrolplus.pos.room.dao.BaseDao
 import java.lang.IllegalArgumentException
