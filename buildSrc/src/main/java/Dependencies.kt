@@ -7,6 +7,7 @@ object Dependencies {
     const val namespaceMainScreen = "ru.petroplus.pos.mainscreen"
     const val namespaceP7Lib = "ru.petroplus.pos.p7Lib"
     const val namespaceNetwork = "ru.petroplus.pos.network"
+    const val namespaceNetworkWorker = "ru.petroplus.pos.networkworker"
     const val namespaceNetworkApi = "ru.petroplus.pos.networkApi"
     const val namespaceP7LibApi = "ru.petroplus.pos.p7LibApi"
     const val namespaceEvotorSdk = "ru.petroplus.pos.evotorsdk"
@@ -16,6 +17,7 @@ object Dependencies {
 
     const val androidApplication = "com.android.application"
     const val kotlinAndroid = "android"
+    const val workKtx = "androidx.work:work-runtime-ktx"
     const val testInstrumentationRunner = "testInstrumentationRunner"
     const val coreKtx = "androidx.core:core-ktx"
     const val appcompat = "androidx.appcompat:appcompat"
@@ -30,6 +32,7 @@ object Dependencies {
     const val daggerCompiler = "com.google.dagger:dagger-compiler"
     const val androidxNavigation = "androidx.navigation"
     const val kotlinxCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android"
+    const val kotlinxCoroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core"
 
     const val activityCompose = "androidx.activity:activity-compose"
     const val composeFoundation = "androidx.compose.foundation:foundation"
@@ -65,6 +68,7 @@ object Versions {
     const val versionCode = 1
     const val kotlinCompilerExtensionVersion = "1.3.1"
     const val versionName = "1.0"
+    const val workKtx = "2.8.1"
     const val androidApplication = "7.3.1"
     const val androidAnnotation = "1.2.0"
     const val kotlinAndroid = "1.7.10"
