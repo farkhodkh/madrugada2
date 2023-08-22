@@ -8,12 +8,13 @@ import android.os.IBinder
 import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiCallbackInterface
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiInterface
 import ru.petroplus.pos.evotorsdk.util.HexUtil
 import ru.petroplus.pos.sdkapi.ISDKRepository
-import ru.petroplus.pos.sdkapi.ReaderEventBus
 import ru.petroplus.pos.util.ResourceHelper
 import ru.petroplus.pos.util.ext.getNextCommandNumber
 import java.math.BigInteger
@@ -22,10 +23,8 @@ import java.math.BigInteger
  * Репозиторий для работы с SDK терминалов от поставщика "Эвотор"
  */
 class EvotorSDKRepository(context: Context) : ISDKRepository {
-    /**
-     * TODO - Нужно переписать под Flow
-     */
-    override var eventBus: ReaderEventBus = ReaderEventBus()
+    private val _latestCommands: MutableSharedFlow<String> = MutableSharedFlow(10)
+    override val latestCommands: Flow<String> = _latestCommands
 
     private val scope = CoroutineScope(Dispatchers.IO)
     private var requestInterface: ExternalLowLevelApiInterface? = null
@@ -105,8 +104,8 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
         parseReceivedData(receivedData.map { HexUtil.toHexString(it) })
     }
 
-    private suspend fun onReceivedData(receivedData: String) {
-        eventBus.postEvent(receivedData)
+    private fun onReceivedData(receivedData: String) {
+        _latestCommands.tryEmit(receivedData)
     }
 
     /**
@@ -119,7 +118,7 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
      */
     private fun parseReceivedData(receiveDataList: List<String>) {
         scope.launch {
-            if (receiveDataList.getOrNull(4) == "0A" && receiveDataList.getOrNull(5) == "00" ) {
+            if (receiveDataList.getOrNull(4) == "0A" && receiveDataList.getOrNull(5) == "00") {
                 onReceivedData("Терминал инициализирован, можно работать")
             } else {
                 onReceivedData("$receiveDataList")
@@ -135,20 +134,20 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
         }
 
         override fun onServiceDisconnected(className: ComponentName) {
-            Log.e("TAG","Service has unexpectedly disconnected")
             requestInterface = null
         }
-    }
 
-    /**
-     * 1) При запуске приложения вызывать команду 00 (пакет будет выглядеть так: 00)
-     * 2) В процессе работы проверять результат работы команды 25, и если код ошибки = 08,
-     * то делать вывод, что произошла рассинхронизация драйвера и модуля эквайринга и делать повтор 00.
-     * Если вы в дальнейшем захотите работать с онлайн пин, то к команде 00 добавите команду 0A с
-     * установкой необходимых ключей.
-     * То есть, в этой схеме инициализация/синхронизация вызывается по необходимости.
-     */
-    private fun initDevice() {
-        sendCommand("00")
+
+        /**
+         * 1) При запуске приложения вызывать команду 00 (пакет будет выглядеть так: 00)
+         * 2) В процессе работы проверять результат работы команды 25, и если код ошибки = 08,
+         * то делать вывод, что произошла рассинхронизация драйвера и модуля эквайринга и делать повтор 00.
+         * Если вы в дальнейшем захотите работать с онлайн пин, то к команде 00 добавите команду 0A с
+         * установкой необходимых ключей.
+         * То есть, в этой схеме инициализация/синхронизация вызывается по необходимости.
+         */
+        private fun initDevice() {
+            sendCommand("00")
+        }
     }
 }

@@ -7,6 +7,7 @@ import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petroplus.pos.p7LibApi.requests.ApduData
 import ru.petroplus.pos.p7LibApi.responces.ApduAnswer
 import ru.petroplus.pos.p7LibApi.responces.OperationResult
+import java.io.File
 
 /**
  * Interface для обслуживания "callback" ов библиотеки p7lib
@@ -80,4 +81,10 @@ interface IP7LibCallbacks {
      * @param data - Данные для заполнения чека для печати
      */
     fun printSimpleDoc(data: PrintDataDto)
+
+    /**
+     *  Метод возвращает данные для передачи в шлюз
+     *  @return OOB для передачи в шлюз
+     */
+    fun getPingData(): File
 }

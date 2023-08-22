@@ -1,6 +1,7 @@
 package ru.petroplus.pos.mainscreen.di
 
 import dagger.Subcomponent
+import ru.petrolplus.pos.persitence.ServicesPersistence
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petrolplus.pos.persitence.di.MappersModule
@@ -20,6 +21,7 @@ interface MainScreenComponent {
 
     val transactionsPersistence: TransactionsPersistence
     val settingsPersistence: SettingsPersistence
+    val servicesPersistence: ServicesPersistence
     @Subcomponent.Builder
     interface Builder {
         fun roomModule(module: RoomModule): Builder

@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence
 
-import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
+import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.exceptions.NoRecordsException
 import ru.petrolplus.pos.persitence.mappers.Mapper
 import ru.petrolplus.pos.room.dao.GUIDparamsDao

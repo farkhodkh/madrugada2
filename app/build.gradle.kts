@@ -63,6 +63,9 @@ dependencies {
     implementation("${Dependencies.annotation}:${Versions.annotation}")
     implementation("${Dependencies.androidMaterial}:${Versions.androidMaterial}")
 
+    //Android worker
+    implementation("${Dependencies.workKtx}:${Versions.workKtx}")
+    
     //Compose
     implementation("${Dependencies.composeConstraint}:${Versions.composeConstraint}")
     implementation("${Dependencies.composeUi}:${Versions.compose}")
@@ -113,4 +116,5 @@ dependencies {
     implementation(project(":persistence"))
     implementation(project(":network"))
     implementation(project(":networkapi"))
+    implementation(project(":network-worker"))
 }

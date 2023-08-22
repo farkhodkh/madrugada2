@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence
 
-import ru.petrolplus.pos.persitence.entities.CommonSettingsDTO
+import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
 import ru.petrolplus.pos.persitence.exceptions.NoRecordsException
 import ru.petrolplus.pos.persitence.mappers.Mapper
 import ru.petrolplus.pos.room.dao.CommonSettingsDao

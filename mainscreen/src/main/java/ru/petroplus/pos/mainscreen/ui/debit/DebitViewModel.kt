@@ -9,13 +9,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectIndexed
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
-import ru.petrolplus.pos.persitence.entities.GUIDParamsDTO
-import ru.petrolplus.pos.persitence.entities.TransactionDTO
+import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
+import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petroplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
@@ -35,12 +36,12 @@ class DebitViewModel(
         viewModelScope.launch {
             cardReaderRepository
                 .sdkRepository
-                .eventBus
-                .events
-                .collectIndexed { _, value ->
+                .latestCommands
+                .onEach { value ->
                     _viewState.value = DebitViewState
                         .CommandExecutionState(value)
                 }
+                .launchIn(viewModelScope)
         }
 
         if (BuildConfig.DEBUG) {

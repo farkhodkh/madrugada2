@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.persitence.mappers
 
-import ru.petrolplus.pos.persitence.entities.TransactionDTO
+import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petrolplus.pos.room.entities.TransactionDB
 
 class TransactionsMapper : Mapper<TransactionDTO, TransactionDB> {

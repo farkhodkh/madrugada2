@@ -1,4 +1,4 @@
-package ru.petrolplus.pos.persitence.entities
+package ru.petrolplus.pos.persitence.dto
 
 /**
  * Содержит информацию о последнем номере онлайн-запроса и о параметрах, необходимых для генерации

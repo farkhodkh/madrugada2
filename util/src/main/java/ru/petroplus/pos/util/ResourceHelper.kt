@@ -1,6 +1,7 @@
 package ru.petroplus.pos.util
 
 import android.content.Context
+import com.google.gson.Gson
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -33,6 +34,9 @@ object ResourceHelper {
             val inputStream = it.assets.open(fileName)
             return@let writeBytesToFile(inputStream)
         }
+
+
+    fun <T>parseJson(json: String, clazz: Class<T>): T = Gson().fromJson(json, clazz)
 
     /**
      * Метод для чтения содержимого файла из assets

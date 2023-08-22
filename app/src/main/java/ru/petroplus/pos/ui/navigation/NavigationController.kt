@@ -13,7 +13,8 @@ import ru.petroplus.pos.mainscreen.ui.configuration.ConfigurationCheckScreen
 import ru.petroplus.pos.mainscreen.ui.debit.DebitScreen
 import ru.petroplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petroplus.pos.navigation.Screens
-import ru.petroplus.pos.navigation.SettingsScreen
+import ru.petroplus.pos.mainscreen.ui.settings.SettingsScreen
+import ru.petroplus.pos.mainscreen.ui.settings.SettingsViewModel
 import ru.petroplus.pos.ui.main.MainActivity
 import ru.petroplus.pos.ui.views.RefundScreen
 
@@ -42,9 +43,14 @@ fun NavigationController(navController: NavHostController) {
         }
 
         composable(Screens.SettingsScreen.route) {
-            SettingsScreen(onClickListener = { screen ->
+            SettingsScreen(viewModel(
+                factory = SettingsViewModel.provideFactory(
+                    (LocalContext.current as MainActivity).mainScreenSubcomponent.servicesPersistence,
+                    owner = LocalSavedStateRegistryOwner.current
+                )
+            )) { screen ->
                 navController.navigate(screen)
-            })
+            }
         }
 
         composable(Screens.RefundScreen.route) {
