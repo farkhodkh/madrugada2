@@ -19,6 +19,7 @@ class ReceiptMapper : ProjectionMapper<ReceiptProjection, ReceiptDTO> {
         amount = input.transactionDB.amount,
         sum = input.transactionDB.sum,
         price = input.transactionDB.price,
-        responseCode = input.transactionDB.responseCode
+        responseCode = input.transactionDB.responseCode,
+        operatorNumber = input.transactionDB.operatorNumber
     )
 }

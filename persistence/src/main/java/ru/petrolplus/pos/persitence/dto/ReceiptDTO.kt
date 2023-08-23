@@ -37,5 +37,6 @@ data class ReceiptDTO(
     val amount: Long,
     val price: Long,
     val sum: Long,
-    val responseCode: Int
+    val responseCode: Int,
+    val operatorNumber: String
 )
