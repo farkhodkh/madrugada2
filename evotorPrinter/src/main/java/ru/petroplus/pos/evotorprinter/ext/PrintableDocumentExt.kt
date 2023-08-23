@@ -23,7 +23,12 @@ import java.util.Calendar
 
 fun ReceiptDTO.toPrinterDoc(paperWidth: Int): PrinterDocument =
     when (val responseCode = this.responseCode.toResponseCode()) {
-        ResponseCode.Success -> generateSuccessfulTransactionDocument(this, responseCode, paperWidth)
+        ResponseCode.Success -> generateSuccessfulTransactionDocument(
+            this,
+            responseCode,
+            paperWidth
+        )
+
         is ResponseCode.Error -> generateFailedTransactionDocument(this, responseCode, paperWidth)
     }
 
@@ -43,7 +48,7 @@ fun generateFailedTransactionDocument(
                 divider,
                 text("$DENIAL_CODE: ${responseCode.code}"),
                 divider,
-                *operatorData("<operatorNumber>", paperWidth),
+                *operatorData(operatorNumber, paperWidth),
             )
         }
     }
@@ -70,7 +75,7 @@ fun generateSuccessfulTransactionDocument(
                 centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_I),
                 centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_II),
                 divider,
-                *operatorData("<operatorNumber>", paperWidth),
+                *operatorData(operatorNumber, paperWidth),
                 divider,
                 centredText(FOOTER_TEXT),
             )
@@ -85,9 +90,9 @@ fun receiptData(title: String, receiptNumber: Long, printerWidth: Int) = arrayOf
     ),
 )
 
-fun orgData(orgName: String, posName: String, INN: String): Array<IPrintable> = arrayOf(
+fun orgData(orgName: String, posName: String, inn: String): Array<IPrintable> = arrayOf(
     centredText(orgName),
-    centredText("${IntroductoryConstruction.INN} $INN"),
+    centredText("${IntroductoryConstruction.INN} $inn"),
     centredText(posName),
 )
 
@@ -104,11 +109,27 @@ fun cardData(cardType: Int, cardNumber: String): Array<IPrintable> = arrayOf(
 fun terminalData(terminalId: Int, terminalDate: Calendar, printerWidth: Int): Array<IPrintable> =
     arrayOf(
         textJustify(terminalDate.time.toTextDate().split(" ").toTypedArray(), printerWidth),
-        textJustify(arrayOf(IntroductoryConstruction.POS_NUMBER_EN, terminalId.leadingZeros(TERMINAL_NUMBER_MASK_SIZE)), printerWidth),
-        textJustify(arrayOf(IntroductoryConstruction.POS_NUMBER_RU, terminalId.leadingZeros(TERMINAL_NUMBER_MASK_SIZE)), printerWidth),
+        textJustify(
+            arrayOf(
+                IntroductoryConstruction.POS_NUMBER_EN,
+                terminalId.leadingZeros(TERMINAL_NUMBER_MASK_SIZE)
+            ), printerWidth
+        ),
+        textJustify(
+            arrayOf(
+                IntroductoryConstruction.POS_NUMBER_RU,
+                terminalId.leadingZeros(TERMINAL_NUMBER_MASK_SIZE)
+            ), printerWidth
+        ),
     )
 
-fun serviceTable(serviceName: String, serviceUnit: String, servicePrice: Long, sum: Long, amount: Long, paperWidth: Int
+fun serviceTable(
+    serviceName: String,
+    serviceUnit: String,
+    servicePrice: Long,
+    sum: Long,
+    amount: Long,
+    paperWidth: Int
 ): Array<IPrintable> {
     val sumStr = sum.toCurrencyString()
     val amountStr = amount.toAmountString()
