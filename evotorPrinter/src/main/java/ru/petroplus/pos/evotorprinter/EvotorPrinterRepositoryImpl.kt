@@ -4,16 +4,16 @@ import android.content.Context
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import ru.evotor.devices.commons.kkm.KKM
-import ru.petroplus.pos.printerapi.DocumentData
 import ru.petroplus.pos.printerapi.PrinterRepository
 import kotlinx.coroutines.flow.Flow
 import ru.evotor.devices.commons.kkm.KkmInfoRequest
+import ru.petrolplus.pos.persitence.dto.ReceiptDTO
 import ru.petroplus.pos.evotorprinter.ext.toPrinterDoc
 import ru.petroplus.pos.printerapi.BuildConfig
 import kotlin.random.Random
 
 class EvotorPrinterRepositoryImpl(private val applicationContext: Context) : PrinterRepository {
-    override suspend fun print(data: DocumentData): Flow<Boolean> {
+    override suspend fun print(data: ReceiptDTO): Flow<Boolean> {
         return flow {
             try {
                 val kkm = KKM()

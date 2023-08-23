@@ -11,18 +11,15 @@ import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import ru.petrolplus.pos.persitence.ServicesPersistence
+import ru.petrolplus.pos.persitence.ReceiptPersistence
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
-import ru.petrolplus.pos.persitence.dto.ServiceDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petroplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
-import ru.petroplus.pos.printerapi.DocumentData
 import ru.petroplus.pos.printerapi.PrinterRepository
 import ru.petroplus.pos.printerapi.PrinterState
-import ru.petroplus.pos.printerapi.ResponseCode
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
 
@@ -32,8 +29,8 @@ class DebitViewModel(
     private val gatewayServer: GatewayServerRepositoryApi,
     private val transactionsPersistence: TransactionsPersistence,
     private val settingsPersistence: SettingsPersistence,
-    private val servicesPersistence: ServicesPersistence,
-    private val savedStateHandle: SavedStateHandle
+    private val receiptPersistence: ReceiptPersistence,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _viewState = mutableStateOf<DebitViewState>(DebitViewState.StartingState)
@@ -131,37 +128,29 @@ class DebitViewModel(
         cardReaderRepository.sdkRepository.sendCommand(command)
     }
 
-    //FIXME: Метод тестовый. Распечатывает чек по ввенному ID
+    //FIXME: Метод тестовый. Распечатывает чек по введенному ID
     fun printTransactionTest() {
         val transactionId = _transactionId.value.trim()
         if (!preprintCheck(transactionId)) return
 
         toPreparePrinter()
 
-        viewModelScope.launch {
-            val settings = settingsPersistence.getCommonSettings()
-            val transaction = transactionsPersistence.getById(transactionId)
-
-            var service: ServiceDTO = ServiceDTO(0, "", "", 0)
-            if (transaction?.responseCode == ResponseCode.SUCCESS) {
-                val serviceId = transaction.serviceIdWhat
-                servicesPersistence.getAll().firstOrNull { it.id == serviceId }?.let { service = it }
-            }
-
-            if (transaction == null) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = receiptPersistence.getDebitReceipt(transactionId)
+            if (data == null) {
                 onFailPrint()
-            } else {
-                val document = DocumentData(transaction, service, settings)
-                printer.print(document).onEach { isSuccess ->
-                    when (isSuccess) {
-                        false -> onFailPrint()
-                        true -> {
-                            _transactionId.value = ""
-                            resetPrinter()
-                        }
-                    }
-                }.launchIn(viewModelScope)
+                return@launch
             }
+
+            printer.print(data).onEach { isSuccess ->
+                when (isSuccess) {
+                    false -> onFailPrint()
+                    true -> {
+                        _transactionId.value = ""
+                        resetPrinter()
+                    }
+                }
+            }.launchIn(viewModelScope)
         }
     }
 
@@ -187,12 +176,12 @@ class DebitViewModel(
     companion object {
         fun provideFactory(
             cardReaderRepository: CardReaderRepository,
-            printerService: PrinterRepository,
+            printerRepository: PrinterRepository,
             gatewayServer: GatewayServerRepositoryApi,
             transactionsPersistence: TransactionsPersistence,
             settingsPersistence: SettingsPersistence,
             owner: SavedStateRegistryOwner,
-            servicesPersistence: ServicesPersistence,
+            receiptPersistence: ReceiptPersistence,
             defaultArgs: Bundle? = null,
         ): AbstractSavedStateViewModelFactory =
             object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
@@ -202,11 +191,11 @@ class DebitViewModel(
                 ): T {
                     return DebitViewModel(
                         cardReaderRepository,
-                        printerService,
+                        printerRepository,
                         gatewayServer,
                         transactionsPersistence,
                         settingsPersistence,
-                        servicesPersistence,
+                        receiptPersistence,
                         handle
                     ) as T
                 }

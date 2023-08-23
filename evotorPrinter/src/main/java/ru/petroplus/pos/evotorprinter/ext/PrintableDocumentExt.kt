@@ -5,9 +5,7 @@ import ru.evotor.devices.commons.printer.printable.IPrintable
 import ru.evotor.devices.commons.printer.printable.PrintableText
 import ru.evotor.devices.commons.utils.Format
 import ru.evotor.devices.commons.utils.PrintableDocumentItem
-import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
-import ru.petrolplus.pos.persitence.dto.ServiceDTO
-import ru.petroplus.pos.printerapi.DocumentData
+import ru.petrolplus.pos.persitence.dto.ReceiptDTO
 import ru.petroplus.pos.printerapi.IntroductoryConstruction
 import ru.petroplus.pos.printerapi.ReceiptFormatting.RECEIPT_MASK_SIZE
 import ru.petroplus.pos.printerapi.ReceiptFormatting.TERMINAL_NUMBER_MASK_SIZE
@@ -23,18 +21,16 @@ import ru.petroplus.pos.util.ext.lengthOfSymbols
 import ru.petroplus.pos.util.ext.toTextDate
 import java.util.Calendar
 
-fun DocumentData.toPrinterDoc(paperWidth: Int): PrinterDocument =
-    when (val responseCode = this.transaction.responseCode.toResponseCode()) {
-        ResponseCode.Success -> generateSuccessfulTransactionDocument(
-            this, responseCode, paperWidth
-        )
+fun ReceiptDTO.toPrinterDoc(paperWidth: Int): PrinterDocument =
+    when (val responseCode = this.responseCode.toResponseCode()) {
+        ResponseCode.Success -> generateSuccessfulTransactionDocument(this, responseCode, paperWidth)
         is ResponseCode.Error -> generateFailedTransactionDocument(this, responseCode, paperWidth)
     }
 
 fun generateFailedTransactionDocument(
-    data: DocumentData, responseCode: ResponseCode, paperWidth: Int
+    data: ReceiptDTO, responseCode: ResponseCode, paperWidth: Int
 ): PrinterDocument {
-    return with(data.transaction) {
+    return with(data) {
         with(IntroductoryConstruction) {
             PrinterDocument(
                 *receiptData(RECEIPT_NUMBER_DENIAL, receiptNumber, paperWidth),
@@ -47,20 +43,20 @@ fun generateFailedTransactionDocument(
                 divider,
                 text("$DENIAL_CODE: ${responseCode.code}"),
                 divider,
-                *operatorData(operatorNumber, paperWidth),
+                *operatorData("<operatorNumber>", paperWidth),
             )
         }
     }
 }
 
 fun generateSuccessfulTransactionDocument(
-    data: DocumentData, responseCode: ResponseCode, paperWidth: Int
+    data: ReceiptDTO, responseCode: ResponseCode, paperWidth: Int
 ): PrinterDocument {
-    return with(data.transaction) {
+    return with(data) {
         with(IntroductoryConstruction) {
             PrinterDocument(
                 *receiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
-                *orgData(data.commonSettings),
+                *orgData(organizationName, posName, organizationInn),
                 divider,
                 *terminalData(terminalId, terminalDate, paperWidth),
                 divider,
@@ -68,13 +64,13 @@ fun generateSuccessfulTransactionDocument(
                 divider,
                 centredText(operationType.toOperationType()),
                 divider,
-                *serviceTable(data.service, sum, amount, paperWidth),
+                *serviceTable(serviceName, serviceUnit, price, sum, amount, paperWidth),
                 divider,
                 centredText(responseCode.description),
                 centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_I),
                 centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_II),
                 divider,
-                *operatorData(operatorNumber, paperWidth),
+                *operatorData("<operatorNumber>", paperWidth),
                 divider,
                 centredText(FOOTER_TEXT),
             )
@@ -89,10 +85,10 @@ fun receiptData(title: String, receiptNumber: Long, printerWidth: Int) = arrayOf
     ),
 )
 
-fun orgData(settings: CommonSettingsDTO): Array<IPrintable> = arrayOf(
-    centredText(settings.organizationName),
-    centredText("${IntroductoryConstruction.INN} ${settings.organizationName}"),
-    centredText("<POS_NAME>"),
+fun orgData(orgName: String, posName: String, INN: String): Array<IPrintable> = arrayOf(
+    centredText(orgName),
+    centredText("${IntroductoryConstruction.INN} $INN"),
+    centredText(posName),
 )
 
 
@@ -112,12 +108,11 @@ fun terminalData(terminalId: Int, terminalDate: Calendar, printerWidth: Int): Ar
         textJustify(arrayOf(IntroductoryConstruction.POS_NUMBER_RU, terminalId.leadingZeros(TERMINAL_NUMBER_MASK_SIZE)), printerWidth),
     )
 
-fun serviceTable(
-    service: ServiceDTO, sum: Long, amount: Long, paperWidth: Int
+fun serviceTable(serviceName: String, serviceUnit: String, servicePrice: Long, sum: Long, amount: Long, paperWidth: Int
 ): Array<IPrintable> {
     val sumStr = sum.toCurrencyString()
     val amountStr = amount.toAmountString()
-    val priceStr = service.price.toCurrencyString()
+    val priceStr = servicePrice.toCurrencyString()
 
     val spaceOccupied: Int = arrayOf(
         IntroductoryConstruction.SERVICE_SUM, IntroductoryConstruction.PRICE_UNIT, sumStr
@@ -128,10 +123,10 @@ fun serviceTable(
     val rightSpace = freeSpace / 2
 
     return arrayOf(
-        textJustify(arrayOf(IntroductoryConstruction.SERVICE, service.name), paperWidth),
+        textJustify(arrayOf(IntroductoryConstruction.SERVICE, serviceName), paperWidth),
         serviceLine(
             IntroductoryConstruction.SERVICE_AMOUNT,
-            service.unit,
+            serviceUnit,
             amountStr,
             rightSpace + (sumStr.length - amountStr.length),
             paperWidth
