@@ -12,7 +12,6 @@ import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.sdkapi.ISDKRepository
-import ru.petroplus.pos.ui.main.MainActivityViewModel
 
 @Module
 object AppModule {
@@ -23,12 +22,6 @@ object AppModule {
     fun providesP7LibCallbacks(): IP7LibCallbacks = P7LibCallbacksImpl()
 
     @[Provides AppScope]
-    fun providesMainActivityViewModel(
-        repository: IP7LibRepository,
-        callBacks: IP7LibCallbacks
-    ): MainActivityViewModel = MainActivityViewModel(repository, callBacks)
-
-    @[Provides AppScope]
     fun providesEvotorSDKRepository(context: Context): ISDKRepository = EvotorSDKRepository(context)
 
     @[Provides AppScope]
@@ -37,7 +30,6 @@ object AppModule {
             override val sdkRepository: ISDKRepository
                 get() = sdkRepository
         }
-
 
     @[Provides AppScope]
     fun providesAppDatabase(context: Context) = AppDatabase.getInstance(context)

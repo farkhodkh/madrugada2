@@ -5,8 +5,6 @@ import dagger.BindsInstance
 import dagger.Component
 import ru.petroplus.pos.App
 import ru.petroplus.pos.core.AppScope
-import ru.petroplus.pos.mainscreen.di.MainScreenComponent
-import ru.petroplus.pos.mainscreen.di.MainScreenComponentDependencies
 import ru.petroplus.pos.network.di.NetworkComponentDependencies
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.ui.main.MainActivity
@@ -35,8 +33,6 @@ interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependen
     }
 
     fun inject(application: App)
-
-    fun inject(activity: MainActivity)
 
     fun mainScreenComponentBuilder(): MainScreenComponent.Builder
 }

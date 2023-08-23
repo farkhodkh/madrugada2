@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import ru.petrolplus.pos.persitence.SettingsPersistence
+import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
 import ru.petroplus.pos.R
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
@@ -17,17 +19,16 @@ import ru.petroplus.pos.p7LibApi.dto.TransactionUUIDDto
 import ru.petroplus.pos.util.ConfigurationFileReader
 import ru.petroplus.pos.util.constants.Constants.CONFIG_FILE_NAME
 import ru.petroplus.pos.util.ext.toInitDataDto
-import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import kotlin.system.exitProcess
 
 class MainActivityViewModel(
     private val p7LibraryRepository: IP7LibRepository,
+    private val configurationFileReader: ConfigurationFileReader,
+    private val settingsPersistence: SettingsPersistence,
     private val callbacks: IP7LibCallbacks
 ) : ViewModel() {
-
-    private val configurationReaderUtil by lazy { ConfigurationFileReader() }
 
     private val _viewState: MutableStateFlow<MainScreenState> =
         MutableStateFlow(MainScreenState.StartingState)
@@ -41,24 +42,37 @@ class MainActivityViewModel(
         }
     }
 
-    fun readConfigurationFile(confFile: FileInputStream?) {
-        if (confFile == null) {
-            _viewState.value =
-                MainScreenState.NoIniFileError
+    fun setupConfiguration(configFileName: String) {
+
+        val properties = try {
+            configurationFileReader.readConfiguration(configFileName)
+        } catch (e: Exception) {
+            when(e) {
+                is ConfigurationFileReader.NoConfigurationFileException -> {
+                    _viewState.value = MainScreenState.NoIniFileError
+                }
+                is ConfigurationFileReader.FileParseException -> {
+                    _viewState.value = MainScreenState.CheckingSettingsError(errorMessageId = R.string.cache_dir_access_error)
+                }
+            }
             return
         }
 
-        try {
-            configurationReaderUtil
-                .readConfigurationFileContent(confFile)
-        } catch (ex: ConfigurationFileReader.ConfigurationFileReaderException) {
-            _viewState.value =
-                MainScreenState.CheckingSettingsError(errorMessageId = R.string.cache_dir_access_error)
-            return
+        val initDataDto = properties.toInitDataDto()
+
+        viewModelScope.launch {
+            settingsPersistence.setBaseSettings(
+                BaseSettingsDTO(
+                    acquirerId = initDataDto.acquirerId,
+                    terminalId = initDataDto.terminalId,
+                    hostIp = initDataDto.hostIp,
+                    hostPort = initDataDto.hostPort
+                )
+            )
         }
 
         val result = p7LibraryRepository.init(
-            configurationReaderUtil.properties.toInitDataDto(),
+            initDataDto,
             TransactionUUIDDto(),
             callbacks,
             "",
