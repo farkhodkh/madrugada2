@@ -5,14 +5,13 @@ import dagger.Module
 import dagger.Provides
 import ru.petrolplus.pos.room.database.AppDatabase
 import ru.petroplus.pos.core.AppScope
-import ru.petroplus.pos.evotorprinter.EvotorDocumentInflater
-import ru.petroplus.pos.evotorprinter.EvotorPrinterApiImpl
+import ru.petroplus.pos.evotorprinter.EvotorPrinterRepositoryImpl
 import ru.petroplus.pos.evotorsdk.EvotorSDKRepository
 import ru.petroplus.pos.p7Lib.impl.P7LibCallbacksImpl
 import ru.petroplus.pos.p7Lib.impl.P7LibRepositoryImpl
 import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petroplus.pos.p7LibApi.IP7LibRepository
-import ru.petroplus.pos.printerapi.PrinterApi
+import ru.petroplus.pos.printerapi.PrinterRepository
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.sdkapi.ISDKRepository
 import ru.petroplus.pos.ui.main.MainActivityViewModel
@@ -26,7 +25,7 @@ object AppModule {
     fun providesP7LibCallbacks(): IP7LibCallbacks = P7LibCallbacksImpl()
 
     @[Provides AppScope]
-    fun providePrinter(context: Context): PrinterApi = EvotorPrinterApiImpl(context, EvotorDocumentInflater())
+    fun providePrinter(context: Context): PrinterRepository = EvotorPrinterRepositoryImpl(context)
 
 
     @[Provides AppScope]

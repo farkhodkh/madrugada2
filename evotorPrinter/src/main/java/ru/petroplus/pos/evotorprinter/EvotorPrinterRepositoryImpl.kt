@@ -4,33 +4,26 @@ import android.content.Context
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import ru.evotor.devices.commons.kkm.KKM
-import ru.evotor.devices.commons.printer.PrinterDocument
 import ru.petroplus.pos.printerapi.DocumentData
-import ru.petroplus.pos.printerapi.DocumentInflater
-import ru.petroplus.pos.printerapi.PrintableDocument
-import ru.petroplus.pos.printerapi.PrinterApi
+import ru.petroplus.pos.printerapi.PrinterRepository
 import kotlinx.coroutines.flow.Flow
 import ru.evotor.devices.commons.kkm.KkmInfoRequest
+import ru.petroplus.pos.evotorprinter.ext.toPrinterDoc
 import ru.petroplus.pos.printerapi.BuildConfig
 import kotlin.random.Random
 
-class EvotorPrinterApiImpl(
-    private val applicationContext: Context,
-    private val inflater: DocumentInflater<PrinterDocument>
-) : PrinterApi {
-    override suspend fun print(document: DocumentData): Flow<Boolean> {
+class EvotorPrinterRepositoryImpl(private val applicationContext: Context) : PrinterRepository {
+    override suspend fun print(data: DocumentData): Flow<Boolean> {
         return flow {
             try {
                 val kkm = KKM()
                 kkm.connect(applicationContext)
 
-                val printerWidth = kkm.getKkmInfo(KkmInfoRequest()).printerWidthInChar
-
-                val doc = PrintableDocument.Debit(document)
-                val printerDocument = inflater.inflatePrinterDocument(doc, printerWidth)
+                val paperWidth = kkm.getKkmInfo(KkmInfoRequest()).printerWidthInChar
+                val printerDocument = data.toPrinterDoc(paperWidth)
 
                 // Симуляция ошибки во время печати
-                if (BuildConfig.DEBUG) {
+                if (BuildConfig.DEBUG && false) {
                     delay(300)
                     val isSuccessTry = Random.nextBoolean()
                     if (!isSuccessTry) {

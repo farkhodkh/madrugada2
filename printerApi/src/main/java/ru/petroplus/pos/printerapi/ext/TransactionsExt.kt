@@ -64,5 +64,5 @@ fun Long.toAmountString(): String {
 }
 
 fun Long.toCurrencyString(): String {
-    return (this / 100.0).roundTo(2)
+    return (this / 1000.0).roundTo(2)
 }

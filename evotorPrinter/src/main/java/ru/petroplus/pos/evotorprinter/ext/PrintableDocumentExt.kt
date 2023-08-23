@@ -5,8 +5,8 @@ import ru.evotor.devices.commons.printer.printable.IPrintable
 import ru.evotor.devices.commons.printer.printable.PrintableText
 import ru.evotor.devices.commons.utils.Format
 import ru.evotor.devices.commons.utils.PrintableDocumentItem
-import ru.petrolplus.pos.persitence.entities.CommonSettingsDTO
-import ru.petrolplus.pos.persitence.entities.ServiceDTO
+import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
+import ru.petrolplus.pos.persitence.dto.ServiceDTO
 import ru.petroplus.pos.printerapi.DocumentData
 import ru.petroplus.pos.printerapi.IntroductoryConstruction
 import ru.petroplus.pos.printerapi.ReceiptFormatting.RECEIPT_MASK_SIZE
@@ -23,22 +23,22 @@ import ru.petroplus.pos.util.ext.lengthOfSymbols
 import ru.petroplus.pos.util.ext.toTextDate
 import java.util.Calendar
 
-fun DocumentData.toPrinterDoc(printerWidth: Int): PrinterDocument =
+fun DocumentData.toPrinterDoc(paperWidth: Int): PrinterDocument =
     when (val responseCode = this.transaction.responseCode.toResponseCode()) {
         ResponseCode.Success -> generateSuccessfulTransactionDocument(
-            this, responseCode, printerWidth
+            this, responseCode, paperWidth
         )
-        is ResponseCode.Error -> generateFailedTransactionDocument(this, responseCode, printerWidth)
+        is ResponseCode.Error -> generateFailedTransactionDocument(this, responseCode, paperWidth)
     }
 
 fun generateFailedTransactionDocument(
-    data: DocumentData, responseCode: ResponseCode, printerWidth: Int
+    data: DocumentData, responseCode: ResponseCode, paperWidth: Int
 ): PrinterDocument {
     return with(data.transaction) {
         with(IntroductoryConstruction) {
             PrinterDocument(
-                *receiptData(RECEIPT_NUMBER_DENIAL, receiptNumber, printerWidth),
-                *terminalData(terminalId, terminalDate, printerWidth),
+                *receiptData(RECEIPT_NUMBER_DENIAL, receiptNumber, paperWidth),
+                *terminalData(terminalId, terminalDate, paperWidth),
                 *cardData(cardType, cardNumber),
                 divider,
                 centredText(responseCode.description),
@@ -47,34 +47,34 @@ fun generateFailedTransactionDocument(
                 divider,
                 text("$DENIAL_CODE: ${responseCode.code}"),
                 divider,
-                *operatorData(operatorNumber, printerWidth),
+                *operatorData(operatorNumber, paperWidth),
             )
         }
     }
 }
 
 fun generateSuccessfulTransactionDocument(
-    data: DocumentData, responseCode: ResponseCode, printerWidth: Int
+    data: DocumentData, responseCode: ResponseCode, paperWidth: Int
 ): PrinterDocument {
     return with(data.transaction) {
         with(IntroductoryConstruction) {
             PrinterDocument(
-                *receiptData(RECEIPT_NUMBER, receiptNumber, printerWidth),
+                *receiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
                 *orgData(data.commonSettings),
                 divider,
-                *terminalData(terminalId, terminalDate, printerWidth),
+                *terminalData(terminalId, terminalDate, paperWidth),
                 divider,
                 *cardData(cardType, cardNumber),
                 divider,
                 centredText(operationType.toOperationType()),
                 divider,
-                *serviceTable(data.service, sum, amount, printerWidth),
+                *serviceTable(data.service, sum, amount, paperWidth),
                 divider,
                 centredText(responseCode.description),
                 centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_I),
                 centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_II),
                 divider,
-                *operatorData(operatorNumber, printerWidth),
+                *operatorData(operatorNumber, paperWidth),
                 divider,
                 centredText(FOOTER_TEXT),
             )
@@ -113,7 +113,7 @@ fun terminalData(terminalId: Int, terminalDate: Calendar, printerWidth: Int): Ar
     )
 
 fun serviceTable(
-    service: ServiceDTO, sum: Long, amount: Long, printerWidth: Int
+    service: ServiceDTO, sum: Long, amount: Long, paperWidth: Int
 ): Array<IPrintable> {
     val sumStr = sum.toCurrencyString()
     val amountStr = amount.toAmountString()
@@ -124,31 +124,31 @@ fun serviceTable(
     ).lengthOfSymbols()
 
     // Кол-во "свободного" места при самой длинной строке
-    val freeSpace = printerWidth - spaceOccupied
+    val freeSpace = paperWidth - spaceOccupied
     val rightSpace = freeSpace / 2
 
     return arrayOf(
-        textJustify(arrayOf(IntroductoryConstruction.SERVICE, service.name), printerWidth),
+        textJustify(arrayOf(IntroductoryConstruction.SERVICE, service.name), paperWidth),
         serviceLine(
             IntroductoryConstruction.SERVICE_AMOUNT,
             service.unit,
             amountStr,
             rightSpace + (sumStr.length - amountStr.length),
-            printerWidth
+            paperWidth
         ),
         serviceLine(
             IntroductoryConstruction.SERVICE_PRICE,
             IntroductoryConstruction.PRICE_UNIT,
             priceStr,
             rightSpace + (sumStr.length - priceStr.length),
-            printerWidth
+            paperWidth
         ),
         serviceLine(
             IntroductoryConstruction.SERVICE_SUM,
             IntroductoryConstruction.PRICE_UNIT,
             sumStr,
             rightSpace,
-            printerWidth
+            paperWidth
         )
     )
 }
@@ -156,16 +156,19 @@ fun serviceTable(
 private val divider = PrintableDocumentItem("-", Format.DIVIDER)
 private fun text(text: String) = PrintableDocumentItem(text, Format.LEFT_WORD)
 private fun centredText(text: String) = PrintableDocumentItem(text, Format.CENTER)
-fun textJustify(data: Array<String>, printerWidth: Int): IPrintable {
+private fun textJustify(data: Array<String>, printerWidth: Int): IPrintable {
     return PrintableText(data.justify(printerWidth))
 }
 
 fun serviceLine(
-    title: String, unit: String, value: String, rightSpaceSize: Int, printerWidth: Int
+    title: String, unit: String, value: String, rightSpaceSize: Int, paperWidth: Int
 ): PrintableText {
+    val leftSpaceSize = paperWidth - title.length - unit.length - value.length - rightSpaceSize
     val leftSpace =
-        " ".repeat(printerWidth - title.length - unit.length - value.length - rightSpaceSize)
+        " ".repeat(leftSpaceSize)
+
     val rightSpace = " ".repeat(rightSpaceSize)
+
     val builder = StringBuilder()
     builder.append(title, leftSpace, unit, rightSpace, value)
     return PrintableText(builder.toString())

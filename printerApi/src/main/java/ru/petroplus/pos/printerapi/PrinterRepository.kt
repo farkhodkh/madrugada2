@@ -5,11 +5,11 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Репозиторий для работы с принтером
  */
-interface PrinterApi {
+interface PrinterRepository {
     /**
      * Метод для отправки команды на печать
-     * @param document тип документа для печати
+     * @param data данные о документе для печати
      */
-    suspend fun print(document: DocumentData): Flow<Boolean>
+    suspend fun print(data: DocumentData): Flow<Boolean>
 
 }

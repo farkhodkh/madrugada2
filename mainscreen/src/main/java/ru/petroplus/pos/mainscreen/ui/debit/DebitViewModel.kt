@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.petrolplus.pos.persitence.ServicesPersistence
@@ -21,7 +20,7 @@ import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petroplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.printerapi.DocumentData
-import ru.petroplus.pos.printerapi.PrinterApi
+import ru.petroplus.pos.printerapi.PrinterRepository
 import ru.petroplus.pos.printerapi.PrinterState
 import ru.petroplus.pos.printerapi.ResponseCode
 import ru.petroplus.pos.sdkapi.CardReaderRepository
@@ -29,7 +28,7 @@ import ru.petroplus.pos.ui.BuildConfig
 
 class DebitViewModel(
     private val cardReaderRepository: CardReaderRepository,
-    private val printer: PrinterApi,
+    private val printer: PrinterRepository,
     private val gatewayServer: GatewayServerRepositoryApi,
     private val transactionsPersistence: TransactionsPersistence,
     private val settingsPersistence: SettingsPersistence,
@@ -188,7 +187,7 @@ class DebitViewModel(
     companion object {
         fun provideFactory(
             cardReaderRepository: CardReaderRepository,
-            printerService: PrinterApi,
+            printerService: PrinterRepository,
             gatewayServer: GatewayServerRepositoryApi,
             transactionsPersistence: TransactionsPersistence,
             settingsPersistence: SettingsPersistence,
