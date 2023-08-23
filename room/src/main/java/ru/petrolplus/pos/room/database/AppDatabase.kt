@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import ru.petrolplus.pos.room.BuildConfig
 import ru.petrolplus.pos.room.dao.BaseSettingsDao
 import ru.petrolplus.pos.room.dao.CommonSettingsDao
 import ru.petrolplus.pos.room.dao.GUIDParamsDao
@@ -46,7 +47,13 @@ abstract class AppDatabase : RoomDatabase() {
 
         private const val DATABASE_NAME = "pos-database"
         fun getInstance(context: Context): AppDatabase {
-           return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME).build()
+            return if (BuildConfig.DEBUG) {
+                Room.databaseBuilder(context, AppDatabase::class.java, "pos-test-database")
+                    .createFromAsset("prepopulated-database.db")
+                    .build()
+            } else {
+                Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME).build()
+            }
         }
     }
 }
