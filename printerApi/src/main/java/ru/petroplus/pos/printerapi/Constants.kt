@@ -1,70 +1,76 @@
 package ru.petroplus.pos.printerapi
 
+import ru.petroplus.pos.util.ResourceHelper
+
 
 object ReceiptFormatting {
     const val RECEIPT_MASK_SIZE = 10
     const val TERMINAL_NUMBER_MASK_SIZE = 5
 }
-object IntroductoryConstruction {
-    const val SERVICE_SUM = "Итого"
-    const val SERVICE_PRICE = "Цена за"
-    const val SERVICE_AMOUNT = "Кол-во"
-    const val SERVICE = "Услуга"
-    const val RECEIPT_NUMBER = "Чек No."
-    const val RECEIPT_NUMBER_DENIAL = "ЧЕК ОТКАЗА"
-    const val POS_NUMBER_EN = "POS No."
-    const val POS_NUMBER_RU = "Терминал No."
-    const val CART = "Карта"
-    const val INN = "ИНН"
-    const val TRANSACTION_CONFIRMED_BY_PIN_PART_I = "Операция подтверждена"
-    const val TRANSACTION_CONFIRMED_BY_PIN_PART_II = "вводом ПИН кода"
-    const val OPERATOR_NUMBER = "Оператор No."
-    const val FOOTER_TEXT = "Добро пожаловать"
-    const val PRICE_UNIT = "Pуб"
-    const val DENIAL = "ОТКАЗ"
-    const val DENIAL_CODE = "Код отказа"
-}
-sealed class ResponseCode(val code: Int, val description: String) {
-    object Success: ResponseCode(SUCCESS, "ОДОБРЕНО")
 
-    sealed class Error(code: Int, description: String): ResponseCode(code, description) {
-        object Universal: Error(UNIVERSAL_ERROR, "Универсальная ошибка")
-        object System: Error(SYSTEM_ERROR, "Системная ошибка")
-        object LibInit: Error(LIB_INT_ERROR, "Системная ошибка инициализации")
-        object Ini: Error(INI_FAIL, "Ошибка с ini-файлом")
-        object Call: Error(CALL_ERROR, "Некорректный вызов библиотеки извне")
-        object WrongCard: Error(WRONG_CARD, "Не Petrol 7")
-        object BadCard: Error(BAD_CARD, "Ошибка чтения/работы с картой")
-        object BadSam: Error(BAD_SAM, "Проблемы с SAM")
-        object PinFail: Error(PIN_FAIL, "Ошибка проверки PIN")
-        object WrongPin: Error(WRONG_PIN,"Hеверный PIN")
-        object WrongArgs: Error(WRONG_ARGS,"Неверный заказ")
-        object WrongService: Error(WRONG_SRV,"Неверная услуга")
-        object DebitFail: Error(DEBIT_FAIL,"Ошибка дебета")
-        object RefundFail: Error(REFUND_FAIL,"Ошибка возврата")
-        object FatalError: Error(FATAL_ERROR,"Ошибка обслуживания")
-        object NetError: Error(NET_ERROR,"Ошибка запроса АС")
-        object ASTimout: Error(AS_TIMEOUT,"Таймаут авторизации")
-        object ASLimits: Error(AS_LIMITS,"Нет онлайн лимитов")
-        object ASExtAuth: Error(AS_EXT_AUTH,"Требуется доп.авторизация")
-        object ASBlocked: Error(AS_BLOCKED,"Карта заблокирована")
-        object ASNoFunds: Error(AS_NO_FUNDS,"Недостаточно средств")
-        object ASNoLimits: Error(AS_NO_LIMITS,"Превышение лимита")
-        object ASPin: Error(AS_PIN_ERROR,"Неверный PIN")
-        object ASNoService: Error(AS_NO_SERVICE,"Сервис недоступен")
-        object ASNoTime: Error(AS_NO_TIME,"В текущее время не обслуживается")
-        object ASUnknown: Error(AS_UNKNOWN,"Карта неизвестна")
-        object ASError: Error(AS_ERROR,"Ошибка на АС")
-        object ASCommError: Error(AS_COMM_ERROR,"Ошибка на АС")
-        object ASBlExp: Error(AS_BL_EXP,"ЧС на АС устарел")
-        object ASCardExp: Error(AS_CARD_EXP,"Срок действия карты истек")
-        object ASNoEm: Error(AS_NO_EM,"Прием данного эмитента не разрешен")
-        object ASNoTerm: Error(AS_NO_TERM,"Неверный номер терминала")
-        object ASBl: Error(BL_ERROR,"Ошибка проверки ЧС")
-        object SrvError: Error(SRV_ERROR,"Нет услуги")
-        object LimitError: Error(LIM_ERROR,"Лимит исчерпан")
-        object AmountError: Error(AMOUNT_ERROR,"Недостаточно средств")
-        object GenAcError: Error(GEN_AC_ERROR,"Ошибка на карте")
+object IntroductoryConstruction {
+    val SERVICE_SUM = ResourceHelper.getStringResource(R.string.service_sum)
+    val SERVICE_PRICE = ResourceHelper.getStringResource(R.string.service_price)
+    val SERVICE_AMOUNT = ResourceHelper.getStringResource(R.string.service_amount)
+    val SERVICE = ResourceHelper.getStringResource(R.string.service)
+    val RECEIPT_NUMBER = ResourceHelper.getStringResource(R.string.service_number)
+    val RECEIPT_NUMBER_DENIAL = ResourceHelper.getStringResource(R.string.service_number_denial)
+    val POS_NUMBER_EN = ResourceHelper.getStringResource(R.string.pos_number_en)
+    val POS_NUMBER_RU = ResourceHelper.getStringResource(R.string.pos_number_ru)
+    val CARD = ResourceHelper.getStringResource(R.string.card)
+    val INN = ResourceHelper.getStringResource(R.string.inn)
+    val TRANSACTION_CONFIRMED_BY_PIN_PART_I =
+        ResourceHelper.getStringResource(R.string.transaction_confirmed_by_pin_part_I)
+    val TRANSACTION_CONFIRMED_BY_PIN_PART_II =
+        ResourceHelper.getStringResource(R.string.transaction_confirmed_by_pin_part_II)
+    val OPERATOR_NUMBER = ResourceHelper.getStringResource(R.string.operator_number)
+    val FOOTER_TEXT = ResourceHelper.getStringResource(R.string.footer_text)
+    val PRICE_UNIT = ResourceHelper.getStringResource(R.string.price_unit)
+    val DENIAL = ResourceHelper.getStringResource(R.string.denial)
+    val DENIAL_CODE = ResourceHelper.getStringResource(R.string.denial_code)
+}
+
+sealed class ResponseCode(val code: Int, val description: String) {
+    object Success : ResponseCode(SUCCESS, "ОДОБРЕНО")
+
+    sealed class Error(code: Int, description: String) : ResponseCode(code, description) {
+        object Universal : Error(UNIVERSAL_ERROR, "Универсальная ошибка")
+        object System : Error(SYSTEM_ERROR, "Системная ошибка")
+        object LibInit : Error(LIB_INT_ERROR, "Системная ошибка инициализации")
+        object Ini : Error(INI_FAIL, "Ошибка с ini-файлом")
+        object Call : Error(CALL_ERROR, "Некорректный вызов библиотеки извне")
+        object WrongCard : Error(WRONG_CARD, "Не Petrol 7")
+        object BadCard : Error(BAD_CARD, "Ошибка чтения/работы с картой")
+        object BadSam : Error(BAD_SAM, "Проблемы с SAM")
+        object PinFail : Error(PIN_FAIL, "Ошибка проверки PIN")
+        object WrongPin : Error(WRONG_PIN, "Hеверный PIN")
+        object WrongArgs : Error(WRONG_ARGS, "Неверный заказ")
+        object WrongService : Error(WRONG_SRV, "Неверная услуга")
+        object DebitFail : Error(DEBIT_FAIL, "Ошибка дебета")
+        object RefundFail : Error(REFUND_FAIL, "Ошибка возврата")
+        object FatalError : Error(FATAL_ERROR, "Ошибка обслуживания")
+        object NetError : Error(NET_ERROR, "Ошибка запроса АС")
+        object ASTimout : Error(AS_TIMEOUT, "Таймаут авторизации")
+        object ASLimits : Error(AS_LIMITS, "Нет онлайн лимитов")
+        object ASExtAuth : Error(AS_EXT_AUTH, "Требуется доп.авторизация")
+        object ASBlocked : Error(AS_BLOCKED, "Карта заблокирована")
+        object ASNoFunds : Error(AS_NO_FUNDS, "Недостаточно средств")
+        object ASNoLimits : Error(AS_NO_LIMITS, "Превышение лимита")
+        object ASPin : Error(AS_PIN_ERROR, "Неверный PIN")
+        object ASNoService : Error(AS_NO_SERVICE, "Сервис недоступен")
+        object ASNoTime : Error(AS_NO_TIME, "В текущее время не обслуживается")
+        object ASUnknown : Error(AS_UNKNOWN, "Карта неизвестна")
+        object ASError : Error(AS_ERROR, "Ошибка на АС")
+        object ASCommError : Error(AS_COMM_ERROR, "Ошибка на АС")
+        object ASBlExp : Error(AS_BL_EXP, "ЧС на АС устарел")
+        object ASCardExp : Error(AS_CARD_EXP, "Срок действия карты истек")
+        object ASNoEm : Error(AS_NO_EM, "Прием данного эмитента не разрешен")
+        object ASNoTerm : Error(AS_NO_TERM, "Неверный номер терминала")
+        object ASBl : Error(BL_ERROR, "Ошибка проверки ЧС")
+        object SrvError : Error(SRV_ERROR, "Нет услуги")
+        object LimitError : Error(LIM_ERROR, "Лимит исчерпан")
+        object AmountError : Error(AMOUNT_ERROR, "Недостаточно средств")
+        object GenAcError : Error(GEN_AC_ERROR, "Ошибка на карте")
     }
 
     companion object {

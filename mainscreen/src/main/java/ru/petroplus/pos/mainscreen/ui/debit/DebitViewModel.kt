@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.petrolplus.pos.persitence.ReceiptPersistence
@@ -22,6 +23,7 @@ import ru.petroplus.pos.printerapi.PrinterRepository
 import ru.petroplus.pos.printerapi.PrinterState
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
+import kotlin.random.Random
 
 class DebitViewModel(
     private val cardReaderRepository: CardReaderRepository,
@@ -133,7 +135,7 @@ class DebitViewModel(
         val transactionId = _transactionId.value.trim()
         if (!preprintCheck(transactionId)) return
 
-        toPreparePrinter()
+        _printerState.value = PrinterState.PRINTING
 
         viewModelScope.launch(Dispatchers.IO) {
             val data = receiptPersistence.getDebitReceipt(transactionId)
@@ -142,20 +144,24 @@ class DebitViewModel(
                 return@launch
             }
 
-            printer.print(data).onEach { isSuccess ->
-                when (isSuccess) {
-                    false -> onFailPrint()
-                    true -> {
-                        _transactionId.value = ""
-                        resetPrinter()
-                    }
+            // Симуляция ошибки во время печати
+            if (ru.petroplus.pos.printerapi.BuildConfig.DEBUG) {
+                delay(300)
+                val isSuccessTry = Random.nextBoolean()
+                if (isSuccessTry) {
+                    onFailPrint()
+                    return@launch
                 }
-            }.launchIn(viewModelScope)
-        }
-    }
+            }
 
-    private fun toPreparePrinter() {
-        _printerState.value = PrinterState.PRINTING
+            when (printer.print(data)) {
+                null -> {
+                    _transactionId.value = ""
+                    resetPrinter()
+                }
+                else -> onFailPrint()
+            }
+        }
     }
 
     fun resetPrinter() {

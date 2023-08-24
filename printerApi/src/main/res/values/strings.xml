@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--  Типы карт  -->
+    <string name="petrol5">Петрол5</string>
+    <string name="petrol7">Петрол7</string>
+    <string name="unknown_card_type">Неизвестно</string>
+
+    <!--  Типы операция  -->
+    <string name="debit">ДЕБЕТ</string>
+    <string name="wallet_credit">КРЕДИТ КОШЕЛЬКА</string>
+    <string name="online_deposit">ОНЛАЙН ПОПОЛНЕНИЕ СЧЕТА</string>
+    <string name="return_to_card">ВОЗВРАТ НА КАРТУ</string>
+    <string name="return_to_account">ВОЗВРАТ НА СЧЕТ</string>
+    <string name="unknown_operation">НЕИЗВЕСТНАЯ ОПЕРАЦИЯ</string>
+
+    <!--  Вводные конструкции  -->
+    <string name="service_sum">Итого</string>
+    <string name="service_price">Цена за</string>
+    <string name="service_amount">Кол-во</string>
+    <string name="service">Услуга</string>
+    <string name="service_number">Чек No.</string>
+    <string name="service_number_denial">ЧЕК ОТКАЗА</string>
+    <string name="pos_number_en">POS No.</string>
+    <string name="pos_number_ru">Терминал No.</string>
+    <string name="card">Карта</string>
+    <string name="inn">ИНН</string>
+    <string name="transaction_confirmed_by_pin_part_I">Операция подтверждена</string>
+    <string name="transaction_confirmed_by_pin_part_II">вводом ПИН кода</string>
+    <string name="operator_number">Оператор No.</string>
+    <string name="footer_text">Добро пожаловать</string>
+    <string name="price_unit">Pуб</string>
+    <string name="denial">ОТКАЗ</string>
+    <string name="denial_code">Код отказа</string>
+</resources>

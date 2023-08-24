@@ -1,21 +1,23 @@
 package ru.petroplus.pos.printerapi.ext
 
+import ru.petroplus.pos.printerapi.R
 import ru.petroplus.pos.printerapi.ResponseCode
+import ru.petroplus.pos.util.ResourceHelper
 import ru.petroplus.pos.util.ext.roundTo
 
 fun Int.toCardType(): String = when (this) {
-    1 -> "Петрол5"
-    2 -> "Петрол7"
-    else -> "Неизвестно"
+    1 -> ResourceHelper.getStringResource(R.string.petrol5)
+    2 -> ResourceHelper.getStringResource(R.string.petrol7)
+    else -> ResourceHelper.getStringResource(R.string.unknown_card_type)
 }
 
 fun Int.toOperationType(): String = when (this) {
-    1 -> "ДЕБЕТ"
-    2 -> "КРЕДИТ КОШЕЛЬКА"
-    3 -> "ОНЛАЙН ПОПОЛНЕНИЕ СЧЕТА"
-    4 -> "ВОЗВРАТ НА КАРТУ"
-    5 -> "ВОЗВРАТ НА СЧЕТ"
-    else -> "НЕИЗВЕСТНАЯ ОПЕРАЦИЯ"
+    1 -> ResourceHelper.getStringResource(R.string.debit)
+    2 -> ResourceHelper.getStringResource(R.string.wallet_credit)
+    3 -> ResourceHelper.getStringResource(R.string.online_deposit)
+    4 -> ResourceHelper.getStringResource(R.string.return_to_card)
+    5 -> ResourceHelper.getStringResource(R.string.return_to_account)
+    else -> ResourceHelper.getStringResource(R.string.unknown_operation)
 }
 
 fun Int.toResponseCode(): ResponseCode = when(this) {
@@ -48,7 +50,7 @@ fun Int.toResponseCode(): ResponseCode = when(this) {
     ResponseCode.AS_ERROR -> ResponseCode.Error.ASError
     ResponseCode.AS_COMM_ERROR -> ResponseCode.Error.ASCommError
     ResponseCode.AS_BL_EXP -> ResponseCode.Error.ASBlExp
-    ResponseCode.AS_CARD_EXP -> ResponseCode.Error.ASCommError
+    ResponseCode.AS_CARD_EXP -> ResponseCode.Error.ASCardExp
     ResponseCode.AS_NO_EM -> ResponseCode.Error.ASNoEm
     ResponseCode.AS_NO_TERM -> ResponseCode.Error.ASNoTerm
     ResponseCode.BL_ERROR -> ResponseCode.Error.ASBl

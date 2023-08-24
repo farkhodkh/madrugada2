@@ -1,6 +1,5 @@
 package ru.petroplus.pos.printerapi
 
-import kotlinx.coroutines.flow.Flow
 import ru.petrolplus.pos.persitence.dto.ReceiptDTO
 
 /**
@@ -10,7 +9,7 @@ interface PrinterRepository {
     /**
      * Метод для отправки команды на печать
      * @param data данные о документе для печати
+     * @return возвращает Exception в случае ошибки во время процесса печати, null - при отсутствии ошибки
      */
-    suspend fun print(data: ReceiptDTO): Flow<Boolean>
-
+    suspend fun print(data: ReceiptDTO): Exception?
 }

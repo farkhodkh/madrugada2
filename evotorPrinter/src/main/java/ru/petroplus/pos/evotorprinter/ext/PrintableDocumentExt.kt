@@ -7,6 +7,13 @@ import ru.evotor.devices.commons.utils.Format
 import ru.evotor.devices.commons.utils.PrintableDocumentItem
 import ru.petrolplus.pos.persitence.dto.ReceiptDTO
 import ru.petroplus.pos.printerapi.IntroductoryConstruction
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.DENIAL
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.DENIAL_CODE
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.FOOTER_TEXT
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.RECEIPT_NUMBER
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.RECEIPT_NUMBER_DENIAL
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.TRANSACTION_CONFIRMED_BY_PIN_PART_I
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.TRANSACTION_CONFIRMED_BY_PIN_PART_II
 import ru.petroplus.pos.printerapi.ReceiptFormatting.RECEIPT_MASK_SIZE
 import ru.petroplus.pos.printerapi.ReceiptFormatting.TERMINAL_NUMBER_MASK_SIZE
 import ru.petroplus.pos.printerapi.ResponseCode
@@ -36,21 +43,19 @@ fun generateFailedTransactionDocument(
     data: ReceiptDTO, responseCode: ResponseCode, paperWidth: Int
 ): PrinterDocument {
     return with(data) {
-        with(IntroductoryConstruction) {
-            PrinterDocument(
-                *receiptData(RECEIPT_NUMBER_DENIAL, receiptNumber, paperWidth),
-                *terminalData(terminalId, terminalDate, paperWidth),
-                *cardData(cardType, cardNumber),
-                divider,
-                centredText(responseCode.description),
-                divider,
-                centredText(DENIAL),
-                divider,
-                text("$DENIAL_CODE: ${responseCode.code}"),
-                divider,
-                *operatorData(operatorNumber, paperWidth),
-            )
-        }
+        PrinterDocument(
+            *receiptData(RECEIPT_NUMBER_DENIAL, receiptNumber, paperWidth),
+            *terminalData(terminalId, terminalDate, paperWidth),
+            *cardData(cardType, cardNumber),
+            divider,
+            centredText(responseCode.description),
+            divider,
+            centredText(DENIAL),
+            divider,
+            text("$DENIAL_CODE: ${responseCode.code}"),
+            divider,
+            *operatorData(operatorNumber, paperWidth),
+        )
     }
 }
 
@@ -58,28 +63,26 @@ fun generateSuccessfulTransactionDocument(
     data: ReceiptDTO, responseCode: ResponseCode, paperWidth: Int
 ): PrinterDocument {
     return with(data) {
-        with(IntroductoryConstruction) {
-            PrinterDocument(
-                *receiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
-                *orgData(organizationName, posName, organizationInn),
-                divider,
-                *terminalData(terminalId, terminalDate, paperWidth),
-                divider,
-                *cardData(cardType, cardNumber),
-                divider,
-                centredText(operationType.toOperationType()),
-                divider,
-                *serviceTable(serviceName, serviceUnit, price, sum, amount, paperWidth),
-                divider,
-                centredText(responseCode.description),
-                centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_I),
-                centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_II),
-                divider,
-                *operatorData(operatorNumber, paperWidth),
-                divider,
-                centredText(FOOTER_TEXT),
-            )
-        }
+        PrinterDocument(
+            *receiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
+            *orgData(organizationName, posName, organizationInn),
+            divider,
+            *terminalData(terminalId, terminalDate, paperWidth),
+            divider,
+            *cardData(cardType, cardNumber),
+            divider,
+            centredText(operationType.toOperationType()),
+            divider,
+            *serviceTable(serviceName, serviceUnit, price, sum, amount, paperWidth),
+            divider,
+            centredText(responseCode.description),
+            centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_I),
+            centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_II),
+            divider,
+            *operatorData(operatorNumber, paperWidth),
+            divider,
+            centredText(FOOTER_TEXT)
+        )
     }
 }
 
@@ -102,7 +105,7 @@ fun operatorData(operatorNumber: String, printerWidth: Int) = arrayOf(
 )
 
 fun cardData(cardType: Int, cardNumber: String): Array<IPrintable> = arrayOf(
-    text("${IntroductoryConstruction.CART} ${cardType.toCardType()}: "),
+    text("${IntroductoryConstruction.CARD} ${cardType.toCardType()}: "),
     text(cardNumber),
 )
 
@@ -172,7 +175,8 @@ fun serviceTable(
 private val divider = PrintableDocumentItem("-", Format.DIVIDER)
 private fun text(text: String) = PrintableDocumentItem(text, Format.LEFT_WORD)
 private fun centredText(text: String) = PrintableDocumentItem(text, Format.CENTER)
-private fun textJustify(data: Array<String>, printerWidth: Int) = PrintableText(data.justify(printerWidth))
+private fun textJustify(data: Array<String>, printerWidth: Int) =
+    PrintableText(data.justify(printerWidth))
 
 
 fun serviceLine(
