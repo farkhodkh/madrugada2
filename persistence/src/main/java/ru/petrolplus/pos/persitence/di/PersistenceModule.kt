@@ -7,8 +7,8 @@ import ru.petrolplus.pos.persitence.BaseSettingsPersistenceImpl
 import ru.petrolplus.pos.persitence.CommonSettingsPersistence
 import ru.petrolplus.pos.persitence.CommonSettingsPersistenceImpl
 import ru.petrolplus.pos.persitence.DatabaseStoreStrategy
-import ru.petrolplus.pos.persitence.GUIDparamsPersistence
-import ru.petrolplus.pos.persitence.GUIDparamsPersistenceImpl
+import ru.petrolplus.pos.persitence.GUIDParamsPersistence
+import ru.petrolplus.pos.persitence.GUIDParamsPersistenceImpl
 import ru.petrolplus.pos.persitence.ReceiptParamsPersistence
 import ru.petrolplus.pos.persitence.ReceiptParamsPersistenceImpl
 import ru.petrolplus.pos.persitence.ReceiptPersistence
@@ -34,7 +34,7 @@ import ru.petrolplus.pos.persitence.mappers.Mapper
 import ru.petrolplus.pos.persitence.mappers.ProjectionMapper
 import ru.petrolplus.pos.room.dao.BaseSettingsDao
 import ru.petrolplus.pos.room.dao.CommonSettingsDao
-import ru.petrolplus.pos.room.dao.GUIDparamsDao
+import ru.petrolplus.pos.room.dao.GUIDParamsDao
 import ru.petrolplus.pos.room.dao.ReceiptDao
 import ru.petrolplus.pos.room.dao.ReceiptParamsDao
 import ru.petrolplus.pos.room.dao.ServicesDao
@@ -73,10 +73,10 @@ class PersistenceModule {
 
     @[Provides MainScreenScope]
     fun provideGUIDparamsPersistence(
-        guidParamsDao: GUIDparamsDao,
+        guidParamsDao: GUIDParamsDao,
         mapper: Mapper<GUIDParamsDTO, GUIDParamsDB>,
         storeStrategy: StoreStrategy
-    ): GUIDparamsPersistence = GUIDparamsPersistenceImpl(guidParamsDao, mapper, storeStrategy)
+    ): GUIDParamsPersistence = GUIDParamsPersistenceImpl(guidParamsDao, mapper, storeStrategy)
 
     @[Provides MainScreenScope]
     fun provideShiftParamsPersistence(
@@ -89,7 +89,7 @@ class PersistenceModule {
     fun providesSettingsPersistence(
         baseSettingsPersistence: BaseSettingsPersistence,
         commonSettingsPersistence: CommonSettingsPersistence,
-        guiDparamsPersistence: GUIDparamsPersistence,
+        guiDparamsPersistence: GUIDParamsPersistence,
         shiftParamsPersistence: ShiftParamsPersistence,
         receiptParamsPersistence: ReceiptParamsPersistence
     ): SettingsPersistence = SettingsPersistenceImpl(
