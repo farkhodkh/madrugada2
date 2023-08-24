@@ -41,9 +41,6 @@ class DebitViewModel(
     private val _printerState = mutableStateOf(PrinterState.WAIT_DOCUMENT)
     val printerState: State<PrinterState> = _printerState
 
-    private var _transactionId = mutableStateOf("")
-    var transactionId: State<String> = _transactionId
-
     init {
         viewModelScope.launch {
             cardReaderRepository
@@ -116,6 +113,7 @@ class DebitViewModel(
     fun setTab(index: Int) {
         when (index) {
             0 -> _viewState.value = DebitViewState.DebugState.APDU
+            2 -> _viewState.value = DebitViewState.DebugState.Print
             else -> _viewState.value = DebitViewState.DebugState.Debit()
         }
     }
@@ -131,8 +129,7 @@ class DebitViewModel(
     }
 
     //FIXME: Метод тестовый. Распечатывает чек по введенному ID
-    fun printTransactionTest() {
-        val transactionId = _transactionId.value.trim()
+    fun printTransactionTest(transactionId: String) {
         if (!preprintCheck(transactionId)) return
 
         _printerState.value = PrinterState.PRINTING
@@ -155,10 +152,7 @@ class DebitViewModel(
             }
 
             when (printer.print(data)) {
-                null -> {
-                    _transactionId.value = ""
-                    resetPrinter()
-                }
+                null -> resetPrinter()
                 else -> onFailPrint()
             }
         }
@@ -174,10 +168,6 @@ class DebitViewModel(
 
     private fun preprintCheck(transactionId: String) =
         (transactionId.isNotEmpty() && _printerState.value != PrinterState.PRINTING)
-
-    fun updateTransactionId(newId: String) {
-        _transactionId.value = newId
-    }
 
     companion object {
         fun provideFactory(

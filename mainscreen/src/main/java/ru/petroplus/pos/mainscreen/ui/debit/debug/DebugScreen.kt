@@ -62,40 +62,72 @@ import java.util.Locale
 fun DebugScreen(
     viewModel: DebitViewModel
 ) {
-    val tabs = listOf("APDU", "DATABASE")
+    val tabs = listOf("APDU", "DATABASE", "PRINTER")
     val tabIndex = when (viewModel.viewState.value) {
+        DebitViewState.DebugState.Print -> 2
         is DebitViewState.DebugState.Debit -> 1
         else -> 0
     }
 
-    when (viewModel.printerState.value) {
-        PrinterState.PRINTING -> PrintProgressScreen(modifier = Modifier.fillMaxSize())
-        PrinterState.PRINT_FAILED -> FailedPrintScreen(
-            retry = viewModel::printTransactionTest,
-            dismiss = viewModel::resetPrinter,
-            modifier = Modifier.fillMaxSize()
-        )
+    Column(modifier = Modifier.fillMaxSize()) {
+        TabRow(selectedTabIndex = tabIndex) {
+            tabs.forEachIndexed { index, tab ->
+                Tab(selected = tabIndex == index,
+                    onClick = { viewModel.setTab(index) },
+                    text = { Text(text = tab) })
+            }
 
-        else -> {
-            Column(modifier = Modifier.fillMaxSize()) {
-                TabRow(selectedTabIndex = tabIndex) {
-                    tabs.forEachIndexed { index, tab ->
-                        Tab(selected = tabIndex == index,
-                            onClick = { viewModel.setTab(index) },
-                            text = { Text(text = tab) })
-                    }
+        }
+        when (val viewState = viewModel.viewState.value) {
+            DebitViewState.DebugState.APDU, is DebitViewState.CommandExecutionState -> APDUScreen(
+                viewModel, viewState
+            )
 
-                }
-                when (val viewState = viewModel.viewState.value) {
-                    DebitViewState.DebugState.APDU, is DebitViewState.CommandExecutionState -> APDUScreen(
-                        viewModel, viewState
+            DebitViewState.DebugState.Print -> PrinterScreen(viewModel)
+
+            is DebitViewState.DebugState.Debit -> DatabaseScreen(viewModel, viewState)
+            else -> Surface { }
+        }
+    }
+}
+
+@Composable
+fun PrinterScreen(viewModel: DebitViewModel) {
+    var transactionId by remember { mutableStateOf("") }
+
+    Surface(
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .fillMaxWidth()
+    ) {
+        when (viewModel.printerState.value) {
+            PrinterState.PRINTING -> PrintProgressScreen(modifier = Modifier.fillMaxSize())
+            PrinterState.PRINT_FAILED -> FailedPrintScreen(
+                retry = { viewModel.printTransactionTest(transactionId) },
+                dismiss = viewModel::resetPrinter,
+                modifier = Modifier.fillMaxSize()
+            )
+
+            else -> {
+                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        label = { Text(text = "Transaction ID") },
+                        value = transactionId,
+                        onValueChange = { transactionId = it },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
                     )
 
-                    is DebitViewState.DebugState.Debit -> DatabaseScreen(viewModel, viewState)
-                    else -> Surface { }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(modifier = Modifier.fillMaxWidth(),
+                        onClick = { viewModel.printTransactionTest(transactionId) }) {
+                        Text(text = "Распечатать")
+                    }
                 }
             }
         }
+
     }
 }
 
@@ -261,22 +293,6 @@ fun DatabaseScreen(viewModel: DebitViewModel, viewState: DebitViewState.DebugSta
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = "Transaction ID") },
-                value = viewModel.transactionId.value,
-                onValueChange = viewModel::updateTransactionId,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Button(modifier = Modifier.fillMaxWidth(), onClick = { viewModel.printTransactionTest() }) {
-                Text(text = "Распечатать")
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
             Output("Все транзакции", listItems = viewState.debitDebugGroup.transactionsOutput)
         }
     }
@@ -301,7 +317,11 @@ private fun getTestData(
         .removeSurrounding("{", "}")
         .split(",")
         .map { it.split(" : ") }
-        .map { it[0].replace("\"", "").replace("\\r\\n ", "").trim() to parseTyped(it[1].trim().replace("\"", "")) }
+        .map {
+            it[0].replace("\"", "").replace("\\r\\n ", "").trim() to parseTyped(
+                it[1].trim().replace("\"", "")
+            )
+        }
         .map { if (additionalMapper != null) additionalMapper(it) else it }
         .toTypedArray()
     return mutableStateListOf(*list)
