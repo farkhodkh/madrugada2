@@ -16,8 +16,12 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/evotorsdk" />
             <option value="$PROJECT_DIR$/mainscreen" />
+            <option value="$PROJECT_DIR$/network" />
+            <option value="$PROJECT_DIR$/networkapi" />
             <option value="$PROJECT_DIR$/p7lib" />
             <option value="$PROJECT_DIR$/p7libapi" />
+            <option value="$PROJECT_DIR$/persistence" />
+            <option value="$PROJECT_DIR$/room" />
             <option value="$PROJECT_DIR$/sdkapi" />
             <option value="$PROJECT_DIR$/ui" />
             <option value="$PROJECT_DIR$/util" />

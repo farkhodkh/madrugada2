@@ -1,7 +1,7 @@
 package ru.petroplus.pos.p7LibApi.dto.card
 
 /**
- * Тип карты P7
+ * Класс информации о карте
  * @property isRecalcCard - TRUE - карта не поддерживает дебет "услуга за услугу", только "услуга за рубли"
  * @property PTC - Количество оставшихся попыток ввода PIN
  * @property cardNumber - Номер карты

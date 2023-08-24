@@ -6,7 +6,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ru.petroplus.pos.blockingScreen.InsertClientCardScreen
-import ru.petroplus.pos.debug.DebugScreen
+import ru.petroplus.pos.mainscreen.ui.debit.debug.DebugScreen
 
 @Composable
 fun DebitScreen(
@@ -14,24 +14,17 @@ fun DebitScreen(
     viewModel: DebitViewModel
 ) {
 
-    when (val viewState = viewModel.viewState.value) {
+    when (viewModel.viewState.value) {
         DebitViewState.StartingState -> {
             InsertClientCardScreen() {
 
             }
         }
-        DebitViewState.DebugState -> {
-            DebugScreen() {
-                viewModel.sendAPDUCommand(it)
-            }
+        is DebitViewState.DebugState -> {
+            DebugScreen(viewModel)
         }
-
         is DebitViewState.CommandExecutionState -> {
-            DebugScreen(
-                viewState.commandResult
-            ) {
-                viewModel.sendAPDUCommand(it)
-            }
+            DebugScreen(viewModel)
         }
         else -> {
             Surface {
