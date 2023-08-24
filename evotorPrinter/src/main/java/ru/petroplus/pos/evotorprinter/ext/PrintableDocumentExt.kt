@@ -12,8 +12,10 @@ import ru.petroplus.pos.printerapi.IntroductoryConstruction.DENIAL_CODE
 import ru.petroplus.pos.printerapi.IntroductoryConstruction.FOOTER_TEXT
 import ru.petroplus.pos.printerapi.IntroductoryConstruction.RECEIPT_NUMBER
 import ru.petroplus.pos.printerapi.IntroductoryConstruction.RECEIPT_NUMBER_DENIAL
-import ru.petroplus.pos.printerapi.IntroductoryConstruction.TRANSACTION_CONFIRMED_BY_PIN_PART_I
-import ru.petroplus.pos.printerapi.IntroductoryConstruction.TRANSACTION_CONFIRMED_BY_PIN_PART_II
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.OPERATION_CONFIRMED
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.DEBIT_CONFIRMED_BY_PIN
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.RETURN_CONFIRMED_BY_TERMINAL
+import ru.petroplus.pos.printerapi.OperationType
 import ru.petroplus.pos.printerapi.ReceiptFormatting.RECEIPT_MASK_SIZE
 import ru.petroplus.pos.printerapi.ReceiptFormatting.TERMINAL_NUMBER_MASK_SIZE
 import ru.petroplus.pos.printerapi.ResponseCode
@@ -41,7 +43,7 @@ fun ReceiptDTO.generateFailedTransactionDocument(
     *terminalData(terminalId, terminalDate, paperWidth),
     *cardData(cardType, cardNumber),
     divider,
-    centredText(responseCode.description),
+    *operationDescription(responseCode, operationType.toOperationType()),
     divider,
     centredText(DENIAL),
     divider,
@@ -52,26 +54,51 @@ fun ReceiptDTO.generateFailedTransactionDocument(
 
 fun ReceiptDTO.generateSuccessfulTransactionDocument(
     responseCode: ResponseCode, paperWidth: Int
-) = PrinterDocument(
-    *receiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
-    *orgData(organizationName, posName, organizationInn),
-    divider,
-    *terminalData(terminalId, terminalDate, paperWidth),
-    divider,
-    *cardData(cardType, cardNumber),
-    divider,
-    centredText(operationType.toOperationType()),
-    divider,
-    *serviceTable(serviceName, serviceUnit, price, sum, amount, paperWidth),
-    divider,
-    centredText(responseCode.description),
-    centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_I),
-    centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_II),
-    divider,
-    *operatorData(operatorNumber, paperWidth),
-    divider,
-    centredText(FOOTER_TEXT)
-)
+): PrinterDocument {
+    val operationType = operationType.toOperationType()
+    return PrinterDocument(
+        *receiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
+        *orgData(organizationName, posName, organizationInn),
+        divider,
+        *terminalData(terminalId, terminalDate, paperWidth),
+        divider,
+        *cardData(cardType, cardNumber),
+        divider,
+        centredText(operationType.name),
+        divider,
+        *serviceTable(serviceName, serviceUnit, price, sum, amount, paperWidth),
+        divider,
+        *operationDescription(responseCode, operationType),
+        divider,
+        *operatorData(operatorNumber, paperWidth),
+        divider,
+        centredText(FOOTER_TEXT)
+    )
+}
+
+fun operationDescription(
+    responseCode: ResponseCode, operationType: OperationType
+): Array<IPrintable> {
+    val descriptionsList = mutableListOf(centredText(responseCode.description))
+
+    if (responseCode == ResponseCode.Success) {
+        when (operationType) {
+            OperationType.Debit -> {
+                descriptionsList.add(centredText(OPERATION_CONFIRMED))
+                descriptionsList.add(centredText(DEBIT_CONFIRMED_BY_PIN))
+            }
+
+            is OperationType.Return -> {
+                descriptionsList.add(centredText(OPERATION_CONFIRMED))
+                descriptionsList.add(centredText(RETURN_CONFIRMED_BY_TERMINAL))
+            }
+
+            else -> {}
+        }
+    }
+
+    return descriptionsList.toTypedArray()
+}
 
 fun receiptData(title: String, receiptNumber: Long, printerWidth: Int) = arrayOf(
     textJustify(
@@ -92,7 +119,7 @@ fun operatorData(operatorNumber: String, printerWidth: Int) = arrayOf(
 )
 
 fun cardData(cardType: Int, cardNumber: String): Array<IPrintable> = arrayOf(
-    text("${IntroductoryConstruction.CARD} ${cardType.toCardType()}: "),
+    text("${IntroductoryConstruction.CARD} ${cardType.toCardType().name}: "),
     text(cardNumber),
 )
 

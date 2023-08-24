@@ -19,10 +19,12 @@ object IntroductoryConstruction {
     val POS_NUMBER_RU = ResourceHelper.getStringResource(R.string.pos_number_ru)
     val CARD = ResourceHelper.getStringResource(R.string.card)
     val INN = ResourceHelper.getStringResource(R.string.inn)
-    val TRANSACTION_CONFIRMED_BY_PIN_PART_I =
-        ResourceHelper.getStringResource(R.string.transaction_confirmed_by_pin_part_I)
-    val TRANSACTION_CONFIRMED_BY_PIN_PART_II =
-        ResourceHelper.getStringResource(R.string.transaction_confirmed_by_pin_part_II)
+    val OPERATION_CONFIRMED =
+        ResourceHelper.getStringResource(R.string.operation_confirmed)
+    val DEBIT_CONFIRMED_BY_PIN =
+        ResourceHelper.getStringResource(R.string.debit_confirmed_by_pin)
+    val RETURN_CONFIRMED_BY_TERMINAL =
+        ResourceHelper.getStringResource(R.string.return_confirmed_by_terminal)
     val OPERATOR_NUMBER = ResourceHelper.getStringResource(R.string.operator_number)
     val FOOTER_TEXT = ResourceHelper.getStringResource(R.string.footer_text)
     val PRICE_UNIT = ResourceHelper.getStringResource(R.string.price_unit)

@@ -1,26 +1,26 @@
 package ru.petroplus.pos.printerapi.ext
 
-import ru.petroplus.pos.printerapi.R
+import ru.petroplus.pos.printerapi.CardType
+import ru.petroplus.pos.printerapi.OperationType
 import ru.petroplus.pos.printerapi.ResponseCode
-import ru.petroplus.pos.util.ResourceHelper
 import ru.petroplus.pos.util.ext.roundTo
 
-fun Int.toCardType(): String = when (this) {
-    1 -> ResourceHelper.getStringResource(R.string.petrol5)
-    2 -> ResourceHelper.getStringResource(R.string.petrol7)
-    else -> ResourceHelper.getStringResource(R.string.unknown_card_type)
+fun Int.toCardType(): CardType = when (this) {
+    1 -> CardType.Petrol5
+    2 -> CardType.Petrol7
+    else -> CardType.Unknown
 }
 
-fun Int.toOperationType(): String = when (this) {
-    1 -> ResourceHelper.getStringResource(R.string.debit)
-    2 -> ResourceHelper.getStringResource(R.string.wallet_credit)
-    3 -> ResourceHelper.getStringResource(R.string.online_deposit)
-    4 -> ResourceHelper.getStringResource(R.string.return_to_card)
-    5 -> ResourceHelper.getStringResource(R.string.return_to_account)
-    else -> ResourceHelper.getStringResource(R.string.unknown_operation)
+fun Int.toOperationType(): OperationType = when (this) {
+    1 -> OperationType.Debit
+    2 -> OperationType.WalletCredit
+    3 -> OperationType.OnlineDeposit
+    4 -> OperationType.Return.ToCard
+    5 -> OperationType.Return.ToAccount
+    else -> OperationType.Unknown
 }
 
-fun Int.toResponseCode(): ResponseCode = when(this) {
+fun Int.toResponseCode(): ResponseCode = when (this) {
     ResponseCode.SUCCESS -> ResponseCode.Success
     ResponseCode.SYSTEM_ERROR -> ResponseCode.Error.System
     ResponseCode.LIB_INT_ERROR -> ResponseCode.Error.LibInit
@@ -40,7 +40,7 @@ fun Int.toResponseCode(): ResponseCode = when(this) {
     ResponseCode.AS_TIMEOUT -> ResponseCode.Error.ASTimout
     ResponseCode.AS_LIMITS -> ResponseCode.Error.ASLimits
     ResponseCode.AS_EXT_AUTH -> ResponseCode.Error.ASExtAuth
-    ResponseCode.AS_BLOCKED-> ResponseCode.Error.ASBlocked
+    ResponseCode.AS_BLOCKED -> ResponseCode.Error.ASBlocked
     ResponseCode.AS_NO_FUNDS -> ResponseCode.Error.ASNoFunds
     ResponseCode.AS_NO_LIMITS -> ResponseCode.Error.ASNoLimits
     ResponseCode.AS_PIN_ERROR -> ResponseCode.Error.ASPin

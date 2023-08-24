@@ -24,8 +24,9 @@
     <string name="pos_number_ru">Терминал No.</string>
     <string name="card">Карта</string>
     <string name="inn">ИНН</string>
-    <string name="transaction_confirmed_by_pin_part_I">Операция подтверждена</string>
-    <string name="transaction_confirmed_by_pin_part_II">вводом ПИН кода</string>
+    <string name="operation_confirmed">Операция подтверждена</string>
+    <string name="debit_confirmed_by_pin">вводом ПИН кода</string>
+    <string name="return_confirmed_by_terminal">терминалом</string>
     <string name="operator_number">Оператор No.</string>
     <string name="footer_text">Добро пожаловать</string>
     <string name="price_unit">Pуб</string>
