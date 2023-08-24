@@ -30,61 +30,48 @@ import java.util.Calendar
 
 fun ReceiptDTO.toPrinterDoc(paperWidth: Int): PrinterDocument =
     when (val responseCode = this.responseCode.toResponseCode()) {
-        ResponseCode.Success -> generateSuccessfulTransactionDocument(
-            this,
-            responseCode,
-            paperWidth
-        )
-
-        is ResponseCode.Error -> generateFailedTransactionDocument(this, responseCode, paperWidth)
+        ResponseCode.Success -> generateSuccessfulTransactionDocument(responseCode, paperWidth)
+        is ResponseCode.Error -> generateFailedTransactionDocument(responseCode, paperWidth)
     }
 
-fun generateFailedTransactionDocument(
-    data: ReceiptDTO, responseCode: ResponseCode, paperWidth: Int
-): PrinterDocument {
-    return with(data) {
-        PrinterDocument(
-            *receiptData(RECEIPT_NUMBER_DENIAL, receiptNumber, paperWidth),
-            *terminalData(terminalId, terminalDate, paperWidth),
-            *cardData(cardType, cardNumber),
-            divider,
-            centredText(responseCode.description),
-            divider,
-            centredText(DENIAL),
-            divider,
-            text("$DENIAL_CODE: ${responseCode.code}"),
-            divider,
-            *operatorData(operatorNumber, paperWidth),
-        )
-    }
-}
+fun ReceiptDTO.generateFailedTransactionDocument(
+    responseCode: ResponseCode, paperWidth: Int
+) = PrinterDocument(
+    *receiptData(RECEIPT_NUMBER_DENIAL, receiptNumber, paperWidth),
+    *terminalData(terminalId, terminalDate, paperWidth),
+    *cardData(cardType, cardNumber),
+    divider,
+    centredText(responseCode.description),
+    divider,
+    centredText(DENIAL),
+    divider,
+    text("$DENIAL_CODE: ${responseCode.code}"),
+    divider,
+    *operatorData(operatorNumber, paperWidth),
+)
 
-fun generateSuccessfulTransactionDocument(
-    data: ReceiptDTO, responseCode: ResponseCode, paperWidth: Int
-): PrinterDocument {
-    return with(data) {
-        PrinterDocument(
-            *receiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
-            *orgData(organizationName, posName, organizationInn),
-            divider,
-            *terminalData(terminalId, terminalDate, paperWidth),
-            divider,
-            *cardData(cardType, cardNumber),
-            divider,
-            centredText(operationType.toOperationType()),
-            divider,
-            *serviceTable(serviceName, serviceUnit, price, sum, amount, paperWidth),
-            divider,
-            centredText(responseCode.description),
-            centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_I),
-            centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_II),
-            divider,
-            *operatorData(operatorNumber, paperWidth),
-            divider,
-            centredText(FOOTER_TEXT)
-        )
-    }
-}
+fun ReceiptDTO.generateSuccessfulTransactionDocument(
+    responseCode: ResponseCode, paperWidth: Int
+) = PrinterDocument(
+    *receiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
+    *orgData(organizationName, posName, organizationInn),
+    divider,
+    *terminalData(terminalId, terminalDate, paperWidth),
+    divider,
+    *cardData(cardType, cardNumber),
+    divider,
+    centredText(operationType.toOperationType()),
+    divider,
+    *serviceTable(serviceName, serviceUnit, price, sum, amount, paperWidth),
+    divider,
+    centredText(responseCode.description),
+    centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_I),
+    centredText(TRANSACTION_CONFIRMED_BY_PIN_PART_II),
+    divider,
+    *operatorData(operatorNumber, paperWidth),
+    divider,
+    centredText(FOOTER_TEXT)
+)
 
 fun receiptData(title: String, receiptNumber: Long, printerWidth: Int) = arrayOf(
     textJustify(

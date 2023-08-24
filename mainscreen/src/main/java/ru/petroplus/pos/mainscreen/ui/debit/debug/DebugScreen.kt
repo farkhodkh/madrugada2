@@ -51,7 +51,6 @@ import ru.petroplus.pos.blockingScreen.FailedPrintScreen
 import ru.petroplus.pos.blockingScreen.PrintProgressScreen
 import ru.petroplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petroplus.pos.mainscreen.ui.debit.DebitViewState
-import ru.petroplus.pos.printerapi.PrinterState
 import ru.petroplus.pos.ui.R
 import ru.petroplus.pos.util.ResourceHelper
 import java.text.SimpleDateFormat
@@ -64,7 +63,7 @@ fun DebugScreen(
 ) {
     val tabs = listOf("APDU", "DATABASE", "PRINTER")
     val tabIndex = when (viewModel.viewState.value) {
-        DebitViewState.DebugState.Print -> 2
+        is DebitViewState.DebugState.PrinterState -> 2
         is DebitViewState.DebugState.Debit -> 1
         else -> 0
     }
@@ -83,8 +82,7 @@ fun DebugScreen(
                 viewModel, viewState
             )
 
-            DebitViewState.DebugState.Print -> PrinterScreen(viewModel)
-
+            is DebitViewState.DebugState.PrinterState -> PrinterScreen(viewModel)
             is DebitViewState.DebugState.Debit -> DatabaseScreen(viewModel, viewState)
             else -> Surface { }
         }
@@ -100,16 +98,20 @@ fun PrinterScreen(viewModel: DebitViewModel) {
             .padding(top = 16.dp)
             .fillMaxWidth()
     ) {
-        when (viewModel.printerState.value) {
-            PrinterState.PRINTING -> PrintProgressScreen(modifier = Modifier.fillMaxSize())
-            PrinterState.PRINT_FAILED -> FailedPrintScreen(
+        when (viewModel.viewState.value) {
+            DebitViewState.DebugState.PrinterState.Printing ->
+                PrintProgressScreen(modifier = Modifier.fillMaxSize())
+
+            DebitViewState.DebugState.PrinterState.PrintFailed -> FailedPrintScreen(
                 retry = { viewModel.printTransactionTest(transactionId) },
                 dismiss = viewModel::resetPrinter,
                 modifier = Modifier.fillMaxSize()
             )
 
-            else -> {
-                Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+            is DebitViewState.DebugState.PrinterState -> {
+                Column(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)) {
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Transaction ID") },
@@ -126,6 +128,8 @@ fun PrinterScreen(viewModel: DebitViewModel) {
                     }
                 }
             }
+
+            else -> Surface {}
         }
 
     }

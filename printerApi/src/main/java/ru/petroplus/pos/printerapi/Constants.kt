@@ -115,9 +115,3 @@ sealed class ResponseCode(val code: Int, val description: String) {
         const val GEN_AC_ERROR = 36
     }
 }
-
-enum class PrinterState {
-    WAIT_DOCUMENT,
-    PRINT_FAILED,
-    PRINTING
-}
