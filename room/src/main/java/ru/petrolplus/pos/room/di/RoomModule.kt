@@ -4,7 +4,9 @@ import dagger.Module
 import dagger.Provides
 import ru.petrolplus.pos.room.dao.BaseSettingsDao
 import ru.petrolplus.pos.room.dao.CommonSettingsDao
-import ru.petrolplus.pos.room.dao.GUIDparamsDao
+import ru.petrolplus.pos.room.dao.GUIDParamsDao
+import ru.petrolplus.pos.room.dao.ReceiptDao
+import ru.petrolplus.pos.room.dao.ReceiptParamsDao
 import ru.petrolplus.pos.room.dao.ServicesDao
 import ru.petrolplus.pos.room.dao.ShiftParamsDao
 import ru.petrolplus.pos.room.dao.TransactionsDao
@@ -24,11 +26,17 @@ class RoomModule {
     fun provideShiftParamsDao(appDatabase: AppDatabase): ShiftParamsDao = appDatabase.shiftParamsDao()
 
     @[Provides MainScreenScope]
-    fun provideGUIDparamsDao(appDatabase: AppDatabase): GUIDparamsDao = appDatabase.guidParamsDao()
+    fun provideGUIDParamsDao(appDatabase: AppDatabase): GUIDParamsDao = appDatabase.guidParamsDao()
 
     @[Provides MainScreenScope]
     fun provideServicesDao(appDatabase: AppDatabase): ServicesDao = appDatabase.servicesDao()
 
     @[Provides MainScreenScope]
     fun provideTransactionsDao(appDatabase: AppDatabase): TransactionsDao = appDatabase.transactionDao()
+
+    @[Provides MainScreenScope]
+    fun provideReceiptParamsDao(appDatabase: AppDatabase): ReceiptParamsDao = appDatabase.receiptParamsDao()
+
+    @[Provides MainScreenScope]
+    fun provideReceiptDao(appDatabase: AppDatabase): ReceiptDao = appDatabase.receiptDao()
 }
