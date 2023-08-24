@@ -23,7 +23,7 @@ class EvotorPrinterRepositoryImpl(private val applicationContext: Context) : Pri
                 val printerDocument = data.toPrinterDoc(paperWidth)
 
                 // Симуляция ошибки во время печати
-                if (BuildConfig.DEBUG && false) {
+                if (BuildConfig.DEBUG) {
                     delay(300)
                     val isSuccessTry = Random.nextBoolean()
                     if (!isSuccessTry) {

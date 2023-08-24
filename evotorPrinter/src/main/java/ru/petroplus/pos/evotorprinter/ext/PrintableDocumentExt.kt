@@ -172,9 +172,8 @@ fun serviceTable(
 private val divider = PrintableDocumentItem("-", Format.DIVIDER)
 private fun text(text: String) = PrintableDocumentItem(text, Format.LEFT_WORD)
 private fun centredText(text: String) = PrintableDocumentItem(text, Format.CENTER)
-private fun textJustify(data: Array<String>, printerWidth: Int): IPrintable {
-    return PrintableText(data.justify(printerWidth))
-}
+private fun textJustify(data: Array<String>, printerWidth: Int) = PrintableText(data.justify(printerWidth))
+
 
 fun serviceLine(
     title: String, unit: String, value: String, rightSpaceSize: Int, paperWidth: Int
@@ -184,9 +183,7 @@ fun serviceLine(
         " ".repeat(leftSpaceSize)
 
     val rightSpace = " ".repeat(rightSpaceSize)
-
-    val builder = StringBuilder()
-    builder.append(title, leftSpace, unit, rightSpace, value)
-    return PrintableText(builder.toString())
+    val line = "$title$leftSpace$unit$rightSpace$value"
+    return PrintableText(line)
 }
 
