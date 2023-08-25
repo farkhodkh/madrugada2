@@ -1,6 +1,3 @@
-//
-// Created by Yuriy.Poprygushin on 10.07.2023.
-//
 #ifndef POS_CALLBACKCONTROLLER_CPP
 #define POS_CALLBACKCONTROLLER_CPP
 //---------------------------------------------------------------------------------------------------------------

@@ -917,7 +917,7 @@ bool TP7LibTypes::ConvertTransactionInfoToJObj(JNIEnv *env, const TTransactionIn
       return false;  }
 
     jfieldID cardNumber_ID = env->GetFieldID(TransInfoJObjClass, "cardNumber", "J");
-    jfieldID transNumber_ID = env->GetFieldID(TransInfoJObjClass, "transNumber", "J");
+    jfieldID transNumber_ID = env->GetFieldID(TransInfoJObjClass, "transactionNumber", "J");
     jfieldID terminalNumber_ID = env->GetFieldID(TransInfoJObjClass, "terminalNumber", "J");
     jfieldID terminalId_ID = env->GetFieldID(TransInfoJObjClass, "terminalId", "J");
     jfieldID issuerId_ID = env->GetFieldID(TransInfoJObjClass, "issuerId", "J");

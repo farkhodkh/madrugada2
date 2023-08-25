@@ -1,12 +1,12 @@
 package ru.petroplus.pos.p7LibApi.dto
 
 /**
- * TODO - Юрий добавь описание
- * @property onlineTransNumber -
- * @property lastGenTime -
- * @property clockSequence -
- * @property hasNodeId -
- * @property nodeId -
+ * Класс для задания уникальной информации о отранзакции
+ * @property onlineTransNumber - номер транзакции
+ * @property lastGenTime - время транзакции (младшие байты)
+ * @property clockSequence - количество тиков с начала эпохи на момент выполнения транзакции (младшие байты)
+ * @property hasNodeId - признак наличия идентивикатора узла
+ * @property nodeId - код идентификатора узла
  */
 class TransactionUUIDDto(
     var onlineTransNumber: Int = 0,

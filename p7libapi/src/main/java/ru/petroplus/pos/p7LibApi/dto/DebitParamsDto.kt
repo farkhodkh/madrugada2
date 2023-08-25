@@ -13,8 +13,8 @@ package ru.petroplus.pos.p7LibApi.dto
 class DebitParamsDto(
     var serviceWhat: Int = 0,
     var serviceFrom: Int = 0,
-    var amount: Long = 0,
-    var price: Long = 0,
-    var sum: Long = 0,
+    var amount: Long = 0L,
+    var price: Long = 0L,
+    var sum: Long = 0L,
     var pinBlock: ByteArray = byteArrayOf()
 )

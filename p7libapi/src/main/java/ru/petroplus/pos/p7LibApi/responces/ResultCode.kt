@@ -1,46 +1,7 @@
 package ru.petroplus.pos.p7LibApi.dto
 
-////Является полным аналогом TP7ErrorType P7Lib c++
-//enum class ResultCode(val Code: Int) {
-//    OK(0),                             //!< Ошибок нет, успех
-//    AlreadyInitialized(1),             //!< Библиотека уже инициализировалась через P7Lib_Init()
-//    NonInitializedError(2),            //!< Библиотека не проинициализирована через P7Lib_Init()
-//    CardResetInitError(3),             //!< Функция сброса карты в TP7Callbacks не проинициализирована
-//    CardIoInitError(4),                //!< Функция ввода-вывода APDU-команд карты в TP7Callbacks не проинициализирована
-//    CardSelectError(5),                //!< Ошибка выбора апплета Petrol7 на карте
-//    CardAuthError(6),                  //!< Ошибка авторизации карты
-//    LoadIniError(7),                   //!< Ошибка загрузки параметров из Ini-файла
-//    LibFatalError(8),                  //!< Фатальная ошибка библиотеки, работа невозможна
-//    SequenceError(9),                  //!< Нарушена последовательность выполнения команд библиотеки в сессии обслуживания
-//    NotPetrol7Card(10),                //!< Карта, вставленная в ридер - не Petrol 7
-//    CardReadError(11),                 //!< Ошибка чтения данных с карты
-//    SamGetError(12),                   //!< Ошибка получения данных от SAM-карты
-//    PinDataError(13),                  //!< Некорректные данные PIN-блока
-//    PinCheckError(14),                 //!< PIN не прошел проверку на карте
-//    DebitError(15),                    //!< Дебет закончился ошибкой
-//    ArgAmountPriceSumError(16),        //!< Один из параметров (количество, цена или сумма) некорректен
-//    ArgServiceError(17),               //!< Параметр с номером услуги некорректен
-//    ArgPinblockError(18),              //!< Параметр содержащий значение PIN-блока некорректен
-//    ArgCardTypeJError(19),             //!< Операция не поддерживается для карты J
-//    RefundError(20),                   //!< Возврат закончился ошибкой
-//    SamResetInitError(21),             //!< Функция сброса SAM в TP7Callbacks не проинициализирована
-//    SamIoInitError(22),                //!< Функция ввода-вывода APDU-команд SAM в TP7Callbacks не проинициализирована
-//    SamSelectError(23),                //!< Ошибка выбора апплета InitSAM на карте
-//    SamAuthInitError(24),              //!< Не прошла авторизацию SAM-карта (вынута или там что-то не то)
-//    SamLicenseError(25),               //!< Ошибка проверки SAM лицензии
-//
-//    NetworkModuleError(26),            //!< Ошибка в сетевом модуле
-//    UndefinedError(27);                //!< Неизвестная ошибка
-//
-//  companion object {
-//    fun getByValue(value: Int) = ResultCode.values().firstOrNull { it.Code == value }
-//  }
-//}
-
-
 /**
- * интерфейс обощающий все возможные варианты ответов от p7lib
- * TODO -  Юрий добавь описание
+ * класс обощающий все возможные варианты ответов от p7lib
  *
  * @author - @FAHA
  */
@@ -57,132 +18,132 @@ object OK: ResultCode(0)
 object AlreadyInitialized : ResultCode(1)
 
 /**
- *
+ * Библиотека не проинициализирована через P7Lib_Init()
  */
 object NonInitializedError : ResultCode(2)
 
 /**
- *
+ * Функция сброса карты в TP7Callbacks не проинициализирована
  */
 object CardResetInitError : ResultCode(3)
 
 /**
- *
+ * Функция ввода-вывода APDU-команд карты в TP7Callbacks не проинициализирована
  */
 object CardIoInitError : ResultCode(4)
 
 /**
- *
+ * Ошибка выбора апплета Petrol7 на карте
  */
 object CardSelectError : ResultCode(5)
 
 /**
- *
+ * Ошибка авторизации карты
  */
 object CardAuthError : ResultCode(6)
 
 /**
- *
+ * Ошибка загрузки параметров из Ini-файла
  */
 object LoadIniError : ResultCode(7)
 
 /**
- *
+ * Фатальная ошибка библиотеки, работа невозможна
  */
 object LibFatalError : ResultCode(8)
 
 /**
- *
+ * Нарушена последовательность выполнения команд библиотеки в сессии обслуживания
  */
 object SequenceError : ResultCode(9)
 
 /**
- *
+ * Карта, вставленная в ридер - не Petrol 7
  */
 object NotPetrol7Card : ResultCode(10)
 
 /**
- *
+ * Ошибка чтения данных с карты
  */
 object CardReadError : ResultCode(11)
 
 /**
- *
+ * Ошибка получения данных от SAM-карты
  */
 object SamGetError : ResultCode(12)
 
 /**
- *
+ * Некорректные данные PIN-блока
  */
 object PinDataError : ResultCode(13)
 
 /**
- *
+ * PIN не прошел проверку на карте
  */
 object PinCheckError : ResultCode(14)
 
 /**
- *
+ * Дебет закончился ошибкой
  */
 object DebitError : ResultCode(15)
 
 /**
- *
+ * Один из параметров (количество, цена или сумма) некорректен
  */
 object ArgAmountPriceSumError : ResultCode(16)
 
 /**
- *
+ * Параметр с номером услуги некорректен
  */
 object ArgServiceError : ResultCode(17)
 
 /**
- *
+ * Параметр содержащий значение PIN-блока некорректен
  */
 object ArgPinblockError : ResultCode(18)
 
 /**
- *
+ * Операция не поддерживается для карты J
  */
 object ArgCardTypeJError : ResultCode(19)
 
 /**
- *
+ * Возврат закончился ошибкой
  */
 object RefundError : ResultCode(20)
 
 /**
- *
+ * Функция сброса SAM в TP7Callbacks не проинициализирована
  */
 object SamResetInitError : ResultCode(21)
 
 /**
- *
+ * Функция ввода-вывода APDU-команд SAM в TP7Callbacks не проинициализирована
  */
 object SamIoInitError : ResultCode(22)
 
 /**
- *
+ * Ошибка выбора апплета InitSAM на карте
  */
 object SamSelectError : ResultCode(23)
 
 /**
- *
+ * Не прошла авторизацию SAM-карта (вынута или там что-то не то)
  */
 object SamAuthInitError : ResultCode(24)
 
 /**
- *
+ * Ошибка проверки SAM лицензии
  */
 object SamLicenseError : ResultCode(25)
 
 /**
- *
+ * Ошибка в сетевом модуле
  */
 object NetworkModuleError : ResultCode(26)
 
 /**
- *
+ * Неизвестная ошибка
  */
 object UndefinedError : ResultCode(27)
 
