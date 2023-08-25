@@ -1,6 +1,7 @@
 package ru.petroplus.pos.di
 
 import dagger.Subcomponent
+import ru.petrolplus.pos.persitence.ReceiptPersistence
 import ru.petrolplus.pos.persitence.ServicesPersistence
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
@@ -21,11 +22,13 @@ import ru.petroplus.pos.ui.main.MainActivity
 )
 interface MainScreenComponent {
 
+    val receiptPersistence: ReceiptPersistence
     val transactionsPersistence: TransactionsPersistence
     val settingsPersistence: SettingsPersistence
     val servicesPersistence: ServicesPersistence
 
     fun inject(mainActivity: MainActivity)
+
     @Subcomponent.Builder
     interface Builder {
         fun mainModule(module: MainScreenModule): Builder

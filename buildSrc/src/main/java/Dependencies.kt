@@ -14,6 +14,8 @@ object Dependencies {
     const val namespaceSdkApi = "ru.petroplus.pos.sdkapi"
     const val namespaceRoom = "ru.petrolplus.pos.room"
     const val namespacePersistence = "ru.petrolplus.pos.persitence"
+    const val namespacePrinterApi = "ru.petroplus.pos.printerapi"
+    const val namespaceEvatorPrinter = "ru.petroplus.pos.evatorprinter"
 
     const val androidApplication = "com.android.application"
     const val kotlinAndroid = "android"
@@ -97,6 +99,5 @@ object Versions {
     const val lifecycle = "2.5.1"
     const val gson = "2.10.1"
     const val evotor = "v0.6.03"
-
     const val room = "2.5.2"
 }

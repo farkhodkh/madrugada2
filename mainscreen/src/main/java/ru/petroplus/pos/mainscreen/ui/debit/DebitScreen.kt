@@ -16,7 +16,7 @@ fun DebitScreen(
 
     when (viewModel.viewState.value) {
         DebitViewState.StartingState -> {
-            InsertClientCardScreen() {
+            InsertClientCardScreen {
 
             }
         }

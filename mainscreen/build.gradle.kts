@@ -77,4 +77,5 @@ dependencies {
     implementation(project(":networkapi"))
     implementation(project(":room"))
     implementation(project(":persistence"))
+    implementation(project(":printerApi"))
 }

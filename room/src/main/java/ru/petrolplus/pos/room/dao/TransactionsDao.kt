@@ -20,6 +20,14 @@ interface TransactionsDao : BaseDao<TransactionDB> {
     @Query("SELECT * FROM transactions WHERE id = :id LIMIT 1")
     suspend fun getById(id: String): TransactionDB?
 
+   /* @Transaction
+    @Query(
+        "SELECT cs.*, t.* FROM transactions t " +
+                "INNER JOIN common_settings cs ON cs.id = 1 " +
+                "WHERE t.id = :transactionId"
+    )
+    suspend fun getGeneralById(transactionId: String): TransactionEmbeddedDB?*/
+
     /**
      * Получение списка совершенных транзакций
      * @return коллекцию сущностей олицетворяющих совершенные транзакцию, может быть пустой
