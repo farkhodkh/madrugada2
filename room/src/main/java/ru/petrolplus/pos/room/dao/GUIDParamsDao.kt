@@ -9,7 +9,7 @@ import ru.petrolplus.pos.room.entities.GUIDParamsDB
  * название таблицы и полей можно посмотреть в [GUIDParamsDB]
  */
 @Dao
-interface GUIDparamsDao : BaseDao<GUIDParamsDB> {
+interface GUIDParamsDao : BaseDao<GUIDParamsDB> {
 
     /**
      * Метод для получения записи по ее идентификатору

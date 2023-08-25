@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.petrolplus.pos.room.dao.BaseSettingsDao
 import ru.petrolplus.pos.room.dao.CommonSettingsDao
-import ru.petrolplus.pos.room.dao.GUIDparamsDao
+import ru.petrolplus.pos.room.dao.GUIDParamsDao
 import ru.petrolplus.pos.room.dao.ReceiptDao
 import ru.petrolplus.pos.room.dao.ReceiptParamsDao
 import ru.petrolplus.pos.room.dao.ServicesDao
@@ -37,7 +37,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun servicesDao(): ServicesDao
     abstract fun baseSettingsDao(): BaseSettingsDao
     abstract fun commonSettingsDao(): CommonSettingsDao
-    abstract fun guidParamsDao(): GUIDparamsDao
+    abstract fun guidParamsDao(): GUIDParamsDao
     abstract fun shiftParamsDao(): ShiftParamsDao
     abstract fun receiptParamsDao(): ReceiptParamsDao
     abstract fun receiptDao(): ReceiptDao

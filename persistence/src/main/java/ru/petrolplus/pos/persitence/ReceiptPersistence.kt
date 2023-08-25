@@ -24,9 +24,8 @@ class ReceiptPersistenceImpl(
     private val mapper: ProjectionMapper<ReceiptProjection, ReceiptDTO>
 ) : ReceiptPersistence {
 
-    override suspend fun getDebitReceipt(transactionId: String): ReceiptDTO? {
-        return receiptDao.getDebitReceiptByTransactionId(transactionId)?.let(mapper::fromProjection)
-    }
+    override suspend fun getDebitReceipt(transactionId: String): ReceiptDTO? =
+        receiptDao.getDebitReceiptByTransactionId(transactionId)?.let(mapper::fromProjection)
 
 
 }

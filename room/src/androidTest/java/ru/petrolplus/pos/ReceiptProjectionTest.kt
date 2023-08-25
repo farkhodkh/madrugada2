@@ -62,7 +62,11 @@ class ReceiptProjectionTest {
             servicesDao.insert(ServiceDB(1, "АИ-95", "Л", 45000))
 
             val receipt = receiptDao.getDebitReceiptByTransactionId("ABCDEFGIDSLKJDIFELSKJKJKDSFDIJSD")
+
             Assert.assertEquals(receipt?.transactionDB?.id, "ABCDEFGIDSLKJDIFELSKJKJKDSFDIJSD")
+            Assert.assertEquals(receipt?.receiptParamsDB?.id, 1)
+            Assert.assertEquals(receipt?.commonSettingsDB?.id, 1)
+            Assert.assertEquals(receipt?.serviceDB?.id, 1)
         }
 
     }
