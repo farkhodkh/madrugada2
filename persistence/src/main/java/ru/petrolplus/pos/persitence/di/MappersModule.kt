@@ -40,7 +40,7 @@ class MappersModule {
     fun providesCommonSettingsMapper(): Mapper<CommonSettingsDTO, CommonSettingsDB> = CommonSettingsMapper()
 
     @[Provides MainScreenScope]
-    fun providesGUIDparamsMapper(): Mapper<GUIDParamsDTO, GUIDParamsDB> = GUIDparamsMapper()
+    fun providesGUIDParamsMapper(): Mapper<GUIDParamsDTO, GUIDParamsDB> = GUIDparamsMapper()
 
     @[Provides MainScreenScope]
     fun providesShiftParamsMapper(): Mapper<ShiftParamsDTO, ShiftParamsDB> = ShiftParamsMapper()

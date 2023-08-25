@@ -3,7 +3,7 @@ package ru.petrolplus.pos.persitence
 import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.exceptions.NoRecordsException
 import ru.petrolplus.pos.persitence.mappers.Mapper
-import ru.petrolplus.pos.room.dao.GUIDparamsDao
+import ru.petrolplus.pos.room.dao.GUIDParamsDao
 import ru.petrolplus.pos.room.entities.GUIDParamsDB
 import java.lang.IllegalArgumentException
 import kotlin.jvm.Throws
@@ -11,7 +11,7 @@ import kotlin.jvm.Throws
 /**
  * Интерфейс для доступа к параметрам GUID (небходимые параметры для генерации GUID транзакции)
  */
-interface GUIDparamsPersistence {
+interface GUIDParamsPersistence {
 
     /**
      * Получение GUID параметров терминала
@@ -26,11 +26,11 @@ interface GUIDparamsPersistence {
     suspend fun setGUIDparams(guidParams: GUIDParamsDTO)
 }
 
-class GUIDparamsPersistenceImpl(
-    private val guiDparamsDao: GUIDparamsDao,
+class GUIDParamsPersistenceImpl(
+    private val guiDparamsDao: GUIDParamsDao,
     private val mapper: Mapper<GUIDParamsDTO, GUIDParamsDB>,
     private val persistenceStoreStrategy: StoreStrategy
-) : GUIDparamsPersistence {
+) : GUIDParamsPersistence {
 
     /**
      * Получает первую запись из хранилища
