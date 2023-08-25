@@ -44,7 +44,7 @@ fun ReceiptDTO.generateFailedTransactionDocument(
     *terminalData(terminalId, terminalDate, paperWidth),
     *cardData(cardType, cardNumber),
     divider,
-    *operationDescription(responseCode, operationType.toOperationType()),
+    *operationType.toOperationType().toUi(responseCode),
     divider,
     centredText(DENIAL),
     divider,
@@ -69,28 +69,24 @@ fun ReceiptDTO.generateSuccessfulTransactionDocument(
         divider,
         *serviceTable(serviceName, serviceUnit, price, sum, amount, paperWidth),
         divider,
-        *operationDescription(responseCode, operationType),
+        *operationType.toUi(responseCode),
         divider,
         *operatorData(operatorNumber, paperWidth),
         divider,
         centredText(FOOTER_TEXT)
     )
 }
-
-fun operationDescription(
-    responseCode: ResponseCode, operationType: OperationType
-): Array<IPrintable> {
+fun OperationType.toUi(responseCode: ResponseCode):Array<IPrintable> {
     val descriptionsList = mutableListOf(centredText(responseCode.description))
     if (responseCode != ResponseCode.Success) return descriptionsList.toTypedArray()
 
-    if (operationType == OperationType.Debit) {
+    if (this == OperationType.Debit) {
         descriptionsList.add(centredText(OPERATION_CONFIRMED_BY_PIN))
         descriptionsList.add(centredText(DEBIT_CONFIRMED_BY_PIN))
-    } else if (operationType is OperationType.Return) {
+    } else if (this is OperationType.Return) {
         descriptionsList.add(centredText(OPERATION_CONFIRMED_BY_TERMINAL))
         descriptionsList.add(centredText(RETURN_CONFIRMED_BY_TERMINAL))
     }
-
     return descriptionsList.toTypedArray()
 }
 
