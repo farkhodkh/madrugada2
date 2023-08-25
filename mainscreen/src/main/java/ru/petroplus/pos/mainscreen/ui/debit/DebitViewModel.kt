@@ -9,24 +9,29 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import ru.petrolplus.pos.persitence.ReceiptPersistence
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
-import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petroplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
+import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
+import ru.petroplus.pos.printerapi.PrinterRepository
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
+import kotlin.random.Random
 
 class DebitViewModel(
     private val cardReaderRepository: CardReaderRepository,
+    private val printer: PrinterRepository,
     private val gatewayServer: GatewayServerRepositoryApi,
     private val transactionsPersistence: TransactionsPersistence,
     private val settingsPersistence: SettingsPersistence,
-    private val savedStateHandle: SavedStateHandle
+    private val receiptPersistence: ReceiptPersistence,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _viewState = mutableStateOf<DebitViewState>(DebitViewState.StartingState)
@@ -102,8 +107,12 @@ class DebitViewModel(
     //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
     //Изза бага с рассинхроном состояния экрана и отображения, при переключении вкладок так-же меняем стейты
     fun setTab(index: Int) {
-        when(index) {
+        // Блокировака переключения пока идёт печать
+        if (_viewState.value == DebitViewState.DebugState.PrinterState.Printing) return
+
+        when (index) {
             0 -> _viewState.value = DebitViewState.DebugState.APDU
+            2 -> _viewState.value = DebitViewState.DebugState.PrinterState.WaitDocument
             else -> _viewState.value = DebitViewState.DebugState.Debit()
         }
     }
@@ -118,23 +127,76 @@ class DebitViewModel(
         cardReaderRepository.sdkRepository.sendCommand(command)
     }
 
+    //FIXME: Метод тестовый. Распечатывает чек по введенному ID
+    //Проверяется возможна ли сейчас печать. Переход в состояние печати
+    //Запрос данных для печати чека из БД. Проверка полученных данных
+    //В Debug сборке симуляция ошибки во время печати. Печать чека с отслеживанием наличия ошибки
+    fun printTransactionTest(transactionId: String) {
+        if (!preprintCheck(transactionId)) return
+
+        _viewState.value = DebitViewState.DebugState.PrinterState.Printing
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = receiptPersistence.getDebitReceipt(transactionId)
+            if (data == null) {
+                onFailPrint()
+                return@launch
+            }
+
+            // Симуляция ошибки во время печати
+            if (ru.petroplus.pos.printerapi.BuildConfig.DEBUG) {
+                delay(300)
+                val isSuccessTry = Random.nextBoolean()
+                if (isSuccessTry) {
+                    onFailPrint()
+                    return@launch
+                }
+            }
+
+            when (printer.print(data)) {
+                null -> resetPrinter()
+                else -> onFailPrint()
+            }
+        }
+    }
+
+    fun resetPrinter() {
+        _viewState.value = DebitViewState.DebugState.PrinterState.WaitDocument
+    }
+
+    private fun onFailPrint() {
+        _viewState.value = DebitViewState.DebugState.PrinterState.PrintFailed
+    }
+
+    // Проверяем что принтер не находится в состоянии печати и значение ID валидное
+    private fun preprintCheck(transactionId: String) =
+        (transactionId.isNotEmpty() && _viewState.value != DebitViewState.DebugState.PrinterState.Printing)
+
     companion object {
         fun provideFactory(
             cardReaderRepository: CardReaderRepository,
+            printerRepository: PrinterRepository,
             gatewayServer: GatewayServerRepositoryApi,
             transactionsPersistence: TransactionsPersistence,
             settingsPersistence: SettingsPersistence,
             owner: SavedStateRegistryOwner,
+            receiptPersistence: ReceiptPersistence,
             defaultArgs: Bundle? = null,
         ): AbstractSavedStateViewModelFactory =
             object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(
-                    key: String,
-                    modelClass: Class<T>,
-                    handle: SavedStateHandle
+                    key: String, modelClass: Class<T>, handle: SavedStateHandle
                 ): T {
-                    return DebitViewModel(cardReaderRepository, gatewayServer, transactionsPersistence, settingsPersistence, handle) as T
+                    return DebitViewModel(
+                        cardReaderRepository,
+                        printerRepository,
+                        gatewayServer,
+                        transactionsPersistence,
+                        settingsPersistence,
+                        receiptPersistence,
+                        handle
+                    ) as T
                 }
             }
     }
