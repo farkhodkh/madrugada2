@@ -12,8 +12,9 @@ import ru.petroplus.pos.printerapi.IntroductoryConstruction.DENIAL_CODE
 import ru.petroplus.pos.printerapi.IntroductoryConstruction.FOOTER_TEXT
 import ru.petroplus.pos.printerapi.IntroductoryConstruction.RECEIPT_NUMBER
 import ru.petroplus.pos.printerapi.IntroductoryConstruction.RECEIPT_NUMBER_DENIAL
-import ru.petroplus.pos.printerapi.IntroductoryConstruction.OPERATION_CONFIRMED
 import ru.petroplus.pos.printerapi.IntroductoryConstruction.DEBIT_CONFIRMED_BY_PIN
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.OPERATION_CONFIRMED_BY_PIN
+import ru.petroplus.pos.printerapi.IntroductoryConstruction.OPERATION_CONFIRMED_BY_TERMINAL
 import ru.petroplus.pos.printerapi.IntroductoryConstruction.RETURN_CONFIRMED_BY_TERMINAL
 import ru.petroplus.pos.printerapi.OperationType
 import ru.petroplus.pos.printerapi.ReceiptFormatting.RECEIPT_MASK_SIZE
@@ -80,21 +81,14 @@ fun operationDescription(
     responseCode: ResponseCode, operationType: OperationType
 ): Array<IPrintable> {
     val descriptionsList = mutableListOf(centredText(responseCode.description))
+    if (responseCode != ResponseCode.Success) return descriptionsList.toTypedArray()
 
-    if (responseCode == ResponseCode.Success) {
-        when (operationType) {
-            OperationType.Debit -> {
-                descriptionsList.add(centredText(OPERATION_CONFIRMED))
-                descriptionsList.add(centredText(DEBIT_CONFIRMED_BY_PIN))
-            }
-
-            is OperationType.Return -> {
-                descriptionsList.add(centredText(OPERATION_CONFIRMED))
-                descriptionsList.add(centredText(RETURN_CONFIRMED_BY_TERMINAL))
-            }
-
-            else -> {}
-        }
+    if (operationType == OperationType.Debit) {
+        descriptionsList.add(centredText(OPERATION_CONFIRMED_BY_PIN))
+        descriptionsList.add(centredText(DEBIT_CONFIRMED_BY_PIN))
+    } else if (operationType is OperationType.Return) {
+        descriptionsList.add(centredText(OPERATION_CONFIRMED_BY_TERMINAL))
+        descriptionsList.add(centredText(RETURN_CONFIRMED_BY_TERMINAL))
     }
 
     return descriptionsList.toTypedArray()

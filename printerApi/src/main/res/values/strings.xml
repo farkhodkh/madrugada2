@@ -24,14 +24,17 @@
     <string name="pos_number_ru">Терминал No.</string>
     <string name="card">Карта</string>
     <string name="inn">ИНН</string>
-    <string name="operation_confirmed">Операция подтверждена</string>
+    <string name="operation_confirmed_by_pin">Операция подтверждена</string>
     <string name="debit_confirmed_by_pin">вводом ПИН кода</string>
+    <string name="operation_confirmed_by_terminal">Операция одобрена</string>
     <string name="return_confirmed_by_terminal">терминалом</string>
     <string name="operator_number">Оператор No.</string>
     <string name="footer_text">Добро пожаловать</string>
     <string name="price_unit">Pуб</string>
     <string name="denial">ОТКАЗ</string>
     <string name="denial_code">Код отказа</string>
+
+    <!--  описание ResponseCodes  -->
     <string name="success_response">ОДОБРЕНО</string>
     <string name="universal_error">Универсальная ошибка</string>
     <string name="system_error">Системная ошибка</string>
