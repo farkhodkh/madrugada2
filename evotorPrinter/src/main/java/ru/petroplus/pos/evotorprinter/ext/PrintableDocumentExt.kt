@@ -54,7 +54,7 @@ fun ReceiptDTO.generateSuccessfulTransactionDocument(
     responseCode: ResponseCode, paperWidth: Int
 ) = PrinterDocument(
     *receiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
-    *orgData(organizationName, posName, organizationInn),
+    *organizationData(organizationName, posName, organizationInn),
     divider,
     *terminalData(terminalId, terminalDate, paperWidth),
     divider,
@@ -80,7 +80,7 @@ fun receiptData(title: String, receiptNumber: Long, printerWidth: Int) = arrayOf
     ),
 )
 
-fun orgData(orgName: String, posName: String, inn: String): Array<IPrintable> = arrayOf(
+fun organizationData(orgName: String, posName: String, inn: String): Array<IPrintable> = arrayOf(
     centredText(orgName),
     centredText("${IntroductoryConstruction.INN} $inn"),
     centredText(posName),

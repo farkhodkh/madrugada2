@@ -11,7 +11,7 @@ private val DarkColorPalette = darkColors(
     primary = Purple200,
     primaryVariant = Purple700,
     secondary = Teal200,
-    error = Color(196, 69, 69, 255),
+    error = Color.Red,
     onError = Color.White
 )
 
@@ -19,7 +19,7 @@ private val LightColorPalette = lightColors(
     primary = Purple500,
     primaryVariant = Purple700,
     secondary = Teal200,
-    error = Color(196, 69, 69, 255),
+    error = Color.Red,
     onError = Color.White
     
 

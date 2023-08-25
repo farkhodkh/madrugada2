@@ -36,9 +36,6 @@ class DebitViewModel(
 
     private val _viewState = mutableStateOf<DebitViewState>(DebitViewState.StartingState)
     val viewState: State<DebitViewState> = _viewState
-/*
-    private val _printerState = mutableStateOf(PrinterState.WAIT_DOCUMENT)
-    val printerState: State<PrinterState> = _printerState*/
 
     init {
         viewModelScope.launch {

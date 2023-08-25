@@ -25,7 +25,8 @@ import ru.petroplus.pos.ui.R
 
 @Composable
 fun FailedPrintScreen(
-    retry: () -> Unit, dismiss: () -> Unit, modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    retry: () -> Unit, dismiss: () -> Unit
 ) {
     Surface(
         modifier = modifier,
@@ -68,5 +69,5 @@ fun FailedPrintScreen(
 @Preview
 @Composable
 fun previewFailedPrinterScreen() {
-    FailedPrintScreen({}, {}, Modifier.fillMaxSize())
+    FailedPrintScreen(Modifier.fillMaxSize(), {}, {})
 }

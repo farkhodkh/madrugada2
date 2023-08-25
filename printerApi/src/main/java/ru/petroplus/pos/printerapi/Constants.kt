@@ -9,68 +9,68 @@ object ReceiptFormatting {
 }
 
 object IntroductoryConstruction {
-    val SERVICE_SUM = ResourceHelper.getStringResource(R.string.service_sum)
-    val SERVICE_PRICE = ResourceHelper.getStringResource(R.string.service_price)
-    val SERVICE_AMOUNT = ResourceHelper.getStringResource(R.string.service_amount)
-    val SERVICE = ResourceHelper.getStringResource(R.string.service)
-    val RECEIPT_NUMBER = ResourceHelper.getStringResource(R.string.service_number)
-    val RECEIPT_NUMBER_DENIAL = ResourceHelper.getStringResource(R.string.service_number_denial)
-    val POS_NUMBER_EN = ResourceHelper.getStringResource(R.string.pos_number_en)
-    val POS_NUMBER_RU = ResourceHelper.getStringResource(R.string.pos_number_ru)
-    val CARD = ResourceHelper.getStringResource(R.string.card)
-    val INN = ResourceHelper.getStringResource(R.string.inn)
-    val TRANSACTION_CONFIRMED_BY_PIN_PART_I =
-        ResourceHelper.getStringResource(R.string.transaction_confirmed_by_pin_part_I)
-    val TRANSACTION_CONFIRMED_BY_PIN_PART_II =
-        ResourceHelper.getStringResource(R.string.transaction_confirmed_by_pin_part_II)
-    val OPERATOR_NUMBER = ResourceHelper.getStringResource(R.string.operator_number)
-    val FOOTER_TEXT = ResourceHelper.getStringResource(R.string.footer_text)
-    val PRICE_UNIT = ResourceHelper.getStringResource(R.string.price_unit)
-    val DENIAL = ResourceHelper.getStringResource(R.string.denial)
-    val DENIAL_CODE = ResourceHelper.getStringResource(R.string.denial_code)
+    val SERVICE_SUM by lazy { ResourceHelper.getStringResource(R.string.service_sum) }
+    val SERVICE_PRICE by lazy { ResourceHelper.getStringResource(R.string.service_price) }
+    val SERVICE_AMOUNT by lazy { ResourceHelper.getStringResource(R.string.service_amount) }
+    val SERVICE by lazy { ResourceHelper.getStringResource(R.string.service) }
+    val RECEIPT_NUMBER by lazy { ResourceHelper.getStringResource(R.string.service_number) }
+    val RECEIPT_NUMBER_DENIAL by lazy { ResourceHelper.getStringResource(R.string.service_number_denial) }
+    val POS_NUMBER_EN by lazy { ResourceHelper.getStringResource(R.string.pos_number_en) }
+    val POS_NUMBER_RU by lazy { ResourceHelper.getStringResource(R.string.pos_number_ru) }
+    val CARD by lazy { ResourceHelper.getStringResource(R.string.card) }
+    val INN by lazy { ResourceHelper.getStringResource(R.string.inn) }
+    val TRANSACTION_CONFIRMED_BY_PIN_PART_I by lazy {
+        ResourceHelper.getStringResource(R.string.transaction_confirmed_by_pin_part_I) }
+    val TRANSACTION_CONFIRMED_BY_PIN_PART_II by lazy {
+        ResourceHelper.getStringResource(R.string.transaction_confirmed_by_pin_part_II) }
+    val OPERATOR_NUMBER by lazy { ResourceHelper.getStringResource(R.string.operator_number) }
+    val FOOTER_TEXT by lazy { ResourceHelper.getStringResource(R.string.footer_text) }
+    val PRICE_UNIT by lazy { ResourceHelper.getStringResource(R.string.price_unit) }
+    val DENIAL by lazy { ResourceHelper.getStringResource(R.string.denial) }
+    val DENIAL_CODE by lazy { ResourceHelper.getStringResource(R.string.denial_code) }
 }
 
 sealed class ResponseCode(val code: Int, val description: String) {
-    object Success : ResponseCode(SUCCESS, "ОДОБРЕНО")
+    object Success : ResponseCode(SUCCESS, ResourceHelper.getStringResource(R.string.success_response) )
 
     sealed class Error(code: Int, description: String) : ResponseCode(code, description) {
-        object Universal : Error(UNIVERSAL_ERROR, "Универсальная ошибка")
-        object System : Error(SYSTEM_ERROR, "Системная ошибка")
-        object LibInit : Error(LIB_INT_ERROR, "Системная ошибка инициализации")
-        object Ini : Error(INI_FAIL, "Ошибка с ini-файлом")
-        object Call : Error(CALL_ERROR, "Некорректный вызов библиотеки извне")
-        object WrongCard : Error(WRONG_CARD, "Не Petrol 7")
-        object BadCard : Error(BAD_CARD, "Ошибка чтения/работы с картой")
-        object BadSam : Error(BAD_SAM, "Проблемы с SAM")
-        object PinFail : Error(PIN_FAIL, "Ошибка проверки PIN")
-        object WrongPin : Error(WRONG_PIN, "Hеверный PIN")
-        object WrongArgs : Error(WRONG_ARGS, "Неверный заказ")
-        object WrongService : Error(WRONG_SRV, "Неверная услуга")
-        object DebitFail : Error(DEBIT_FAIL, "Ошибка дебета")
-        object RefundFail : Error(REFUND_FAIL, "Ошибка возврата")
-        object FatalError : Error(FATAL_ERROR, "Ошибка обслуживания")
-        object NetError : Error(NET_ERROR, "Ошибка запроса АС")
-        object ASTimout : Error(AS_TIMEOUT, "Таймаут авторизации")
-        object ASLimits : Error(AS_LIMITS, "Нет онлайн лимитов")
-        object ASExtAuth : Error(AS_EXT_AUTH, "Требуется доп.авторизация")
-        object ASBlocked : Error(AS_BLOCKED, "Карта заблокирована")
-        object ASNoFunds : Error(AS_NO_FUNDS, "Недостаточно средств")
-        object ASNoLimits : Error(AS_NO_LIMITS, "Превышение лимита")
-        object ASPin : Error(AS_PIN_ERROR, "Неверный PIN")
-        object ASNoService : Error(AS_NO_SERVICE, "Сервис недоступен")
-        object ASNoTime : Error(AS_NO_TIME, "В текущее время не обслуживается")
-        object ASUnknown : Error(AS_UNKNOWN, "Карта неизвестна")
-        object ASError : Error(AS_ERROR, "Ошибка на АС")
-        object ASCommError : Error(AS_COMM_ERROR, "Ошибка на АС")
-        object ASBlExp : Error(AS_BL_EXP, "ЧС на АС устарел")
-        object ASCardExp : Error(AS_CARD_EXP, "Срок действия карты истек")
-        object ASNoEm : Error(AS_NO_EM, "Прием данного эмитента не разрешен")
-        object ASNoTerm : Error(AS_NO_TERM, "Неверный номер терминала")
-        object ASBl : Error(BL_ERROR, "Ошибка проверки ЧС")
-        object SrvError : Error(SRV_ERROR, "Нет услуги")
-        object LimitError : Error(LIM_ERROR, "Лимит исчерпан")
-        object AmountError : Error(AMOUNT_ERROR, "Недостаточно средств")
-        object GenAcError : Error(GEN_AC_ERROR, "Ошибка на карте")
+        object Universal : Error(UNIVERSAL_ERROR, ResourceHelper.getStringResource(R.string.universal_error))
+        object System : Error(SYSTEM_ERROR, ResourceHelper.getStringResource(R.string.system_error))
+        object LibInit : Error(LIB_INT_ERROR, ResourceHelper.getStringResource(R.string.lib_init))
+        object Ini : Error(INI_FAIL, ResourceHelper.getStringResource(R.string.ini))
+        object Call : Error(CALL_ERROR, ResourceHelper.getStringResource(R.string.call_error))
+        object WrongCard : Error(WRONG_CARD, ResourceHelper.getStringResource(R.string.worng_card))
+        object BadCard : Error(BAD_CARD, ResourceHelper.getStringResource(R.string.bad_card))
+        object BadSam : Error(BAD_SAM, ResourceHelper.getStringResource(R.string.bad_sam))
+        object PinFail : Error(PIN_FAIL, ResourceHelper.getStringResource(R.string.pin_fail))
+        object WrongPin : Error(WRONG_PIN, ResourceHelper.getStringResource(R.string.wrong_pin))
+        object WrongArgs : Error(WRONG_ARGS, ResourceHelper.getStringResource(R.string.wrong_args))
+        object WrongService : Error(WRONG_SRV, ResourceHelper.getStringResource(R.string.wrong_service))
+        object DebitFail : Error(DEBIT_FAIL, ResourceHelper.getStringResource(R.string.debit_fail))
+        object RefundFail : Error(REFUND_FAIL, ResourceHelper.getStringResource(R.string.refund_fail))
+        object FatalError : Error(FATAL_ERROR, ResourceHelper.getStringResource(R.string.fatal_error))
+        object NetError : Error(NET_ERROR, ResourceHelper.getStringResource(R.string.net_error))
+        object ASTimout : Error(AS_TIMEOUT, ResourceHelper.getStringResource(R.string.as_timout))
+        object ASLimits : Error(AS_LIMITS, ResourceHelper.getStringResource(R.string.as_limits))
+        object ASExtAuth : Error(AS_EXT_AUTH, ResourceHelper.getStringResource(R.string.as_ext_auth))
+        object ASBlocked : Error(AS_BLOCKED, ResourceHelper.getStringResource(R.string.as_blocked))
+        object ASNoFunds : Error(AS_NO_FUNDS, ResourceHelper.getStringResource(R.string.as_no_founds))
+        object ASNoLimits : Error(AS_NO_LIMITS, ResourceHelper.getStringResource(R.string.as_no_limits))
+        object ASPin : Error(AS_PIN_ERROR, ResourceHelper.getStringResource(R.string.as_pin_error))
+        object ASNoService : Error(AS_NO_SERVICE, ResourceHelper.getStringResource(R.string.as_no_service))
+        object ASNoTime : Error(AS_NO_TIME,  ResourceHelper.getStringResource(R.string.as_no_time))
+        object ASUnknown : Error(AS_UNKNOWN, ResourceHelper.getStringResource(R.string.as_unknown))
+        object ASError : Error(AS_ERROR, ResourceHelper.getStringResource(R.string.as_error))
+        object ASCommError : Error(AS_COMM_ERROR, ResourceHelper.getStringResource(R.string.as_comm_error))
+        object ASBlExp : Error(AS_BL_EXP, ResourceHelper.getStringResource(R.string.as_bl_exp))
+        object ASCardExp : Error(AS_CARD_EXP, ResourceHelper.getStringResource(R.string.as_card_exp))
+        object ASNoEm : Error(AS_NO_EM, ResourceHelper.getStringResource(R.string.as_no_em))
+        object ASNoTerm : Error(AS_NO_TERM, ResourceHelper.getStringResource(R.string.as_no_term))
+        object ASBl : Error(BL_ERROR, ResourceHelper.getStringResource(R.string.as_bl))
+        object SrvError : Error(SRV_ERROR, ResourceHelper.getStringResource(R.string.srv_error))
+        object LimitError : Error(LIM_ERROR, ResourceHelper.getStringResource(R.string.limit_error))
+        object AmountError : Error(AMOUNT_ERROR, ResourceHelper.getStringResource(R.string.amount_error))
+        object GenAcError : Error(GEN_AC_ERROR, ResourceHelper.getStringResource(R.string.gen_ac_error))
     }
 
     companion object {
