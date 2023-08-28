@@ -27,15 +27,14 @@ import ru.petroplus.pos.ui.R
 import ru.petroplus.pos.blockingScreen.StartingApplicationBlockingScreen
 import ru.petroplus.pos.dialogs.ConfigurationFileRequiredDialog
 import ru.petroplus.pos.dialogs.FilePickerDialog
-import ru.petroplus.pos.mainscreen.di.MainScreenComponent
+import ru.petroplus.pos.di.MainScreenComponent
+import ru.petroplus.pos.di.MainScreenModule
 import ru.petroplus.pos.navigation.BottomBarItem
 import ru.petroplus.pos.navigation.BottomNavigationController
 import ru.petroplus.pos.navigation.Screens
 import ru.petroplus.pos.ui.BottomNavWithBadgesTheme
 import ru.petroplus.pos.ui.navigation.NavigationController
-import ru.petroplus.pos.util.ResourceHelper
 import ru.petroplus.pos.util.constants.Constants
-import java.io.FileNotFoundException
 import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
@@ -49,13 +48,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        App.appComponent.inject(this)
-
         mainScreenSubcomponent = App.appComponent.mainScreenComponentBuilder()
+            .mainModule(MainScreenModule())
             .roomModule(RoomModule())
             .mappersModule(MappersModule())
             .persistenceModule(PersistenceModule())
             .build()
+
+        mainScreenSubcomponent.inject(this)
 
         setContent {
             val viewState by viewModel.viewState.collectAsState()
@@ -66,12 +66,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 MainScreenState.CheckingSettingsState -> {
-                    try {
-                        val fis = applicationContext.openFileInput(Constants.CONFIG_FILE_NAME)
-                        viewModel.readConfigurationFile(fis)
-                    } catch (ex: FileNotFoundException) {
-                        viewModel.readConfigurationFile(null)
-                    }
+                    viewModel.setupConfiguration(Constants.CONFIG_FILE_NAME)
                 }
 
                 MainScreenState.CheckingSuccessState -> {

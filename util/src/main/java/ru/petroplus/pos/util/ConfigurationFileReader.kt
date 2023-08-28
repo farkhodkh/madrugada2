@@ -1,35 +1,43 @@
 package ru.petroplus.pos.util
 
+import android.content.Context
 import android.util.Patterns
-import ru.petroplus.pos.util.ext.isNotConfigurationCommentedLine
-import java.io.FileInputStream
-import java.io.InputStream
+import java.io.FileNotFoundException
 import java.util.*
 
 /**
  * Класс для проверки файла конвигурации терминала и для его чтения
  */
-class ConfigurationFileReader() {
+class ConfigurationFileReader(private val context: Context) {
 
-    var properties: Properties = Properties()
-    private lateinit var inputStream: InputStream
-
-    private val REQUIRED_FIELDS_LITS = listOf("AcquireID", "TerminalID", "Host1_ip", "Host1_port")
-
-    @Throws(ConfigurationFileReaderException::class)
-    fun readConfigurationFileContent(configurationFile: FileInputStream) {
-        try {
-            inputStream = configurationFile
-            properties.load(inputStream)
-        } catch (ex: Exception) {
-            throw ConfigurationFileReaderException(true, ex.localizedMessage.orEmpty())
-        }
+    companion object {
+        const val ACQUIRER_ID = "AcquireID"
+        const val TERMINAL_ID = "AcquireID"
+        const val HOST_PORT = "Host1_port"
+        const val HOST_IP = "Host1_ip"
     }
 
-    private fun getConfigurationContent() = properties
-        .filter {
-            !(it.key as String).isNotConfigurationCommentedLine()
+    @Throws(NoConfigurationFileException::class)
+    fun readConfiguration(configurationFile: String): Properties {
+
+        val inputStream = try {
+            context.openFileInput(configurationFile)
+        } catch (e: FileNotFoundException) {
+            throw NoConfigurationFileException("Не найден файл конфигурации по текущему пути")
         }
+
+        val properties = try {
+            Properties().apply { load(inputStream) }
+        } catch (ex: Exception) {
+            throw FileParseException(ex.localizedMessage.orEmpty())
+        } finally {
+            inputStream.close()
+        }
+
+        validateConfiguration(properties)
+
+        return properties
+    }
 
     /**
      * Все указанные проперти обязательно должны присутствовать и иметь значение
@@ -38,35 +46,34 @@ class ConfigurationFileReader() {
      * Необходимо игнорировать закомментированные параметры с символом ';', например ";AcquireID"
      * Необходимо будет подумать над другими проверками
      */
-    @Throws(ConfigurationFileReaderException::class)
-    fun checkConfigurationFileContent() {
+    @Throws(NoConfigurationFileException::class)
+    private fun validateConfiguration(prop: Properties) {
 
         var errorDetails = ""
-        val prop = getConfigurationContent()
 
-        if (prop.isEmpty()) {
-            errorDetails = "Properties empty!"
-        }
+        if (prop.isEmpty) errorDetails = "Properties empty!"
 
-        REQUIRED_FIELDS_LITS.forEach {
-            if (!prop.containsKey(it)) {
-                errorDetails = "$errorDetails Config file does not contain $it property\n"
+        fun checkIsPropExists(propName: String) {
+            if (!prop.containsKey(propName)) {
+                errorDetails = "$errorDetails Config file does not contain $propName property\n"
             }
-            val propValue = prop.getValue(it)
+            val propValue = prop.getValue(propName)
             if (propValue == null || propValue.equals("")) {
-                errorDetails = "$errorDetails Config file does not contain value for property $it\n"
+                errorDetails = "$errorDetails Config file does not contain value for property $propName\n"
             }
         }
 
         //AcquireID check
-        val acquireID = prop.getValue("AcquireID") as String
+        checkIsPropExists(ACQUIRER_ID)
+        val acquireID = prop.getValue(ACQUIRER_ID) as String
         try {
             acquireID.toInt()
         } catch (ex: Exception) {
-            errorDetails = "$errorDetails AcquireID value error: ${ex.localizedMessage}"
+            errorDetails = "$errorDetails $ACQUIRER_ID value error: ${ex.localizedMessage}"
         }
 
         //TerminalID check
+        checkIsPropExists(TERMINAL_ID)
         val terminalID = prop.getValue("TerminalID") as String
         try {
             terminalID.toInt()
@@ -75,6 +82,7 @@ class ConfigurationFileReader() {
         }
 
         //Host1_ip check
+        checkIsPropExists(HOST_IP)
         val host1Ip = prop.getValue("Host1_ip") as String
         val itCheck = Patterns
                 .IP_ADDRESS
@@ -86,6 +94,7 @@ class ConfigurationFileReader() {
         }
 
         //Host1_port check 0 до 65535
+        checkIsPropExists(HOST_PORT)
         val host1Port = prop.getValue("Host1_port") as String
 
         var portInt: Int = -1
@@ -98,8 +107,10 @@ class ConfigurationFileReader() {
         if (portInt !in 0..65535) {
             errorDetails = "$errorDetails Host1_port value error: $host1Port"
         }
-        throw ConfigurationFileReaderException(errorDetails.isNotEmpty(), errorDetails)
+
+        if (errorDetails.isNotEmpty()) throw FileParseException(errorDetails)
     }
 
-    class ConfigurationFileReaderException(val hasError: Boolean, detailedMessage: String): Exception(detailedMessage)
+    class FileParseException(detailedMessage: String): Exception(detailedMessage)
+    class NoConfigurationFileException(detailedMessage: String): Exception(detailedMessage)
 }

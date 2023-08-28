@@ -1,4 +1,4 @@
-package ru.petroplus.pos.mainscreen.di
+package ru.petroplus.pos.di
 
 /**
  * Зависимости компоненты
