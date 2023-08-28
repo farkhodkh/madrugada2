@@ -22,6 +22,7 @@ import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.printerapi.PrinterRepository
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
+import java.util.Calendar
 import kotlin.random.Random
 
 class DebitViewModel(
@@ -127,12 +128,40 @@ class DebitViewModel(
         cardReaderRepository.sdkRepository.sendCommand(command)
     }
 
+    fun repeatPrinting() {
+        // TODO: проверка того, какой чека печатался
+        printShiftReport()
+    }
+
+    fun printShiftReport() {
+        if (!preprintCheck()) return
+        _viewState.value = DebitViewState.DebugState.PrinterState.Printing
+
+        viewModelScope.launch(Dispatchers.IO) {
+            // Симуляция ошибки во время печати
+            if (ru.petroplus.pos.printerapi.BuildConfig.DEBUG && false) {
+                delay(300)
+                val isSuccessTry = Random.nextBoolean()
+                if (isSuccessTry) {
+                    onFailPrint()
+                    return@launch
+                }
+            }
+
+            val currentDate = Calendar.getInstance().time
+            when (printer.printShiftReport(currentDate)) {
+                null -> resetPrinter()
+                else -> onFailPrint()
+            }
+        }
+    }
+
     //FIXME: Метод тестовый. Распечатывает чек по введенному ID
     //Проверяется возможна ли сейчас печать. Переход в состояние печати
     //Запрос данных для печати чека из БД. Проверка полученных данных
     //В Debug сборке симуляция ошибки во время печати. Печать чека с отслеживанием наличия ошибки
     fun printTransactionTest(transactionId: String) {
-        if (!preprintCheck(transactionId)) return
+        if (!preprintCheckBeforePrintTransaction(transactionId)) return
 
         _viewState.value = DebitViewState.DebugState.PrinterState.Printing
 
@@ -153,7 +182,7 @@ class DebitViewModel(
                 }
             }
 
-            when (printer.print(data)) {
+            when (printer.printReceipt(data)) {
                 null -> resetPrinter()
                 else -> onFailPrint()
             }
@@ -169,8 +198,12 @@ class DebitViewModel(
     }
 
     // Проверяем что принтер не находится в состоянии печати и значение ID валидное
-    private fun preprintCheck(transactionId: String) =
-        (transactionId.isNotEmpty() && _viewState.value != DebitViewState.DebugState.PrinterState.Printing)
+    private fun preprintCheckBeforePrintTransaction(transactionId: String) =
+        (transactionId.isNotEmpty() && preprintCheck())
+
+    // Проверяем что принтер не находится в состоянии печати
+    private fun preprintCheck() =
+        _viewState.value != DebitViewState.DebugState.PrinterState.Printing
 
     companion object {
         fun provideFactory(

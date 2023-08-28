@@ -33,6 +33,12 @@
     <string name="price_unit">Pуб</string>
     <string name="denial">ОТКАЗ</string>
     <string name="denial_code">Код отказа</string>
+    <string name="shift_report_title">ОТЧЕТ ЗА СМЕНУ</string>
+    <string name="shift_start">НАЧАЛО</string>
+    <string name="shift_time">ВРЕМЯ</string>
+    <string name="cards_petrolplus_title">КАРТЫ ПЕТРОЛ+</string>
+    <string name="card_processed">ОБРАБОТАНО КАРТ</string>
+    <string name="current_price">текушая цена</string>
 
     <!--  описание ResponseCodes  -->
     <string name="success_response">ОДОБРЕНО</string>

@@ -1,9 +1,13 @@
 package ru.petroplus.pos.printerapi.ext
 
 import ru.petroplus.pos.printerapi.CardType
+import ru.petroplus.pos.printerapi.Formatting
 import ru.petroplus.pos.printerapi.OperationType
 import ru.petroplus.pos.printerapi.ResponseCode
-import ru.petroplus.pos.util.ext.roundTo
+import ru.petroplus.pos.util.ext.leadingZeros
+
+
+fun Int.formattingTerminalId() = this.leadingZeros(Formatting.TERMINAL_NUMBER_MASK_SIZE)
 
 fun Int.toCardType(): CardType = when (this) {
     1 -> CardType.Petrol5
@@ -59,12 +63,4 @@ fun Int.toResponseCode(): ResponseCode = when (this) {
     ResponseCode.AMOUNT_ERROR -> ResponseCode.Error.AmountError
     ResponseCode.GEN_AC_ERROR -> ResponseCode.Error.GenAcError
     else -> ResponseCode.Error.Universal
-}
-
-fun Long.toAmountString(): String {
-    return (this / 100.0).roundTo(2)
-}
-
-fun Long.toCurrencyString(): String {
-    return (this / 1000.0).roundTo(2)
 }

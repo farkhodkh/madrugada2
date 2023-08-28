@@ -103,7 +103,7 @@ fun PrinterScreen(viewModel: DebitViewModel) {
                 PrintProgressScreen(modifier = Modifier.fillMaxSize())
 
             DebitViewState.DebugState.PrinterState.PrintFailed -> FailedPrintScreen(
-                retry = { viewModel.printTransactionTest(transactionId) },
+                retry = { viewModel.repeatPrinting() },
                 dismiss = viewModel::resetPrinter,
                 modifier = Modifier.fillMaxSize()
             )
@@ -125,6 +125,13 @@ fun PrinterScreen(viewModel: DebitViewModel) {
                     Button(modifier = Modifier.fillMaxWidth(),
                         onClick = { viewModel.printTransactionTest(transactionId) }) {
                         Text(text = "Распечатать")
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Button(modifier = Modifier.fillMaxWidth(),
+                        onClick = viewModel::printShiftReport) {
+                        Text(text = "Распечатать чек смены")
                     }
                 }
             }

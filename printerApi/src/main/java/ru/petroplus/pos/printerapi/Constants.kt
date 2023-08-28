@@ -3,9 +3,10 @@ package ru.petroplus.pos.printerapi
 import ru.petroplus.pos.util.ResourceHelper
 
 
-object ReceiptFormatting {
+object Formatting {
     const val RECEIPT_MASK_SIZE = 10
     const val TERMINAL_NUMBER_MASK_SIZE = 5
+    const val PRINTER_DATE_PATTERN = "dd/MM/yy HH:mm:ss"
 }
 
 object IntroductoryConstruction {
@@ -28,6 +29,12 @@ object IntroductoryConstruction {
     val PRICE_UNIT by lazy { ResourceHelper.getStringResource(R.string.price_unit) }
     val DENIAL by lazy { ResourceHelper.getStringResource(R.string.denial) }
     val DENIAL_CODE by lazy { ResourceHelper.getStringResource(R.string.denial_code) }
+    val SHIFT_REPORT_TITLE by lazy { ResourceHelper.getStringResource(R.string.shift_report_title) }
+    val SHIFT_START by lazy { ResourceHelper.getStringResource(R.string.shift_start) }
+    val SHIFT_TIME by lazy { ResourceHelper.getStringResource(R.string.shift_time) }
+    val CARDS_PETROL_PLUS_TITLE by lazy { ResourceHelper.getStringResource(R.string.cards_petrolplus_title) }
+    val CARD_PROCESSED by lazy { ResourceHelper.getStringResource(R.string.card_processed) }
+    val FOOTNOTE_CURRENT_PRICE by lazy { ResourceHelper.getStringResource(R.string.current_price) }
 }
 
 sealed class ResponseCode(val code: Int, val description: String) {
