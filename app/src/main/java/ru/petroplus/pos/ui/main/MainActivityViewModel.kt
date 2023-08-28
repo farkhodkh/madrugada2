@@ -81,72 +81,7 @@ class MainActivityViewModel(
             DataDirectoryPath
         )
 
-        if (result.code != OK.code) {
-            throw RuntimeException("first init fail!")
-        }
 
-        
-//==================================================================================================
-//todo: Тестовые вызовы прочих методов библиотеки. Их слежует убрать при финальной проработке
-//      взаимодействия с библиотекой.
-
-        var cardKey = CardKeyDto()
-        var cardData = CardInfo()
-
-        var debitParams = DebitParamsDto()
-        var transInfo = TransactionInfoDto()
-        var refundParam = RefundParamsDto()
-        var errorInfo = ErrorInfoDto()
-        var libInfo = LibInfoDto()
-
-        result = p7LibraryRepository.deInit()
-        if (result.code != OK.code) {
-            throw RuntimeException("deInit fail!")
-        }
-        result = p7LibraryRepository.init(
-            configurationReaderUtil.properties.toInitDataDto(),
-            UUID,
-            callbacks,
-            DataDirectoryPath,
-            DataDirectoryPath
-        )
-        if (result.code != OK.code) {
-            throw RuntimeException("second init fail!")
-        }
-        result = p7LibraryRepository.detect(cardKey, cardData)
-        if (result.code != OK.code) {
-            throw RuntimeException("detect fail!")
-        }
-        debitParams.serviceWhat = 1
-        debitParams.serviceFrom = 0
-        debitParams.amount = 100L
-        debitParams.price  = 1000L
-        debitParams.sum    = 1000L
-        debitParams.pinBlock = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
-        result = p7LibraryRepository.debit(debitParams, transInfo, UUID)
-        if (result.code != OK.code) {
-            throw RuntimeException("debit fail!")
-        }
-        refundParam.serviceWhat = debitParams.serviceWhat
-        refundParam.price       = debitParams.price
-        refundParam.amount      = debitParams.amount
-        refundParam.sum         = debitParams.sum
-        result = p7LibraryRepository.refund(refundParam, transInfo, UUID)
-        if (result.code != OK.code) {
-            throw RuntimeException("refund fail!")
-        }
-        result = p7LibraryRepository.getErrorInfo(errorInfo)
-        if (result.code != OK.code) {
-            throw RuntimeException("getErrorInfo fail!")
-        }
-        result = p7LibraryRepository.getLibInfo(libInfo)
-        if (result.code != OK.code) {
-            throw RuntimeException("getLibInfo fail!")
-        }
-        
-//==================================================================================================
-
-        
         if (result.code == OK.code) {
             _viewState.value =
                 MainScreenState.CheckingSuccessState
