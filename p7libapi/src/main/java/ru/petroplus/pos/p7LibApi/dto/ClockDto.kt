@@ -11,6 +11,7 @@ package ru.petroplus.pos.p7LibApi.dto
  * @property weekDay - день недели, 1=MON ... 7=SUN
  */
 
+//todo: возможно, название класса не оптимально, при возможности подумать над переименованием.
 class ClockDto {
     var year : Short = 0
     var month : Short = 0

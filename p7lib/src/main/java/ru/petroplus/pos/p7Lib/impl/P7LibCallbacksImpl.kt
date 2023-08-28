@@ -88,7 +88,7 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
         return OK
     }
 
-    override fun transferOOBToAS(OOBData: ByteArray): ResultCode {
+    override fun transferOOBToAS(oobData: ByteArray): ResultCode {
 
         return OK
     }

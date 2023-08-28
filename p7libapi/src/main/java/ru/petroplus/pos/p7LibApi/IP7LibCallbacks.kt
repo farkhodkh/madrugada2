@@ -43,6 +43,7 @@ interface IP7LibCallbacks {
     /**
      * Обмен данными с SAM картой
      * @param data - Информационное сообщение для передачи на карту
+     * @param answer - Ответ карты
      * @return Код результат выполнения операции по сбросу карты
      */
     fun sendDataToSam(data: ApduData, answer: ApduAnswer): ResultCode
@@ -57,33 +58,38 @@ interface IP7LibCallbacks {
     /**
      * Передача данных в АС
      * @param data - бинарное нешифрованное информационное сообщение для передачи в АС
-     * @return Код результат выполнения операции
+     * @return Код результата выполнения операции
      */
     fun doASDataExchange(data: ByteArray): OperationResult
 
     /**
-     * Метод поиска последней транзакции по номеру карты
+     * Метод поиска последней транзакции по номеру карты в базе данных
      * @param cardNumber - номер карты
-     * @param transactionEntity - <=> Запись в базе данных
+     * @param record - <=> Запись в базе данных
+     * @return Код результата выполнения операции
      */
     fun findLastTransactionDB(cardNumber: Long, record: TransactionRecordDto): ResultCode
 
     /**
-     * Обновление записей транзакции в БД
-     * @param record - Содержание транзакции для печати
+     * Оповещение о завершении транзакции с передачей данных трензакции
+     * для сохранения транзакции в БД
+     * @param record - Данные транзакции для сохранения в БД
+     * @return Код результата выполнения операции
      */
     fun completeTransactionDB(record: TransactionRecordDto): ResultCode
 
     /**
      * Распечатка чека с технической информацией и прочими данными
      * @param data - Данные для заполнения чека для печати
+     * @return Код результата выполнения операции
      */
     fun printSimpleDoc(data: PrintableDataDto): ResultCode
 
     /**
      * Передача отложенных документов (OOB) на АС
-     * @param data - Блок JJB в бинарном виде
+     * @param oobData - Блок OOB в бинарном виде
+     * @return Код результата выполнения операции
      */
-    fun transferOOBToAS(OOBData: ByteArray): ResultCode
+    fun transferOOBToAS(oobData: ByteArray): ResultCode
 
 }

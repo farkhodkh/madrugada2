@@ -68,8 +68,6 @@ class MainActivityViewModel(
 
         var DataDirectoryPath = String()
 
-//        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-//            DataDirectoryPath = Environment.getExternalStorageDirectory().getAbsolutePath();  }
         DataDirectoryPath = Environment.getStorageDirectory().getAbsolutePath();
         DataDirectoryPath += File.separator + "P7Lib";
 
