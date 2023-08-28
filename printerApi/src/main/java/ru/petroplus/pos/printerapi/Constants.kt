@@ -19,10 +19,10 @@ object IntroductoryConstruction {
     val POS_NUMBER_RU by lazy { ResourceHelper.getStringResource(R.string.pos_number_ru) }
     val CARD by lazy { ResourceHelper.getStringResource(R.string.card) }
     val INN by lazy { ResourceHelper.getStringResource(R.string.inn) }
-    val TRANSACTION_CONFIRMED_BY_PIN_PART_I by lazy {
-        ResourceHelper.getStringResource(R.string.transaction_confirmed_by_pin_part_I) }
-    val TRANSACTION_CONFIRMED_BY_PIN_PART_II by lazy {
-        ResourceHelper.getStringResource(R.string.transaction_confirmed_by_pin_part_II) }
+    val OPERATION_CONFIRMED_BY_PIN by lazy { ResourceHelper.getStringResource(R.string.operation_confirmed_by_pin) }
+    val DEBIT_CONFIRMED_BY_PIN by lazy { ResourceHelper.getStringResource(R.string.debit_confirmed_by_pin) }
+    val OPERATION_CONFIRMED_BY_TERMINAL by lazy { ResourceHelper.getStringResource(R.string.operation_confirmed_by_terminal) }
+    val RETURN_CONFIRMED_BY_TERMINAL by lazy { ResourceHelper.getStringResource(R.string.return_confirmed_by_terminal) }
     val OPERATOR_NUMBER by lazy { ResourceHelper.getStringResource(R.string.operator_number) }
     val FOOTER_TEXT by lazy { ResourceHelper.getStringResource(R.string.footer_text) }
     val PRICE_UNIT by lazy { ResourceHelper.getStringResource(R.string.price_unit) }
