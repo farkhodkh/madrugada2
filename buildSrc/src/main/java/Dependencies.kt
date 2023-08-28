@@ -53,6 +53,8 @@ object Dependencies {
     const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx"
     const val lifecycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-compose"
 
+    const val buildTools = "com.android.tools.build:gradle"
+
     const val retrofit = "com.squareup.retrofit2:retrofit"
     const val okhttpProfiler = "com.localebro:okhttpprofiler"
     const val okhttLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor"
