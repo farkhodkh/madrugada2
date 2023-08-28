@@ -7,7 +7,7 @@ import ru.evotor.devices.commons.kkm.KkmInfoRequest
 import ru.evotor.devices.commons.printer.PrinterDocument
 import ru.petrolplus.pos.persitence.dto.ReceiptDTO
 import ru.petroplus.pos.evatorprinter.R
-import ru.petroplus.pos.evotorprinter.ext.generateShiftReport
+import ru.petroplus.pos.evotorprinter.ShiftReportComponents.generateShiftReport
 import ru.petroplus.pos.evotorprinter.ext.toPrinterDoc
 import ru.petroplus.pos.printerapi.PrinterRepository
 import ru.petroplus.pos.util.ResourceHelper
