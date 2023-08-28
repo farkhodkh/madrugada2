@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
 import ru.petrolplus.pos.room.BuildConfig
 import ru.petrolplus.pos.room.dao.BaseSettingsDao
 import ru.petrolplus.pos.room.dao.CommonSettingsDao
@@ -49,7 +50,21 @@ abstract class AppDatabase : RoomDatabase() {
         fun getInstance(context: Context): AppDatabase {
             return if (BuildConfig.DEBUG) {
                 Room.databaseBuilder(context, AppDatabase::class.java, "pos-test-database")
-                    .createFromAsset("prepopulated-database.db")
+                    .addCallback(
+                        callback = object : Callback() {
+                            override fun onCreate(db: SupportSQLiteDatabase) {
+                                super.onCreate(db)
+                                with(db) {
+                                    execSQL("INSERT INTO base_settings (id, acquirer_id, terminal_id, host_port, host_ip) VALUES(1, 2005, 26, '99.100.100.1', 4023)")
+                                    execSQL("INSERT INTO common_settings (id, organization_name, organization_inn, pos_name) VALUES(1, 'Первая автокомпания', '111222333444', 'АЗС №1')")
+                                    execSQL("INSERT INTO guid_params (id, last_online_transaction, last_generated_time, clock_sequence, has_node_id, node_id) VALUES (1, 57073, 1669910413, 25131, 1, 'CDE471DBA267')")
+                                    execSQL("INSERT INTO shift_params (id, current_shift_number, current_shift_starts_timestamp) VALUES(1, 12, '2023-12-20 12:12:12')")
+                                    execSQL("INSERT INTO receipt_params (id, current_receipt_number) VALUES(1, 12)")
+                                    execSQL("INSERT INTO services (id, name, unit, price) VALUES(1, 'Аи-92', 'Л', 45000), (2, 'Аи-95', 'Л', 50000), (3, 'Аи-98', 'Л', 55000)")
+                                }
+                            }
+                        }
+                    )
                     .build()
             } else {
                 Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME).build()

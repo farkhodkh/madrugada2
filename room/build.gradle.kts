@@ -13,12 +13,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    sourceSets {
-        getByName("debug") {
-            assets.srcDirs("rc/debug/assets")
-        }
-    }
-
     kotlinOptions {
         jvmTarget =  JavaVersion.VERSION_1_8.toString()
     }
