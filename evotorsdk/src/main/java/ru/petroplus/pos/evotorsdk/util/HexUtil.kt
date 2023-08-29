@@ -1,5 +1,6 @@
 package ru.petroplus.pos.evotorsdk.util
 
+//TODO - Рефактор этого класса необходим с учетом такого же файла в пакете tlv
 object HexUtil {
 
     private val HEX_FORMAT = "%02X"
