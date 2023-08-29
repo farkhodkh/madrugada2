@@ -8,10 +8,12 @@ import ru.petroplus.pos.p7LibApi.responces.OperationResult
 
 class P7LibCallbacksImpl : IP7LibCallbacks {
     override fun log(message: String) {
+        //TODO: код подлежит переработке
         val b = 0
     }
 
     override fun cardReset(answer: ApduAnswer): ResultCode {
+        //TODO: код подлежит переработке
         answer.sw1  = 0x00
         answer.sw2  = 0x00
         answer.data = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
@@ -19,6 +21,7 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
     }
 
     override fun sendDataToCard(data: ApduData, answer: ApduAnswer): ResultCode {
+        //TODO: код подлежит переработке
         answer.sw1  = 0x90
         answer.sw2  = 0x00
         answer.data = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
@@ -26,6 +29,7 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
     }
 
     override fun samReset(answer: ApduAnswer): ResultCode {
+        //TODO: код подлежит переработке
         answer.sw1  = 0x00
         answer.sw2  = 0x00
         answer.data = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
@@ -34,6 +38,7 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
     }
 
     override fun sendDataToSam(data: ApduData, answer: ApduAnswer): ResultCode {
+        //TODO: код подлежит переработке
         answer.sw1  = 0x90
         answer.sw2  = 0x00
         answer.data = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
@@ -41,15 +46,18 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
     }
 
     override fun connectToAS(timeUnit: Long): Boolean {
+        //TODO: код подлежит переработке
         return true
     }
 
     override fun doASDataExchange(data: ByteArray): OperationResult {
+        //TODO: код подлежит переработке
         val byteAnswer = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
         return OperationResult(OK, byteAnswer)
     }
 
     override fun findLastTransactionDB(
+        //TODO: код подлежит переработке
         cardNumber: Long,
         record: TransactionRecordDto
     ): ResultCode {
@@ -79,16 +87,19 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
     }
 
     override fun completeTransactionDB(record: TransactionRecordDto): ResultCode {
+        //TODO: код подлежит переработке
         val d = 0
         return OK
     }
 
     override fun printSimpleDoc(data: PrintableDataDto): ResultCode {
+        //TODO: код подлежит переработке
         val f = 0
         return OK
     }
 
     override fun transferOOBToAS(oobData: ByteArray): ResultCode {
+        //TODO: код подлежит переработке
 
         return OK
     }

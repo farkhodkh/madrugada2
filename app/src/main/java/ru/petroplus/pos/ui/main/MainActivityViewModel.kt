@@ -59,34 +59,6 @@ class MainActivityViewModel(
             return
         }
 
-        var UUID = TransactionUUIDDto()
-        UUID.onlineTransNumber = 18
-        UUID.lastGenTime = 1690547808
-        UUID.clockSequence = 61920
-        UUID.hasNodeId = true
-        UUID.nodeId = ubyteArrayOf(0x01u, 0xB5u, 0x14u, 0x6Fu, 0xB4u, 0xE3u).toByteArray()
-
-        var DataDirectoryPath = String()
-
-        DataDirectoryPath = Environment.getStorageDirectory().getAbsolutePath();
-        DataDirectoryPath += File.separator + "P7Lib";
-
-        var result = p7LibraryRepository.init(
-            configurationReaderUtil.properties.toInitDataDto(),
-            UUID,
-            callbacks,
-            DataDirectoryPath,
-            DataDirectoryPath
-        )
-
-
-        if (result.code == OK.code) {
-            _viewState.value =
-                MainScreenState.CheckingSuccessState
-        } else {
-            _viewState.value =
-                MainScreenState.CheckingSettingsError(R.string.cache_dir_access_error)
-        }
     }
 
     fun configurationFileDownloadRequired() {
