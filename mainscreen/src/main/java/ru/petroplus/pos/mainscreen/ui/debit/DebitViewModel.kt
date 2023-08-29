@@ -19,6 +19,7 @@ import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petroplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
+import ru.petroplus.pos.printerapi.FakeData
 import ru.petroplus.pos.printerapi.PrinterRepository
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
@@ -139,7 +140,7 @@ class DebitViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             // Симуляция ошибки во время печати
-            if (ru.petroplus.pos.printerapi.BuildConfig.DEBUG && false) {
+            if (ru.petroplus.pos.printerapi.BuildConfig.DEBUG) {
                 delay(300)
                 val isSuccessTry = Random.nextBoolean()
                 if (isSuccessTry) {
@@ -149,7 +150,7 @@ class DebitViewModel(
             }
 
             val currentDate = Calendar.getInstance().time
-            when (printer.printShiftReport(currentDate)) {
+            when (printer.printShiftReport(FakeData.statisticsByOperations, currentDate)) {
                 null -> resetPrinter()
                 else -> onFailPrint()
             }

@@ -6,7 +6,9 @@
     <string name="unknown_card_type">Неизвестно</string>
 
     <!--  Типы операция  -->
-    <string name="debit">ДЕБЕТ</string>
+    <string name="debit">Дебет</string>
+    <string name="return_operation">Возврат</string>
+    <string name="debit_upper_case">ДЕБЕТ</string>
     <string name="wallet_credit">КРЕДИТ КОШЕЛЬКА</string>
     <string name="online_deposit">ОНЛАЙН ПОПОЛНЕНИЕ СЧЕТА</string>
     <string name="return_to_card">ВОЗВРАТ НА КАРТУ</string>
@@ -31,6 +33,8 @@
     <string name="operator_number">Оператор No.</string>
     <string name="footer_text">Добро пожаловать</string>
     <string name="price_unit">Pуб</string>
+    <string name="current_price_unit">* Р</string>
+    <string name="footnore_symbol">*</string>
     <string name="denial">ОТКАЗ</string>
     <string name="denial_code">Код отказа</string>
     <string name="shift_report_title">ОТЧЕТ ЗА СМЕНУ</string>
@@ -38,7 +42,9 @@
     <string name="shift_time">ВРЕМЯ</string>
     <string name="cards_petrolplus_title">КАРТЫ ПЕТРОЛ+</string>
     <string name="card_processed">ОБРАБОТАНО КАРТ</string>
-    <string name="current_price">текушая цена</string>
+    <string name="current_price">* - текушая цена</string>
+    <string name="total">ИТОГО</string>
+    <string name="recalculate_mark">По пересч.</string>
 
     <!--  описание ResponseCodes  -->
     <string name="success_response">ОДОБРЕНО</string>

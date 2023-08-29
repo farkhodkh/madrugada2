@@ -10,6 +10,7 @@ import ru.petroplus.pos.evatorprinter.R
 import ru.petroplus.pos.evotorprinter.ShiftReportComponents.generateShiftReport
 import ru.petroplus.pos.evotorprinter.ext.toPrinterDoc
 import ru.petroplus.pos.printerapi.PrinterRepository
+import ru.petroplus.pos.printerapi.ShiftStatistic
 import ru.petroplus.pos.util.ResourceHelper
 import java.util.Date
 
@@ -35,8 +36,8 @@ class EvotorPrinterRepositoryImpl(private val applicationContext: Context) : Pri
         return print(document)
     }
 
-    override suspend fun printShiftReport(endDate: Date): Exception? {
-        val document = generateShiftReport(endDate, paperWidth)
+    override suspend fun printShiftReport(statistics: ShiftStatistic, endDate: Date): Exception? {
+        val document = generateShiftReport(statistics, endDate, paperWidth)
         return print(document)
     }
 }

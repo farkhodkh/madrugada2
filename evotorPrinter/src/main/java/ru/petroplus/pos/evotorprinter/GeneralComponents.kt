@@ -17,7 +17,7 @@ object GeneralComponents {
     internal fun textJustify(data: Array<String>, paperWidth: Int) =
         PrintableText(data.justify(paperWidth))
 
-    internal fun shiftReportFootnote() = text("* - ${IntroductoryConstruction.FOOTNOTE_CURRENT_PRICE}")
+    internal fun shiftReportFootnote() = text(IntroductoryConstruction.FOOTNOTE_CURRENT_PRICE)
 
 
     internal fun receiptData(title: String, receiptNumber: Long, paperWidth: Int) = arrayOf(
