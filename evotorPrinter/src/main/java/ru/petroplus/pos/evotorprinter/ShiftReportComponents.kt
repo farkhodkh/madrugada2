@@ -7,16 +7,14 @@ import ru.petroplus.pos.evotorprinter.GeneralComponents.divider
 import ru.petroplus.pos.evotorprinter.GeneralComponents.operatorData
 import ru.petroplus.pos.evotorprinter.GeneralComponents.organizationData
 import ru.petroplus.pos.evotorprinter.GeneralComponents.shiftReportFootnote
-import ru.petroplus.pos.evotorprinter.GeneralComponents.text
 import ru.petroplus.pos.evotorprinter.GeneralComponents.textJustify
 import ru.petroplus.pos.evotorprinter.TerminalComponents.terminalDate
-import ru.petroplus.pos.printerapi.Formatting
+import ru.petroplus.pos.evotorprinter.ext.toUi
 import ru.petroplus.pos.printerapi.IntroductoryConstruction
 import ru.petroplus.pos.printerapi.OperationType
 import ru.petroplus.pos.printerapi.ShiftStatistic
 import ru.petroplus.pos.printerapi.StatisticByService
 import ru.petroplus.pos.printerapi.ext.formattingForPrinter
-import ru.petroplus.pos.printerapi.ext.toAmountString
 import ru.petroplus.pos.printerapi.ext.toCurrencyString
 import java.util.Date
 
@@ -50,39 +48,7 @@ object ShiftReportComponents {
     )
 
     private fun statisticByServices(statistic: List<StatisticByService>) =
-        statistic.map { it.toUi() }.toTypedArray().flatten().toTypedArray()
-
-    private fun StatisticByService.toUi(): Array<IPrintable> {
-        val price = service.price.toCurrencyString()
-        val priceUnit = IntroductoryConstruction.CURRENT_PRICE_UNIT
-        val recalculateMark = IntroductoryConstruction.RECALCULATE_MARK
-        val noRecalculatedAmount = amountByNoRecalculatedTransaction.toAmountString()
-        val noRecalculatedSum = sumByNoRecalculatedTransaction.toCurrencyString()
-        val recalculatedAmount = amountByRecalculatedTransaction.toAmountString()
-        val recalculatedSum = sumByRecalculatedTransaction.toCurrencyString()
-
-        val serviceUnitOffset = service.unit.length - Formatting.BASE_UNIT_LENGTH
-        val priceUnitOffset = priceUnit.length - Formatting.BASE_UNIT_LENGTH - 1
-
-        return arrayOf(
-            statisticLine(service.name, service.unit, noRecalculatedAmount, serviceUnitOffset),
-            statisticLine(price, priceUnit, noRecalculatedSum, priceUnitOffset),
-            statisticLine(recalculateMark, service.unit, recalculatedAmount, serviceUnitOffset),
-            statisticLine(price, priceUnit, recalculatedSum, priceUnitOffset),
-            divider
-        )
-    }
-
-    // TODO: попробовать переделать justifyText
-    // TODO: в чеке дебета в serviceTable использовать justifyText
-    private fun statisticLine(left: String, center: String, right: String, offset: Int = 0): IPrintable {
-        val freeSpace = (paperWidth - center.length) / 2
-        val leftSpaceSize = freeSpace - left.length - offset
-        val leftSpace = " ".repeat(leftSpaceSize)
-        val rightSpaceSize = paperWidth - leftSpaceSize - left.length - center.length - right.length
-        val rightSpace = " ".repeat(if (rightSpaceSize > 0) rightSpaceSize else 0)
-        return text("$left$leftSpace$center$rightSpace$right")
-    }
+        statistic.map { it.toUi(paperWidth) }.toTypedArray().flatten().toTypedArray()
 
     private fun statisticByOperation(operationType: OperationType, statistic: List<StatisticByService>) = arrayOf(
         centredText(operationType.name),
@@ -106,7 +72,11 @@ object ShiftReportComponents {
             textJustify(arrayOf(returnOperation, statistic.countOfReturn.toString()), paperWidth),
             divider,
             textJustify(arrayOf(total, countOfOperations), paperWidth),
-            statisticLine(total, priceUnit, statistic.sumByAllOperations.toCurrencyString(), 1),
+            textJustify(
+                arrayOf(total, priceUnit, statistic.sumByAllOperations.toCurrencyString()),
+                paperWidth,
+                offset = 1
+            ),
             divider,
         )
     }

@@ -8,17 +8,22 @@ import ru.petroplus.pos.printerapi.IntroductoryConstruction
 import ru.petroplus.pos.printerapi.ext.formattingReceiptNumber
 import ru.petroplus.pos.printerapi.ext.toCardType
 import ru.petroplus.pos.util.ext.justify
+import ru.petroplus.pos.util.ext.justifyWithCenterMiddle
 
 object GeneralComponents {
 
     internal val divider = PrintableDocumentItem("-", Format.DIVIDER)
     internal fun text(text: String) = PrintableDocumentItem(text, Format.LEFT_WORD)
     internal fun centredText(text: String) = PrintableDocumentItem(text, Format.CENTER)
-    internal fun textJustify(data: Array<String>, paperWidth: Int) =
-        PrintableText(data.justify(paperWidth))
+    internal fun textJustify(data: Array<String>, paperWidth: Int, offset: Int = 0): IPrintable {
+        val content = when (data.size) {
+            3 -> data.justifyWithCenterMiddle(paperWidth, offset)
+            else -> data.justify(paperWidth)
+        }
+        return PrintableText(content)
+    }
 
     internal fun shiftReportFootnote() = text(IntroductoryConstruction.FOOTNOTE_CURRENT_PRICE)
-
 
     internal fun receiptData(title: String, receiptNumber: Long, paperWidth: Int) = arrayOf(
         textJustify(
