@@ -57,10 +57,10 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
     }
 
     override fun findLastTransactionDB(
-        //TODO: код подлежит переработке
         cardNumber: Long,
         record: TransactionRecordDto
     ): ResultCode {
+        //TODO: код подлежит переработке
         record.cardNumber = 3005876014L         //!< Графический номер карты
         record.shiftNumber = 0                  //!< Номер смены
         record.timeStamp = ClockDto()           //!< Время проведения операции, привести к структуре STCLOCK
