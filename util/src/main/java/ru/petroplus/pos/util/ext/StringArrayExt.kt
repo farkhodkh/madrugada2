@@ -16,9 +16,9 @@ fun Array<String>.justify(sizeLine: Int): String {
 
 fun Array<String>.justifyWithCenterMiddle(sizeLine: Int, offset: Int
 ): String {
-    val left: String = this[1]
-    val middle = this[2]
-    val right = this[3]
+    val left: String = this[0]
+    val middle = this[1]
+    val right = this[2]
 
     val freeSpace = (sizeLine - middle.length) / 2
     val leftSpaceSize = freeSpace - left.length - offset

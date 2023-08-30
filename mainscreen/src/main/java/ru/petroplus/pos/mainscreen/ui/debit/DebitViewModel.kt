@@ -17,12 +17,14 @@ import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
+import ru.petroplus.pos.mainscreen.R
 import ru.petroplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petroplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petroplus.pos.printerapi.FakeData
 import ru.petroplus.pos.printerapi.PrinterRepository
 import ru.petroplus.pos.sdkapi.CardReaderRepository
 import ru.petroplus.pos.ui.BuildConfig
+import ru.petroplus.pos.util.ResourceHelper
 import java.util.Calendar
 import kotlin.random.Random
 
@@ -129,11 +131,23 @@ class DebitViewModel(
         cardReaderRepository.sdkRepository.sendCommand(command)
     }
 
+    /**
+     * Метод который вызывается для повтора печати в случае ошибки
+     * @throws IllegalStateException если функция вызвана при отсутствии ошибки печати
+     */
     fun repeatPrinting() {
-        // TODO: проверка того, какой чека печатался
-        printShiftReport()
+        when (val state = _viewState.value) {
+            is DebitViewState.DebugState.PrinterState.FailedState.Receipt -> printTransactionTest(state.transactionId)
+            DebitViewState.DebugState.PrinterState.FailedState.ShiftReport -> printShiftReport()
+            else ->
+                throw IllegalStateException(ResourceHelper.getStringResource(R.string.current_state_forbidden_calling_function))
+        }
     }
 
+    //FIXME: Метод тестовый. Распечатывает сменный отчет
+    //Проверяется возможна ли сейчас печать. Переход в состояние печати
+    //В Debug сборке симуляция ошибки во время печати. Печать чека с отслеживанием наличия ошибки
+    //TODO: данные для печати брать из БД (сейчас используются FakeData)
     fun printShiftReport() {
         if (!preprintCheck()) return
         _viewState.value = DebitViewState.DebugState.PrinterState.Printing
@@ -142,9 +156,8 @@ class DebitViewModel(
             // Симуляция ошибки во время печати
             if (ru.petroplus.pos.printerapi.BuildConfig.DEBUG) {
                 delay(300)
-                val isSuccessTry = Random.nextBoolean()
-                if (isSuccessTry) {
-                    onFailPrint()
+                if (!Random.nextBoolean()) {
+                    onFailPrintShiftReport()
                     return@launch
                 }
             }
@@ -152,7 +165,7 @@ class DebitViewModel(
             val currentDate = Calendar.getInstance().time
             when (printer.printShiftReport(FakeData.statisticsByOperations, currentDate)) {
                 null -> resetPrinter()
-                else -> onFailPrint()
+                else -> onFailPrintShiftReport()
             }
         }
     }
@@ -169,23 +182,22 @@ class DebitViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val data = receiptPersistence.getDebitReceipt(transactionId)
             if (data == null) {
-                onFailPrint()
+                onFailPrintReceipt(transactionId)
                 return@launch
             }
 
             // Симуляция ошибки во время печати
             if (ru.petroplus.pos.printerapi.BuildConfig.DEBUG) {
                 delay(300)
-                val isSuccessTry = Random.nextBoolean()
-                if (isSuccessTry) {
-                    onFailPrint()
+                if (!Random.nextBoolean()) {
+                    onFailPrintReceipt(transactionId)
                     return@launch
                 }
             }
 
             when (printer.printReceipt(data)) {
                 null -> resetPrinter()
-                else -> onFailPrint()
+                else -> onFailPrintReceipt(transactionId)
             }
         }
     }
@@ -194,8 +206,12 @@ class DebitViewModel(
         _viewState.value = DebitViewState.DebugState.PrinterState.WaitDocument
     }
 
-    private fun onFailPrint() {
-        _viewState.value = DebitViewState.DebugState.PrinterState.PrintFailed
+    private fun onFailPrintShiftReport() {
+        _viewState.value = DebitViewState.DebugState.PrinterState.FailedState.ShiftReport
+    }
+
+    private fun onFailPrintReceipt(transactionId: String) {
+        _viewState.value = DebitViewState.DebugState.PrinterState.FailedState.Receipt(transactionId)
     }
 
     // Проверяем что принтер не находится в состоянии печати и значение ID валидное
