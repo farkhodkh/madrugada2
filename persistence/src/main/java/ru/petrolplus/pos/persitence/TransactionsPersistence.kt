@@ -28,6 +28,13 @@ interface TransactionsPersistence {
      * @return возвращает DTO транзакции, может быть null если не найдено ни одной подходящей
      */
     suspend fun getById(transactionId: String): TransactionDTO?
+
+    /**
+     * Метод для получения последней транзакции дебета по определенном типу и номеру карты
+     * @param cardNumber см [TransactionDB.cardNumber]
+     * @param serviceId cм [TransactionDB.serviceIdWhat]
+     */
+    suspend fun getLastByCardNumberAndService(cardNumber: String, serviceId: Int): TransactionDTO?
 }
 
 class TransactionsPersistenceImpl(
@@ -45,6 +52,13 @@ class TransactionsPersistenceImpl(
 
     override suspend fun getById(transactionId: String): TransactionDTO? {
         return transactionsDao.getById(transactionId)?.let(mapper::toDTO)
+    }
+
+    override suspend fun getLastByCardNumberAndService(
+        cardNumber: String,
+        serviceId: Int
+    ): TransactionDTO? {
+        return transactionsDao.getLastByCardNumberAndService(cardNumber, serviceId)?.let(mapper::toDTO)
     }
 
 }

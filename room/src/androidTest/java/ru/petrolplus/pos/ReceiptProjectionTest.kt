@@ -25,7 +25,6 @@ class ReceiptProjectionTest {
     private val receiptParamsDao = db.receiptParamsDao()
     private val servicesDao = db.servicesDao()
     private val receiptDao = db.receiptDao()
-
     
     @Test
     fun testGetDebitReceipt() {
@@ -45,7 +44,7 @@ class ReceiptProjectionTest {
                 cardTransactionCounter = 2147483647000,
                 hasReturn = false,
                 crs32 = "DJIFESLD",
-                operationType = 2,
+                operationType = 1,
                 cardType = 2,
                 loyaltySum = 2147483647000,
                 deltaBonus = 2147483647000,

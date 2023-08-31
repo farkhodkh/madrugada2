@@ -9,6 +9,10 @@ plugins {
 android {
     namespace = Dependencies.namespaceRoom
 
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
     kotlinOptions {
         jvmTarget =  JavaVersion.VERSION_1_8.toString()
     }
