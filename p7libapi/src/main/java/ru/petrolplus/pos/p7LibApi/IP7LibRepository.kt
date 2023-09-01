@@ -2,6 +2,7 @@ package ru.petrolplus.pos.p7LibApi
 
 import ru.petrolplus.pos.p7LibApi.dto.*
 import ru.petrolplus.pos.p7LibApi.dto.card.CardInfo
+import ru.petrolplus.pos.p7LibApi.responces.ResultCode
 
 /**
  * Interface описывает методы и апарметры для взаимодействия с библиотекой P7Lib (C++)

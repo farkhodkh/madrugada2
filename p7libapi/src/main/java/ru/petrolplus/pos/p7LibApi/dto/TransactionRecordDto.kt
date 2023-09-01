@@ -1,6 +1,7 @@
 package ru.petrolplus.pos.p7LibApi.dto
 
-package ru.petroplus.pos.p7LibApi.dto
+import ru.petroplus.pos.p7LibApi.dto.ClockDto
+
 
 class TransactionRecordDto(
     /**
@@ -58,7 +59,7 @@ class TransactionRecordDto(
     /**
      * CRC32 для данной записи
      */
-    var crc32: ByteArray = byteArrayOf(),          
+    var crc32: ByteArray = byteArrayOf(),
     /**
      * Тип транзакции 0 - неизвестно (только для поиска: искать любой тип операции)
      *                1 - дебет

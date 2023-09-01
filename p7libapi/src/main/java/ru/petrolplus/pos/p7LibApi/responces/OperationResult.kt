@@ -1,7 +1,4 @@
-package ru.petroplus.pos.p7LibApi.responces
-
-import ru.petroplus.pos.p7LibApi.dto.OK
-import ru.petroplus.pos.p7LibApi.dto.ResultCode
+package ru.petrolplus.pos.p7LibApi.responces
 
 /**
  * Класс содержит код результата работы и возвращённые картой данные при операции по сбросе карты

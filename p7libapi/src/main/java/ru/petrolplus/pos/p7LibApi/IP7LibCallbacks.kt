@@ -1,11 +1,11 @@
-package ru.petroplus.pos.p7LibApi
+package ru.petrolplus.pos.p7LibApi
 
+import ru.petrolplus.pos.p7LibApi.dto.TransactionRecordDto
+import ru.petrolplus.pos.p7LibApi.requests.ApduData
+import ru.petrolplus.pos.p7LibApi.responces.ApduAnswer
+import ru.petrolplus.pos.p7LibApi.responces.ResultCode
 import ru.petroplus.pos.p7LibApi.dto.PrintableDataDto
-import ru.petroplus.pos.p7LibApi.dto.ResultCode
-import ru.petroplus.pos.p7LibApi.dto.TransactionRecordDto
-import ru.petroplus.pos.p7LibApi.requests.ApduData
-import ru.petroplus.pos.p7LibApi.responces.ApduAnswer
-import ru.petroplus.pos.p7LibApi.responces.OperationResult
+import ru.petrolplus.pos.p7LibApi.responces.OperationResult
 
 /**
  * Interface для обслуживания "callback" ов библиотеки p7lib

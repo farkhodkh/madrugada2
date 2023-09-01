@@ -4,6 +4,7 @@ import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
 import ru.petrolplus.pos.p7LibApi.dto.*
 import ru.petrolplus.pos.p7LibApi.dto.card.CardInfo
+import ru.petrolplus.pos.p7LibApi.responces.ResultCode
 
 class P7LibRepositoryImpl : IP7LibRepository {
     init {

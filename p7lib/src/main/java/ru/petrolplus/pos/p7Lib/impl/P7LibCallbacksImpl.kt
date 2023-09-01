@@ -1,10 +1,13 @@
-package ru.petroplus.pos.p7Lib.impl
+package ru.petrolplus.pos.p7Lib.impl
 
-import ru.petroplus.pos.p7LibApi.IP7LibCallbacks
+import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
+import ru.petrolplus.pos.p7LibApi.dto.TransactionRecordDto
+import ru.petrolplus.pos.p7LibApi.requests.ApduData
+import ru.petrolplus.pos.p7LibApi.responces.ApduAnswer
+import ru.petrolplus.pos.p7LibApi.responces.OK
 import ru.petroplus.pos.p7LibApi.dto.*
-import ru.petroplus.pos.p7LibApi.requests.ApduData
-import ru.petroplus.pos.p7LibApi.responces.ApduAnswer
-import ru.petroplus.pos.p7LibApi.responces.OperationResult
+import ru.petrolplus.pos.p7LibApi.responces.OperationResult
+import ru.petrolplus.pos.p7LibApi.responces.ResultCode
 
 class P7LibCallbacksImpl : IP7LibCallbacks {
     override fun log(message: String) {

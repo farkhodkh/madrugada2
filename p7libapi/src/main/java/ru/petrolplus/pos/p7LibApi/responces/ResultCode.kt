@@ -1,4 +1,4 @@
-package ru.petrolplus.pos.p7LibApi.dto
+package ru.petrolplus.pos.p7LibApi.responces
 
 /**
  * класс обощающий все возможные варианты ответов от p7lib
