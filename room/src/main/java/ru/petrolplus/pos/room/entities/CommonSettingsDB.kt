@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey
  * @param id идентификатор записи, первичный ключ
  * @param organizationName название организации
  * @param organizationInn ИНН организации
+ * @param posName Название ТО/АЗС
  */
 @Entity(tableName = "common_settings")
 data class CommonSettingsDB(
@@ -21,4 +22,7 @@ data class CommonSettingsDB(
 
     @ColumnInfo("organization_inn")
     val organizationInn: String,
+
+    @ColumnInfo("pos_name")
+    val posName: String,
 )

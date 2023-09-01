@@ -7,6 +7,7 @@
 /.idea
 /build
 /core/build
+/evotorlib/build
 /mainscreen/build
 /nativelib/build
 /buildSrc/build

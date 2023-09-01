@@ -1186,6 +1186,8 @@ bool TP7LibTypes::ConvertStTimeFromJObj(JNIEnv *env, const jobject *StTimeJObj, 
       StTime->weekDay = (BYTE)env->GetShortField(*StTimeJObj, weekDay_ID);
     } // if Result
   } // if env && StTime && StTimeJObj
+
+  return true;
 }
 //--------------------------------------------------
 
