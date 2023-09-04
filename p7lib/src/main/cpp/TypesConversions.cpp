@@ -103,7 +103,7 @@ TP7ErrorType TP7LibTypes::GetResultCode(JNIEnv *env, const jobject *ResultCodeJO
   TP7ErrorType Result = TP7ErrorType::UndefinedError;
 
   if (env && ResultCodeJObj) {
-    jclass   ResultCodeClass   = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ResultCode");
+    jclass   ResultCodeClass   = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/ResultCode");
     jfieldID ResultCodeValueID = env->GetFieldID(ResultCodeClass, "code", "I");
     jint     intVal            = env->GetIntField(*ResultCodeJObj, ResultCodeValueID);
 
@@ -123,91 +123,91 @@ bool TP7LibTypes::ConvertResultCodeToJObj(JNIEnv *env,TP7ErrorType ResultCode, j
     jclass ResultClass = nullptr;
     switch (ResultCode) {
       case OK:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/OK");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/OK");
       break;
       case AlreadyInitialized:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/AlreadyInitialized");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/AlreadyInitialized");
       break;
       case NonInitializedError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/NonInitializedError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/NonInitializedError");
       break;
       case CardResetInitError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/CardResetInitError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/CardResetInitError");
       break;
       case CardIoInitError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/CardIoInitError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/CardIoInitError");
       break;
       case CardSelectError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/CardSelectError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/CardSelectError");
       break;
       case CardAuthError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/CardAuthError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/CardAuthError");
       break;
       case LoadIniError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/LoadIniError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/LoadIniError");
       break;
       case LibFatalError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/LibFatalError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/LibFatalError");
       break;
       case SequenceError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/SequenceError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/SequenceError");
       break;
       case NotPetrol7Card:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/NotPetrol7Card");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/NotPetrol7Card");
       break;
       case CardReadError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/CardReadError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/CardReadError");
       break;
       case SamGetError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/SamGetError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/SamGetError");
       break;
       case PinDataError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/PinDataError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/PinDataError");
       break;
       case PinCheckError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/PinCheckError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/PinCheckError");
       break;
       case DebitError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/DebitError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/DebitError");
       break;
       case ArgAmountPriceSumError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ArgAmountPriceSumError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/ArgAmountPriceSumError");
       break;
       case ArgServiceError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ArgServiceError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/ArgServiceError");
       break;
       case ArgPinblockError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ArgPinblockError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/ArgPinblockError");
       break;
       case ArgCardTypeJError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ArgCardTypeJError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/ArgCardTypeJError");
       break;
       case RefundError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/RefundError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/RefundError");
       break;
       case SamResetInitError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/SamResetInitError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/SamResetInitError");
       break;
       case SamIoInitError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/SamIoInitError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/SamIoInitError");
       break;
       case SamSelectError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/SamSelectError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/SamSelectError");
       break;
       case SamAuthInitError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/SamAuthInitError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/SamAuthInitError");
       break;
       case SamLicenseError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/SamLicenseError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/SamLicenseError");
       break;
       case NetworkModuleError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/NetworkModuleError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/NetworkModuleError");
       break;
       case UndefinedError:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/UndefinedError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/UndefinedError");
       break;
       default:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/UndefinedError");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/UndefinedError");
       break;
     }  // switch ResultCode
 
@@ -229,7 +229,7 @@ bool TP7LibTypes::CreateApduAnswerJObj(JNIEnv *env, jobject *ApduAnswerJObj) {
     if (*ApduAnswerJObj) {
       DeleteLocalRef(env, ApduAnswerJObj);  }
 
-    jclass ApduAnswerClass = env->FindClass("ru/petroplus/pos/p7LibApi/responces/ApduAnswer");
+    jclass ApduAnswerClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/ApduAnswer");
     jmethodID ApduAnswerConstructorID = env->GetMethodID(ApduAnswerClass, "<init>", "()V");
     *ApduAnswerJObj = env->NewObject(ApduAnswerClass, ApduAnswerConstructorID);
     Result = true;
@@ -241,7 +241,7 @@ bool TP7LibTypes::CreateApduAnswerJObj(JNIEnv *env, jobject *ApduAnswerJObj) {
 bool TP7LibTypes::ConvertApduAnswerFromJObj(JNIEnv *env, const jobject *ApduAnswerJObj, TAPDUAnswer *APDUAnswer) {
   bool Result = false;
   if (env && ApduAnswerJObj && APDUAnswer) {
-    jclass ApduAnswerClass = env->FindClass("ru/petroplus/pos/p7LibApi/responces/ApduAnswer");
+    jclass ApduAnswerClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/ApduAnswer");
 
     jfieldID SW1_ID  = env->GetFieldID(ApduAnswerClass, "sw1", "I");
     jfieldID SW2_ID  = env->GetFieldID(ApduAnswerClass, "sw2", "I");
@@ -266,7 +266,7 @@ bool TP7LibTypes::CreateApduDataJObj(JNIEnv *env, jobject *ApduDataJObj) {
       DeleteLocalRef(env, ApduDataJObj);
       ApduDataJObj = nullptr;  }
 
-    jclass ApduDataClass = env->FindClass("ru/petroplus/pos/p7LibApi/requests/ApduData");
+    jclass ApduDataClass = env->FindClass("ru/petrolplus/pos/p7LibApi/requests/ApduData");
     jmethodID ApduDataConstructorID = env->GetMethodID(ApduDataClass, "<init>", "()V");
     *ApduDataJObj = env->NewObject(ApduDataClass, ApduDataConstructorID);
     Result = true;
@@ -283,7 +283,7 @@ bool TP7LibTypes::ConvertApduDataToJObj(JNIEnv *env, const TAPDUData *APDUData, 
       ApduDataJObj = nullptr;  }
     CreateApduDataJObj(env, ApduDataJObj);
 
-    jclass ApduDataClass = env->FindClass("ru/petroplus/pos/p7LibApi/requests/ApduData");
+    jclass ApduDataClass = env->FindClass("ru/petrolplus/pos/p7LibApi/requests/ApduData");
 
     jfieldID GLA_ID  = env->GetFieldID(ApduDataClass, "GLA", "B");
     jfieldID INS_ID  = env->GetFieldID(ApduDataClass, "INS", "B");
@@ -314,7 +314,7 @@ bool TP7LibTypes::ConvertApduDataToJObj(JNIEnv *env, const TAPDUData *APDUData, 
 bool TP7LibTypes::ConvertIniDataFromJObj(JNIEnv *env, const jobject *IniDataJObj, TIniData *IniData) {
   bool Result = false;
   if (env && IniDataJObj && IniData) {
-    jclass IniDataClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/InitDataDto");
+    jclass IniDataClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/InitDataDto");
 
     jfieldID acquirerId_ID = env->GetFieldID(IniDataClass, "acquirerId", "I");
     jfieldID terminalId_ID = env->GetFieldID(IniDataClass, "terminalId", "I");
@@ -338,7 +338,7 @@ bool TP7LibTypes::CreateTransactionUUIDJObj(JNIEnv *env, jobject *UUIDJObj) {
       DeleteLocalRef(env, UUIDJObj);
       *UUIDJObj = nullptr;  }
 
-    jclass UUIDClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionUUIDDto");
+    jclass UUIDClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/TransactionUUIDDto");
     jmethodID UUIDConstructorID = env->GetMethodID(UUIDClass, "<init>", "()V");
     *UUIDJObj = env->NewObject(UUIDClass, UUIDConstructorID);
     Result = true;
@@ -350,7 +350,7 @@ bool TP7LibTypes::CreateTransactionUUIDJObj(JNIEnv *env, jobject *UUIDJObj) {
 bool TP7LibTypes::ConvertTransactionUUIDFromJObj(JNIEnv *env, const jobject *UUIDJObj, TTransactionUUID *UUID) {
   bool Result = false;
   if (env && UUIDJObj && UUID) {
-    jclass UUIDDClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionUUIDDto");
+    jclass UUIDDClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/TransactionUUIDDto");
 
     jfieldID onlineTransNumber_ID = env->GetFieldID(UUIDDClass, "onlineTransNumber", "I");
     jfieldID lastGenTime_ID       = env->GetFieldID(UUIDDClass, "lastGenTime", "I");  // "J"
@@ -384,7 +384,7 @@ bool TP7LibTypes::ConvertTransactionUUIDToJObj(JNIEnv *env, const TTransactionUU
   bool Result = false;
   if (env && UUIDJObj && UUID) {
     Result = CreateTransactionUUIDJObj(env, UUIDJObj);
-    jclass UUIDDClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionUUIDDto");
+    jclass UUIDDClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/TransactionUUIDDto");
     Result = (Result && UUIDDClass != nullptr);
     if (!Result) {
       return false;  }
@@ -418,9 +418,9 @@ bool TP7LibTypes::ConvertTransactionUUIDToJObj(JNIEnv *env, const TTransactionUU
 bool TP7LibTypes::ConvertOperationResultFromJObj(JNIEnv *env, const jobject *OperationResultObj, TOperationResult *OperationResult) {
   bool Result = false;
   if (env && OperationResultObj && OperationResult) {
-    jclass OperationResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/responces/OperationResult");
+    jclass OperationResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/responces/OperationResult");
 
-    jfieldID ResultCode_ID = env->GetFieldID(OperationResultClass, "resultCode", "Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+    jfieldID ResultCode_ID = env->GetFieldID(OperationResultClass, "resultCode", "Lru/petrolplus/pos/p7LibApi/responces/ResultCode;");
     jfieldID Data_ID      = env->GetFieldID(OperationResultClass, "data", "[B");
 
     jobject    ResultCode = env->GetObjectField(*OperationResultObj, ResultCode_ID);
@@ -440,7 +440,7 @@ bool TP7LibTypes::CreateTransDBRecordJObj(JNIEnv *env, jobject *DBRecordJObj) {
     if (*DBRecordJObj) {
       DeleteLocalRef(env, DBRecordJObj);  }
 
-    jclass DBRecordJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionRecordDto");
+    jclass DBRecordJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/TransactionRecordDto");
     jmethodID ApduAnswerConstructorID = env->GetMethodID(DBRecordJObjClass, "<init>", "()V");
     *DBRecordJObj = env->NewObject(DBRecordJObjClass, ApduAnswerConstructorID);
     Result = (*DBRecordJObj != nullptr);
@@ -459,14 +459,15 @@ bool TP7LibTypes::ConvertTransDBRecordFromJObj(JNIEnv *env, const jobject *DBRec
     std::vector<unsigned char> StdByteArr;
     jobject timeStampJObj = nullptr;
 
-    jclass DBRecordClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionRecordDto");
+    jclass DBRecordClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/TransactionRecordDto");
     Result = (DBRecordClass != nullptr);
     if (!Result) {
       return false;  }
 
     jfieldID cardNumber_ID = env->GetFieldID(DBRecordClass, "cardNumber", "J");
     jfieldID shiftNumber_ID = env->GetFieldID(DBRecordClass, "shiftNumber", "J");
-    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "Lru/petroplus/pos/p7LibApi/dto/ClockDto;");
+    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp",
+                                            "Lru/petrolplus/pos/p7LibApi/dto/ClockDto;");
     jfieldID serviceIdOrigEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdOrigEmit", "B");
     jfieldID serviceIdCurrEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdCurrEmit", "B");
     jfieldID totalVolume_ID = env->GetFieldID(DBRecordClass, "totalVolume", "J");
@@ -482,7 +483,8 @@ bool TP7LibTypes::ConvertTransDBRecordFromJObj(JNIEnv *env, const jobject *DBRec
     jfieldID cardType_ID = env->GetFieldID(DBRecordClass, "cardType", "B");
     jfieldID clientSum_ID = env->GetFieldID(DBRecordClass, "clientSum", "J");
     jfieldID deltaBonus_ID = env->GetFieldID(DBRecordClass, "deltaBonus", "J");
-    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "Lru/petroplus/pos/p7LibApi/dto/ClockDto;");
+    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp",
+                                                  "Lru/petrolplus/pos/p7LibApi/dto/ClockDto;");
 
 
     DBRecord->CardNumber = (DWORD)env->GetLongField(*DBRecordJObj, cardNumber_ID);
@@ -538,7 +540,7 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
 
   if (env && DBRecord && DBRecordJObj) {
     Result = CreateTransDBRecordJObj(env, DBRecordJObj);
-    jclass DBRecordClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionRecordDto");
+    jclass DBRecordClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/TransactionRecordDto");
 
     Result = (Result && *DBRecordJObj && DBRecordClass);
     if (!Result) {
@@ -546,7 +548,7 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
 
     jfieldID cardNumber_ID = env->GetFieldID(DBRecordClass, "cardNumber", "J");
     jfieldID shiftNumber_ID = env->GetFieldID(DBRecordClass, "shiftNumber", "J");
-    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "Lru/petroplus/pos/p7LibApi/dto/ClockDto;");
+    jfieldID timeStamp_ID = env->GetFieldID(DBRecordClass, "timeStamp", "Lru/petrolplus/pos/p7LibApi/dto/ClockDto;");
     jfieldID serviceIdOrigEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdOrigEmit", "B");
     jfieldID serviceIdCurrEmit_ID = env->GetFieldID(DBRecordClass, "serviceIdCurrEmit", "B");
     jfieldID totalVolume_ID = env->GetFieldID(DBRecordClass, "totalVolume", "J");
@@ -562,7 +564,7 @@ bool TP7LibTypes::ConvertTransDBRecordToJObj(JNIEnv *env, const TTransDBRecord *
     jfieldID cardType_ID = env->GetFieldID(DBRecordClass, "cardType", "B");
     jfieldID clientSum_ID = env->GetFieldID(DBRecordClass, "clientSum", "J");
     jfieldID deltaBonus_ID = env->GetFieldID(DBRecordClass, "deltaBonus", "J");
-    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "Lru/petroplus/pos/p7LibApi/dto/ClockDto;");
+    jfieldID returnTimeStamp_ID = env->GetFieldID(DBRecordClass, "returnTimeStamp", "Lru/petrolplus/pos/p7LibApi/dto/ClockDto;");
 
 
     env->SetLongField(*DBRecordJObj, cardNumber_ID, (long long)DBRecord->CardNumber);
@@ -609,9 +611,12 @@ bool TP7LibTypes::CreateSimpleDocJObj(JNIEnv *env, jobject *SimpleDocJObj) {
     if (*SimpleDocJObj) {
       DeleteLocalRef(env, SimpleDocJObj);  }
 
-    jclass PrintDataJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/PrintableDataDto");
-    jmethodID SimpleDocConstructorID = env->GetMethodID(PrintDataJObjClass, "<init>", "()V");
-    *SimpleDocJObj = env->NewObject(PrintDataJObjClass, SimpleDocConstructorID);
+    jclass PrintDataJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/PrintableDataDto");
+    jmethodID SimpleDocConstructorID = env->GetMethodID(PrintDataJObjClass, "<init>",
+                                                        "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+    *SimpleDocJObj = env->NewObject(PrintDataJObjClass, SimpleDocConstructorID,
+                                    env->NewStringUTF(""), env->NewStringUTF(""),
+                                    env->NewStringUTF(""), env->NewStringUTF(""));
     Result = (*SimpleDocJObj != nullptr);
   } // if env && ApduAnswerJObj
   return Result;
@@ -624,7 +629,7 @@ bool TP7LibTypes::ConvertSimpleDocToJObj(JNIEnv *env, const TSimpleDoc *SimpleDo
   if (env && SimpleDoc && SimpleDocJObj) {
     jstring JStr = nullptr;
     Result = CreateSimpleDocJObj(env, SimpleDocJObj);
-    jclass SimpleDocJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/PrintableDataDto");
+    jclass SimpleDocJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/PrintableDataDto");
     Result = (Result && SimpleDocJObjClass != nullptr);
     if (!Result) {
       return false;  }
@@ -667,7 +672,7 @@ bool TP7LibTypes::CreateCardKeyJObj(JNIEnv *env, jobject *CardKeyJObj) {
     if (*CardKeyJObj) {
       DeleteLocalRef(env, CardKeyJObj);  }
 
-    jclass CardKeyJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/CardKeyDto");
+    jclass CardKeyJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/CardKeyDto");
     jmethodID CardKeyConstructorID = env->GetMethodID(CardKeyJObjClass, "<init>", "()V");
 
     *CardKeyJObj = env->NewObject(CardKeyJObjClass, CardKeyConstructorID);
@@ -684,7 +689,7 @@ bool TP7LibTypes::ConvertCardKeyToJObj(JNIEnv *env, const TCardKey *CardKey, job
     jbyteArray JBArray = nullptr;
 
     Result = CreateCardKeyJObj(env, CardKeyJObj);
-    jclass CardKeyJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/CardKeyDto");
+    jclass CardKeyJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/CardKeyDto");
     Result = (Result && CardKeyJObjClass != nullptr);
     if (!Result) {
       return false;  }
@@ -719,7 +724,7 @@ bool TP7LibTypes::ConvertCardKeyFromJObj(JNIEnv *env, const jobject *CardKeyJObj
   bool Result = false;
 
   if (env && CardKey && CardKeyJObj) {
-    jclass CardKeyJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/CardKeyDto");
+    jclass CardKeyJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/CardKeyDto");
     Result = (CardKeyJObjClass != nullptr);
     if (!Result) {
       return false;  }
@@ -745,7 +750,7 @@ TCardType TP7LibTypes::GetCardType(JNIEnv *env, const jobject *CardTypeJObj) {
   TCardType Result = TCardType::UnknownCardType;
 
   if (env && CardTypeJObj) {
-    jclass   CardTypeClass   = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/CardType");
+    jclass   CardTypeClass   = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/CardType");
     jfieldID CardTypeValueID = env->GetFieldID(CardTypeClass, "code", "I");
     jint     intVal           = env->GetIntField(*CardTypeJObj, CardTypeValueID);
     Result = static_cast<TCardType>(intVal);  }
@@ -764,58 +769,58 @@ bool TP7LibTypes::ConvertCardTypeToJObj(JNIEnv *env, TCardType CardType, jobject
     jclass ResultClass = nullptr;
     switch (CardType) {
       case UnknownCardType:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/UnknownCardType");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/UnknownCardType");
       break;
       case P7_A:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7_A");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P7_A");
       break;
       case P7_B:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7_B");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P7_B");
       break;
       case P7_C:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7_C");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P7_C");
       break;
       case P7_D:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7_D");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P7_D");
       break;
       case P7_E:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7_E");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P7_E");
       break;
       case P7_F:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7_F");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P7_F");
       break;
       case P7_G:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7_G");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P7_G");
       break;
       case P7_H:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7_H");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P7_H");
       break;
       case P7_I:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7_I");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P7_I");
       break;
       case P7_J:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P7_J");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P7_J");
       break;
       case P5:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/P5");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/P5");
       break;
       case PPay:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/PPay");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/PPay");
       break;
       case PLNR:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/PLNR");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/PLNR");
       break;
       case ExtLikard:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/ExtLikard");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/ExtLikard");
       break;
       case ExtRN:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/ExtRN");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/ExtRN");
       break;
       case ExtGPN:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/ExtGPN");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/ExtGPN");
       break;
       default:
-        ResultClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/UnknownCardType");
+        ResultClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/UnknownCardType");
       break;
     } // switch CardType
 
@@ -837,7 +842,7 @@ bool TP7LibTypes::CreateCardInfoJObj(JNIEnv *env, jobject *CardInfoJObj) {
     if (*CardInfoJObj) {
       DeleteLocalRef(env, CardInfoJObj);  }
 
-    jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/CardInfo");
+    jclass CardInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/CardInfo");
     jmethodID CardInfoConstructorID = env->GetMethodID(CardInfoJObjClass, "<init>", "()V");
     *CardInfoJObj = env->NewObject(CardInfoJObjClass, CardInfoConstructorID);
 
@@ -854,7 +859,7 @@ bool TP7LibTypes::ConvertCardInfoToJObj(JNIEnv *env, const TCardInfo *CardInfo, 
     jbyteArray JBArray = nullptr;
 
     Result = CreateCardInfoJObj(env, CardInfoJObj);
-    jclass CardInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/card/CardInfo");
+    jclass CardInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/CardInfo");
     Result = (Result && CardInfoJObjClass != nullptr);
     if (!Result) {
       return false;  }
@@ -864,7 +869,7 @@ bool TP7LibTypes::ConvertCardInfoToJObj(JNIEnv *env, const TCardInfo *CardInfo, 
     jfieldID cardNumber_ID = env->GetFieldID(CardInfoJObjClass, "cardNumber", "J");
     jfieldID issuerID_ID = env->GetFieldID(CardInfoJObjClass, "issuerID", "J");
     jfieldID cardType_ID = env->GetFieldID(CardInfoJObjClass, "cardType",
-                                           "Lru/petroplus/pos/p7LibApi/dto/card/CardType;");
+                                           "Lru/petrolplus/pos/p7LibApi/dto/card/CardType;");
     Result = (isRecalcCard_ID && PTC_ID && cardNumber_ID && issuerID_ID && cardType_ID);
 
     if (Result) {
@@ -894,7 +899,7 @@ bool TP7LibTypes::CreateTransactionInfoJObj(JNIEnv *env, jobject *TransactionInf
     if (*TransactionInfoJObj) {
       DeleteLocalRef(env, TransactionInfoJObj);  }
 
-    jclass TransInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionInfoDto");
+    jclass TransInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/TransactionInfoDto");
     jmethodID TransInfoConstructorID = env->GetMethodID(TransInfoJObjClass, "<init>", "()V");
     *TransactionInfoJObj = env->NewObject(TransInfoJObjClass, TransInfoConstructorID);
 
@@ -911,7 +916,7 @@ bool TP7LibTypes::ConvertTransactionInfoToJObj(JNIEnv *env, const TTransactionIn
     jbyteArray JBArray = nullptr;
 
     Result = CreateTransactionInfoJObj(env, TransInfoJObj);
-    jclass TransInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/TransactionInfoDto");
+    jclass TransInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/TransactionInfoDto");
     Result = (Result && TransInfoJObjClass != nullptr);
     if (!Result) {
       return false;  }
@@ -946,7 +951,7 @@ bool TP7LibTypes::ConvertDebetParamsFromJObj(JNIEnv *env, const jobject *DebetPa
   bool Result = false;
 
   if (env && DebetParamsJObj && DebetParams) {
-    jclass DebitJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/DebitParamsDto");
+    jclass DebitJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/DebitParamsDto");
     Result = (DebitJObjClass != nullptr);
     if (!Result) {
       return false;  }
@@ -979,7 +984,7 @@ bool TP7LibTypes::ConvertRefundParamsFromJObj(JNIEnv *env, const jobject *Refund
   bool Result = false;
 
   if (env && RefundParamsJObj && RefundParams) {
-    jclass RefundJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/RefundParamsDto");
+    jclass RefundJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/RefundParamsDto");
     Result = (RefundJObjClass != nullptr);
     if (!Result) {
       return false;  }
@@ -1008,7 +1013,7 @@ bool TP7LibTypes::CreateErrorInfoJObj(JNIEnv *env, jobject *ErrorInfoJObj) {
     if (*ErrorInfoJObj) {
       DeleteLocalRef(env, ErrorInfoJObj);  }
 
-    jclass TransInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ErrorInfoDto");
+    jclass TransInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/ErrorInfoDto");
     jmethodID TransInfoConstructorID = env->GetMethodID(TransInfoJObjClass, "<init>", "()V");
     *ErrorInfoJObj = env->NewObject(TransInfoJObjClass, TransInfoConstructorID);
 
@@ -1023,12 +1028,12 @@ bool TP7LibTypes::ConvertErrorInfoToJObj(JNIEnv *env, const TErrorInfo *ErrorInf
 
   if (env && ErrorInfo && ErrorInfoJObj) {
     Result = CreateErrorInfoJObj(env, ErrorInfoJObj);
-    jclass ErrorInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ErrorInfoDto");
+    jclass ErrorInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/ErrorInfoDto");
     Result = (Result && ErrorInfoJObjClass != nullptr);
     if (!Result) {
       return false;  }
 
-    jfieldID errorCode_ID = env->GetFieldID(ErrorInfoJObjClass, "errorCode", "Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+    jfieldID errorCode_ID = env->GetFieldID(ErrorInfoJObjClass, "errorCode", "Lru/petrolplus/pos/p7LibApi/responces/ResultCode;");
     jfieldID errorStack_ID = env->GetFieldID(ErrorInfoJObjClass, "errorStack", "[Ljava/lang/Byte;");
     jfieldID errorMessage_ID = env->GetFieldID(ErrorInfoJObjClass, "errorMessage", "Ljava/lang/String;");
     Result = (errorCode_ID && errorStack_ID && errorMessage_ID);
@@ -1064,7 +1069,7 @@ bool TP7LibTypes::CreateLibInfoJObj(JNIEnv *env, jobject *LibInfoJObj) {
     if (*LibInfoJObj) {
       DeleteLocalRef(env, LibInfoJObj);  }
 
-    jclass TransInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/LibInfoDto");
+    jclass TransInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/LibInfoDto");
     jmethodID TransInfoConstructorID = env->GetMethodID(TransInfoJObjClass, "<init>", "()V");
     *LibInfoJObj = env->NewObject(TransInfoJObjClass, TransInfoConstructorID);
 
@@ -1081,7 +1086,7 @@ bool TP7LibTypes::ConvertLibInfoToJObj(JNIEnv *env, const TLibInfo *LibInfo, job
     jbyteArray JBArray = nullptr;
 
     Result = CreateLibInfoJObj(env, LibInfoJObj);
-    jclass TransInfoJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/LibInfoDto");
+    jclass TransInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/LibInfoDto");
     Result = (Result && TransInfoJObjClass != nullptr);
     if (!Result) {
       return false;  }
@@ -1110,7 +1115,7 @@ bool TP7LibTypes::CreateStTimeJObj(JNIEnv *env, jobject *StTimeJObj) {
     if (*StTimeJObj) {
       DeleteLocalRef(env, StTimeJObj);  }
 
-    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ClockDto");
+    jclass StTimeJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/ClockDto");
     jmethodID TransInfoConstructorID = env->GetMethodID(StTimeJObjClass, "<init>", "()V");
     *StTimeJObj = env->NewObject(StTimeJObjClass, TransInfoConstructorID);
 
@@ -1126,7 +1131,7 @@ bool TP7LibTypes::ConvertStTimeToJObj(JNIEnv *env, const TSTTime *StTime, jobjec
     jbyteArray JBArray = nullptr;
 
     Result = CreateStTimeJObj(env, StTimeJObj);
-    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ClockDto");
+    jclass StTimeJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/ClockDto");
     Result = (Result && StTimeJObjClass != nullptr);
     if (!Result) {
       if (*StTimeJObj) {
@@ -1162,7 +1167,7 @@ bool TP7LibTypes::ConvertStTimeFromJObj(JNIEnv *env, const jobject *StTimeJObj, 
   bool Result = false;
 
   if (env && StTime && StTimeJObj) {
-    jclass StTimeJObjClass = env->FindClass("ru/petroplus/pos/p7LibApi/dto/ClockDto");
+    jclass StTimeJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/ClockDto");
     Result = (StTimeJObjClass != nullptr);
     if (!Result) {
       return false;  }

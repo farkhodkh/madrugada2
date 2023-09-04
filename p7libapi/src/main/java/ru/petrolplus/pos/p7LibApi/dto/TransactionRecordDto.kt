@@ -1,8 +1,5 @@
 package ru.petrolplus.pos.p7LibApi.dto
 
-import ru.petroplus.pos.p7LibApi.dto.ClockDto
-
-
 class TransactionRecordDto(
     /**
     *  Графический номер карты

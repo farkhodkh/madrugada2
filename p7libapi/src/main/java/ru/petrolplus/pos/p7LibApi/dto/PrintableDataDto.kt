@@ -1,4 +1,4 @@
-package ru.petroplus.pos.p7LibApi.dto
+package ru.petrolplus.pos.p7LibApi.dto
 
 /**
  * Класс простого строкового документа для печати
@@ -9,8 +9,8 @@ package ru.petroplus.pos.p7LibApi.dto
  */
 
 class PrintableDataDto (
-    var header : String = String(),
-    var title : String = String(),
-    var body : String = String(),
-    var footer : String = String()
+    var header : String,
+    var title : String,
+    var body : String,
+    var footer : String
 )

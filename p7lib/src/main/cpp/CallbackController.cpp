@@ -312,22 +312,22 @@ TCallbacksSet TCallbackController::GetCallbacks(JNIEnv *jniEnv, jobject &Callbac
       CallbacksSet.Log = &Log;  }
 
     CardResetCallbackID = jniEnv->GetMethodID(CallbackClass, "cardReset",
-                                              "(Lru/petroplus/pos/p7LibApi/responces/ApduAnswer;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                              "(Lru/petrolplus/pos/p7LibApi/responces/ApduAnswer;)Lru/petrolplus/pos/p7LibApi/dto/ResultCode;");
     if (CardResetCallbackID) {
       CallbacksSet.CardReset = &CardReset;  }
 
     CardAPDUCallbackID = jniEnv->GetMethodID(CallbackClass, "sendDataToCard",
-                                             "(Lru/petroplus/pos/p7LibApi/requests/ApduData;Lru/petroplus/pos/p7LibApi/responces/ApduAnswer;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                             "(Lru/petrolplus/pos/p7LibApi/requests/ApduData;Lru/petrolplus/pos/p7LibApi/responces/ApduAnswer;)Lru/petrolplus/pos/p7LibApi/dto/ResultCode;");
     if (CardAPDUCallbackID) {
       CallbacksSet.CardAPDU = &CardAPDU;  }
 
     SamResetCallbackID = jniEnv->GetMethodID(CallbackClass, "samReset",
-                                             "(Lru/petroplus/pos/p7LibApi/responces/ApduAnswer;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                             "(Lru/petrolplus/pos/p7LibApi/responces/ApduAnswer;)Lru/petrolplus/pos/p7LibApi/dto/ResultCode;");
     if (SamResetCallbackID) {
       CallbacksSet.SamReset = &SamReset;  }
 
     SamAPDUCallbackID = jniEnv->GetMethodID(CallbackClass, "sendDataToSam",
-                                            "(Lru/petroplus/pos/p7LibApi/requests/ApduData;Lru/petroplus/pos/p7LibApi/responces/ApduAnswer;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                            "(Lru/petrolplus/pos/p7LibApi/requests/ApduData;Lru/petrolplus/pos/p7LibApi/responces/ApduAnswer;)Lru/petrolplus/pos/p7LibApi/dto/ResultCode;");
     if (SamAPDUCallbackID) {
       CallbacksSet.SamAPDU = &SamAPDU;  }
 
@@ -336,27 +336,27 @@ TCallbacksSet TCallbackController::GetCallbacks(JNIEnv *jniEnv, jobject &Callbac
       CallbacksSet.TryASConnection = &TryASConnection;  }
 
     DoASDataExchangeCallbackID = jniEnv->GetMethodID(CallbackClass, "doASDataExchange",
-                                                     "([B)Lru/petroplus/pos/p7LibApi/responces/OperationResult;");
+                                                     "([B)Lru/petrolplus/pos/p7LibApi/responces/OperationResult;");
     if (DoASDataExchangeCallbackID) {
       CallbacksSet.DoASDataExchange = &DoASDataExchange;  }
 
     FindLastTransDBCallbackID = jniEnv->GetMethodID(CallbackClass, "findLastTransactionDB",
-                                                    "(JLru/petroplus/pos/p7LibApi/dto/TransactionRecordDto;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                                    "(JLru/petrolplus/pos/p7LibApi/dto/TransactionRecordDto;)Lru/petrolplus/pos/p7LibApi/dto/ResultCode;");
     if (FindLastTransDBCallbackID) {
       CallbacksSet.FindLastTransDB = &FindLastTransDB;  }
 
     CompleteTransDBCallbackID = jniEnv->GetMethodID(CallbackClass, "completeTransactionDB",
-                                                    "(Lru/petroplus/pos/p7LibApi/dto/TransactionRecordDto;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                                    "(Lru/petrolplus/pos/p7LibApi/dto/TransactionRecordDto;)Lru/petrolplus/pos/p7LibApi/dto/ResultCode;");
     if (CompleteTransDBCallbackID) {
       CallbacksSet.CompleteTransDB = &CompleteTransDB;  }
 
     PrintSimpleDocCallbackID = jniEnv->GetMethodID(CallbackClass, "printSimpleDoc",
-                                                   "(Lru/petroplus/pos/p7LibApi/dto/PrintableDataDto;)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                                   "(Lru/petrolplus/pos/p7LibApi/dto/PrintableDataDto;)Lru/petrolplus/pos/p7LibApi/dto/ResultCode;");
     if (PrintSimpleDocCallbackID) {
       CallbacksSet.PrintSimpleDoc = &PrintSimpleDoc;  }
 
     TransferOOBToASCallbackID = jniEnv->GetMethodID(CallbackClass, "transferOOBToAS",
-                                                   "([B)Lru/petroplus/pos/p7LibApi/dto/ResultCode;");
+                                                   "([B)Lru/petrolplus/pos/p7LibApi/dto/ResultCode;");
     if (TransferOOBToASCallbackID) {
       CallbacksSet.TransferOOBToAS = &TransferOOBToAS;  }
   } // if JVM && CallbackObject

@@ -5,7 +5,7 @@ import ru.petrolplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petrolplus.pos.p7LibApi.requests.ApduData
 import ru.petrolplus.pos.p7LibApi.responces.ApduAnswer
 import ru.petrolplus.pos.p7LibApi.responces.OK
-import ru.petroplus.pos.p7LibApi.dto.*
+import ru.petrolplus.pos.p7LibApi.dto.*
 import ru.petrolplus.pos.p7LibApi.responces.OperationResult
 import ru.petrolplus.pos.p7LibApi.responces.ResultCode
 

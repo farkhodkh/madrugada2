@@ -1,4 +1,4 @@
-package ru.petroplus.pos.p7LibApi.dto
+package ru.petrolplus.pos.p7LibApi.dto
 
 /**
  * Класс представления времени
