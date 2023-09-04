@@ -1,4 +1,4 @@
-package ru.petrolplus.pos.evotorsdk
+package ru.petroplus.pos.evotorsdk
 
 import android.content.ComponentName
 import android.content.Context
@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiCallbackInterface
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiInterface
-import ru.petrolplus.pos.evotorsdk.util.HexUtil
-import ru.petrolplus.pos.sdkapi.ISDKRepository
-import ru.petrolplus.pos.util.ResourceHelper
-import ru.petrolplus.pos.util.ext.getNextCommandNumber
-import java.math.BigInteger
+import ru.petroplus.pos.evotorsdk.util.HexUtil
+import ru.petroplus.pos.evotorsdk.util.TlvCommands
+import ru.petroplus.pos.sdkapi.ISDKRepository
+import ru.petroplus.pos.util.ResourceHelper
+import ru.petroplus.pos.util.ext.getNextCommandNumber
 
 /**
  * Репозиторий для работы с SDK терминалов от поставщика "Эвотор"
@@ -27,9 +27,6 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
 
     private val scope = CoroutineScope(Dispatchers.IO)
     private var requestInterface: ExternalLowLevelApiInterface? = null
-    private val requestHeader: String by lazy {
-        String.format("%04x", BigInteger(1, "SBR".toByteArray(Charsets.UTF_8)))
-    }
     private var commandNumber: Int = 0
     private val actionName = "ru.evotor.pinpaddriver.internal.CMTransportService"
     private val packageName = "ru.evotor.pinpaddriver.internal"
@@ -79,7 +76,7 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
         commandNumber += 1
 
         try {
-            val commandLine = "$requestHeader${commandNumber.getNextCommandNumber()}$bytesString"
+            val commandLine = "${TlvCommands.RequestHeader.code}${commandNumber.getNextCommandNumber()}$bytesString"
             if (BuildConfig.DEBUG) {
                 scope.launch {
                     onReceivedData("Отправил команду: $commandLine")
@@ -136,7 +133,6 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
             requestInterface = null
         }
 
-
         /**
          * 1) При запуске приложения вызывать команду 00 (пакет будет выглядеть так: 00)
          * 2) В процессе работы проверять результат работы команды 25, и если код ошибки = 08,
@@ -146,7 +142,7 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
          * То есть, в этой схеме инициализация/синхронизация вызывается по необходимости.
          */
         private fun initDevice() {
-            sendCommand("00")
+            sendCommand(TlvCommands.InitDevice.code)
         }
     }
 }
