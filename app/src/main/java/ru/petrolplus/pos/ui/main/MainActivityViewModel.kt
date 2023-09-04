@@ -1,7 +1,6 @@
 package ru.petrolplus.pos.ui.main
 
 import android.content.Context
-import android.os.Environment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
@@ -15,13 +14,9 @@ import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
 import ru.petrolplus.pos.R
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
-import ru.petrolplus.pos.p7LibApi.dto.InitDataDto
-import ru.petrolplus.pos.p7LibApi.responces.OK
-import ru.petrolplus.pos.p7LibApi.dto.TransactionUUIDDto
 import ru.petrolplus.pos.util.ConfigurationFileReader
 import ru.petrolplus.pos.util.constants.Constants.CONFIG_FILE_NAME
 import ru.petrolplus.pos.util.ext.toInitDataDto
-import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
 import kotlin.system.exitProcess
