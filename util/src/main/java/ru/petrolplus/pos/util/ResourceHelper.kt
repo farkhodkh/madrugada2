@@ -47,6 +47,11 @@ object ResourceHelper {
             return@let IOUtil.readInputStreamFully(inputStream)
         }
 
+    fun getExternalCacheDirectory(): String? {
+        return weakContext.get()?.let {
+            it.externalCacheDir?.absolutePath
+        }
+    }
     /**
      * Метод для записи InputStream в файл для Ping запроса
      */
