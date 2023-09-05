@@ -11,6 +11,8 @@ package ru.petrolplus.pos.p7LibApi.dto
  *
  * @author - @FAHA
  */
+
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class InitDataDto(
     var acquirerId: Int = 0,
     var terminalId: Int = 0,

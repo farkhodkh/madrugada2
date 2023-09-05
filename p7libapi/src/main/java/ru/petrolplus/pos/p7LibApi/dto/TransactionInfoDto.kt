@@ -7,6 +7,8 @@ package ru.petrolplus.pos.p7LibApi.dto
  * @property terminalId - ID терминала
  * @property issuerId - ID эмитента
  */
+
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class TransactionInfoDto(
     var transactionNumber: Long = 0L,
     var cardNumber: Long = 0L,

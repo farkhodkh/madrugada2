@@ -11,6 +11,7 @@ package ru.petrolplus.pos.p7LibApi.dto
  * @property weekDay - день недели, 1=MON ... 7=SUN
  */
 
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 //todo: возможно, название класса не оптимально, при возможности подумать над переименованием.
 class ClockDto {
     var year : Short = 0

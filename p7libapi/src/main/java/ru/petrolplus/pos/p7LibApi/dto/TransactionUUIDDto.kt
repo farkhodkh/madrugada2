@@ -8,6 +8,8 @@ package ru.petrolplus.pos.p7LibApi.dto
  * @property hasNodeId - признак наличия идентивикатора узла
  * @property nodeId - код идентификатора узла
  */
+
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class TransactionUUIDDto(
     var onlineTransNumber: Int = 0,
     var lastGenTime: Int = 0,

@@ -10,6 +10,8 @@ package ru.petrolplus.pos.p7LibApi.dto
  * @property pinBlock - Введенный PIN предъявителем карты в виде PIN-блока зашифрованного публичной частью
  * RSA ключа и Nonce, предоставленного управляющему приложению ранее на этапе DetectCard
  */
+
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class DebitParamsDto(
     var serviceWhat: Int = 0,
     var serviceFrom: Int = 0,

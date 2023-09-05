@@ -7,6 +7,8 @@ package ru.petrolplus.pos.p7LibApi.dto
  * @property majorVersion - Старший номер версии библиотеки
  * @property minerVersion - Младший номер версии бибилиотеки
  */
+
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class LibInfoDto(
     var acquirerId: Long = 0,
     var terminalNum: Long = 0,

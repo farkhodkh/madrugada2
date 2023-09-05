@@ -11,6 +11,7 @@ package ru.petrolplus.pos.p7LibApi.requests
  * @property LE - длинна данных предполагаемого ответа
  */
 
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class ApduData(
     var GLA: Byte = 0,
     var INS: Byte = 0,

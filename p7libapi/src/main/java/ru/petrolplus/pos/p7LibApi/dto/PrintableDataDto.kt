@@ -8,6 +8,7 @@ package ru.petrolplus.pos.p7LibApi.dto
  * @property footer - футер документа
  */
 
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class PrintableDataDto (
     var header : String,
     var title : String,

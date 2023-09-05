@@ -7,6 +7,8 @@ package ru.petrolplus.pos.p7LibApi.dto
  * @property nonce - случайное число публичного ключа
  * @author - @FAHA
  */
+
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class CardKeyDto(
     var publicKey: ByteArray = byteArrayOf(),
     var publicExp: ByteArray = byteArrayOf(),
