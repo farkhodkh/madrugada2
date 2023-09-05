@@ -18,11 +18,15 @@ import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petrolplus.pos.mainscreen.BuildConfig
-import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewState
 import ru.petrolplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
+import ru.petrolplus.pos.mainscreen.ui.ext.toInitDataDto
 import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
+import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
+import ru.petrolplus.pos.p7LibApi.IP7LibRepository
+import ru.petrolplus.pos.p7LibApi.dto.TransactionUUIDDto
 import ru.petrolplus.pos.printerapi.PrinterRepository
 import ru.petrolplus.pos.sdkapi.CardReaderRepository
+import ru.petrolplus.pos.util.ResourceHelper
 import kotlin.random.Random
 
 class DebitViewModel(
@@ -32,6 +36,8 @@ class DebitViewModel(
     private val transactionsPersistence: TransactionsPersistence,
     private val settingsPersistence: SettingsPersistence,
     private val receiptPersistence: ReceiptPersistence,
+    private val p7LibRepository: IP7LibRepository,
+    private val p7LibCallbacks: IP7LibCallbacks,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -56,28 +62,107 @@ class DebitViewModel(
         }
     }
 
-    //FIXME: Метод тестовый, по хорошему заменится тестами или переедет в тестовую вью модель
-    //меняет текущий вьюстейт на тестовый или подменяет текущее тестовое состояние новым
-    fun onTransactionDataChanges(debitDebugGroup: DebitDebugGroup) {
-        _viewState.value = DebitViewState.DebugState.Debit(debitDebugGroup)
-    }
-
-    //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
-    //добавляет транзакцию в бд и подгружает все остальные транзакции
-    fun testDebit(transactionDTO: TransactionDTO) {
+    fun ping() {
         viewModelScope.launch(Dispatchers.IO) {
-            transactionsPersistence.add(transactionDTO)
-            loadTransactions()
+            gatewayServer.doPing()
         }
     }
 
-    //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
-    //Загружает все транзакции из бд в IO планировщике
-    fun fetchTransactions() {
-        viewModelScope.launch(Dispatchers.IO) {
-            loadTransactions()
+    fun sendCommand(command: String) {
+        cardReaderRepository.sdkRepository.sendCommand(command)
+    }
+
+
+    fun resetPrinter() {
+        _viewState.value = DebitViewState.DebugState.PrinterState.WaitDocument
+    }
+
+    private fun onFailPrint() {
+        _viewState.value = DebitViewState.DebugState.PrinterState.PrintFailed
+    }
+
+    // Проверяем что принтер не находится в состоянии печати и значение ID валидное
+    private fun preprintCheck(transactionId: String) =
+        (transactionId.isNotEmpty() && _viewState.value != DebitViewState.DebugState.PrinterState.Printing)
+
+    companion object {
+        fun provideFactory(
+            cardReaderRepository: CardReaderRepository,
+            printerRepository: PrinterRepository,
+            gatewayServer: GatewayServerRepositoryApi,
+            transactionsPersistence: TransactionsPersistence,
+            settingsPersistence: SettingsPersistence,
+            owner: SavedStateRegistryOwner,
+            receiptPersistence: ReceiptPersistence,
+            p7LibRepository: IP7LibRepository,
+            p7LibCallbacks: IP7LibCallbacks,
+            defaultArgs: Bundle? = null,
+        ): AbstractSavedStateViewModelFactory =
+            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(
+                    key: String, modelClass: Class<T>, handle: SavedStateHandle
+                ): T {
+                    return DebitViewModel(
+                        cardReaderRepository,
+                        printerRepository,
+                        gatewayServer,
+                        transactionsPersistence,
+                        settingsPersistence,
+                        receiptPersistence,
+                        p7LibRepository,
+                        p7LibCallbacks,
+                        handle
+                    ) as T
+                }
+            }
+    }
+
+    //region TEST_METHODS
+    //FIXME: Метод тестовый. Проверка работы библиотеки P7Lib
+    fun testP7LibCommand() {
+        viewModelScope.launch {
+            val initData = settingsPersistence.getBaseSettings().toInitDataDto()
+            val uuidDto = TransactionUUIDDto()
+            val cacheDir = ResourceHelper.getExternalCacheDirectory() ?: ""
+            val result = p7LibRepository.init(initData, uuidDto, p7LibCallbacks, cacheDir, cacheDir)
+            val b = result.code
         }
     }
+
+    //FIXME: Метод тестовый. Распечатывает чек по введенному ID
+    //Проверяется возможна ли сейчас печать. Переход в состояние печати
+    //Запрос данных для печати чека из БД. Проверка полученных данных
+    //В Debug сборке симуляция ошибки во время печати. Печать чека с отслеживанием наличия ошибки
+    fun printTransactionTest(transactionId: String) {
+        if (!preprintCheck(transactionId)) return
+
+        _viewState.value = DebitViewState.DebugState.PrinterState.Printing
+
+        viewModelScope.launch(Dispatchers.IO) {
+            val data = receiptPersistence.getDebitReceipt(transactionId)
+            if (data == null) {
+                onFailPrint()
+                return@launch
+            }
+
+            // Симуляция ошибки во время печати
+            if (BuildConfig.DEBUG) {
+                delay(300)
+                val isSuccessTry = Random.nextBoolean()
+                if (isSuccessTry) {
+                    onFailPrint()
+                    return@launch
+                }
+            }
+
+            when (printer.print(data)) {
+                null -> resetPrinter()
+                else -> onFailPrint()
+            }
+        }
+    }
+
 
     //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
     //Загружает все транзакции из бд
@@ -118,87 +203,30 @@ class DebitViewModel(
         }
     }
 
-    fun ping() {
+
+    //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
+    //Загружает все транзакции из бд в IO планировщике
+    fun fetchTransactions() {
         viewModelScope.launch(Dispatchers.IO) {
-            gatewayServer.doPing()
+            loadTransactions()
         }
     }
 
-    fun sendCommand(command: String) {
-        cardReaderRepository.sdkRepository.sendCommand(command)
+
+    //FIXME: Метод тестовый, по хорошему заменится тестами или переедет в тестовую вью модель
+    //меняет текущий вьюстейт на тестовый или подменяет текущее тестовое состояние новым
+    fun onTransactionDataChanges(debitDebugGroup: DebitDebugGroup) {
+        _viewState.value = DebitViewState.DebugState.Debit(debitDebugGroup)
     }
 
-    //FIXME: Метод тестовый. Распечатывает чек по введенному ID
-    //Проверяется возможна ли сейчас печать. Переход в состояние печати
-    //Запрос данных для печати чека из БД. Проверка полученных данных
-    //В Debug сборке симуляция ошибки во время печати. Печать чека с отслеживанием наличия ошибки
-    fun printTransactionTest(transactionId: String) {
-        if (!preprintCheck(transactionId)) return
-
-        _viewState.value = DebitViewState.DebugState.PrinterState.Printing
-
+    //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
+    //добавляет транзакцию в бд и подгружает все остальные транзакции
+    fun testDebit(transactionDTO: TransactionDTO) {
         viewModelScope.launch(Dispatchers.IO) {
-            val data = receiptPersistence.getDebitReceipt(transactionId)
-            if (data == null) {
-                onFailPrint()
-                return@launch
-            }
-
-            // Симуляция ошибки во время печати
-            if (BuildConfig.DEBUG) {
-                delay(300)
-                val isSuccessTry = Random.nextBoolean()
-                if (isSuccessTry) {
-                    onFailPrint()
-                    return@launch
-                }
-            }
-
-            when (printer.print(data)) {
-                null -> resetPrinter()
-                else -> onFailPrint()
-            }
+            transactionsPersistence.add(transactionDTO)
+            loadTransactions()
         }
     }
 
-    fun resetPrinter() {
-        _viewState.value = DebitViewState.DebugState.PrinterState.WaitDocument
-    }
-
-    private fun onFailPrint() {
-        _viewState.value = DebitViewState.DebugState.PrinterState.PrintFailed
-    }
-
-    // Проверяем что принтер не находится в состоянии печати и значение ID валидное
-    private fun preprintCheck(transactionId: String) =
-        (transactionId.isNotEmpty() && _viewState.value != DebitViewState.DebugState.PrinterState.Printing)
-
-    companion object {
-        fun provideFactory(
-            cardReaderRepository: CardReaderRepository,
-            printerRepository: PrinterRepository,
-            gatewayServer: GatewayServerRepositoryApi,
-            transactionsPersistence: TransactionsPersistence,
-            settingsPersistence: SettingsPersistence,
-            owner: SavedStateRegistryOwner,
-            receiptPersistence: ReceiptPersistence,
-            defaultArgs: Bundle? = null,
-        ): AbstractSavedStateViewModelFactory =
-            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(
-                    key: String, modelClass: Class<T>, handle: SavedStateHandle
-                ): T {
-                    return DebitViewModel(
-                        cardReaderRepository,
-                        printerRepository,
-                        gatewayServer,
-                        transactionsPersistence,
-                        settingsPersistence,
-                        receiptPersistence,
-                        handle
-                    ) as T
-                }
-            }
-    }
+    //endregion
 }

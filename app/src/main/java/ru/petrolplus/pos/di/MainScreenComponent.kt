@@ -9,6 +9,8 @@ import ru.petrolplus.pos.persitence.di.MappersModule
 import ru.petrolplus.pos.persitence.di.PersistenceModule
 import ru.petrolplus.pos.room.di.RoomModule
 import ru.petrolplus.pos.core.MainScreenScope
+import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
+import ru.petrolplus.pos.p7LibApi.IP7LibRepository
 import ru.petrolplus.pos.ui.main.MainActivity
 
 @MainScreenScope
@@ -26,6 +28,8 @@ interface MainScreenComponent {
     val transactionsPersistence: TransactionsPersistence
     val settingsPersistence: SettingsPersistence
     val servicesPersistence: ServicesPersistence
+    val p7LibRepository: IP7LibRepository
+    val p7LibCallbacks: IP7LibCallbacks
 
     fun inject(mainActivity: MainActivity)
 

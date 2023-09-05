@@ -183,6 +183,17 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Row {
+
+                Button(modifier = Modifier
+                    .width(100.dp)
+                    .padding(8.dp), onClick = {
+                    viewModel.testP7LibCommand()
+                }) {
+                    Text(
+                        text = stringResource(id = R.string.P7Lib)
+                    )
+                }
+
                 Button(modifier = Modifier
                     .width(100.dp)
                     .padding(8.dp), onClick = {

@@ -15,6 +15,7 @@ import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petrolplus.pos.mainscreen.ui.settings.SettingsScreen
 import ru.petrolplus.pos.mainscreen.ui.settings.SettingsViewModel
 import ru.petrolplus.pos.navigation.Screens
+import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.ui.main.MainActivity
 import ru.petrolplus.pos.ui.views.RefundScreen
 
@@ -38,7 +39,9 @@ fun NavigationController(navController: NavHostController) {
                         printerRepository = (LocalContext.current.applicationContext as App).appComponent.printer,
                         receiptPersistence = mainScreenComponent.receiptPersistence,
                         transactionsPersistence = mainScreenComponent.transactionsPersistence,
-                        settingsPersistence = mainScreenComponent.settingsPersistence
+                        settingsPersistence = mainScreenComponent.settingsPersistence,
+                        p7LibRepository = mainScreenComponent.p7LibRepository,
+                        p7LibCallbacks = mainScreenComponent.p7LibCallbacks
                     )
                 )
             )

@@ -54,8 +54,8 @@ dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*aar"))))
 
     //SSL Authentification
-    implementation ("com.google.android.gms:play-services-auth:20.6.0")
-    implementation ("org.bouncycastle:bcprov-jdk15on:1.67")
+    implementation("${Dependencies.gmsAuth}:${Versions.gmsAuth}")
+    implementation("${Dependencies.bcprovJdk}:${Versions.bcprovJdk}")
 
     //Core
     implementation("${Dependencies.coreKtx}:${Versions.coreKtx}")
@@ -78,7 +78,6 @@ dependencies {
     implementation("${Dependencies.composeNavigation}:${Versions.composeNavigation}")
     implementation("${Dependencies.composeFoundation}:${Versions.compose}")
 
-    //Lifecycle
     //Lifecycle
     implementation("${Dependencies.lifecycleViewModel}:${Versions.lifecycle}")
     implementation("${Dependencies.lifecycleRuntime}:${Versions.lifecycle}")

@@ -36,6 +36,8 @@ dependencies {
     implementation(project(":util"))
     implementation(project(":ui"))
     implementation(project(":sdkapi"))
+    implementation(project(":p7libapi"))
+    implementation(project(":p7lib"))
     implementation(project(":networkapi"))
     implementation(project(":room"))
     implementation(project(":persistence"))
