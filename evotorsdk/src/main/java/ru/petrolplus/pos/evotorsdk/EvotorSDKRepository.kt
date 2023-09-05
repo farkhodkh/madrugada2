@@ -1,4 +1,4 @@
-package ru.petroplus.pos.evotorsdk
+package ru.petrolplus.pos.evotorsdk
 
 import android.content.ComponentName
 import android.content.Context
@@ -12,11 +12,11 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiCallbackInterface
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiInterface
-import ru.petroplus.pos.evotorsdk.util.HexUtil
-import ru.petroplus.pos.evotorsdk.util.TlvCommands
-import ru.petroplus.pos.sdkapi.ISDKRepository
-import ru.petroplus.pos.util.ResourceHelper
-import ru.petroplus.pos.util.ext.getNextCommandNumber
+import ru.petrolplus.pos.evotorsdk.util.HexUtil
+import ru.petrolplus.pos.evotorsdk.util.TlvCommands
+import ru.petrolplus.pos.sdkapi.ISDKRepository
+import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.util.ext.getNextCommandNumber
 
 /**
  * Репозиторий для работы с SDK терминалов от поставщика "Эвотор"

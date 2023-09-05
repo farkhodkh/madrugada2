@@ -1,4 +1,4 @@
-package ru.petroplus.pos.evotorsdk.util
+package ru.petrolplus.pos.evotorsdk.util
 
 import java.math.BigInteger
 
