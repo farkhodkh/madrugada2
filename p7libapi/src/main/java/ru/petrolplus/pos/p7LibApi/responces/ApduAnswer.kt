@@ -1,13 +1,14 @@
 package ru.petrolplus.pos.p7LibApi.responces
 
 /**
- * TODO - Юрий, добавть описание
- * @property sw1 -
- * @property sw2 -
- * @property data -
+ * @property sw1 - младший байт кода успешности выполнения
+ * @property sw2 -старший байт кода успешности выполнения
+ * @property data - данные ответа (необязательны)
  */
+
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class ApduAnswer(
-    sw1: Int,
-    sw2: Int,
-    data: ByteArray
+    var sw1: Int = 0,
+    var sw2: Int = 0,
+    var data: ByteArray = byteArrayOf()
 )

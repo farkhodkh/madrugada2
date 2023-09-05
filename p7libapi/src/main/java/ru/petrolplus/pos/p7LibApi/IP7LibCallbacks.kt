@@ -1,13 +1,11 @@
 package ru.petrolplus.pos.p7LibApi
 
-import ru.petrolplus.pos.p7LibApi.dto.PrintDataDto
-import ru.petrolplus.pos.p7LibApi.dto.ResultCode
-import ru.petrolplus.pos.p7LibApi.dto.TransactionInfoDto
 import ru.petrolplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petrolplus.pos.p7LibApi.requests.ApduData
 import ru.petrolplus.pos.p7LibApi.responces.ApduAnswer
+import ru.petrolplus.pos.p7LibApi.responces.ResultCode
+import ru.petrolplus.pos.p7LibApi.dto.PrintableDataDto
 import ru.petrolplus.pos.p7LibApi.responces.OperationResult
-import java.io.File
 
 /**
  * Interface для обслуживания "callback" ов библиотеки p7lib
@@ -25,7 +23,7 @@ interface IP7LibCallbacks {
      * @param answer - Ответ APDU
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun cardReset(answer: ApduAnswer): OperationResult
+    fun cardReset(answer: ApduAnswer): ResultCode
 
     /**
      * Обмен данными с картой
@@ -33,21 +31,22 @@ interface IP7LibCallbacks {
      * @param answer - Ответ APDU
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun sendDataToCard(data: ApduData, answer: ApduAnswer): OperationResult
+    fun sendDataToCard(data: ApduData, answer: ApduAnswer): ResultCode
 
     /**
      * Сброс SAM карты
      * @param answer - Ответ APDU
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun samReset(answer: ApduAnswer): OperationResult
+    fun samReset(answer: ApduAnswer): ResultCode
 
     /**
      * Обмен данными с SAM картой
      * @param data - Информационное сообщение для передачи на карту
+     * @param answer - Ответ карты
      * @return Код результат выполнения операции по сбросу карты
      */
-    fun sendToSamCard(data: ApduData, answer: ApduAnswer): OperationResult
+    fun sendDataToSam(data: ApduData, answer: ApduAnswer): ResultCode
 
     /**
      * Проверка наличия установленного соединения с "АС"
@@ -59,32 +58,38 @@ interface IP7LibCallbacks {
     /**
      * Передача данных в АС
      * @param data - бинарное нешифрованное информационное сообщение для передачи в АС
-     * @return Код результат выполнения операции
+     * @return Код результата выполнения операции
      */
-    fun sendToAS(data: ByteArray): OperationResult
+    fun doASDataExchange(data: ByteArray): OperationResult
 
     /**
-     * Метод поиска последней транзакции по номеру карты
+     * Метод поиска последней транзакции по номеру карты в базе данных
      * @param cardNumber - номер карты
-     * @param transactionEntity - <=> Запись в базе данных
+     * @param record - <=> Запись в базе данных
+     * @return Код результата выполнения операции
      */
-    fun findLastTransaction(cardNumber: Int, transactionEntity: TransactionInfoDto): ResultCode
+    fun findLastTransactionDB(cardNumber: Long, record: TransactionRecordDto): ResultCode
 
     /**
-     * Обновление записей транзакции в БД
-     * @param record - Содержание транзакции для печати
+     * Оповещение о завершении транзакции с передачей данных трензакции
+     * для сохранения транзакции в БД
+     * @param record - Данные транзакции для сохранения в БД
+     * @return Код результата выполнения операции
      */
-    fun updateTransaction(record: TransactionRecordDto)
+    fun completeTransactionDB(record: TransactionRecordDto): ResultCode
 
     /**
-     * Распечатка чека по результатам транзакции
+     * Распечатка чека с технической информацией и прочими данными
      * @param data - Данные для заполнения чека для печати
+     * @return Код результата выполнения операции
      */
-    fun printSimpleDoc(data: PrintDataDto)
+    fun printSimpleDoc(data: PrintableDataDto): ResultCode
 
     /**
-     *  Метод возвращает данные для передачи в шлюз
-     *  @return OOB для передачи в шлюз
+     * Передача отложенных документов (OOB) на АС
+     * @param oobData - Блок OOB в бинарном виде
+     * @return Код результата выполнения операции
      */
-    fun getPingData(): File
+    fun transferOOBToAS(oobData: ByteArray): ResultCode
+
 }

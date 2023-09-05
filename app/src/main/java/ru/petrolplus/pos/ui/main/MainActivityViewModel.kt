@@ -14,8 +14,6 @@ import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
 import ru.petrolplus.pos.R
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
-import ru.petrolplus.pos.p7LibApi.dto.OK
-import ru.petrolplus.pos.p7LibApi.dto.TransactionUUIDDto
 import ru.petrolplus.pos.util.ConfigurationFileReader
 import ru.petrolplus.pos.util.constants.Constants.CONFIG_FILE_NAME
 import ru.petrolplus.pos.util.ext.toInitDataDto
@@ -71,21 +69,7 @@ class MainActivityViewModel(
             )
         }
 
-        val result = p7LibraryRepository.init(
-            initDataDto,
-            TransactionUUIDDto(),
-            callbacks,
-            "",
-            ""
-        )
-
-        if (result.code == OK.code) {
-            _viewState.value =
-                MainScreenState.CheckingSuccessState
-        } else {
-            _viewState.value =
-                MainScreenState.CheckingSettingsError(R.string.cache_dir_access_error)
-        }
+        _viewState.value = MainScreenState.CheckingSuccessState
     }
 
     fun configurationFileDownloadRequired() {
