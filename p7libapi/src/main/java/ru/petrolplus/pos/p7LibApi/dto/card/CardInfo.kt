@@ -9,6 +9,7 @@ package ru.petrolplus.pos.p7LibApi.dto.card
  * @property cardType - Тип карты
  */
 
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class CardInfo(
     var isRecalcCard: Boolean = false,
     var PTC: Byte = 0,

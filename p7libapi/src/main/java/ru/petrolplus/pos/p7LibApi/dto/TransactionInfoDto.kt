@@ -1,7 +1,7 @@
 package ru.petrolplus.pos.p7LibApi.dto
 
 /**
- * @property transNumber - номер последней транзауции
+ * @property transactionNumber - номер последней транзауции
  * @property cardNumber - номер карты
  * @property terminalNumber - номер терминала
  * @property terminalId - ID терминала
