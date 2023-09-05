@@ -22,7 +22,7 @@ object Dependencies {
     const val workKtx = "androidx.work:work-runtime-ktx"
     const val testInstrumentationRunner = "testInstrumentationRunner"
     const val gmsAuth = "com.google.android.gms:play-services-auth"
-    const val bcprovJdk = "org.bouncycastle:bcprov-jdk15on:1.67"
+    const val bcprovJdk = "org.bouncycastle:bcprov-jdk15on"
     const val coreKtx = "androidx.core:core-ktx"
     const val appcompat = "androidx.appcompat:appcompat"
     const val androidMaterial = "com.google.android.material:material"
