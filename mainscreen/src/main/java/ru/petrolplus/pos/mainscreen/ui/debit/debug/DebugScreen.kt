@@ -190,7 +190,7 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                     viewModel.testP7LibCommand()
                 }) {
                     Text(
-                        text = stringResource(id = R.string.P7Lib)
+                        text = stringResource(id = R.string.p7_lib)
                     )
                 }
 
@@ -211,6 +211,28 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                 }) {
                     Text(
                         text = stringResource(id = R.string.ping)
+                    )
+                }
+            }
+
+            Row {
+                Button(modifier = Modifier
+                    .width(100.dp)
+                    .padding(8.dp), onClick = {
+                    viewModel.testInitCardReader()
+                }) {
+                    Text(
+                        text = stringResource(id = R.string.init_card_reader)
+                    )
+                }
+
+                Button(modifier = Modifier
+                    .width(100.dp)
+                    .padding(8.dp), onClick = {
+                    viewModel.testReadCardData()
+                }) {
+                    Text(
+                        text = stringResource(id = R.string.read_card_data)
                     )
                 }
             }

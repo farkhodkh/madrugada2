@@ -7,10 +7,16 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ISDKRepository {
     /**
-     * Метод для передачи команды в терминал
+     * Метод для синхронной передачи команды в терминал
      * @param bytesString - Строковое представление передаваемой команды
      */
-    fun sendCommand(bytesString: String)
+    fun sendCommandSync(bytesString: String)
+
+    /**
+     * Метод для ассинхронной передачи команды в терминал
+     * @param bytesString - Строковое представление передаваемой команды
+     */
+    fun sendCommand(bytesString: String): ByteArray
 
     /**
      *  Flow для обработки команд от терминала

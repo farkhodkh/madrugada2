@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import ru.petrolplus.pos.evotorsdk.util.TlvCommands
 import ru.petrolplus.pos.persitence.ReceiptPersistence
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
@@ -27,6 +28,7 @@ import ru.petrolplus.pos.p7LibApi.dto.TransactionUUIDDto
 import ru.petrolplus.pos.printerapi.PrinterRepository
 import ru.petrolplus.pos.sdkapi.CardReaderRepository
 import ru.petrolplus.pos.util.ResourceHelper
+import ru.petroplus.pos.evotorsdk.util.TlvTags
 import kotlin.random.Random
 
 class DebitViewModel(
@@ -69,7 +71,7 @@ class DebitViewModel(
     }
 
     fun sendCommand(command: String) {
-        cardReaderRepository.sdkRepository.sendCommand(command)
+        cardReaderRepository.sdkRepository.sendCommandSync(command)
     }
 
 
@@ -125,8 +127,7 @@ class DebitViewModel(
             val initData = settingsPersistence.getBaseSettings().toInitDataDto()
             val uuidDto = TransactionUUIDDto()
             val cacheDir = ResourceHelper.getExternalCacheDirectory() ?: ""
-            val result = p7LibRepository.init(initData, uuidDto, p7LibCallbacks, cacheDir, cacheDir)
-            val b = result.code
+            p7LibRepository.init(initData, uuidDto, p7LibCallbacks, cacheDir, cacheDir)
         }
     }
 
@@ -228,5 +229,26 @@ class DebitViewModel(
         }
     }
 
+    //FIXME: Метод тестовый, не потребуется в проде, для инициализации всех ридеров
+    fun testInitCardReader() {
+        //1 байт маски 0x01:MS , 0x02:ICC, 0x04:CLESS
+        //Init card reader
+        //TAG 01 -
+        //030107
+        cardReaderRepository
+            .sdkRepository
+            .sendCommandSync(
+                "${TlvCommands.InitCardReader.code}${TlvTags.CardFind.code}02"
+            )
+    }
+
+    //FIXME: Метод тестовый, не потребуется в проде, для чтения карты из всех ридеров
+    fun testReadCardData() {
+        cardReaderRepository
+            .sdkRepository
+            .sendCommandSync(
+                TlvCommands.GetCardReaderInfo.code
+            )
+    }
     //endregion
 }

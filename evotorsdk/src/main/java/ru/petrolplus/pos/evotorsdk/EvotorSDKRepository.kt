@@ -10,13 +10,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiCallbackInterface
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiInterface
+import ru.petrolplus.pos.evotorsdk.exaption.EvotorNotInitializedException
 import ru.petrolplus.pos.evotorsdk.util.HexUtil
 import ru.petrolplus.pos.evotorsdk.util.TlvCommands
 import ru.petrolplus.pos.sdkapi.ISDKRepository
 import ru.petrolplus.pos.util.ResourceHelper
 import ru.petrolplus.pos.util.ext.getNextCommandNumber
+import java.util.concurrent.atomic.AtomicInteger
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
+import kotlin.jvm.Throws
 
 /**
  * Репозиторий для работы с SDK терминалов от поставщика "Эвотор"
@@ -26,8 +32,9 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
     override val latestCommands: Flow<String> = _latestCommands
 
     private val scope = CoroutineScope(Dispatchers.IO)
+
     private var requestInterface: ExternalLowLevelApiInterface? = null
-    private var commandNumber: Int = 0
+    private var commandNumber: AtomicInteger = AtomicInteger(0)
     private val actionName = "ru.evotor.pinpaddriver.internal.CMTransportService"
     private val packageName = "ru.evotor.pinpaddriver.internal"
     private val className = "ru.evotor.pinpaddriver.internal.driver.CMTransportService"
@@ -44,13 +51,38 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
         context.bindService(intent, connection, Context.BIND_AUTO_CREATE)
     }
 
-    private val sdkCallback = object : ExternalLowLevelApiCallbackInterface.Stub() {
-        override fun onReceive(received: ByteArray?) {
-            received?.let {
-                scope.launch {
-                    onReceivedData(it)
-                }
+    @Throws(EvotorNotInitializedException::class, Exception::class)
+    override fun sendCommand(bytesString: String): ByteArray = runBlocking {
+        if (requestInterface == null) {
+            throw EvotorNotInitializedException(
+                ResourceHelper
+                    .getStringResource(R.string.terminal_not_initialized_error)
+            )
+        }
+
+        val number = commandNumber.incrementAndGet()
+
+        return@runBlocking try {
+            val commandLine =
+                "${TlvCommands.RequestHeader.code}${number.getNextCommandNumber()}$bytesString"
+
+            val charArray = "$commandLine".toCharArray()
+            val commandBytes = HexUtil.decodeHex(charArray)
+
+            val response: ByteArray = suspendCoroutine<ByteArray> { continuation ->
+                requestInterface?.sendCommand(
+                    commandBytes,
+                    object : ExternalLowLevelApiCallbackInterface.Stub() {
+                        override fun onReceive(received: ByteArray?) {
+                            received?.let { result ->
+                                continuation.resume(result)
+                            }
+                        }
+                    })
             }
+            response
+        } catch (ex: Exception) {
+            throw ex
         }
     }
 
@@ -62,37 +94,18 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
      * с установкой необходимых ключей.
      * То есть, в этой схеме инициализация/синхронизация вызывается по необходимости.
      */
-    override fun sendCommand(bytesString: String) {
-        if (requestInterface == null) {
-            scope.launch {
-                onReceivedData(
-                    ResourceHelper.getStringResource(R.string.terminal_not_initialized_error)
-                        .toByteArray(Charsets.UTF_8)
-                )
-            }
-            return
-        }
-
-        commandNumber += 1
-
+    override fun sendCommandSync(bytesString: String) {
         try {
-            val commandLine = "${TlvCommands.RequestHeader.code}${commandNumber.getNextCommandNumber()}$bytesString"
-            if (BuildConfig.DEBUG) {
-                scope.launch {
-                    onReceivedData("Отправил команду: $commandLine")
-                }
-            }
-            val charArray = "$commandLine".toCharArray()
-            val commandBytes = HexUtil.decodeHex(charArray)
-            requestInterface?.sendCommand(commandBytes, sdkCallback)
+            val result = sendCommand(bytesString)
+            onReceivedData(result)
+        } catch (ex: EvotorNotInitializedException) {
+            onReceivedData(ex.desc)
         } catch (ex: Exception) {
-            scope.launch {
-                onReceivedData(
-                    "{${ex::class.java.simpleName}: ${ex.localizedMessage}}".toByteArray(
-                        Charsets.UTF_8
-                    )
+            onReceivedData(
+                "{${ex::class.java.simpleName}: ${ex.localizedMessage}}".toByteArray(
+                    Charsets.UTF_8
                 )
-            }
+            )
         }
     }
 
@@ -142,7 +155,8 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
          * То есть, в этой схеме инициализация/синхронизация вызывается по необходимости.
          */
         private fun initDevice() {
-            sendCommand(TlvCommands.InitDevice.code)
+            //Init device
+            sendCommandSync(TlvCommands.InitDevice.code)
         }
     }
 }

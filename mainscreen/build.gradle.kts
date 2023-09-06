@@ -36,6 +36,7 @@ dependencies {
     implementation(project(":util"))
     implementation(project(":ui"))
     implementation(project(":sdkapi"))
+    implementation(project(":evotorsdk"))
     implementation(project(":p7libapi"))
     implementation(project(":p7lib"))
     implementation(project(":networkapi"))
