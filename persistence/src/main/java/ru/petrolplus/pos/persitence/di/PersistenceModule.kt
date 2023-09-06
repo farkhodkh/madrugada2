@@ -49,8 +49,8 @@ import ru.petrolplus.pos.room.entities.ServiceDB
 import ru.petrolplus.pos.room.entities.ShiftParamsDB
 import ru.petrolplus.pos.room.entities.TransactionDB
 import ru.petrolplus.pos.room.projections.ReceiptProjection
+import ru.petrolplus.pos.core.MainScreenScope
 import ru.petrolplus.pos.room.projections.TransactionByServiceProjection
-import ru.petroplus.pos.core.MainScreenScope
 
 @Module
 class PersistenceModule {

@@ -2,8 +2,8 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
-    id("ru.petroplus.pos.convention")
-    id("ru.petroplus.pos.compose")
+    id("ru.petrolplus.pos.convention")
+    id("ru.petrolplus.pos.compose")
 }
 
 android {
@@ -36,6 +36,8 @@ dependencies {
     implementation(project(":util"))
     implementation(project(":ui"))
     implementation(project(":sdkapi"))
+    implementation(project(":p7libapi"))
+    implementation(project(":p7lib"))
     implementation(project(":networkapi"))
     implementation(project(":room"))
     implementation(project(":persistence"))

@@ -11,7 +11,7 @@ import ru.petrolplus.pos.room.dao.ServicesDao
 import ru.petrolplus.pos.room.dao.ShiftParamsDao
 import ru.petrolplus.pos.room.dao.TransactionsDao
 import ru.petrolplus.pos.room.database.AppDatabase
-import ru.petroplus.pos.core.MainScreenScope
+import ru.petrolplus.pos.core.MainScreenScope
 
 @Module
 class RoomModule {

@@ -38,9 +38,6 @@ dependencies {
     //Coroutines
     implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
 
-    // Lib
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*aar"))))
-
     // Evator
     implementation("${Dependencies.evotor}:${Versions.evotor}")
 
@@ -48,4 +45,5 @@ dependencies {
     implementation(project(":printerApi"))
     implementation(project(":persistence"))
     implementation(project(":util"))
+    implementation(project(":evotorlib"))
 }
