@@ -1,7 +1,7 @@
 package ru.petrolplus.pos.persitence.enum
 
 /**
- * Енумерация представляющая тип транзакции
+ * Энумерация представляющая тип транзакции
  * @param id целочисленный идентификатор операции
  */
 enum class OperationType(val id: Int) {

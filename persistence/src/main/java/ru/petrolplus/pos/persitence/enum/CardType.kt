@@ -1,7 +1,7 @@
 package ru.petrolplus.pos.persitence.enum
 
 /**
- * Енумерация представляющая тип карты
+ * Энумерация представляющая тип карты
  * @param id целочисленный идентификатор карты
  */
 enum class CardType(val id: Int) {
