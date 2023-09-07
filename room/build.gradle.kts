@@ -21,6 +21,9 @@ android {
 dependencies {
     //Modules
     implementation(project(":core"))
+
+    //Modules for testing
+    androidTestImplementation(project(":util"))
     //Room
     implementation("${Dependencies.roomKtx}:${Versions.room}")
     kapt("${Dependencies.roomCompiler}:${Versions.room}")
@@ -31,6 +34,7 @@ dependencies {
 
     //Testing
     testImplementation("${Dependencies.junit}:${Versions.junit}")
+    androidTestImplementation("${Dependencies.roomTesting}:${Versions.room}")
     androidTestImplementation("${Dependencies.roomTesting}:${Versions.room}")
     androidTestImplementation("${Dependencies.extJunit}:${Versions.extJunit}")
     androidTestImplementation("${Dependencies.espresso}:${Versions.espresso}")
