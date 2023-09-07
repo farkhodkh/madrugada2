@@ -1,7 +1,7 @@
 package ru.petrolplus.pos.printerapi.ext
 
+import ru.petrolplus.pos.persitence.enum.CardType
 import ru.petrolplus.pos.persitence.enum.OperationType
-import ru.petrolplus.pos.printerapi.CardType
 import ru.petrolplus.pos.printerapi.Formatting
 import ru.petrolplus.pos.printerapi.ResponseCode
 import ru.petrolplus.pos.util.ext.leadingZeros
@@ -9,9 +9,9 @@ import ru.petrolplus.pos.util.ext.leadingZeros
 fun Int.formattingTerminalId() = this.leadingZeros(Formatting.TERMINAL_NUMBER_MASK_SIZE)
 
 fun Int.toCardType(): CardType = when (this) {
-    1 -> CardType.Petrol5
-    2 -> CardType.Petrol7
-    else -> CardType.Unknown
+    1 -> CardType.PETROL_5
+    2 -> CardType.PETROL_7
+    else -> CardType.UNKNOWN
 }
 
 fun Int.toOperationType(): OperationType = when (this) {

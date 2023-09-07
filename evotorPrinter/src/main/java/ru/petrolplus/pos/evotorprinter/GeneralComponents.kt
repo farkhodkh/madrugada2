@@ -42,7 +42,7 @@ object GeneralComponents {
         textJustify(arrayOf(IntroductoryConstruction.OPERATOR_NUMBER, operatorNumber), paperWidth)
 
     internal fun cardData(cardType: Int, cardNumber: String): Array<IPrintable> = arrayOf(
-        text("${IntroductoryConstruction.CARD} ${cardType.toCardType().name}: "),
+        text("${IntroductoryConstruction.CARD} ${cardType.toCardType().description}: "),
         text(cardNumber),
     )
 }

@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--  Типы карт  -->
-    <string name="petrol5">Петрол5</string>
-    <string name="petrol7">Петрол7</string>
-    <string name="unknown_card_type">Неизвестно</string>
-
     <!--  Типы операция  -->
     <string name="debit">Дебет</string>
     <string name="return_operation">Возврат</string>

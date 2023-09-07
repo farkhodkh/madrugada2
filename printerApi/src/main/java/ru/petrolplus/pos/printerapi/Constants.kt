@@ -1,10 +1,5 @@
 package ru.petrolplus.pos.printerapi
 
-import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
-import ru.petrolplus.pos.persitence.dto.ServiceDTO
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import ru.petrolplus.pos.util.ResourceHelper
 
 
@@ -14,103 +9,6 @@ object Formatting {
     const val PRINTER_DATE_PATTERN = "dd/MM/yy HH:mm:ss"
     const val BASE_UNIT_LENGTH = 1
 
-}
-
-// TODO: удалить после получения данных из БД
-object FakeData {
-    private val gas98 = ServiceDTO(1, "АИ-98", "Л", 156000)
-    private val gas95 = ServiceDTO(2, "АИ-95", "Л", 128000)
-    private val gas93 = ServiceDTO(3, "АИ-93", "Л", 57000)
-    private val gas92 = ServiceDTO(4, "АИ-92", "Л", 87000)
-    private val carWash = ServiceDTO(5, "Мойка", "Ш", 350000)
-
-    private val debitServicesStatistic = listOf(
-        StatisticByService(
-            gas98,
-            amountByNoRecalculatedTransaction =  200,
-            amountByRecalculatedTransaction =  600),
-
-        StatisticByService(
-            gas95,
-            amountByNoRecalculatedTransaction =  12800,
-            amountByRecalculatedTransaction =  2000),
-
-        StatisticByService(
-            gas93,
-            amountByNoRecalculatedTransaction =  0,
-            amountByRecalculatedTransaction =  100),
-
-        StatisticByService(
-            gas92,
-            amountByNoRecalculatedTransaction =  5797,
-            amountByRecalculatedTransaction =  0),
-
-        StatisticByService(
-            carWash,
-            amountByNoRecalculatedTransaction =  100,
-            amountByRecalculatedTransaction =  0),
-    )
-
-
-    private val returnToCardServicesStatistic = listOf(
-        StatisticByService(
-            gas98,
-            amountByNoRecalculatedTransaction =  200,
-            amountByRecalculatedTransaction =  600),
-
-        StatisticByService(
-            carWash,
-            amountByNoRecalculatedTransaction =  100,
-            amountByRecalculatedTransaction =  0),
-
-        StatisticByService(
-            gas93,
-            amountByNoRecalculatedTransaction =  0,
-            amountByRecalculatedTransaction =  100),
-    )
-
-    private val returnToAccountServicesStatistic = listOf(
-        StatisticByService(
-            gas98,
-            amountByNoRecalculatedTransaction =  200,
-            amountByRecalculatedTransaction =  600),
-
-        StatisticByService(
-            gas95,
-            amountByNoRecalculatedTransaction =  100,
-            amountByRecalculatedTransaction =  0),
-
-        StatisticByService(
-            gas92,
-            amountByNoRecalculatedTransaction =  0,
-            amountByRecalculatedTransaction =  100),
-    )
-
-    private val commonSettings = CommonSettingsDTO(
-        organizationName = "АНО НИИ ТАИ",
-        organizationInn = "12300005555134",
-        posName = "АЗС №234",
-    )
-
-    private const val countOfDebit = 79
-    private const val countOfReturn = 19
-    private const val terminalId = 23
-    private const val operatorNumber = 4000000004
-
-    private val sdf by lazy { SimpleDateFormat("dd/MM/yy HH:mm:ss", Locale.getDefault()) }
-    private val shiftStarted: Date = sdf.parse("26/08/18 17:30:34")!!
-
-    val statisticsByOperations = ShiftStatistic(
-        shiftStarted,
-        commonSettings,
-        debitServicesStatistic,
-        returnToCardServicesStatistic,
-        returnToAccountServicesStatistic,
-        countOfDebit,
-        countOfReturn,
-        terminalId,
-        operatorNumber,
-    )
 }
 
 object IntroductoryConstruction {
@@ -142,7 +40,7 @@ object IntroductoryConstruction {
     val FOOTNOTE_CURRENT_PRICE by lazy { ResourceHelper.getStringResource(R.string.current_price) }
     val TOTAL by lazy { ResourceHelper.getStringResource(R.string.total) }
     val DEBIT by lazy { ResourceHelper.getStringResource(R.string.debit) }
-    val RETURN by lazy { ResourceHelper.getStringResource(R.string.return_operation) }
+    val REFUND by lazy { ResourceHelper.getStringResource(R.string.return_operation) }
     val RECALCULATE_MARK by lazy { ResourceHelper.getStringResource(R.string.recalculate_mark) }
 }
 

@@ -26,7 +26,6 @@ import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
 import ru.petrolplus.pos.p7LibApi.dto.TransactionUUIDDto
-import ru.petrolplus.pos.printerapi.FakeData
 import ru.petrolplus.pos.printerapi.PrinterRepository
 import ru.petrolplus.pos.sdkapi.CardReaderRepository
 import ru.petrolplus.pos.util.ResourceHelper
@@ -88,10 +87,64 @@ class DebitViewModel(
         }
     }
 
+    fun resetPrinter() {
+        _viewState.value = DebitViewState.DebugState.PrinterState.WaitDocument
+    }
+
+    private fun onFailPrintShiftReport() {
+        _viewState.value = DebitViewState.DebugState.PrinterState.FailedState.ShiftReport
+    }
+
+    private fun onFailPrintReceipt(transactionId: String) {
+        _viewState.value = DebitViewState.DebugState.PrinterState.FailedState.Receipt(transactionId)
+    }
+
+    // Проверяем что принтер не находится в состоянии печати и значение ID валидное
+    private fun preprintCheckBeforePrintTransaction(transactionId: String) =
+        (transactionId.isNotEmpty() && preprintCheck())
+
+    // Проверяем что принтер не находится в состоянии печати
+    private fun preprintCheck() =
+        _viewState.value != DebitViewState.DebugState.PrinterState.Printing
+
+    companion object {
+        fun provideFactory(
+            cardReaderRepository: CardReaderRepository,
+            printerRepository: PrinterRepository,
+            gatewayServer: GatewayServerRepositoryApi,
+            transactionsPersistence: TransactionsPersistence,
+            settingsPersistence: SettingsPersistence,
+            receiptPersistence: ReceiptPersistence,
+            owner: SavedStateRegistryOwner,
+            p7LibRepository: IP7LibRepository,
+            p7LibCallbacks: IP7LibCallbacks,
+            defaultArgs: Bundle? = null,
+        ): AbstractSavedStateViewModelFactory =
+            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(
+                    key: String, modelClass: Class<T>, handle: SavedStateHandle
+                ): T {
+                    return DebitViewModel(
+                        cardReaderRepository,
+                        printerRepository,
+                        gatewayServer,
+                        transactionsPersistence,
+                        settingsPersistence,
+                        receiptPersistence,
+                        p7LibRepository,
+                        p7LibCallbacks,
+                        handle
+                    ) as T
+                }
+            }
+    }
+
+    //region TEST_METHODS
+
     //FIXME: Метод тестовый. Распечатывает сменный отчет
     //Проверяется возможна ли сейчас печать. Переход в состояние печати
     //В Debug сборке симуляция ошибки во время печати. Печать чека с отслеживанием наличия ошибки
-    //TODO: данные для печати брать из БД (сейчас используются FakeData)
     fun printShiftReport() {
         if (!preprintCheck()) return
         _viewState.value = DebitViewState.DebugState.PrinterState.Printing
@@ -106,8 +159,9 @@ class DebitViewModel(
                 }
             }
 
+            val shiftReceipt = receiptPersistence.getShiftReceipt()
             val currentDate = Calendar.getInstance().time
-            when (printer.printShiftReport(FakeData.statisticsByOperations, currentDate)) {
+            when (printer.printShiftReport(shiftReceipt, currentDate)) {
                 null -> resetPrinter()
                 else -> onFailPrintShiftReport()
             }
@@ -146,60 +200,6 @@ class DebitViewModel(
         }
     }
 
-    fun resetPrinter() {
-        _viewState.value = DebitViewState.DebugState.PrinterState.WaitDocument
-    }
-
-    private fun onFailPrintShiftReport() {
-        _viewState.value = DebitViewState.DebugState.PrinterState.FailedState.ShiftReport
-    }
-
-    private fun onFailPrintReceipt(transactionId: String) {
-        _viewState.value = DebitViewState.DebugState.PrinterState.FailedState.Receipt(transactionId)
-    }
-
-    // Проверяем что принтер не находится в состоянии печати и значение ID валидное
-    private fun preprintCheckBeforePrintTransaction(transactionId: String) =
-        (transactionId.isNotEmpty() && preprintCheck())
-
-    // Проверяем что принтер не находится в состоянии печати
-    private fun preprintCheck() =
-        _viewState.value != DebitViewState.DebugState.PrinterState.Printing
-
-    companion object {
-        fun provideFactory(
-            cardReaderRepository: CardReaderRepository,
-            printerRepository: PrinterRepository,
-            gatewayServer: GatewayServerRepositoryApi,
-            transactionsPersistence: TransactionsPersistence,
-            settingsPersistence: SettingsPersistence,
-            owner: SavedStateRegistryOwner,
-            receiptPersistence: ReceiptPersistence,
-            p7LibRepository: IP7LibRepository,
-            p7LibCallbacks: IP7LibCallbacks,
-            defaultArgs: Bundle? = null,
-        ): AbstractSavedStateViewModelFactory =
-            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(
-                    key: String, modelClass: Class<T>, handle: SavedStateHandle
-                ): T {
-                    return DebitViewModel(
-                        cardReaderRepository,
-                        printerRepository,
-                        gatewayServer,
-                        transactionsPersistence,
-                        settingsPersistence,
-                        receiptPersistence,
-                        p7LibRepository,
-                        p7LibCallbacks,
-                        handle
-                    ) as T
-                }
-            }
-    }
-
-    //region TEST_METHODS
     //FIXME: Метод тестовый. Проверка работы библиотеки P7Lib
     fun testP7LibCommand() {
         viewModelScope.launch {

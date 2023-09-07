@@ -10,47 +10,50 @@ import ru.petrolplus.pos.evotorprinter.GeneralComponents.shiftReportFootnote
 import ru.petrolplus.pos.evotorprinter.GeneralComponents.textJustify
 import ru.petrolplus.pos.evotorprinter.TerminalComponents.terminalDate
 import ru.petrolplus.pos.evotorprinter.ext.toUi
+import ru.petrolplus.pos.persitence.dto.ServiceTotalDTO
+import ru.petrolplus.pos.persitence.dto.ShiftReceiptDTO
 import ru.petrolplus.pos.persitence.enum.OperationType
 import ru.petrolplus.pos.printerapi.IntroductoryConstruction
-import ru.petrolplus.pos.printerapi.StatisticByService
+import ru.petrolplus.pos.printerapi.IntroductoryConstruction.CURRENT_PRICE_UNIT
+import ru.petrolplus.pos.printerapi.IntroductoryConstruction.DEBIT
+import ru.petrolplus.pos.printerapi.IntroductoryConstruction.REFUND
+import ru.petrolplus.pos.printerapi.IntroductoryConstruction.TOTAL
 import ru.petrolplus.pos.printerapi.ext.formattingForPrinter
 import ru.petrolplus.pos.printerapi.ext.toCurrencyString
-import ru.petrolplus.pos.printerapi.ShiftStatistic
 import java.util.Date
 
 object ShiftReportComponents {
     private var paperWidth: Int = 0
-    fun generateShiftReport(statistic: ShiftStatistic, currentDate: Date, paperWidth: Int): PrinterDocument {
+    fun generateShiftReport(receipt: ShiftReceiptDTO, currentDate: Date, paperWidth: Int): PrinterDocument {
         ShiftReportComponents.paperWidth = paperWidth
-        val commonSettings = statistic.commonSettings
 
         return PrinterDocument(
             centredText(IntroductoryConstruction.SHIFT_REPORT_TITLE),
             *organizationData(
-                commonSettings.organizationName,
-                commonSettings.posName,
-                commonSettings.organizationInn
+                receipt.organizationName,
+                receipt.posName,
+                receipt.organizationInn
             ),
-            *shiftData(statistic.shiftStarted, currentDate),
-            *terminalDate(statistic.terminalId, paperWidth),
-            *operationsByPetrolPlus(statistic),
-            operatorData(statistic.operatorNumber.toString(), paperWidth)
+            *shiftData(receipt.currentShiftStart.time, currentDate),
+            *terminalDate(receipt.terminalId, paperWidth),
+            *operationsByPetrolPlus(receipt),
+            operatorData(receipt.operatorNumb.toString(), paperWidth)
         )
     }
-    private fun operationsByPetrolPlus(statistic: ShiftStatistic): Array<out IPrintable> = arrayOf(
+    private fun operationsByPetrolPlus(statistic: ShiftReceiptDTO): Array<out IPrintable> = arrayOf(
         divider,
         centredText(IntroductoryConstruction.CARDS_PETROL_PLUS_TITLE),
         divider,
-        *statisticByOperation(OperationType.DEBIT, statistic.debit),
-        *statisticByOperation(OperationType.CARD_REFUND, statistic.returnToCard),
-        *statisticByOperation(OperationType.ACCOUNT_REFUND, statistic.returnToAccount),
+        *statisticByOperation(OperationType.DEBIT, statistic.debits),
+        *statisticByOperation(OperationType.CARD_REFUND, statistic.cardRefunds),
+        *statisticByOperation(OperationType.ACCOUNT_REFUND, statistic.accountRefunds),
         *cardsProcessed(statistic),
     )
 
-    private fun statisticByServices(statistic: List<StatisticByService>) =
+    private fun statisticByServices(statistic: List<ServiceTotalDTO>) =
         statistic.map { it.toUi(paperWidth) }.toTypedArray().flatten().toTypedArray()
 
-    private fun statisticByOperation(operationType: OperationType, statistic: List<StatisticByService>) = arrayOf(
+    private fun statisticByOperation(operationType: OperationType, statistic: List<ServiceTotalDTO>) = arrayOf(
         centredText(operationType.description),
         divider,
         *statisticByServices(statistic),
@@ -58,28 +61,20 @@ object ShiftReportComponents {
         divider,
     )
 
-    private fun cardsProcessed(statistic: ShiftStatistic): Array<out IPrintable> {
-        val countOfOperations = (statistic.countOfDebit + statistic.countOfReturn).toString()
-        val total = IntroductoryConstruction.TOTAL
-        val debitOperation = IntroductoryConstruction.DEBIT
-        val returnOperation = IntroductoryConstruction.RETURN
-        val priceUnit = IntroductoryConstruction.CURRENT_PRICE_UNIT
-
-        return arrayOf(
-            centredText(IntroductoryConstruction.CARD_PROCESSED),
-            divider,
-            textJustify(arrayOf(debitOperation, statistic.countOfDebit.toString()), paperWidth),
-            textJustify(arrayOf(returnOperation, statistic.countOfReturn.toString()), paperWidth),
-            divider,
-            textJustify(arrayOf(total, countOfOperations), paperWidth),
-            textJustify(
-                arrayOf(total, priceUnit, statistic.sumByAllOperations.toCurrencyString()),
-                paperWidth,
-                offset = 1
-            ),
-            divider,
-        )
-    }
+    private fun cardsProcessed(statistic: ShiftReceiptDTO) = arrayOf(
+        centredText(IntroductoryConstruction.CARD_PROCESSED),
+        divider,
+        textJustify(arrayOf(DEBIT, statistic.totalDebitsOperations.toString()), paperWidth),
+        textJustify(arrayOf(REFUND, statistic.totalRefundsOperations.toString()), paperWidth),
+        divider,
+        textJustify(arrayOf(TOTAL, statistic.totalOperations.toString()), paperWidth),
+        textJustify(
+            arrayOf(TOTAL, CURRENT_PRICE_UNIT, statistic.totalSum.toCurrencyString()),
+            paperWidth,
+            offset = 1
+        ),
+        divider,
+    )
 
     private fun shiftData(startData: Date, endData: Date) = arrayOf(
         textJustify(

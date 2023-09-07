@@ -11,4 +11,9 @@
     <string name="refund_to_card">ВОЗВРАТ НА КАРТУ</string>
     <string name="refund_to_account">ВОЗВРАТ НА СЧЕТ</string>
     <string name="unknown_operation">НЕИЗВЕСТНАЯ ОПЕРАЦИЯ</string>
+
+    <!--  Типы карт  -->
+    <string name="petrol5">Петрол5</string>
+    <string name="petrol7">Петрол7</string>
+    <string name="unknown_card_type">Неизвестно</string>
 </resources>
