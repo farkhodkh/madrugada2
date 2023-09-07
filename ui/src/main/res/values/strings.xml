@@ -7,7 +7,7 @@
     <string name="Cancel">Отмена</string>
     <string name="p7_lib">P7Lib</string>
     <string name="init_card_reader">Init reader</string>
-    <string name="read_card_data">Reader card</string>
+    <string name="read_card_data">Read card</string>
     <string name="OK">OK</string>
     <string name="ping">Ping</string>
     <string name="debit_label">Дебит</string>

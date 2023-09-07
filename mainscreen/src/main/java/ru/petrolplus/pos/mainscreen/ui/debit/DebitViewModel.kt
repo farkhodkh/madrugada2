@@ -235,10 +235,13 @@ class DebitViewModel(
         //Init card reader
         //TAG 01 -
         //030107
+
+        //Вместо 53 42 52 02 03 01 02
+        //нужно отправлять 53 42 52 02 03 01 01 02
         cardReaderRepository
             .sdkRepository
             .sendCommandSync(
-                "${TlvCommands.InitCardReader.code}${TlvTags.CardFind.code}02"
+                "${TlvCommands.InitCardReader.code}${TlvTags.CardFind.code}0102"
             )
     }
 
