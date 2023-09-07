@@ -6,6 +6,7 @@ import java.util.Calendar
  * Содержить информацию об услуге, а также общее количество и сумму предоставленных за период.
  * @param serviceName название услуги
  * @param serviceUnit единица измерения услуги
+ * @param servicePrice цена за услугу
  * @param totalAmount суммарное количество предоставленных услуг за период
  * @param totalSum сумма всех предоставленных услуг за период
  * @param totalRecalculationAmount суммарное количество предоставленных услуг за период по пересчетным операциям
@@ -14,6 +15,7 @@ import java.util.Calendar
 data class ServiceTotalDTO(
     val serviceName: String,
     val serviceUnit: String,
+    val servicePrice: Long,
     val totalAmount: Long,
     val totalSum: Long,
     val totalRecalculationAmount: Long,
@@ -27,6 +29,7 @@ data class ServiceTotalDTO(
  * @param organizationName наименование организации
  * @param organizationInn ИНН организации
  * @param posName название ТО/АЭС
+ * @param terminalId номер терминала
  * @param debits список услуг с суммарной информацией (количество, сумма) по ним. Филтруется по операциям дебета
  * @param cardRefunds список услуг с суммарной информацией (количество, сумма) по ним. Филтруется по возратам на карту
  * @param accountRefunds список услуг с суммарной информацией (количество, сумма) по ним. Филтруется по возратам на счет
@@ -41,6 +44,7 @@ data class ShiftReceiptDTO(
     val currentShiftStart: Calendar,
     val organizationName: String,
     val organizationInn: String,
+    val terminalId: Int,
     val posName: String,
     val debits: List<ServiceTotalDTO>,
     val cardRefunds: List<ServiceTotalDTO>,
