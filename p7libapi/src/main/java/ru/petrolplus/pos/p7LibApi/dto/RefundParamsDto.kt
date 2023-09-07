@@ -8,9 +8,11 @@ package ru.petrolplus.pos.p7LibApi.dto
  * @property price - Цена услуги (price == 1000 (1р))
  * @property sum - Сумма (sum == 1000(1р))
  */
+
+//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class RefundParamsDto(
     var serviceWhat: Int = 0,
-    var amount: Double = 0.0,
-    var price: Double = 0.0,
-    var sum: Double = 0.0,
+    var amount: Long = 0,
+    var price: Long = 0,
+    var sum: Long = 0,
 )
