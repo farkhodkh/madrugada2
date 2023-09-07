@@ -17,6 +17,7 @@ import ru.petrolplus.pos.room.entities.CommonSettingsDB
 import ru.petrolplus.pos.room.entities.ServiceDB
 import ru.petrolplus.pos.room.entities.ShiftParamsDB
 import ru.petrolplus.pos.room.entities.TransactionDB
+import ru.petrolplus.pos.util.constants.TestConstants
 import java.util.Calendar
 
 @RunWith(AndroidJUnit4::class)
@@ -36,12 +37,12 @@ class ReceiptPersistenceTest {
     fun testGetShiftReceipt() {
         runBlocking {
             shiftParamsDao.insert(ShiftParamsDB(1, 11, Calendar.getInstance()))
-            commonSettingsDao.insert(CommonSettingsDB(1, "Первая автокомпания", "111222333444", "АЗС №1"))
+            commonSettingsDao.insert(CommonSettingsDB(1, TestConstants.ORGANIZATION_NAME, TestConstants.ORGANIZATION_INN, TestConstants.ORGANIZATION_POS))
             servicesDao.insert(
                 listOf(
-                    ServiceDB(1, "АИ-92", "Л", 45000),
-                    ServiceDB(2, "АИ-95", "Л", 50000),
-                    ServiceDB(3, "АИ-98", "Л", 55000),
+                    ServiceDB(1, TestConstants.SERVICE_AI_92, TestConstants.LITRES, 45000),
+                    ServiceDB(2, TestConstants.SERVICE_AI_95, TestConstants.LITRES, 50000),
+                    ServiceDB(3, TestConstants.SERVICE_AI_98, TestConstants.LITRES, 55000),
                 )
             )
             transactionsDao.insert(

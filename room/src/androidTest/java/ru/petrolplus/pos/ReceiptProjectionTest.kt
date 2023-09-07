@@ -16,6 +16,7 @@ import ru.petrolplus.pos.room.entities.ReceiptParamsDB
 import ru.petrolplus.pos.room.entities.ServiceDB
 import ru.petrolplus.pos.room.entities.ShiftParamsDB
 import ru.petrolplus.pos.room.entities.TransactionDB
+import ru.petrolplus.pos.util.constants.TestConstants
 import java.util.Calendar
 
 @RunWith(AndroidJUnit4::class)
@@ -41,9 +42,9 @@ class ReceiptProjectionTest {
             val transactionId = "ABCDEFGIDSLKJDIFELSKJKJKDSFDIJSD"
             transactionsDao.insert(createTestTransaction(id = transactionId))
 
-            commonSettingsDao.insert(CommonSettingsDB(1, "Первая автокомпания", "111222333444", "АЗС №1"))
+            commonSettingsDao.insert(CommonSettingsDB(1, TestConstants.ORGANIZATION_NAME, TestConstants.ORGANIZATION_INN, TestConstants.ORGANIZATION_POS))
             receiptParamsDao.insert(ReceiptParamsDB(1, 3))
-            servicesDao.insert(ServiceDB(1, "АИ-95", "Л", 45000))
+            servicesDao.insert(ServiceDB(1, TestConstants.SERVICE_AI_92, TestConstants.LITRES, 45000))
 
             val receipt = receiptDao.getDebitReceiptByTransactionId(transactionId)
 
@@ -59,9 +60,9 @@ class ReceiptProjectionTest {
         runBlocking {
             servicesDao.insert(
                 listOf(
-                    ServiceDB(1, "АИ-92", "Л", 45000),
-                    ServiceDB(2, "АИ-95", "Л", 55000),
-                    ServiceDB(3, "АИ-98", "Л", 60000)
+                    ServiceDB(1, TestConstants.SERVICE_AI_92, TestConstants.LITRES, 45000),
+                    ServiceDB(2, TestConstants.SERVICE_AI_95, TestConstants.LITRES, 55000),
+                    ServiceDB(3, TestConstants.SERVICE_AI_98, TestConstants.LITRES, 60000)
                 )
             )
 
@@ -90,7 +91,7 @@ class ReceiptProjectionTest {
     fun testGetReceiptParamsWithCommonSettings() {
         runBlocking {
             shiftParamsDao.insert(ShiftParamsDB(1, 12, Calendar.getInstance()))
-            commonSettingsDao.insert(CommonSettingsDB(1, "Первая автокомпания", "111222333444", "АЗС №1"))
+            commonSettingsDao.insert(CommonSettingsDB(1, TestConstants.ORGANIZATION_NAME, TestConstants.ORGANIZATION_INN, TestConstants.ORGANIZATION_POS))
 
             val projection = receiptDao.getShiftInfo()
 
