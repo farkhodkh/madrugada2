@@ -14,12 +14,12 @@ dependencies {
 gradlePlugin {
     plugins {
         register("convenience_plugin") {
-            id = "ru.petroplus.pos.convention"
+            id = "ru.petrolplus.pos.convention"
             implementationClass = "ConventionPlugin"
         }
 
         register("compose_plugin") {
-            id = "ru.petroplus.pos.compose"
+            id = "ru.petrolplus.pos.compose"
             implementationClass = "ComposePlugin"
         }
     }

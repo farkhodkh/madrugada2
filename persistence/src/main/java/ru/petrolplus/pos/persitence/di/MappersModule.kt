@@ -8,6 +8,7 @@ import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
 import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
 import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.dto.ServiceDTO
+import ru.petrolplus.pos.persitence.dto.ServiceTotalDTO
 import ru.petrolplus.pos.persitence.dto.ShiftParamsDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petrolplus.pos.persitence.mappers.BaseSettingsMapper
@@ -19,6 +20,7 @@ import ru.petrolplus.pos.persitence.mappers.ProjectionMapper
 import ru.petrolplus.pos.persitence.mappers.ReceiptParamsMapper
 import ru.petrolplus.pos.persitence.mappers.ServicesMapper
 import ru.petrolplus.pos.persitence.mappers.ShiftParamsMapper
+import ru.petrolplus.pos.persitence.mappers.ShiftReceiptMapper
 import ru.petrolplus.pos.persitence.mappers.TransactionsMapper
 import ru.petrolplus.pos.room.entities.BaseSettingsDB
 import ru.petrolplus.pos.room.entities.CommonSettingsDB
@@ -28,7 +30,8 @@ import ru.petrolplus.pos.room.entities.ServiceDB
 import ru.petrolplus.pos.room.entities.ShiftParamsDB
 import ru.petrolplus.pos.room.entities.TransactionDB
 import ru.petrolplus.pos.room.projections.ReceiptProjection
-import ru.petroplus.pos.core.MainScreenScope
+import ru.petrolplus.pos.core.MainScreenScope
+import ru.petrolplus.pos.room.projections.TransactionByServiceProjection
 
 @Module
 class MappersModule {
@@ -56,6 +59,9 @@ class MappersModule {
 
     @[Provides MainScreenScope]
     fun providesReceiptMapper(): ProjectionMapper<ReceiptProjection, ReceiptDTO> = ReceiptMapper()
+
+    @[Provides MainScreenScope]
+    fun providesShiftReceiptMapper(): ProjectionMapper<TransactionByServiceProjection, ServiceTotalDTO> = ShiftReceiptMapper()
 
 
 }

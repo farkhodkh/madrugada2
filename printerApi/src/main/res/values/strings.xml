@@ -10,9 +10,9 @@
     <string name="return_operation">Возврат</string>
     <string name="debit_upper_case">ДЕБЕТ</string>
     <string name="wallet_credit">КРЕДИТ КОШЕЛЬКА</string>
-    <string name="online_deposit">ОНЛАЙН ПОПОЛНЕНИЕ СЧЕТА</string>
-    <string name="return_to_card">ВОЗВРАТ НА КАРТУ</string>
-    <string name="return_to_account">ВОЗВРАТ НА СЧЕТ</string>
+    <string name="online_refill">ОНЛАЙН ПОПОЛНЕНИЕ СЧЕТА</string>
+    <string name="refund_to_card">ВОЗВРАТ НА КАРТУ</string>
+    <string name="refund_to_account">ВОЗВРАТ НА СЧЕТ</string>
     <string name="unknown_operation">НЕИЗВЕСТНАЯ ОПЕРАЦИЯ</string>
 
     <!--  Вводные конструкции  -->

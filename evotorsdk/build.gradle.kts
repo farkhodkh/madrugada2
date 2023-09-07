@@ -2,7 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
-    id("ru.petroplus.pos.convention")
+    id("ru.petrolplus.pos.convention")
 }
 
 android {
@@ -11,12 +11,9 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
-
 }
 
 dependencies {
-    //Lib
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*aar"))))
 
     //Evotor
     implementation("${Dependencies.evotor}:${Versions.evotor}")
@@ -24,6 +21,7 @@ dependencies {
     //Modules
     implementation(project(":sdkapi"))
     implementation(project(":util"))
+    implementation(project(":evotorlib"))
 
     //Coroutines
     implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")

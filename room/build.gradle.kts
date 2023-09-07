@@ -3,11 +3,15 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
-    id("ru.petroplus.pos.convention")
+    id("ru.petrolplus.pos.convention")
 }
 
 android {
     namespace = Dependencies.namespaceRoom
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 
     kotlinOptions {
         jvmTarget =  JavaVersion.VERSION_1_8.toString()

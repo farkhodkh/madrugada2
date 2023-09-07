@@ -20,13 +20,28 @@ interface TransactionsDao : BaseDao<TransactionDB> {
     @Query("SELECT * FROM transactions WHERE id = :id LIMIT 1")
     suspend fun getById(id: String): TransactionDB?
 
-   /* @Transaction
-    @Query(
-        "SELECT cs.*, t.* FROM transactions t " +
-                "INNER JOIN common_settings cs ON cs.id = 1 " +
-                "WHERE t.id = :transactionId"
+    /**
+     * Метод для получения последней транзакции по определенном типу, номеру карты и типу услуги
+     * @param cardNumber см [TransactionDB.cardNumber]
+     * @param serviceId cм [TransactionDB.serviceIdWhat]
+     * @param operationType см [TransactionDB.operationType] по умолчанию 1 - дебет.
+     */
+    @Query("SELECT * FROM transactions " +
+            "WHERE card_number = :cardNumber " +
+            "AND service_id_what = :serviceId " +
+            "AND operation_type = :operationType " +
+            "ORDER BY datetime(terminal_date) " +
+            "DESC LIMIT 1"
     )
-    suspend fun getGeneralById(transactionId: String): TransactionEmbeddedDB?*/
+    suspend fun getLastByCardNumberAndService(cardNumber: String, serviceId: Int, operationType: Int = 1): TransactionDB?
+
+    /* @Transaction
+     @Query(
+         "SELECT cs.*, t.* FROM transactions t " +
+                 "INNER JOIN common_settings cs ON cs.id = 1 " +
+                 "WHERE t.id = :transactionId"
+     )
+     suspend fun getGeneralById(transactionId: String): TransactionEmbeddedDB?*/
 
     /**
      * Получение списка совершенных транзакций
