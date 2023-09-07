@@ -92,7 +92,7 @@ class ReceiptProjectionTest {
             shiftParamsDao.insert(ShiftParamsDB(1, 12, Calendar.getInstance()))
             commonSettingsDao.insert(CommonSettingsDB(1, "Первая автокомпания", "111222333444", "АЗС №1"))
 
-            val projection = receiptDao.getShiftParamsWithCommonSettings()
+            val projection = receiptDao.getShiftInfo()
 
             Assert.assertEquals(projection.shiftParamsDB.id, 1)
             Assert.assertEquals(projection.commonSettingsDB.id, 1)

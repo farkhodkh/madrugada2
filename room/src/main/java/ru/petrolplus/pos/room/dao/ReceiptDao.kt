@@ -47,8 +47,8 @@ interface ReceiptDao {
      * @return проекцию содержащую параметры смены и общие настройки
      */
     @Transaction
-    @Query("SELECT *, 1 as relation_id, transactions.operator_number FROM shift_params LEFT JOIN transactions ON current_shift_number = shift_num LIMIT 1")
-    fun getShiftParamsWithCommonSettings(): ShiftReceiptHeaderProjection
+    @Query("SELECT *, 1 as relation_id, transactions.operator_number, transactions.terminal_id FROM shift_params LEFT JOIN transactions ON current_shift_number = shift_num LIMIT 1")
+    fun getShiftInfo(): ShiftReceiptHeaderProjection
 
     /**
      * Метод для получения общего количества операций за смену (дебет, возврат, дебет + возврат)

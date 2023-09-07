@@ -31,6 +31,7 @@ class ShiftReceiptMapper : ProjectionMapper<TransactionByServiceProjection, Serv
         ServiceTotalDTO(
             serviceName = input.serviceDb.name,
             serviceUnit = input.serviceDb.unit,
+            servicePrice = input.serviceDb.price,
             totalAmount = input.totalAmount,
             totalSum = input.totalSum,
             totalRecalculationAmount = input.totalRecalculationAmount,

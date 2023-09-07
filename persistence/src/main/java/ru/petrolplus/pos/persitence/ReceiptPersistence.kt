@@ -44,7 +44,7 @@ class ReceiptPersistenceImpl(
     @Throws(NoRecordsException::class)
     override suspend fun getShiftReceipt(): ShiftReceiptDTO {
         val shiftInfo = try {
-            receiptDao.getShiftParamsWithCommonSettings()
+            receiptDao.getShiftInfo()
         } catch (e: NullPointerException) { throw NoRecordsException }
 
         val shiftNumber = shiftInfo.shiftParamsDB.currentShiftNumber
@@ -59,6 +59,7 @@ class ReceiptPersistenceImpl(
             organizationName = shiftInfo.commonSettingsDB.organizationName,
             organizationInn =  shiftInfo.commonSettingsDB.organizationInn,
             posName = shiftInfo.commonSettingsDB.posName,
+            terminalId = shiftInfo.terminalId,
             debits = debits.map(serviceTotalMapper::fromProjection),
             cardRefunds = cardRefunds.map(serviceTotalMapper::fromProjection),
             accountRefunds = accountRefunds.map(serviceTotalMapper::fromProjection),
