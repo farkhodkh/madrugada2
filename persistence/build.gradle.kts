@@ -27,6 +27,9 @@ dependencies {
     implementation("${Dependencies.dagger}:${Versions.dagger}")
     kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
 
+    //Modules for testing
+    androidTestImplementation(project(":util"))
+
     //Room for testing
     androidTestImplementation("${Dependencies.roomKtx}:${Versions.room}")
 
