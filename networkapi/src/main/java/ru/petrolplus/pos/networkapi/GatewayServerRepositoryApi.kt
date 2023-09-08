@@ -10,4 +10,9 @@ interface GatewayServerRepositoryApi {
      */
     suspend fun doPing()
 
+    /**
+     * Отправляет данные от p7Lib на AS
+     */
+    suspend fun sendData(byteArray: ByteArray): ByteArray?
+
 }

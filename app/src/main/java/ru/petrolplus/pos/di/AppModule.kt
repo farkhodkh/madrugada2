@@ -7,6 +7,7 @@ import ru.petrolplus.pos.room.database.AppDatabase
 import ru.petrolplus.pos.core.AppScope
 import ru.petrolplus.pos.evotorprinter.EvotorPrinterRepositoryImpl
 import ru.petrolplus.pos.evotorsdk.EvotorSDKRepository
+import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7Lib.impl.P7LibCallbacksImpl
 import ru.petrolplus.pos.p7Lib.impl.P7LibRepositoryImpl
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
@@ -21,7 +22,7 @@ object AppModule {
     fun providesP7LibRepository(): IP7LibRepository = P7LibRepositoryImpl()
 
     @[Provides AppScope]
-    fun providesP7LibCallbacks(): IP7LibCallbacks = P7LibCallbacksImpl()
+    fun providesP7LibCallbacks(gatewayServerRepositoryApi: GatewayServerRepositoryApi): IP7LibCallbacks = P7LibCallbacksImpl(gatewayServerRepositoryApi)
 
     @[Provides AppScope]
     fun providePrinter(context: Context): PrinterRepository = EvotorPrinterRepositoryImpl(context)

@@ -185,7 +185,7 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
             Row {
 
                 Button(modifier = Modifier
-                    .width(100.dp)
+                    .weight(1f)
                     .padding(8.dp), onClick = {
                     viewModel.testP7LibCommand()
                 }) {
@@ -194,8 +194,10 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                     )
                 }
 
+                Spacer(modifier = Modifier.width(8.dp))
+
                 Button(modifier = Modifier
-                    .width(100.dp)
+                    .weight(1f)
                     .padding(8.dp), onClick = {
                     viewModel.sendCommand(message)
                 }) {
@@ -203,9 +205,25 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                         text = stringResource(id = R.string.OK)
                     )
                 }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row {
+                Button(modifier = Modifier
+                    .weight(1f)
+                    .padding(8.dp), onClick = {
+                    viewModel.sendDebit()
+                }) {
+                    Text(
+                        text = stringResource(id = R.string.debit_label)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Button(modifier = Modifier
-                    .width(100.dp)
+                    .weight(1f)
                     .padding(8.dp), onClick = {
                     viewModel.ping()
                 }) {
@@ -214,7 +232,6 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                     )
                 }
             }
-
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(

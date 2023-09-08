@@ -1,6 +1,7 @@
 package ru.petrolplus.pos.mainscreen.ui.debit
 
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
@@ -21,6 +22,7 @@ import ru.petrolplus.pos.mainscreen.BuildConfig
 import ru.petrolplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petrolplus.pos.mainscreen.ui.ext.toInitDataDto
 import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
+import ru.petrolplus.pos.networkapi.auth.GatewayAuthenticationUtil
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
 import ru.petrolplus.pos.p7LibApi.dto.TransactionUUIDDto
@@ -65,6 +67,16 @@ class DebitViewModel(
     fun ping() {
         viewModelScope.launch(Dispatchers.IO) {
             gatewayServer.doPing()
+        }
+    }
+
+    //FIXME!! тестовый метод для проверки передачи данных на AS.
+    fun sendDebit() {
+        viewModelScope.launch(Dispatchers.IO) {
+            ResourceHelper.getAssetFile("DebitP7.bin")?.readBytes()?.let {
+                val bytes = gatewayServer.sendData(byteArray = it)
+                Log.d("test", bytes.toString())
+            }
         }
     }
 
