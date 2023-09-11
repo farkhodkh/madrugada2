@@ -32,6 +32,6 @@ dependencies {
 
     //Modules
     implementation(project(":util"))
-    implementation(project(":networkapi"))
+    implementation(project(":data_networkapi"))
 
 }

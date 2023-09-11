@@ -31,8 +31,8 @@ dependencies {
 
     //Retrofit
     implementation("${Dependencies.retrofit}:${Versions.retrofit}")
+    implementation(project(":data_networkapi"))
 
     //Modules
-    implementation(project(":networkapi"))
     implementation(project(":p7libapi"))
 }

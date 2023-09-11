@@ -28,6 +28,6 @@ dependencies {
 
     //Modules
     implementation(project(":util"))
-    implementation(project(":persistence"))
+    implementation(project(":data_persistence"))
     implementation(kotlin("reflect"))
 }

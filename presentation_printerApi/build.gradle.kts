@@ -4,12 +4,14 @@ plugins {
 }
 
 android {
-    namespace = Dependencies.namespaceEvatorPrinter
+    namespace = Dependencies.namespacePrinterApi
     compileSdkVersion = Versions.compileSdkVersion
 
     defaultConfig {
         minSdk = Versions.minSdkVersion
-        targetSdk = Versions.targetSdk
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -31,19 +33,11 @@ android {
 }
 
 dependencies {
-    // Core
-    implementation("${Dependencies.coreKtx}:${Versions.coreKtx}")
-    implementation("${Dependencies.appcompat}:${Versions.appcompat}")
-
     //Coroutines
     implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
+    implementation(project(":data_persistence"))
 
-    // Evator
-    implementation("${Dependencies.evotor}:${Versions.evotor}")
 
     // Modules
-    implementation(project(":printerApi"))
-    implementation(project(":persistence"))
     implementation(project(":util"))
-    implementation(project(":evotorlib"))
 }

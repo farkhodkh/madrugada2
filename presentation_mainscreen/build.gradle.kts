@@ -34,12 +34,12 @@ dependencies {
     //Modules
     implementation(project(":core"))
     implementation(project(":util"))
-    implementation(project(":ui"))
-    implementation(project(":sdkapi"))
+    implementation(project(":presentation_ui"))
+    implementation(project(":data_sdkapi"))
     implementation(project(":p7libapi"))
     implementation(project(":p7lib"))
-    implementation(project(":networkapi"))
-    implementation(project(":room"))
-    implementation(project(":persistence"))
-    implementation(project(":printerApi"))
+    implementation(project(":data_networkapi"))
+    implementation(project(":data_room"))
+    implementation(project(":data_persistence"))
+    implementation(project(":presentation_printerApi"))
 }

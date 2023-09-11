@@ -17,9 +17,9 @@ dependencies {
 
     //Evotor
     implementation("${Dependencies.evotor}:${Versions.evotor}")
+    implementation(project(":data_sdkapi"))
 
     //Modules
-    implementation(project(":sdkapi"))
     implementation(project(":util"))
     implementation(project(":evotorlib"))
 

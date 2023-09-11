@@ -18,8 +18,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":data_room"))
     //Modules
-    implementation(project(":room"))
     implementation(project(":core"))
     implementation(project(":util"))
 
