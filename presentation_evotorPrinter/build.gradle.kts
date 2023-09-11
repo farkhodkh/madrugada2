@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -42,6 +43,10 @@ dependencies {
     implementation("${Dependencies.evotor}:${Versions.evotor}")
     implementation(project(":presentation_printerApi"))
     implementation(project(":data_persistence"))
+
+    //Dagger 2
+    implementation("${Dependencies.dagger}:${Versions.dagger}")
+    kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
 
     // Modules
     implementation(project(":util"))

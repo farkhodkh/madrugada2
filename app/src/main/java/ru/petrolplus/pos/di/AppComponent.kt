@@ -5,6 +5,7 @@ import dagger.BindsInstance
 import dagger.Component
 import ru.petrolplus.pos.core.AppScope
 import ru.petrolplus.pos.App
+import ru.petrolplus.pos.evotorprinter.di.EvatorPrinterModule
 import ru.petrolplus.pos.network.di.NetworkComponentDependencies
 import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7Lib.di.P7LibComponentDependencies
@@ -12,7 +13,11 @@ import ru.petrolplus.pos.printerapi.PrinterRepository
 import ru.petrolplus.pos.sdkapi.CardReaderRepository
 
 @Component(
-    modules = [AppModule::class, SubcomponentModule::class, NetworkComponentModule::class],
+    modules = [
+        AppModule::class,
+        SubcomponentModule::class,
+        NetworkComponentModule::class,
+        EvatorPrinterModule::class],
     dependencies = [AppComponentDependencies::class]
 )
 @AppScope
