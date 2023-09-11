@@ -13,9 +13,7 @@ import ru.petrolplus.pos.mainscreen.ui.configuration.ConfigurationCheckScreen
 import ru.petrolplus.pos.mainscreen.ui.debit.DebitScreen
 import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petrolplus.pos.mainscreen.ui.settings.SettingsScreen
-import ru.petrolplus.pos.mainscreen.ui.settings.SettingsViewModel
 import ru.petrolplus.pos.navigation.Screens
-import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.ui.main.MainActivity
 import ru.petrolplus.pos.ui.views.RefundScreen
 
@@ -48,14 +46,12 @@ fun NavigationController(navController: NavHostController) {
         }
 
         composable(Screens.SettingsScreen.route) {
-            SettingsScreen(
-                viewModel(
-                    factory = SettingsViewModel.provideFactory(
-                        (LocalContext.current as MainActivity).mainScreenSubcomponent.servicesPersistence,
-                        owner = LocalSavedStateRegistryOwner.current
-                    )
-                )
-            ) { screen ->
+            val mainScreenComponent = (LocalContext.current as MainActivity).mainScreenSubcomponent
+            val settingsScreenComponent =
+                mainScreenComponent.settingScreenComponentFactory().create(LocalSavedStateRegistryOwner.current)
+
+            val viewModelFactory = settingsScreenComponent.getViewModelFactory()
+            SettingsScreen(viewModelFactory) { screen ->
                 navController.navigate(screen)
             }
         }

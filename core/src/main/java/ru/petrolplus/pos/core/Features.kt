@@ -9,5 +9,8 @@ annotation class AppScope
 annotation class MainScreenScope
 
 @Scope
+annotation class SettingsScreenScope
+
+@Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class P7LibScope

@@ -30,6 +30,7 @@ dependencies {
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
+    kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
 
     //Modules
     implementation(project(":core"))
