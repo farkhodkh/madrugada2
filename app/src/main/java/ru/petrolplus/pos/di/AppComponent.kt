@@ -9,10 +9,7 @@ import ru.petrolplus.pos.evotorprinter.di.EvatorPrinterModule
 import ru.petrolplus.pos.evotorsdk.di.EvatorSDKModule
 import ru.petrolplus.pos.network.di.NetworkComponentDependencies
 import ru.petrolplus.pos.network.di.NetworkModule
-import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7Lib.di.P7LibComponentDependencies
-import ru.petrolplus.pos.printerapi.PrinterRepository
-import ru.petrolplus.pos.sdkapi.CardReaderRepository
 
 @Component(
     modules = [
@@ -26,10 +23,6 @@ import ru.petrolplus.pos.sdkapi.CardReaderRepository
 @AppScope
 interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies, NetworkComponentDependencies
 {
-    val printer: PrinterRepository
-    val readerRepository: CardReaderRepository
-    val gatewayServerRepository: GatewayServerRepositoryApi
-
     @Component.Builder
     interface Builder {
 

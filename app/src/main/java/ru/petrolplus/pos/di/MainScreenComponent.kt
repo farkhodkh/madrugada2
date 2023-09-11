@@ -1,17 +1,12 @@
 package ru.petrolplus.pos.di
 
 import dagger.Subcomponent
-import ru.petrolplus.pos.persitence.ReceiptPersistence
-import ru.petrolplus.pos.persitence.SettingsPersistence
-import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petrolplus.pos.persitence.di.MappersModule
 import ru.petrolplus.pos.persitence.di.PersistenceModule
 import ru.petrolplus.pos.room.di.RoomModule
 import ru.petrolplus.pos.core.MainScreenScope
 import ru.petrolplus.pos.mainscreen.ui.debit.di.DebitScreenComponent
 import ru.petrolplus.pos.mainscreen.ui.settings.di.SettingsScreenComponent
-import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
-import ru.petrolplus.pos.p7LibApi.IP7LibRepository
 import ru.petrolplus.pos.ui.main.MainActivity
 
 @MainScreenScope
@@ -24,13 +19,6 @@ import ru.petrolplus.pos.ui.main.MainActivity
     ]
 )
 interface MainScreenComponent {
-
-    val receiptPersistence: ReceiptPersistence
-    val transactionsPersistence: TransactionsPersistence
-    val settingsPersistence: SettingsPersistence
-    val p7LibRepository: IP7LibRepository
-    val p7LibCallbacks: IP7LibCallbacks
-
     fun inject(mainActivity: MainActivity)
     fun settingScreenComponentFactory(): SettingsScreenComponent.Factory
     fun debitScreenComponentFactory(): DebitScreenComponent.Factory
