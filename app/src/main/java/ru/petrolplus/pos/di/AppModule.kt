@@ -1,9 +1,7 @@
 package ru.petrolplus.pos.di
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
-import ru.petrolplus.pos.room.database.AppDatabase
 import ru.petrolplus.pos.core.AppScope
 import ru.petrolplus.pos.p7Lib.impl.P7LibCallbacksImpl
 import ru.petrolplus.pos.p7Lib.impl.P7LibRepositoryImpl
@@ -14,6 +12,7 @@ import ru.petrolplus.pos.sdkapi.ISDKRepository
 
 @Module
 object AppModule {
+    // TODO: вынести providesP7LibRepository & providesP7LibCallbacks
     @[Provides AppScope]
     fun providesP7LibRepository(): IP7LibRepository = P7LibRepositoryImpl()
 
@@ -26,7 +25,4 @@ object AppModule {
             override val sdkRepository: ISDKRepository
                 get() = sdkRepository
         }
-
-    @[Provides AppScope]
-    fun providesAppDatabase(context: Context) = AppDatabase.getInstance(context)
 }

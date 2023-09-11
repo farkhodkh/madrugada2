@@ -1,5 +1,6 @@
 package ru.petrolplus.pos.room.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ru.petrolplus.pos.room.dao.BaseSettingsDao
@@ -15,6 +16,8 @@ import ru.petrolplus.pos.core.MainScreenScope
 
 @Module
 class RoomModule {
+    @[Provides]
+    fun providesAppDatabase(context: Context): AppDatabase = AppDatabase.getInstance(context)
 
     @[Provides MainScreenScope]
     fun provideBaseSettingsDao(appDatabase: AppDatabase): BaseSettingsDao = appDatabase.baseSettingsDao()

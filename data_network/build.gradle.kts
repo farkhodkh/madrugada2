@@ -20,8 +20,12 @@ java {
 
 dependencies {
 
+    //Android worker
+    implementation("${Dependencies.workKtx}:${Versions.workKtx}")
+
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
+    kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
 
     //Okhttp
     implementation("${Dependencies.okhttpProfiler}:${Versions.okhttpProfiler}")
@@ -29,9 +33,12 @@ dependencies {
 
     //Retrofit
     implementation("${Dependencies.retrofit}:${Versions.retrofit}")
+    implementation("${Dependencies.gsonConverter}:${Versions.gsonConverter}")
 
     //Modules
     implementation(project(":util"))
     implementation(project(":data_networkapi"))
-
+    implementation(project(":data_network-worker"))
+    implementation(project(":p7lib"))
+    implementation(project(":p7libapi"))
 }
