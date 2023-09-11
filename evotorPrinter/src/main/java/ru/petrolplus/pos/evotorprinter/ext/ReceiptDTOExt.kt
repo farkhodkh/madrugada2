@@ -1,16 +1,17 @@
 package ru.petrolplus.pos.evotorprinter.ext
 
 import ru.evotor.devices.commons.printer.PrinterDocument
+import ru.evotor.devices.commons.printer.printable.IPrintable
 import ru.petrolplus.pos.persitence.dto.ReceiptDTO
-import ru.petrolplus.pos.evotorprinter.GeneralComponents.cardData
+import ru.petrolplus.pos.evotorprinter.GeneralComponents.getCardData
 import ru.petrolplus.pos.evotorprinter.GeneralComponents.centredText
-import ru.petrolplus.pos.evotorprinter.GeneralComponents.divider
-import ru.petrolplus.pos.evotorprinter.GeneralComponents.operatorData
-import ru.petrolplus.pos.evotorprinter.GeneralComponents.organizationData
-import ru.petrolplus.pos.evotorprinter.GeneralComponents.receiptData
+import ru.petrolplus.pos.evotorprinter.GeneralComponents.dashDivider
+import ru.petrolplus.pos.evotorprinter.GeneralComponents.getOperatorData
+import ru.petrolplus.pos.evotorprinter.GeneralComponents.getOrganizationData
+import ru.petrolplus.pos.evotorprinter.GeneralComponents.getReceiptData
 import ru.petrolplus.pos.evotorprinter.GeneralComponents.text
-import ru.petrolplus.pos.evotorprinter.ServiceComponents.serviceTable
-import ru.petrolplus.pos.evotorprinter.TerminalComponents.terminalDataWithDate
+import ru.petrolplus.pos.evotorprinter.ServiceComponents.getServiceTable
+import ru.petrolplus.pos.evotorprinter.TerminalComponents.getTerminalDataWithDate
 import ru.petrolplus.pos.printerapi.IntroductoryConstruction.DENIAL
 import ru.petrolplus.pos.printerapi.IntroductoryConstruction.DENIAL_CODE
 import ru.petrolplus.pos.printerapi.IntroductoryConstruction.FOOTER_TEXT
@@ -22,45 +23,46 @@ import ru.petrolplus.pos.printerapi.ext.toResponseCode
 
 fun ReceiptDTO.toPrinterDoc(paperWidth: Int): PrinterDocument =
     when (val responseCode = responseCode.toResponseCode()) {
-        ResponseCode.Success -> generateSuccessfulTransactionDocument(responseCode, paperWidth)
-        is ResponseCode.Error -> generateFailedTransactionDocument(responseCode, paperWidth)
+        ResponseCode.Success -> generateSuccessfulTransactionDocument(responseCode, paperWidth, dashDivider)
+        is ResponseCode.Error -> generateFailedTransactionDocument(responseCode, paperWidth, dashDivider)
     }
 
 private fun ReceiptDTO.generateFailedTransactionDocument(
-    responseCode: ResponseCode, paperWidth: Int
+    responseCode: ResponseCode, paperWidth: Int, divider: IPrintable
 ) = PrinterDocument(
-    *receiptData(RECEIPT_NUMBER_DENIAL, receiptNumber, paperWidth),
-    *terminalDataWithDate(terminalId, terminalDate.time, paperWidth),
-    *cardData(cardType, cardNumber),
+    *getReceiptData(RECEIPT_NUMBER_DENIAL, receiptNumber, paperWidth),
+    *getTerminalDataWithDate(terminalId, terminalDate.time, paperWidth),
+    *getCardData(cardType, cardNumber),
     divider,
-    *operationType.toOperationType().toUi(responseCode),
+    responseCode.toUi(),
     divider,
     centredText(DENIAL),
     divider,
     text("$DENIAL_CODE: ${responseCode.code}"),
     divider,
-    operatorData(operatorNumber, paperWidth),
+    getOperatorData(operatorNumber, paperWidth),
 )
 
 private fun ReceiptDTO.generateSuccessfulTransactionDocument(
-    responseCode: ResponseCode, paperWidth: Int
+    responseCode: ResponseCode, paperWidth: Int, divider: IPrintable
 ): PrinterDocument {
     val operationType = operationType.toOperationType()
     return PrinterDocument(
-        *receiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
-        *organizationData(organizationName, posName, organizationInn),
+        *getReceiptData(RECEIPT_NUMBER, receiptNumber, paperWidth),
+        *getOrganizationData(organizationName, posName, organizationInn),
         divider,
-        *terminalDataWithDate(terminalId, terminalDate.time, paperWidth),
+        *getTerminalDataWithDate(terminalId, terminalDate.time, paperWidth),
         divider,
-        *cardData(cardType, cardNumber),
+        *getCardData(cardType, cardNumber),
         divider,
         centredText(operationType.description),
         divider,
-        *serviceTable(serviceName, serviceUnit, price, sum, amount, paperWidth),
+        *getServiceTable(serviceName, serviceUnit, price, sum, amount, paperWidth),
         divider,
-        *operationType.toUi(responseCode),
+        responseCode.toUi(),
+        *operationType.toUi(),
         divider,
-        operatorData(operatorNumber, paperWidth),
+        getOperatorData(operatorNumber, paperWidth),
         divider,
         centredText(FOOTER_TEXT)
     )

@@ -103,7 +103,7 @@ fun PrinterScreen(viewModel: DebitViewModel) {
                 PrintProgressScreen(modifier = Modifier.fillMaxSize())
 
             is DebitViewState.DebugState.PrinterState.FailedState -> FailedPrintScreen(
-                retry = { viewModel.repeatPrinting() },
+                retry = viewModel::repeatPrinting,
                 dismiss = viewModel::resetPrinter,
                 modifier = Modifier.fillMaxSize()
             )

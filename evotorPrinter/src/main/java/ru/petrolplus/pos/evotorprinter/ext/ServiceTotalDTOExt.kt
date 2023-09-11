@@ -1,7 +1,7 @@
 package ru.petrolplus.pos.evotorprinter.ext
 
 import ru.evotor.devices.commons.printer.printable.IPrintable
-import ru.petrolplus.pos.evotorprinter.GeneralComponents.divider
+import ru.petrolplus.pos.evotorprinter.GeneralComponents.dashDivider
 import ru.petrolplus.pos.evotorprinter.GeneralComponents.textJustify
 import ru.petrolplus.pos.persitence.dto.ServiceTotalDTO
 import ru.petrolplus.pos.printerapi.Formatting
@@ -9,7 +9,7 @@ import ru.petrolplus.pos.printerapi.IntroductoryConstruction
 import ru.petrolplus.pos.printerapi.ext.toAmountString
 import ru.petrolplus.pos.printerapi.ext.toCurrencyString
 
-fun ServiceTotalDTO.toUi(paperWidth: Int): Array<IPrintable> {
+fun ServiceTotalDTO.toUi(paperWidth: Int, divider: IPrintable = dashDivider): Array<IPrintable> {
     val price = servicePrice.toCurrencyString()
     val priceUnit = IntroductoryConstruction.CURRENT_PRICE_UNIT
     val recalculateMark = IntroductoryConstruction.RECALCULATE_MARK

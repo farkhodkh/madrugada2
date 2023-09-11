@@ -42,5 +42,5 @@ dependencies {
     implementation(project(":room"))
     implementation(project(":persistence"))
     implementation(project(":printerApi"))
-    implementation(project(mapOf("path" to ":p7libapi")))
+    implementation(project(":p7libapi"))
 }

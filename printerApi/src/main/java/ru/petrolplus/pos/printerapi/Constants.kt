@@ -4,6 +4,7 @@ import ru.petrolplus.pos.util.ResourceHelper
 
 
 object Formatting {
+    const val SIZE_JUSTIFY_WITH_CENTER_MIDDLE = 3
     const val RECEIPT_MASK_SIZE = 10
     const val TERMINAL_NUMBER_MASK_SIZE = 5
     const val PRINTER_DATE_PATTERN = "dd/MM/yy HH:mm:ss"

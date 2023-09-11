@@ -8,13 +8,13 @@ import ru.petrolplus.pos.printerapi.ext.formattingTerminalId
 import java.util.Date
 
 object TerminalComponents {
-    internal fun terminalDataWithDate(terminalId: Int, terminalDate: Date, paperWidth: Int): Array<IPrintable> =
+    internal fun getTerminalDataWithDate(terminalId: Int, terminalDate: Date, paperWidth: Int): Array<IPrintable> =
         arrayOf(
             textJustify(terminalDate.formattingForPrinter().split(" ").toTypedArray(), paperWidth),
-            *terminalDate(terminalId, paperWidth)
+            *getTerminalDate(terminalId, paperWidth)
         )
 
-    internal fun terminalDate(terminalId: Int, paperWidth: Int): Array<out IPrintable> {
+    internal fun getTerminalDate(terminalId: Int, paperWidth: Int): Array<out IPrintable> {
         val terminalIdFormatted = terminalId.formattingTerminalId()
         return arrayOf(
             textJustify(

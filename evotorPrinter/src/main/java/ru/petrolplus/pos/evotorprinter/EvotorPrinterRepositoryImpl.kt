@@ -7,9 +7,9 @@ import ru.evotor.devices.commons.kkm.KkmInfoRequest
 import ru.evotor.devices.commons.printer.PrinterDocument
 import ru.petrolplus.pos.persitence.dto.ReceiptDTO
 import ru.petrolplus.pos.evatorprinter.R
-import ru.petrolplus.pos.evotorprinter.ShiftReportComponents.generateShiftReport
 import java.util.Date
 import ru.petrolplus.pos.evotorprinter.ext.toPrinterDoc
+import ru.petrolplus.pos.evotorprinter.ext.toUi
 import ru.petrolplus.pos.persitence.dto.ShiftReceiptDTO
 import ru.petrolplus.pos.printerapi.PrinterRepository
 import ru.petrolplus.pos.util.ResourceHelper
@@ -37,7 +37,7 @@ class EvotorPrinterRepositoryImpl(private val applicationContext: Context) : Pri
     }
 
     override suspend fun printShiftReport(receipt: ShiftReceiptDTO, endDate: Date): Exception? {
-        val document = generateShiftReport(receipt, endDate, paperWidth)
+        val document = receipt.toUi(endDate, paperWidth)
         return print(document)
     }
 }

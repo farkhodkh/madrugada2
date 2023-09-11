@@ -9,17 +9,17 @@ import ru.petrolplus.pos.util.ext.leadingZeros
 fun Int.formattingTerminalId() = this.leadingZeros(Formatting.TERMINAL_NUMBER_MASK_SIZE)
 
 fun Int.toCardType(): CardType = when (this) {
-    1 -> CardType.PETROL_5
-    2 -> CardType.PETROL_7
+    CardType.PETROL_5.id -> CardType.PETROL_5
+    CardType.PETROL_7.id -> CardType.PETROL_7
     else -> CardType.UNKNOWN
 }
 
 fun Int.toOperationType(): OperationType = when (this) {
-    1 -> OperationType.DEBIT
-    2 -> OperationType.WALLET_CREDIT
-    3 -> OperationType.ONLINE_REFILL
-    4 -> OperationType.CARD_REFUND
-    5 -> OperationType.ACCOUNT_REFUND
+    OperationType.DEBIT.id -> OperationType.DEBIT
+    OperationType.WALLET_CREDIT.id -> OperationType.WALLET_CREDIT
+    OperationType.ONLINE_REFILL.id -> OperationType.ONLINE_REFILL
+    OperationType.CARD_REFUND.id -> OperationType.CARD_REFUND
+    OperationType.ACCOUNT_REFUND.id -> OperationType.ACCOUNT_REFUND
     else -> OperationType.UNKNOWN
 }
 
