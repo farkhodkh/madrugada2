@@ -8,6 +8,7 @@ import ru.petrolplus.pos.persitence.di.MappersModule
 import ru.petrolplus.pos.persitence.di.PersistenceModule
 import ru.petrolplus.pos.room.di.RoomModule
 import ru.petrolplus.pos.core.MainScreenScope
+import ru.petrolplus.pos.mainscreen.ui.debit.di.DebitScreenComponent
 import ru.petrolplus.pos.mainscreen.ui.settings.di.SettingsScreenComponent
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
@@ -32,6 +33,7 @@ interface MainScreenComponent {
 
     fun inject(mainActivity: MainActivity)
     fun settingScreenComponentFactory(): SettingsScreenComponent.Factory
+    fun debitScreenComponentFactory(): DebitScreenComponent.Factory
 
     @Subcomponent.Builder
     interface Builder {

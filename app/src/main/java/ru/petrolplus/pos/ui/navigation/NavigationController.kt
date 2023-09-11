@@ -25,33 +25,18 @@ fun NavigationController(navController: NavHostController) {
             route = Screens.DebitScreen.route
         ) {
             val mainScreenComponent = (LocalContext.current as MainActivity).mainScreenSubcomponent
-            DebitScreen(
-                onClickListener = { screen ->
-                    navController.navigate(screen)
-                },
-                viewModel = viewModel(
-                    factory = DebitViewModel.provideFactory(
-                        cardReaderRepository = (LocalContext.current.applicationContext as App).appComponent.readerRepository,
-                        gatewayServer = (LocalContext.current.applicationContext as App).appComponent.gatewayServerRepository,
-                        owner = LocalSavedStateRegistryOwner.current,
-                        printerRepository = (LocalContext.current.applicationContext as App).appComponent.printer,
-                        receiptPersistence = mainScreenComponent.receiptPersistence,
-                        transactionsPersistence = mainScreenComponent.transactionsPersistence,
-                        settingsPersistence = mainScreenComponent.settingsPersistence,
-                        p7LibRepository = mainScreenComponent.p7LibRepository,
-                        p7LibCallbacks = mainScreenComponent.p7LibCallbacks
-                    )
-                )
-            )
+            val debitScreenComponent =
+                mainScreenComponent.debitScreenComponentFactory().create(LocalSavedStateRegistryOwner.current)
+            DebitScreen(debitScreenComponent.getViewModelFactory()) { screen ->
+                navController.navigate(screen)
+            }
         }
 
         composable(Screens.SettingsScreen.route) {
             val mainScreenComponent = (LocalContext.current as MainActivity).mainScreenSubcomponent
             val settingsScreenComponent =
                 mainScreenComponent.settingScreenComponentFactory().create(LocalSavedStateRegistryOwner.current)
-
-            val viewModelFactory = settingsScreenComponent.getViewModelFactory()
-            SettingsScreen(viewModelFactory) { screen ->
+            SettingsScreen(settingsScreenComponent.getViewModelFactory()) { screen ->
                 navController.navigate(screen)
             }
         }
