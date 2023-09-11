@@ -6,6 +6,7 @@ import dagger.Component
 import ru.petrolplus.pos.core.AppScope
 import ru.petrolplus.pos.App
 import ru.petrolplus.pos.evotorprinter.di.EvatorPrinterModule
+import ru.petrolplus.pos.evotorsdk.di.EvatorSDKModule
 import ru.petrolplus.pos.network.di.NetworkComponentDependencies
 import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7Lib.di.P7LibComponentDependencies
@@ -17,7 +18,8 @@ import ru.petrolplus.pos.sdkapi.CardReaderRepository
         AppModule::class,
         SubcomponentModule::class,
         NetworkComponentModule::class,
-        EvatorPrinterModule::class],
+        EvatorPrinterModule::class,
+        EvatorSDKModule::class],
     dependencies = [AppComponentDependencies::class]
 )
 @AppScope

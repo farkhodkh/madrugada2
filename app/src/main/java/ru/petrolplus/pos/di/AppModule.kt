@@ -5,7 +5,6 @@ import dagger.Module
 import dagger.Provides
 import ru.petrolplus.pos.room.database.AppDatabase
 import ru.petrolplus.pos.core.AppScope
-import ru.petrolplus.pos.evotorsdk.EvotorSDKRepository
 import ru.petrolplus.pos.p7Lib.impl.P7LibCallbacksImpl
 import ru.petrolplus.pos.p7Lib.impl.P7LibRepositoryImpl
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
@@ -20,9 +19,6 @@ object AppModule {
 
     @[Provides AppScope]
     fun providesP7LibCallbacks(): IP7LibCallbacks = P7LibCallbacksImpl()
-
-    @[Provides AppScope]
-    fun providesEvotorSDKRepository(context: Context): ISDKRepository = EvotorSDKRepository(context)
 
     @[Provides AppScope]
     fun providesCardReaderRepository(sdkRepository: ISDKRepository): CardReaderRepository =

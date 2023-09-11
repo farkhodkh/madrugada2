@@ -23,6 +23,10 @@ dependencies {
     implementation(project(":util"))
     implementation(project(":evotorlib"))
 
+    //Dagger 2
+    implementation("${Dependencies.dagger}:${Versions.dagger}")
+    kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
+
     //Coroutines
     implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
     implementation("${Dependencies.kotlinxCoroutinesCore}:${Versions.kotlinxCoroutines}")
