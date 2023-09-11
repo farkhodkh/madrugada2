@@ -10,21 +10,15 @@ import java.util.Date
 object TerminalComponents {
     internal fun getTerminalDataWithDate(terminalId: Int, terminalDate: Date, paperWidth: Int): Array<IPrintable> =
         arrayOf(
-            textJustify(terminalDate.formattingForPrinter().split(" ").toTypedArray(), paperWidth),
+            terminalDate.formattingForPrinter().split(" ").toTypedArray().textJustify(paperWidth),
             *getTerminalDate(terminalId, paperWidth)
         )
 
     internal fun getTerminalDate(terminalId: Int, paperWidth: Int): Array<out IPrintable> {
         val terminalIdFormatted = terminalId.formattingTerminalId()
         return arrayOf(
-            textJustify(
-                arrayOf(IntroductoryConstruction.POS_NUMBER_EN, terminalIdFormatted),
-                paperWidth
-            ),
-            textJustify(
-                arrayOf(IntroductoryConstruction.POS_NUMBER_RU, terminalIdFormatted),
-                paperWidth
-            ),
+            arrayOf(IntroductoryConstruction.POS_NUMBER_EN, terminalIdFormatted).textJustify(paperWidth),
+            arrayOf(IntroductoryConstruction.POS_NUMBER_RU, terminalIdFormatted).textJustify(paperWidth),
         )
     }
 }

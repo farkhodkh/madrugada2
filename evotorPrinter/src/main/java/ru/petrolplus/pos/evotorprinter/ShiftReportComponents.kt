@@ -50,26 +50,17 @@ object ShiftReportComponents {
         arrayOf(
             centredText(IntroductoryConstruction.CARD_PROCESSED),
             divider,
-            textJustify(arrayOf(DEBIT, statistic.totalDebitsOperations.toString()), paperWidth),
-            textJustify(arrayOf(REFUND, statistic.totalRefundsOperations.toString()), paperWidth),
+            arrayOf(DEBIT, statistic.totalDebitsOperations.toString()).textJustify(paperWidth),
+            arrayOf(REFUND, statistic.totalRefundsOperations.toString()).textJustify(paperWidth),
             divider,
-            textJustify(arrayOf(TOTAL, statistic.totalOperations.toString()), paperWidth),
-            textJustify(
-                arrayOf(TOTAL, CURRENT_PRICE_UNIT, statistic.totalSum.toCurrencyString()),
-                paperWidth,
-                offset = 1
-            ),
+            arrayOf(TOTAL, statistic.totalOperations.toString()).textJustify(paperWidth),
+            arrayOf(TOTAL, CURRENT_PRICE_UNIT, statistic.totalSum.toCurrencyString())
+                .textJustify(paperWidth, offset = 1),
             divider,
         )
 
     internal fun getShiftData(startData: Date, endData: Date, paperWidth: Int) = arrayOf(
-        textJustify(
-            arrayOf(IntroductoryConstruction.SHIFT_START, startData.formattingForPrinter()),
-            paperWidth
-        ),
-        textJustify(
-            arrayOf(IntroductoryConstruction.SHIFT_TIME, endData.formattingForPrinter()),
-            paperWidth
-        )
+        arrayOf(IntroductoryConstruction.SHIFT_START, startData.formattingForPrinter()).textJustify(paperWidth),
+        arrayOf(IntroductoryConstruction.SHIFT_TIME, endData.formattingForPrinter()).textJustify(paperWidth)
     )
 }

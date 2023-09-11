@@ -99,14 +99,6 @@ class DebitViewModel(
         _viewState.value = DebitViewState.DebugState.PrinterState.FailedState.Receipt(transactionId)
     }
 
-    // Проверяем что принтер не находится в состоянии печати и значение ID валидное
-    private fun preprintCheckBeforePrintTransaction(transactionId: String) =
-        (transactionId.isNotEmpty() && preprintCheck())
-
-    // Проверяем что принтер не находится в состоянии печати
-    private fun preprintCheck() =
-        _viewState.value != DebitViewState.DebugState.PrinterState.Printing
-
     companion object {
         fun provideFactory(
             cardReaderRepository: CardReaderRepository,
@@ -141,12 +133,11 @@ class DebitViewModel(
     }
 
     //region TEST_METHODS
-
     //FIXME: Метод тестовый. Распечатывает сменный отчет
     //Проверяется возможна ли сейчас печать. Переход в состояние печати
     //В Debug сборке симуляция ошибки во время печати. Печать чека с отслеживанием наличия ошибки
     fun printShiftReport() {
-        if (!preprintCheck()) return
+        if (_viewState.value == DebitViewState.DebugState.PrinterState.Printing) return
         _viewState.value = DebitViewState.DebugState.PrinterState.Printing
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -173,7 +164,8 @@ class DebitViewModel(
     //Запрос данных для печати чека из БД. Проверка полученных данных
     //В Debug сборке симуляция ошибки во время печати. Печать чека с отслеживанием наличия ошибки
     fun printTransactionTest(transactionId: String) {
-        if (!preprintCheckBeforePrintTransaction(transactionId)) return
+        if (transactionId.isEmpty()
+            || _viewState.value == DebitViewState.DebugState.PrinterState.Printing) return
 
         _viewState.value = DebitViewState.DebugState.PrinterState.Printing
 

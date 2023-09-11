@@ -33,12 +33,9 @@ object ServiceComponents {
         amount: Long,
         paperWidth: Int
     ): Array<IPrintable> = arrayOf(
-        textJustify(arrayOf(SERVICE, serviceName), paperWidth),
-        textJustify(arrayOf(SERVICE_AMOUNT, serviceUnit, amount.toAmountString()), paperWidth),
-        textJustify(
-            arrayOf(SERVICE_PRICE, PRICE_UNIT, servicePrice.toCurrencyString()),
-            paperWidth
-        ),
-        textJustify(arrayOf(SERVICE_SUM, PRICE_UNIT, sum.toCurrencyString()), paperWidth),
+        arrayOf(SERVICE, serviceName).textJustify(paperWidth),
+        arrayOf(SERVICE_AMOUNT, serviceUnit, amount.toAmountString()).textJustify(paperWidth),
+        arrayOf(SERVICE_PRICE, PRICE_UNIT, servicePrice.toCurrencyString()).textJustify(paperWidth),
+        arrayOf(SERVICE_SUM, PRICE_UNIT, sum.toCurrencyString()).textJustify(paperWidth),
     )
 }
