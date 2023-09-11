@@ -28,6 +28,7 @@ import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
 import ru.petrolplus.pos.persitence.dto.CommonSettingsDTO
 import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.dto.ServiceDTO
+import ru.petrolplus.pos.persitence.dto.ServiceTotalDTO
 import ru.petrolplus.pos.persitence.dto.ShiftParamsDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petrolplus.pos.persitence.mappers.Mapper
@@ -49,6 +50,7 @@ import ru.petrolplus.pos.room.entities.ShiftParamsDB
 import ru.petrolplus.pos.room.entities.TransactionDB
 import ru.petrolplus.pos.room.projections.ReceiptProjection
 import ru.petrolplus.pos.core.MainScreenScope
+import ru.petrolplus.pos.room.projections.TransactionByServiceProjection
 
 @Module
 class PersistenceModule {
@@ -122,6 +124,7 @@ class PersistenceModule {
     @[Provides MainScreenScope]
     fun provideReceiptMapper(
         receiptDao: ReceiptDao,
-        mapper: ProjectionMapper<ReceiptProjection, ReceiptDTO>
-    ): ReceiptPersistence = ReceiptPersistenceImpl(receiptDao, mapper)
+        receiptMapper: ProjectionMapper<ReceiptProjection, ReceiptDTO>,
+        shiftReceiptMapper: ProjectionMapper<TransactionByServiceProjection, ServiceTotalDTO>
+    ): ReceiptPersistence = ReceiptPersistenceImpl(receiptDao, receiptMapper, shiftReceiptMapper)
 }
