@@ -12,7 +12,7 @@ sealed class DebitViewState {
 
             sealed class FailedState: PrinterState() {
                 object ShiftReport: FailedState()
-                class Receipt(val transactionId: String): FailedState()
+                data class Receipt(val transactionId: String): FailedState()
             }
         }
         data class Debit(val debitDebugGroup: DebitDebugGroup = DebitDebugGroup()) : DebugState()

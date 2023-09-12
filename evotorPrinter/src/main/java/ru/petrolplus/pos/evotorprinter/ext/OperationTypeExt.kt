@@ -6,16 +6,12 @@ import ru.petrolplus.pos.persitence.enum.OperationType
 import ru.petrolplus.pos.printerapi.IntroductoryConstruction
 
 internal fun OperationType.toUi(): Array<IPrintable> = when (this) {
-    OperationType.DEBIT -> confirmedByPINUi()
-    else -> confirmedByTerminalUi()
+    OperationType.DEBIT -> arrayOf(
+        centredText(IntroductoryConstruction.OPERATION_CONFIRMED_BY_PIN),
+        centredText(IntroductoryConstruction.DEBIT_CONFIRMED_BY_PIN)
+    )
+    else -> arrayOf(
+        centredText(IntroductoryConstruction.OPERATION_CONFIRMED_BY_TERMINAL),
+        centredText(IntroductoryConstruction.RETURN_CONFIRMED_BY_TERMINAL)
+    )
 }
-
-private fun confirmedByPINUi(): Array<IPrintable> = arrayOf(
-    centredText(IntroductoryConstruction.OPERATION_CONFIRMED_BY_PIN),
-    centredText(IntroductoryConstruction.DEBIT_CONFIRMED_BY_PIN)
-)
-
-private fun confirmedByTerminalUi(): Array<IPrintable> = arrayOf(
-    centredText(IntroductoryConstruction.OPERATION_CONFIRMED_BY_TERMINAL),
-    centredText(IntroductoryConstruction.RETURN_CONFIRMED_BY_TERMINAL)
-)

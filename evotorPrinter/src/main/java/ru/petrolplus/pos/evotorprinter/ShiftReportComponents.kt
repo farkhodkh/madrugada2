@@ -31,7 +31,7 @@ object ShiftReportComponents {
     )
 
     private fun getStatisticByServices(statistic: List<ServiceTotalDTO>, paperWidth: Int) =
-        statistic.map { it.toUi(paperWidth) }.toTypedArray().flatten().toTypedArray()
+        statistic.map { it.toUi(paperWidth) }.toTypedArray().flatten()
 
     private fun getStatisticByOperation(
         operationType: OperationType,
@@ -41,7 +41,7 @@ object ShiftReportComponents {
     ) = arrayOf(
         centredText(operationType.description),
         divider,
-        *getStatisticByServices(statistic, paperWidth),
+        *getStatisticByServices(statistic, paperWidth).toTypedArray(),
         getShiftReportFootnote(),
         divider,
     )
