@@ -75,7 +75,10 @@ class DebitViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             ResourceHelper.getAssetFile("DebitP7.bin")?.readBytes()?.let {
                 val bytes = gatewayServer.sendData(byteArray = it)
-                Log.d("test", bytes.toString())
+
+                Log.v("as_repsonse", bytes?.joinToString ( ":" ) { byte ->
+                    "%02x".format(byte)
+                }.orEmpty())
             }
         }
     }

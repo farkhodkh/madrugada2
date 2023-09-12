@@ -65,9 +65,7 @@ object NetworkComponentModule {
             .retryOnConnectionFailure(false)
             .apply {
                 if (BuildConfig.DEBUG) addInterceptor(
-                    HttpLoggingInterceptor {
-                        Log.d("Network Log", it)
-                    }.also { it.level = HttpLoggingInterceptor.Level.BODY }
+                    HttpLoggingInterceptor().also { it.level = HttpLoggingInterceptor.Level.BODY }
                 )
             }
             .addInterceptor(OkHttpProfilerInterceptor())

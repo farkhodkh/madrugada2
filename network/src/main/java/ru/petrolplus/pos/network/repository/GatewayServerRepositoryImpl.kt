@@ -31,7 +31,6 @@ class GatewayServerRepositoryImpl(private val gatewayServer: GatewayServerApi): 
      */
     override suspend fun sendData(byteArray: ByteArray): ByteArray? {
         val result = gatewayServer.sendData(byteArray.toRequestBody("application/octet-stream".toMediaType()))
-        if (BuildConfig.DEBUG) Log.d("result", result.toString())
         return result.body()?.bytes()
     }
 }
