@@ -3,9 +3,13 @@ package ru.petrolplus.pos.printerapi
 import ru.petrolplus.pos.util.ResourceHelper
 
 
-object ReceiptFormatting {
+object Formatting {
+    const val SIZE_JUSTIFY_WITH_CENTER_MIDDLE = 3
     const val RECEIPT_MASK_SIZE = 10
     const val TERMINAL_NUMBER_MASK_SIZE = 5
+    const val PRINTER_DATE_PATTERN = "dd/MM/yy HH:mm:ss"
+    const val BASE_UNIT_LENGTH = 1
+
 }
 
 object IntroductoryConstruction {
@@ -26,8 +30,19 @@ object IntroductoryConstruction {
     val OPERATOR_NUMBER by lazy { ResourceHelper.getStringResource(R.string.operator_number) }
     val FOOTER_TEXT by lazy { ResourceHelper.getStringResource(R.string.footer_text) }
     val PRICE_UNIT by lazy { ResourceHelper.getStringResource(R.string.price_unit) }
+    val CURRENT_PRICE_UNIT by lazy { ResourceHelper.getStringResource(R.string.current_price_unit) }
     val DENIAL by lazy { ResourceHelper.getStringResource(R.string.denial) }
     val DENIAL_CODE by lazy { ResourceHelper.getStringResource(R.string.denial_code) }
+    val SHIFT_REPORT_TITLE by lazy { ResourceHelper.getStringResource(R.string.shift_report_title) }
+    val SHIFT_START by lazy { ResourceHelper.getStringResource(R.string.shift_start) }
+    val SHIFT_TIME by lazy { ResourceHelper.getStringResource(R.string.shift_time) }
+    val CARDS_PETROL_PLUS_TITLE by lazy { ResourceHelper.getStringResource(R.string.cards_petrolplus_title) }
+    val CARD_PROCESSED by lazy { ResourceHelper.getStringResource(R.string.card_processed) }
+    val FOOTNOTE_CURRENT_PRICE by lazy { ResourceHelper.getStringResource(R.string.current_price) }
+    val TOTAL by lazy { ResourceHelper.getStringResource(R.string.total) }
+    val DEBIT by lazy { ResourceHelper.getStringResource(R.string.debit) }
+    val REFUND by lazy { ResourceHelper.getStringResource(R.string.return_operation) }
+    val RECALCULATE_MARK by lazy { ResourceHelper.getStringResource(R.string.recalculate_mark) }
 }
 
 sealed class ResponseCode(val code: Int, val description: String) {

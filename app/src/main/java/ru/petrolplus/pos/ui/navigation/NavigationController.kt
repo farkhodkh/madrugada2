@@ -15,7 +15,6 @@ import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petrolplus.pos.mainscreen.ui.settings.SettingsScreen
 import ru.petrolplus.pos.mainscreen.ui.settings.SettingsViewModel
 import ru.petrolplus.pos.navigation.Screens
-import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.ui.main.MainActivity
 import ru.petrolplus.pos.ui.views.RefundScreen
 

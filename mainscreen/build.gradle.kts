@@ -42,4 +42,5 @@ dependencies {
     implementation(project(":room"))
     implementation(project(":persistence"))
     implementation(project(":printerApi"))
+    implementation(project(":p7libapi"))
 }

@@ -8,8 +8,12 @@ sealed class DebitViewState {
         object APDU : DebugState()
         sealed class PrinterState: DebugState() {
             object WaitDocument: PrinterState()
-            object PrintFailed: PrinterState()
             object Printing: PrinterState()
+
+            sealed class FailedState: PrinterState() {
+                object ShiftReport: FailedState()
+                data class Receipt(val transactionId: String): FailedState()
+            }
         }
         data class Debit(val debitDebugGroup: DebitDebugGroup = DebitDebugGroup()) : DebugState()
 

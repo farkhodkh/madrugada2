@@ -17,7 +17,7 @@
     <string name="configuration_content_label_text">Содержание конфигурационного файла</string>
     <string name="put_configuration_content_here">Вставьте содержание конфигурационного файла</string>
     <string name="сheck_is_printing">Идёт печать чека</string>
-    <string name="print_failed">Печать чека завершилось с ошибкой</string>
+    <string name="print_failed">Печать завершилась с ошибкой</string>
     <string name="retry">Повторить</string>
     <string name="cancel">Отменить</string>
     <string name="configuration_demo_content">[General]
