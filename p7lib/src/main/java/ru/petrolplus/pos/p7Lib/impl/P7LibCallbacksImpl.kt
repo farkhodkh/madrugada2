@@ -1,34 +1,49 @@
 package ru.petrolplus.pos.p7Lib.impl
 
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
+import ru.petrolplus.pos.p7LibApi.OnP7LibResultListener
 import ru.petrolplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petrolplus.pos.p7LibApi.requests.ApduData
 import ru.petrolplus.pos.p7LibApi.responces.ApduAnswer
 import ru.petrolplus.pos.p7LibApi.responces.OK
 import ru.petrolplus.pos.p7LibApi.dto.*
+import ru.petrolplus.pos.p7LibApi.responces.CardReadError
 import ru.petrolplus.pos.p7LibApi.responces.OperationResult
 import ru.petrolplus.pos.p7LibApi.responces.ResultCode
+import ru.petrolplus.pos.util.ext.isCorrectEvotorAtr
 
 class P7LibCallbacksImpl : IP7LibCallbacks {
+    override lateinit var listener: OnP7LibResultListener
+
     override fun log(message: String) {
         //TODO: код подлежит переработке
         val b = 0
     }
 
     override fun cardReset(answer: ApduAnswer): ResultCode {
-        //TODO: код подлежит переработке
-        answer.sw1  = 0x00
-        answer.sw2  = 0x00
-        answer.data = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
-        return OK
+        val atr = listener.onCardReset(answer)
+
+        return if (atr?.isCorrectEvotorAtr() == true) {
+            answer.sw1  = 0x90
+            answer.sw2  = 0x00
+            answer.data = atr.toByteArray()
+            OK
+        } else {
+            CardReadError
+        }
     }
 
     override fun sendDataToCard(data: ApduData, answer: ApduAnswer): ResultCode {
-        //TODO: код подлежит переработке
-        answer.sw1  = 0x90
-        answer.sw2  = 0x00
-        answer.data = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
-        return OK
+        val data = listener.onSendDataToCard(data, answer)
+
+        return if (data == null) {
+            CardReadError
+        } else {
+            answer.sw1  = 0x90
+            answer.sw2  = 0x00
+            answer.data = data
+            OK
+        }
     }
 
     override fun samReset(answer: ApduAnswer): ResultCode {

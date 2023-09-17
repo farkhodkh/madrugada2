@@ -190,20 +190,7 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Row {
-
-                Button(modifier = Modifier
-                    .width(100.dp)
-                    .padding(8.dp), onClick = {
-                    viewModel.testP7LibCommand()
-                }) {
-                    Text(
-                        text = stringResource(id = R.string.p7_lib)
-                    )
-                }
-
-                Button(modifier = Modifier
-                    .width(100.dp)
-                    .padding(8.dp), onClick = {
+                Button(modifier = testButtonModifier, onClick = {
                     viewModel.sendCommand(message)
                 }) {
                     Text(
@@ -211,21 +198,25 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                     )
                 }
 
-                Button(modifier = Modifier
-                    .width(100.dp)
-                    .padding(8.dp), onClick = {
+                Button(modifier = testButtonModifier, onClick = {
                     viewModel.ping()
                 }) {
                     Text(
                         text = stringResource(id = R.string.ping)
                     )
                 }
+
+                Button(modifier = testButtonModifier, onClick = {
+                    viewModel.testP7LibCommand()
+                }) {
+                    Text(
+                        text = stringResource(id = R.string.init_p7_lib)
+                    )
+                }
             }
 
             Row {
-                Button(modifier = Modifier
-                    .width(100.dp)
-                    .padding(8.dp), onClick = {
+                Button(modifier = testButtonModifier, onClick = {
                     viewModel.testInitCardReader()
                 }) {
                     Text(
@@ -233,13 +224,19 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                     )
                 }
 
-                Button(modifier = Modifier
-                    .width(100.dp)
-                    .padding(8.dp), onClick = {
+                Button(modifier = testButtonModifier, onClick = {
                     viewModel.testReadCardData()
                 }) {
                     Text(
                         text = stringResource(id = R.string.read_card_data)
+                    )
+                }
+
+                Button(modifier = testButtonModifier, onClick = {
+                    viewModel.testDetectCardData()
+                }) {
+                    Text(
+                        text = stringResource(id = R.string.detect_card_data)
                     )
                 }
             }
@@ -550,3 +547,8 @@ private fun parseTyped(string: String): Any {
 }
 
 fun String.zeroIfEmpty(): String = this.ifBlank { "0" }
+
+private val testButtonModifier = Modifier
+    .width(100.dp)
+    .height(70.dp)
+    .padding(8.dp)

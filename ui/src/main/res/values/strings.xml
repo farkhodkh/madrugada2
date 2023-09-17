@@ -5,9 +5,10 @@
     <string name="need_to_upload_ini_file_label_text">Не обнаружен ini файл с настройками терминала. Загрузить?</string>
     <string name="ini_file_description_label_text">Файл настроек необходимо получить у службы поддержки и загрузить на терминале</string>
     <string name="Cancel">Отмена</string>
-    <string name="p7_lib">P7Lib</string>
+    <string name="init_p7_lib">Init p7Lib</string>
     <string name="init_card_reader">Init reader</string>
     <string name="read_card_data">Read card</string>
+    <string name="detect_card_data">Detect card</string>
     <string name="OK">OK</string>
     <string name="ping">Ping</string>
     <string name="debit_label">Дебит</string>

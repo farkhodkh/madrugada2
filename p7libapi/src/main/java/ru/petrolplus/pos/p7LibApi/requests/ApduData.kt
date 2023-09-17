@@ -21,3 +21,15 @@ class ApduData(
     var Data: ByteArray = byteArrayOf(),
     var LE: Byte = 0
 )
+
+/**
+ * Метод возвращает массив APDU для Эвотор.
+ * Порядок элементов массива:
+ * CLA INS P1 P2 Lc <DataCmd> Le – для ICC и NFC интерфейсов
+ */
+fun ApduData.toEvotorApduByteArray(): ByteArray = byteArrayOf(this.GLA, this.INS, this.P1, this.P2)
+    //TODO - В LC должна записываться длина массива "DATA", вычисляем длину самостоятельно
+    // Уточнить почему LC не вычисляется на стороне библиотеки
+    // Это только для select app или для всех apdu?
+    .plus(this.Data.size.toByte())
+    .plus(this.Data)

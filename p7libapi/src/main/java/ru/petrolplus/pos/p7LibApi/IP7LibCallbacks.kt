@@ -13,6 +13,11 @@ import ru.petrolplus.pos.p7LibApi.responces.OperationResult
  */
 interface IP7LibCallbacks {
     /**
+     * Listener для обработки команд от p7lib
+     */
+    var listener: OnP7LibResultListener
+
+    /**
      * Метод для вывода лог сообщений
      * @param message - текстовое сообщение полученное от p7lib
      */
