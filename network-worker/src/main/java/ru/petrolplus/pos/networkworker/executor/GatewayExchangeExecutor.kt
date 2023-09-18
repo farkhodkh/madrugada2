@@ -45,7 +45,6 @@ class GatewayExchangeExecutor(
             configuration.actions.forEach { action ->
                 when (action) {
                     GatewayAction.Ping -> makePing()
-                    GatewayAction.SendData -> sendData()
                     else -> {
                         //TODO - make warning unknown action
                     }
@@ -70,11 +69,6 @@ class GatewayExchangeExecutor(
 
             delay(pingInterval)
         }
-    }
-
-    override fun sendData() {
-        //TODO - Переделать на запрос OOB от P7Lib когда такое будет реализовано
-        TODO("Not yet implemented")
     }
 
     private fun gatewayServerPinger(requestBody: RequestBody): Flow<String> = flow {

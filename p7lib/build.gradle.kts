@@ -23,6 +23,8 @@ dependencies {
 
     implementation(project(":p7libapi"))
 
+
+
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
     implementation("${Dependencies.composeRuntime}:${Versions.compose}")
@@ -30,4 +32,5 @@ dependencies {
     //Modules
     implementation(project(":core"))
     implementation(project(":util"))
+    implementation(project(":networkapi"))
 }

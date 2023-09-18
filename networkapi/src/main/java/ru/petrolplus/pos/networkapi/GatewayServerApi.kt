@@ -1,6 +1,7 @@
 package ru.petrolplus.pos.networkapi
 
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.Headers
@@ -24,4 +25,21 @@ interface GatewayServerApi {
     )
     @POST(".")
     suspend fun pingGatewayServer(@Body request: RequestBody): Response<Any>
+
+    /**
+     * Метод для передачи данных от p7Lib на AS
+     * @param request содержит массив байтов
+     * @return возвращает OkHttp.ResponseBody содержащий массив байтов обернутый в Result (для получения статусов, заголовков и т.д)
+     */
+    @Headers(
+        "Accept: application/octet-stream",
+        "SECURITY_FLAGS: SECURITY_FLAG_IGNORE_UNKNOWN_CA, SECURITY_FLAG_IGNORE_CERT_WRONG_USAGE, SECURITY_FLAG_IGNORE_CERT_CN_INVALID, SECURITY_FLAG_IGNORE_CERT_DATE_INVALID",
+        "Connection: Keep-Alive",
+        "User-Agent: P7_client",
+        "X-SSL-Client-CN: POS-4000-00001-123456789",
+        "X-Terminal-IP: 127.0.0.1",
+        "Content-Type: application/octet-stream"
+    )
+    @POST(".")
+    suspend fun sendData(@Body request: RequestBody): Response<ResponseBody>
 }

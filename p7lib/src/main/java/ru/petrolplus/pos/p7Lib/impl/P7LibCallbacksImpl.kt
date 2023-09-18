@@ -1,15 +1,19 @@
 package ru.petrolplus.pos.p7Lib.impl
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petrolplus.pos.p7LibApi.requests.ApduData
 import ru.petrolplus.pos.p7LibApi.responces.ApduAnswer
 import ru.petrolplus.pos.p7LibApi.responces.OK
 import ru.petrolplus.pos.p7LibApi.dto.*
+import ru.petrolplus.pos.p7LibApi.responces.NetworkModuleError
 import ru.petrolplus.pos.p7LibApi.responces.OperationResult
 import ru.petrolplus.pos.p7LibApi.responces.ResultCode
 
-class P7LibCallbacksImpl : IP7LibCallbacks {
+class P7LibCallbacksImpl(private val gatewayServerRepository: GatewayServerRepositoryApi) : IP7LibCallbacks {
     override fun log(message: String) {
         //TODO: код подлежит переработке
         val b = 0
@@ -53,10 +57,22 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
         return true
     }
 
+    /**
+     * Реализация коллбека p7Lib для связи c AS
+     * Блокирует текущий поток выполнения до получения результата или ошибки
+     * таймат берется из сетевого клиента. Выполняется в IO диспетчере.
+     * @param data массив байтов от p7Lib
+     * @return результат операции со статусов и массивом байтов полученных от AS
+     */
     override fun doASDataExchange(data: ByteArray): OperationResult {
-        //TODO: код подлежит переработке
-        val byteAnswer = ubyteArrayOf(0xFAu, 0xCEu, 0xBEu, 0xF0u, 0xE7u).toByteArray()
-        return OperationResult(OK, byteAnswer)
+        return runBlocking(Dispatchers.IO) {
+            try {
+                val result = gatewayServerRepository.sendData(data)
+                OperationResult(OK, result ?: byteArrayOf())
+            } catch (e: Exception) {
+                OperationResult(NetworkModuleError)
+            }
+        }
     }
 
     override fun findLastTransactionDB(

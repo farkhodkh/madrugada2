@@ -13,9 +13,4 @@ sealed class GatewayAction {
      * Отправка Ping c OOB
      */
     object Ping: GatewayAction()
-
-    /**
-     * Отправка данных от P7Lib
-     */
-    object SendData: GatewayAction()
 }
