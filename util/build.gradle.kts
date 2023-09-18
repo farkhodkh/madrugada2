@@ -14,8 +14,6 @@ android {
 }
 
 dependencies {
-    implementation(project(":p7libapi"))
-
     //Json
     implementation("${Dependencies.gson}:${Versions.gson}")
 }
