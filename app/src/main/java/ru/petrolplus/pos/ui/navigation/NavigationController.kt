@@ -12,7 +12,7 @@ import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petrolplus.pos.mainscreen.ui.settings.SettingsScreen
 import ru.petrolplus.pos.mainscreen.ui.settings.SettingsViewModel
 import ru.petrolplus.pos.navigation.Screens
-import ru.petrolplus.pos.ui.views.RefundScreen
+import ru.petrolplus.pos.mainscreen.ui.refund.RefundScreen
 import javax.inject.Inject
 
 

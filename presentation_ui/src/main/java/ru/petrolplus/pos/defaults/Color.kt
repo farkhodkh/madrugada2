@@ -1,4 +1,4 @@
-package ru.petrolplus.pos.ui
+package ru.petrolplus.pos.defaults
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,13 +1,18 @@
 package ru.petrolplus.pos.persitence.enum
 
+import ru.petrolplus.pos.persitence.R
+import ru.petrolplus.pos.util.ResourceHelper
+
 /**
  * Энумерация представляющая тип транзакции
  * @param id целочисленный идентификатор операции
+ * @param description текстовое описание операции
  */
-enum class OperationType(val id: Int) {
-    DEBIT(1),
-    CARD_CREDIT(2),
-    ONLINE_REFILL(3),
-    CARD_REFUND(4),
-    ACCOUNT_REFUND(5);
+enum class OperationType(val id: Int, val description: String) {
+    UNKNOWN(0, ResourceHelper.getStringResource(R.string.unknown_operation)),
+    DEBIT(1, ResourceHelper.getStringResource(R.string.debit_upper_case)),
+    WALLET_CREDIT(2, ResourceHelper.getStringResource(R.string.wallet_credit)),
+    ONLINE_REFILL(3, ResourceHelper.getStringResource(R.string.online_refill)),
+    CARD_REFUND(4, ResourceHelper.getStringResource(R.string.refund_to_card)),
+    ACCOUNT_REFUND(5, ResourceHelper.getStringResource(R.string.refund_to_account)),
 }

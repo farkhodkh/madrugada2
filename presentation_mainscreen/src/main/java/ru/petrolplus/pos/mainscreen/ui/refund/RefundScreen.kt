@@ -1,4 +1,4 @@
-package ru.petrolplus.pos.ui.views
+package ru.petrolplus.pos.mainscreen.ui.refund
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

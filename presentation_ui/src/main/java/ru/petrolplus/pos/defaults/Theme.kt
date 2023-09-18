@@ -1,4 +1,4 @@
-package ru.petrolplus.pos.ui
+package ru.petrolplus.pos.defaults
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

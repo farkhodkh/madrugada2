@@ -1,23 +1,26 @@
 package ru.petrolplus.pos.printerapi.ext
 
-import ru.petrolplus.pos.printerapi.CardType
-import ru.petrolplus.pos.printerapi.OperationType
+import ru.petrolplus.pos.persitence.enum.CardType
+import ru.petrolplus.pos.persitence.enum.OperationType
+import ru.petrolplus.pos.printerapi.Formatting
 import ru.petrolplus.pos.printerapi.ResponseCode
-import ru.petrolplus.pos.util.ext.roundTo
+import ru.petrolplus.pos.util.ext.leadingZeros
+
+fun Int.formattingTerminalId() = this.leadingZeros(Formatting.TERMINAL_NUMBER_MASK_SIZE)
 
 fun Int.toCardType(): CardType = when (this) {
-    1 -> CardType.Petrol5
-    2 -> CardType.Petrol7
-    else -> CardType.Unknown
+    CardType.PETROL_5.id -> CardType.PETROL_5
+    CardType.PETROL_7.id -> CardType.PETROL_7
+    else -> CardType.UNKNOWN
 }
 
 fun Int.toOperationType(): OperationType = when (this) {
-    1 -> OperationType.Debit
-    2 -> OperationType.WalletCredit
-    3 -> OperationType.OnlineDeposit
-    4 -> OperationType.Return.ToCard
-    5 -> OperationType.Return.ToAccount
-    else -> OperationType.Unknown
+    OperationType.DEBIT.id -> OperationType.DEBIT
+    OperationType.WALLET_CREDIT.id -> OperationType.WALLET_CREDIT
+    OperationType.ONLINE_REFILL.id -> OperationType.ONLINE_REFILL
+    OperationType.CARD_REFUND.id -> OperationType.CARD_REFUND
+    OperationType.ACCOUNT_REFUND.id -> OperationType.ACCOUNT_REFUND
+    else -> OperationType.UNKNOWN
 }
 
 fun Int.toResponseCode(): ResponseCode = when (this) {
@@ -59,12 +62,4 @@ fun Int.toResponseCode(): ResponseCode = when (this) {
     ResponseCode.AMOUNT_ERROR -> ResponseCode.Error.AmountError
     ResponseCode.GEN_AC_ERROR -> ResponseCode.Error.GenAcError
     else -> ResponseCode.Error.Universal
-}
-
-fun Long.toAmountString(): String {
-    return (this / 100.0).roundTo(2)
-}
-
-fun Long.toCurrencyString(): String {
-    return (this / 1000.0).roundTo(2)
 }
