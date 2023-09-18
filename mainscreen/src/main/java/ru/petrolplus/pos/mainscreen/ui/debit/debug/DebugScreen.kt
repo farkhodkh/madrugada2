@@ -78,12 +78,14 @@ fun DebugScreen(
 
         }
         when (val viewState = viewModel.viewState.value) {
-            DebitViewState.DebugState.APDU, is DebitViewState.CommandExecutionState -> APDUScreen(
+            DebitViewState.DebugState.APDU, is DebitViewState.CommandExecutionState, is DebitViewState.CardDetectState -> APDUScreen(
                 viewModel, viewState
             )
 
             is DebitViewState.DebugState.PrinterState -> PrinterScreen(viewModel)
+
             is DebitViewState.DebugState.Debit -> DatabaseScreen(viewModel, viewState)
+
             else -> Surface { }
         }
     }
@@ -243,13 +245,29 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Text(
-                modifier = Modifier
-                    .height(150.dp)
-                    .padding(start = 16.dp, end = 16.dp)
-                    .fillMaxWidth(),
-                text = (viewState as? DebitViewState.CommandExecutionState)?.commandResult ?: "",
-            )
+            when(viewState) {
+                is DebitViewState.CommandExecutionState -> {
+                    Text(
+                        modifier = Modifier
+                            .height(150.dp)
+                            .padding(start = 16.dp, end = 16.dp)
+                            .fillMaxWidth(),
+                        text = viewState.commandResult,
+                    )
+                }
+                is DebitViewState.CardDetectState -> {
+                    Text(
+                        modifier = Modifier
+                            .height(150.dp)
+                            .padding(start = 16.dp, end = 16.dp)
+                            .fillMaxWidth(),
+                        text = viewState.detectDescription,
+                    )
+                }
+                else -> {
+
+                }
+            }
 
         }
     }

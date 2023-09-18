@@ -20,7 +20,7 @@ fun DebitScreen(
 
             }
         }
-        is DebitViewState.DebugState -> {
+        is DebitViewState.DebugState, is DebitViewState.CardDetectState -> {
             DebugScreen(viewModel)
         }
         is DebitViewState.CommandExecutionState -> {

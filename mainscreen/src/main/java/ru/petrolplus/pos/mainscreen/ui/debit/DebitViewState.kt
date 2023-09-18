@@ -23,4 +23,9 @@ sealed class DebitViewState {
     object InsertCartState: DebitViewState()
 
     data class CommandExecutionState(val commandResult: String): DebitViewState()
+
+    sealed class CardDetectState(val detectDescription: String): DebitViewState() {
+        object NotPetrol7Card: CardDetectState("Карта не является картой P7")
+        object CardAuthError: CardDetectState("Ошибка аутентификации карты")
+    }
 }

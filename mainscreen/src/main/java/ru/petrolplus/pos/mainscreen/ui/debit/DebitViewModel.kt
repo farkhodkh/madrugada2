@@ -60,7 +60,6 @@ class DebitViewModel(
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val tlvParser: BerTlvParser = BerTlvParser()
     private val _viewState = mutableStateOf<DebitViewState>(DebitViewState.StartingState)
     val viewState: State<DebitViewState> = _viewState
 
@@ -338,13 +337,6 @@ class DebitViewModel(
 
     //FIXME: Метод тестовый, не потребуется в проде, для инициализации всех ридеров
     fun testInitCardReader() {
-        //1 байт маски 0x01:MS , 0x02:ICC, 0x04:CLESS
-        //Init card reader
-        //TAG 01 -
-        //030107
-
-        //Вместо 53 42 52 02 03 01 02
-        //нужно отправлять 53 42 52 02 03 01 01 02
         cardReaderRepository
             .sdkRepository
             .sendCommandSync(
@@ -369,10 +361,10 @@ class DebitViewModel(
             .detect(cardKey, cardData).let { result ->
                 when (result) {
                     is NotPetrol7Card -> {
-                        val b = 0
+                        _viewState.value = DebitViewState.CardDetectState.NotPetrol7Card
                     }
                     is CardAuthError -> {
-
+                        _viewState.value = DebitViewState.CardDetectState.CardAuthError
                     }
                     else -> {
                         val b = 0
