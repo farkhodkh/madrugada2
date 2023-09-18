@@ -27,6 +27,5 @@ dependencies {
     implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
 
     //Modules
-    implementation(project(":util"))
-
+    implementation(project(":resources"))
 }

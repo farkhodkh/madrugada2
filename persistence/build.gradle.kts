@@ -21,7 +21,8 @@ dependencies {
     //Modules
     implementation(project(":room"))
     implementation(project(":core"))
-    implementation(project(":util"))
+//    implementation(project(":util"))
+    implementation(project(":resources"))
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")

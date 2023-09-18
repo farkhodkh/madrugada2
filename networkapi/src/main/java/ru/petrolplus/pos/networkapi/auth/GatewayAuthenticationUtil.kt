@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.networkapi.auth
 
-import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.resources.ResourceHelper
 import java.io.File
 import java.io.IOException
 

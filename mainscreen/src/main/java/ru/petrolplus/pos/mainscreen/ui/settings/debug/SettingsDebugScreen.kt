@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.petrolplus.pos.persitence.dto.ServicesDTO
 import ru.petrolplus.pos.mainscreen.ui.settings.SettingsViewModel
-import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.resources.ResourceHelper
 import java.lang.StringBuilder
 
 @Composable

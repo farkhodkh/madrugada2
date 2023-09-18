@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    namespace = Dependencies.namespacePrinterApi
+    namespace = Dependencies.namespace
     compileSdkVersion = Versions.compileSdkVersion
 
     defaultConfig {
         minSdk = Versions.minSdkVersion
+        targetSdk = Versions.targetSdk
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        testInstrumentationRunner = Dependencies.testInstrumentationRunner
     }
 
     buildTypes {
@@ -27,17 +27,16 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
 
 dependencies {
-    //Coroutines
-    implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
+    //Json
+    implementation("${Dependencies.gson}:${Versions.gson}")
 
-    // Modules
-    implementation(project(":persistence"))
-    implementation(project(":resources"))
+    //Modules
     implementation(project(":util"))
 }

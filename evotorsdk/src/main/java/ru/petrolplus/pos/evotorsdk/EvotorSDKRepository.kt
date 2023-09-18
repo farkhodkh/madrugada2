@@ -15,7 +15,7 @@ import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiInterface
 import ru.petrolplus.pos.evotorsdk.util.HexUtil
 import ru.petrolplus.pos.evotorsdk.util.TlvCommands
 import ru.petrolplus.pos.sdkapi.ISDKRepository
-import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.resources.ResourceHelper
 import ru.petrolplus.pos.util.ext.getNextCommandNumber
 
 /**
@@ -66,8 +66,8 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
         if (requestInterface == null) {
             scope.launch {
                 onReceivedData(
-                    ResourceHelper.getStringResource(R.string.terminal_not_initialized_error)
-                        .toByteArray(Charsets.UTF_8)
+                    ResourceHelper
+                        .getStringResource(R.string.terminal_not_initialized_error).toByteArray(Charsets.UTF_8)
                 )
             }
             return

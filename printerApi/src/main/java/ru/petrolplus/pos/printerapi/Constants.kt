@@ -1,6 +1,6 @@
 package ru.petrolplus.pos.printerapi
 
-import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.resources.ResourceHelper
 
 
 object Formatting {

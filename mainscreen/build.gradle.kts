@@ -33,7 +33,7 @@ dependencies {
 
     //Modules
     implementation(project(":core"))
-    implementation(project(":util"))
+    implementation(project(":resources"))
     implementation(project(":ui"))
     implementation(project(":sdkapi"))
     implementation(project(":p7libapi"))

@@ -12,7 +12,7 @@ import ru.petrolplus.pos.evotorprinter.ext.toPrinterDoc
 import ru.petrolplus.pos.evotorprinter.ext.toUi
 import ru.petrolplus.pos.persitence.dto.ShiftReceiptDTO
 import ru.petrolplus.pos.printerapi.PrinterRepository
-import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.resources.ResourceHelper
 
 class EvotorPrinterRepositoryImpl(private val applicationContext: Context) : PrinterRepository {
     private val kkm by lazy {
