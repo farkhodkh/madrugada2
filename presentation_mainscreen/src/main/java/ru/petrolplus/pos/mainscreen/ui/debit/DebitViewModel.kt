@@ -17,7 +17,6 @@ import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
 import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
-import ru.petrolplus.pos.mainscreen.BuildConfig
 import ru.petrolplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petrolplus.pos.mainscreen.ui.ext.toInitDataDto
 import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
@@ -28,8 +27,12 @@ import ru.petrolplus.pos.printerapi.PrinterRepository
 import ru.petrolplus.pos.sdkapi.CardReaderRepository
 import ru.petrolplus.pos.util.ResourceHelper
 import kotlin.random.Random
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import ru.petrolplus.pos.mainscreen.BuildConfig
 
-class DebitViewModel(
+class DebitViewModel @AssistedInject constructor(
     private val cardReaderRepository: CardReaderRepository,
     private val printer: PrinterRepository,
     private val gatewayServer: GatewayServerRepositoryApi,
@@ -38,7 +41,7 @@ class DebitViewModel(
     private val receiptPersistence: ReceiptPersistence,
     private val p7LibRepository: IP7LibRepository,
     private val p7LibCallbacks: IP7LibCallbacks,
-    private val savedStateHandle: SavedStateHandle,
+    @Assisted private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _viewState = mutableStateOf<DebitViewState>(DebitViewState.StartingState)
@@ -84,39 +87,6 @@ class DebitViewModel(
     // Проверяем что принтер не находится в состоянии печати и значение ID валидное
     private fun preprintCheck(transactionId: String) =
         (transactionId.isNotEmpty() && _viewState.value != DebitViewState.DebugState.PrinterState.Printing)
-
-    companion object {
-        fun provideFactory(
-            cardReaderRepository: CardReaderRepository,
-            printerRepository: PrinterRepository,
-            gatewayServer: GatewayServerRepositoryApi,
-            transactionsPersistence: TransactionsPersistence,
-            settingsPersistence: SettingsPersistence,
-            owner: SavedStateRegistryOwner,
-            receiptPersistence: ReceiptPersistence,
-            p7LibRepository: IP7LibRepository,
-            p7LibCallbacks: IP7LibCallbacks,
-            defaultArgs: Bundle? = null,
-        ): AbstractSavedStateViewModelFactory =
-            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(
-                    key: String, modelClass: Class<T>, handle: SavedStateHandle
-                ): T {
-                    return DebitViewModel(
-                        cardReaderRepository,
-                        printerRepository,
-                        gatewayServer,
-                        transactionsPersistence,
-                        settingsPersistence,
-                        receiptPersistence,
-                        p7LibRepository,
-                        p7LibCallbacks,
-                        handle
-                    ) as T
-                }
-            }
-    }
 
     //region TEST_METHODS
     //FIXME: Метод тестовый. Проверка работы библиотеки P7Lib
@@ -228,5 +198,26 @@ class DebitViewModel(
         }
     }
 
+    @AssistedFactory
+    interface DebitViewModelFactory {
+        fun create(savedStateHandle: SavedStateHandle): DebitViewModel
+    }
+
+    companion object {
+        fun provideFactory(
+            factory: DebitViewModelFactory,
+            owner: SavedStateRegistryOwner,
+            defaultArgs: Bundle? = null,
+
+            ): AbstractSavedStateViewModelFactory =
+            object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(
+                    key: String, modelClass: Class<T>, handle: SavedStateHandle
+                ): T {
+                    return factory.create(handle) as T
+                }
+            }
+    }
     //endregion
 }

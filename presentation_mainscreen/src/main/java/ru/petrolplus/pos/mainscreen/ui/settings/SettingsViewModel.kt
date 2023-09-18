@@ -12,10 +12,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.petrolplus.pos.persitence.ServicesPersistence
 import ru.petrolplus.pos.persitence.dto.ServicesDTO
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-class SettingsViewModel(
+class SettingsViewModel @AssistedInject constructor(
     private val servicesPersistence: ServicesPersistence,
-    private val savedStateHandle: SavedStateHandle
+    @Assisted private val savedStateHandle: SavedStateHandle
 ): ViewModel() {
     private val _viewState = mutableStateOf<SettingsViewState>(SettingsViewState.DebugState)
     val viewState: State<SettingsViewState> = _viewState
@@ -26,9 +29,14 @@ class SettingsViewModel(
         }
     }
 
+    @AssistedFactory
+    interface SettingsViewModelFactory {
+        fun create(savedStateHandle: SavedStateHandle): SettingsViewModel
+    }
+
     companion object {
         fun provideFactory(
-            servicesPersistence: ServicesPersistence,
+            factory: SettingsViewModelFactory,
             owner: SavedStateRegistryOwner,
             defaultArgs: Bundle? = null,
         ): AbstractSavedStateViewModelFactory =
@@ -39,7 +47,7 @@ class SettingsViewModel(
                     modelClass: Class<T>,
                     handle: SavedStateHandle
                 ): T {
-                    return SettingsViewModel(servicesPersistence, handle) as T
+                    return factory.create(handle) as T
                 }
             }
     }

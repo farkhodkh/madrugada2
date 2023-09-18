@@ -5,8 +5,6 @@ import ru.petrolplus.pos.persitence.di.MappersModule
 import ru.petrolplus.pos.persitence.di.PersistenceModule
 import ru.petrolplus.pos.room.di.RoomModule
 import ru.petrolplus.pos.core.MainScreenScope
-import ru.petrolplus.pos.mainscreen.ui.debit.di.DebitScreenComponent
-import ru.petrolplus.pos.mainscreen.ui.settings.di.SettingsScreenComponent
 import ru.petrolplus.pos.ui.main.MainActivity
 
 @MainScreenScope
@@ -20,8 +18,6 @@ import ru.petrolplus.pos.ui.main.MainActivity
 )
 interface MainScreenComponent {
     fun inject(mainActivity: MainActivity)
-    fun settingScreenComponentFactory(): SettingsScreenComponent.Factory
-    fun debitScreenComponentFactory(): DebitScreenComponent.Factory
 
     @Subcomponent.Builder
     interface Builder {

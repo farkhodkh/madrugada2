@@ -8,14 +8,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.petrolplus.pos.mainscreen.ui.settings.debug.SettingsDebugScreen
 
 @Composable
 fun SettingsScreen(
-    viewModelFactory: AbstractSavedStateViewModelFactory,
-    viewModel: SettingsViewModel = viewModel(factory = viewModelFactory),
+    viewModel: SettingsViewModel,
     onClickListener: (String) -> Unit
 ) {
     when(viewModel.viewState.value) {
