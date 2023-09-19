@@ -71,21 +71,21 @@ extern "C"
 JNIEXPORT jobject JNICALL
 Java_ru_petrolplus_pos_p7Lib_impl_P7LibRepositoryImpl_detect(JNIEnv *env, jobject thiz,
                                                             jobject card_key, jobject card_data) {
-  TP7ErrorType ResultCode = TP7ErrorType::OK;
+//  TP7ErrorType ResultCode = TP7ErrorType::OK;
   jobject      ResultCodeJObj = nullptr;
-
-  TCardKey  CardKey;
-  TCardInfo CardInfo;
-
-  ResultCode = TP7Lib::Detect(CardKey, CardInfo);
-
-  jobject CardKeyJObj = nullptr;
-  jobject CardInfoJObj = nullptr;
-  
-  TP7LibTypes::ConvertCardKeyToJObj(env, &CardKey, &CardKeyJObj);
-  TP7LibTypes::ConvertCardInfoToJObj(env, &CardInfo, &CardInfoJObj);
-
-  TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
+//
+//  TCardKey  CardKey;
+//  TCardInfo CardInfo;
+//
+//  ResultCode = TP7Lib::Detect(CardKey, CardInfo);
+//
+//  jobject CardKeyJObj = nullptr;
+//  jobject CardInfoJObj = nullptr;
+//
+//  TP7LibTypes::ConvertCardKeyToJObj(env, &CardKey, &CardKeyJObj);
+//  TP7LibTypes::ConvertCardInfoToJObj(env, &CardInfo, &CardInfoJObj);
+//
+//  TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
 
   return ResultCodeJObj;
 }
