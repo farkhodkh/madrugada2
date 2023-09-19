@@ -6,7 +6,7 @@ import ru.evotor.devices.commons.kkm.KKM
 import ru.evotor.devices.commons.kkm.KkmInfoRequest
 import ru.evotor.devices.commons.printer.PrinterDocument
 import ru.petrolplus.pos.persitence.dto.ReceiptDTO
-import ru.petrolplus.pos.evatorprinter.R
+import ru.petrolplus.pos.R
 import java.util.Date
 import ru.petrolplus.pos.evotorprinter.ext.toPrinterDoc
 import ru.petrolplus.pos.evotorprinter.ext.toUi

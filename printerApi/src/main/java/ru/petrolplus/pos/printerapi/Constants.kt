@@ -1,7 +1,7 @@
 package ru.petrolplus.pos.printerapi
 
 import ru.petrolplus.pos.resources.ResourceHelper
-
+import ru.petrolplus.pos.R
 
 object Formatting {
     const val SIZE_JUSTIFY_WITH_CENTER_MIDDLE = 3

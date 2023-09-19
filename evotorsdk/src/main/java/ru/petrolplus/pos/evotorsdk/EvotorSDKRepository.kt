@@ -17,6 +17,7 @@ import ru.petrolplus.pos.evotorsdk.util.TlvCommands
 import ru.petrolplus.pos.sdkapi.ISDKRepository
 import ru.petrolplus.pos.resources.ResourceHelper
 import ru.petrolplus.pos.util.ext.getNextCommandNumber
+import ru.petrolplus.pos.R
 
 /**
  * Репозиторий для работы с SDK терминалов от поставщика "Эвотор"
