@@ -22,6 +22,7 @@ dependencies {
     implementation(project(":sdkapi"))
     implementation(project(":util"))
     implementation(project(":evotorlib"))
+    implementation(project(":core"))
 
     //Coroutines
     implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")

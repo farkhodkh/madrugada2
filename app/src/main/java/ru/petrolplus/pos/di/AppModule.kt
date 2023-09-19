@@ -15,6 +15,8 @@ import ru.petrolplus.pos.p7LibApi.IP7LibRepository
 import ru.petrolplus.pos.printerapi.PrinterRepository
 import ru.petrolplus.pos.sdkapi.CardReaderRepository
 import ru.petrolplus.pos.sdkapi.ISDKRepository
+import ru.petrolplus.pos.util.ErrorLogger
+import ru.petrolplus.pos.util.FileLogger
 
 @Module
 object AppModule {
@@ -39,4 +41,7 @@ object AppModule {
 
     @[Provides AppScope]
     fun providesAppDatabase(context: Context) = AppDatabase.getInstance(context)
+
+    @[Provides AppScope]
+    fun providesLogger(context: Context): ErrorLogger = FileLogger(context)
 }

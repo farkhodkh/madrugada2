@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
 import ru.petrolplus.pos.R
+import ru.petrolplus.pos.core.errorhandling.launchHandling
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
 import ru.petrolplus.pos.util.ConfigurationFileReader
@@ -34,7 +34,7 @@ class MainActivityViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MainScreenState.StartingState)
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launchHandling {
             delay(2000)
             _viewState.value = MainScreenState.CheckingSettingsState
         }
@@ -58,7 +58,7 @@ class MainActivityViewModel(
 
         val initDataDto = properties.toInitDataDto()
 
-        viewModelScope.launch {
+        viewModelScope.launchHandling {
             settingsPersistence.setBaseSettings(
                 BaseSettingsDTO(
                     acquirerId = initDataDto.acquirerId,

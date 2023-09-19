@@ -26,4 +26,7 @@ object Constants {
             "ClockSequence=2331\n" +
             "HasNodeID=1\n" +
             "NodeID=01B652966F64"
+
+    //LOCALE
+    const val RUSSIAN = "ru"
 }

@@ -35,4 +35,5 @@ dependencies {
     //Modules
     implementation(project(":networkapi"))
     implementation(project(":p7libapi"))
+    implementation(project(":core"))
 }

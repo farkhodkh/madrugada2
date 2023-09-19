@@ -21,10 +21,11 @@ import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import java.util.Calendar
 import ru.petrolplus.pos.mainscreen.BuildConfig
 import ru.petrolplus.pos.mainscreen.R
+import ru.petrolplus.pos.core.errorhandling.launchHandling
+import ru.petrolplus.pos.core.errorhandling.launchInHandling
 import ru.petrolplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petrolplus.pos.mainscreen.ui.ext.toInitDataDto
 import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
-import ru.petrolplus.pos.networkapi.auth.GatewayAuthenticationUtil
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
 import ru.petrolplus.pos.p7LibApi.dto.TransactionUUIDDto
@@ -49,16 +50,15 @@ class DebitViewModel(
     val viewState: State<DebitViewState> = _viewState
 
     init {
-        viewModelScope.launch {
-            cardReaderRepository
-                .sdkRepository
-                .latestCommands
-                .onEach { value ->
-                    _viewState.value = DebitViewState
-                        .CommandExecutionState(value)
-                }
-                .launchIn(viewModelScope)
-        }
+        //TODO протестировать работоспособность т.к убрана лишняя вложенность корутин
+        cardReaderRepository
+            .sdkRepository
+            .latestCommands
+            .onEach { value ->
+                _viewState.value = DebitViewState
+                    .CommandExecutionState(value)
+            }
+            .launchInHandling(viewModelScope)
 
         if (BuildConfig.DEBUG) {
             //Тестовое состояние экрана в случае если тип сборки DEBUG
@@ -67,14 +67,14 @@ class DebitViewModel(
     }
 
     fun ping() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launchHandling(Dispatchers.IO) {
             gatewayServer.doPing()
         }
     }
 
     //FIXME!! тестовый метод для проверки передачи данных на AS.
     fun sendDebit() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launchHandling(Dispatchers.IO) {
             ResourceHelper.getAssetFile("DebitP7.bin")?.readBytes()?.let {
                 val bytes = gatewayServer.sendData(byteArray = it)
 
@@ -155,13 +155,13 @@ class DebitViewModel(
         if (_viewState.value == DebitViewState.DebugState.PrinterState.Printing) return
         _viewState.value = DebitViewState.DebugState.PrinterState.Printing
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launchHandling(Dispatchers.IO) {
             // Симуляция ошибки во время печати
             if (BuildConfig.DEBUG) {
                 delay(300)
                 if (!Random.nextBoolean()) {
                     onFailPrintShiftReport()
-                    return@launch
+                    return@launchHandling
                 }
             }
 
@@ -184,11 +184,11 @@ class DebitViewModel(
 
         _viewState.value = DebitViewState.DebugState.PrinterState.Printing
 
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launchHandling(Dispatchers.IO) {
             val data = receiptPersistence.getDebitReceipt(transactionId)
             if (data == null) {
                 onFailPrintReceipt(transactionId)
-                return@launch
+                return@launchHandling
             }
 
             // Симуляция ошибки во время печати
@@ -196,7 +196,7 @@ class DebitViewModel(
                 delay(300)
                 if (!Random.nextBoolean()) {
                     onFailPrintReceipt(transactionId)
-                    return@launch
+                    return@launchHandling
                 }
             }
 
@@ -209,7 +209,7 @@ class DebitViewModel(
 
     //FIXME: Метод тестовый. Проверка работы библиотеки P7Lib
     fun testP7LibCommand() {
-        viewModelScope.launch {
+        viewModelScope.launchHandling {
             val initData = settingsPersistence.getBaseSettings().toInitDataDto()
             val uuidDto = TransactionUUIDDto()
             val cacheDir = ResourceHelper.getExternalCacheDirectory() ?: ""

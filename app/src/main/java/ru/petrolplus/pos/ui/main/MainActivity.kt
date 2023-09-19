@@ -5,14 +5,22 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.rememberNavController
 import ru.petrolplus.pos.persitence.di.MappersModule
@@ -22,9 +30,11 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.gms.security.ProviderInstaller
+import kotlinx.coroutines.launch
 import ru.petrolplus.pos.App
 import ru.petrolplus.pos.ui.R
 import ru.petrolplus.pos.blockingScreen.StartingApplicationBlockingScreen
+import ru.petrolplus.pos.core.errorhandling.PosCoroutineExceptionHandler
 import ru.petrolplus.pos.dialogs.ConfigurationFileRequiredDialog
 import ru.petrolplus.pos.dialogs.FilePickerDialog
 import ru.petrolplus.pos.di.MainScreenComponent
@@ -34,6 +44,7 @@ import ru.petrolplus.pos.navigation.BottomNavigationController
 import ru.petrolplus.pos.navigation.Screens
 import ru.petrolplus.pos.ui.BottomNavWithBadgesTheme
 import ru.petrolplus.pos.ui.navigation.NavigationController
+import ru.petrolplus.pos.util.ResourceHelper
 import ru.petrolplus.pos.util.constants.Constants
 import javax.inject.Inject
 
@@ -139,6 +150,8 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+
+            SetupErrorNotifications()
         }
 
         try {
@@ -149,6 +162,21 @@ class MainActivity : ComponentActivity() {
             GooglePlayServicesUtil.getErrorDialog(e.connectionStatusCode, this, 0)
         } catch (e: GooglePlayServicesNotAvailableException) {
             Log.e("SecurityException", "Google Play Services not available.")
+        }
+    }
+
+    @Composable
+    private fun SetupErrorNotifications() {
+        val snackBarState = remember { SnackbarHostState() }
+        SnackbarHost(hostState = snackBarState, Modifier.fillMaxWidth())
+        val compositionAwareScope = rememberCoroutineScope()
+        LaunchedEffect(snackBarState) {
+            compositionAwareScope.launch {
+                PosCoroutineExceptionHandler.errorsRelay.collect {
+                    val message = it.message ?: ResourceHelper.getStringResource(ru.petrolplus.pos.R.string.unknown_error)
+                   snackBarState.showSnackbar(message)
+                }
+            }
         }
     }
 }

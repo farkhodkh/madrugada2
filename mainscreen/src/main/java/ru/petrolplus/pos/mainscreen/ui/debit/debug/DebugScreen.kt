@@ -53,6 +53,7 @@ import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewState
 import ru.petrolplus.pos.ui.R
 import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.util.constants.Constants.RUSSIAN
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -504,7 +505,7 @@ private fun SnapshotStateList<Pair<String, Any>>.toGUIDParamsDTO(): GUIDParamsDT
 private fun SnapshotStateList<Pair<String, Any>>.toTransactionDto(): TransactionDTO {
     val map = this.associate { it }
     val dateString = map.getOrThrow("terminalDate") as String
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale("ru"))
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale(RUSSIAN))
     val date = dateFormat.parse(dateString)
     val calendar = Calendar.getInstance().apply { time = date!! }
 

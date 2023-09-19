@@ -6,11 +6,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import ru.petrolplus.pos.core.errorhandling.launchHandling
+import ru.petrolplus.pos.core.errorhandling.launchInHandling
 import ru.petrolplus.pos.networkapi.GatewayServerApi
 import ru.petrolplus.pos.networkapi.auth.GatewayAuthenticationUtil
 import ru.petrolplus.pos.networkworker.model.GatewayAction
@@ -41,7 +41,7 @@ class GatewayExchangeExecutor(
     private val yearInSeconds = 31_536_000
 
     override fun execute(configuration: GatewayConfiguration) {
-        executorScope.launch {
+        executorScope.launchHandling {
             configuration.actions.forEach { action ->
                 when (action) {
                     GatewayAction.Ping -> makePing()
@@ -65,7 +65,7 @@ class GatewayExchangeExecutor(
                     val b = this
                     val f = it
                 }
-                .launchIn(executorScope)
+                .launchInHandling(executorScope)
 
             delay(pingInterval)
         }

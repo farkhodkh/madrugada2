@@ -9,9 +9,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiCallbackInterface
 import ru.evotor.pinpaddriver.external.api.ExternalLowLevelApiInterface
+import ru.petrolplus.pos.core.errorhandling.launchHandling
 import ru.petrolplus.pos.evotorsdk.util.HexUtil
 import ru.petrolplus.pos.evotorsdk.util.TlvCommands
 import ru.petrolplus.pos.sdkapi.ISDKRepository
@@ -47,7 +47,7 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
     private val sdkCallback = object : ExternalLowLevelApiCallbackInterface.Stub() {
         override fun onReceive(received: ByteArray?) {
             received?.let {
-                scope.launch {
+                scope.launchHandling {
                     onReceivedData(it)
                 }
             }
@@ -64,7 +64,7 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
      */
     override fun sendCommand(bytesString: String) {
         if (requestInterface == null) {
-            scope.launch {
+            scope.launchHandling {
                 onReceivedData(
                     ResourceHelper.getStringResource(R.string.terminal_not_initialized_error)
                         .toByteArray(Charsets.UTF_8)
@@ -78,7 +78,7 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
         try {
             val commandLine = "${TlvCommands.RequestHeader.code}${commandNumber.getNextCommandNumber()}$bytesString"
             if (BuildConfig.DEBUG) {
-                scope.launch {
+                scope.launchHandling {
                     onReceivedData("Отправил команду: $commandLine")
                 }
             }
@@ -86,7 +86,7 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
             val commandBytes = HexUtil.decodeHex(charArray)
             requestInterface?.sendCommand(commandBytes, sdkCallback)
         } catch (ex: Exception) {
-            scope.launch {
+            scope.launchHandling {
                 onReceivedData(
                     "{${ex::class.java.simpleName}: ${ex.localizedMessage}}".toByteArray(
                         Charsets.UTF_8
@@ -113,7 +113,7 @@ class EvotorSDKRepository(context: Context) : ISDKRepository {
      *  Data - блок TLV данных ответа (если присутствует)
      */
     private fun parseReceivedData(receiveDataList: List<String>) {
-        scope.launch {
+        scope.launchHandling {
             if (receiveDataList.getOrNull(4) == "0A" && receiveDataList.getOrNull(5) == "00") {
                 onReceivedData("Терминал инициализирован, можно работать")
             } else {

@@ -17,4 +17,8 @@ dependencies {
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
+
+    //Core
+    implementation("${Dependencies.coreKtx}:${Versions.coreKtx}")
+    implementation("${Dependencies.appcompat}:${Versions.appcompat}")
 }

@@ -10,6 +10,7 @@ import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7Lib.di.P7LibComponentDependencies
 import ru.petrolplus.pos.printerapi.PrinterRepository
 import ru.petrolplus.pos.sdkapi.CardReaderRepository
+import ru.petrolplus.pos.util.ErrorLogger
 
 @Component(
     modules = [AppModule::class, SubcomponentModule::class, NetworkComponentModule::class],
@@ -19,6 +20,7 @@ import ru.petrolplus.pos.sdkapi.CardReaderRepository
 interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies, NetworkComponentDependencies
 {
     val printer: PrinterRepository
+    val logger: ErrorLogger
     val readerRepository: CardReaderRepository
     val gatewayServerRepository: GatewayServerRepositoryApi
 
