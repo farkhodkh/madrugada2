@@ -49,6 +49,7 @@ dependencies {
     kapt("${Dependencies.daggerCompiler}:${Versions.dagger}")
 
     // Modules
+    implementation(project(":core"))
     implementation(project(":util"))
     implementation(project(":evotorlib"))
 }

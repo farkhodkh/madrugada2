@@ -8,6 +8,7 @@ import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.petrolplus.pos.core.AppScope
 import ru.petrolplus.pos.network.repository.GatewayServerRepositoryImpl
 import ru.petrolplus.pos.network.ssl.NoSSLv3SocketFactory
 import ru.petrolplus.pos.network.ssl.SSLContextFactory
@@ -30,11 +31,11 @@ import javax.net.ssl.SSLSocketFactory
 @Module
 object NetworkModule {
 
-    @[Provides]
+    @[Provides AppScope]
     fun providesTrustAllCerts(): Array<TrustAllX509TrustManager> =
         arrayOf(TrustAllX509TrustManager())
 
-    @[Provides]
+    @[Provides AppScope]
     fun provideSSLContextFactory(
         trustAllCerts: Array<TrustAllX509TrustManager>
     ): SSLSocketFactory {
@@ -50,7 +51,7 @@ object NetworkModule {
             ).socketFactory
     }
 
-    @[Provides]
+    @[Provides AppScope]
     fun provideOkHttpClient(
         trustAllCerts: Array<TrustAllX509TrustManager>,
         socketFactory: SSLSocketFactory
@@ -74,7 +75,7 @@ object NetworkModule {
         return clientBuilder.build()
     }
 
-    @[Provides]
+    @[Provides AppScope]
     internal fun provideRetrofitBuilder(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(Constants.GATEWAY_SERVER_ADDRESS_AND_PORT)
@@ -91,15 +92,15 @@ object NetworkModule {
             .build()
     }
 
-    @[Provides]
+    @[Provides AppScope]
     fun provideGatewayServer(builder: Retrofit): GatewayServerApi =
         builder.create(GatewayServerApi::class.java)
 
-    @[Provides]
+    @[Provides AppScope]
     fun providesGatewayServerRepositoryApi(gatewayServer: GatewayServerApi): GatewayServerRepositoryApi =
         GatewayServerRepositoryImpl(gatewayServer)
 
-    @[Provides]
+    @[Provides AppScope]
     @Named(REMOTE_CONFIG_WORKER)
     fun providesGatewayExchangeExecutor(
         gatewayServer: GatewayServerApi,
@@ -108,16 +109,16 @@ object NetworkModule {
     ): GatewayExchangeExecutorApi =
         GatewayExchangeExecutor(gatewayServer, p7LibCallbacks, p7LibRepository)
 
-    @[Provides]
+    @[Provides AppScope]
     @Named(REMOTE_CONFIG_WORKER)
     fun providesGatewayConfigScheduler(): GatewayConfigScheduler = GatewayConfigScheduler()
 
-    @[Provides]
+    @[Provides AppScope]
     @Named(REMOTE_CONFIG_WORKER)
     fun providesGatewayConfigFactory(@Named(REMOTE_CONFIG_WORKER) gatewayExchangeExecutor: GatewayExchangeExecutorApi): GatewayConfigFactory =
         GatewayConfigFactory(gatewayExchangeExecutor)
 
-    @[Provides]
+    @[Provides AppScope]
     @Named(REMOTE_CONFIG_WORKER)
     fun providesDelegatingWorkerFactory(@Named(REMOTE_CONFIG_WORKER) remoteConfigFactory: GatewayConfigFactory): DelegatingWorkerFactory =
         DelegatingWorkerFactory().apply {

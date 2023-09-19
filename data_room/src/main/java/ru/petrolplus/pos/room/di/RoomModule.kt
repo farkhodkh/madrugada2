@@ -16,7 +16,7 @@ import ru.petrolplus.pos.core.MainScreenScope
 
 @Module
 class RoomModule {
-    @[Provides]
+    @[Provides MainScreenScope]
     fun providesAppDatabase(context: Context): AppDatabase = AppDatabase.getInstance(context)
 
     @[Provides MainScreenScope]

@@ -36,6 +36,7 @@ dependencies {
     implementation("${Dependencies.gsonConverter}:${Versions.gsonConverter}")
 
     //Modules
+    implementation(project(":core"))
     implementation(project(":util"))
     implementation(project(":data_networkapi"))
     implementation(project(":data_network-worker"))
