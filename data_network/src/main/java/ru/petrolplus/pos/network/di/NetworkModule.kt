@@ -1,13 +1,16 @@
 package ru.petrolplus.pos.network.di
 
+import android.util.Log
 import androidx.work.DelegatingWorkerFactory
 import com.google.gson.GsonBuilder
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.petrolplus.pos.BuildConfig
 import ru.petrolplus.pos.core.AppScope
 import ru.petrolplus.pos.network.repository.GatewayServerRepositoryImpl
 import ru.petrolplus.pos.network.ssl.NoSSLv3SocketFactory
@@ -60,6 +63,11 @@ object NetworkModule {
         val clientBuilder = OkHttpClient
             .Builder()
             .retryOnConnectionFailure(false)
+            .apply {
+                if (BuildConfig.DEBUG) addInterceptor(
+                    HttpLoggingInterceptor().also { it.level = HttpLoggingInterceptor.Level.BODY }
+                )
+            }
             .addInterceptor(OkHttpProfilerInterceptor())
             .callTimeout(30L, TimeUnit.SECONDS)
             .connectTimeout(30L, TimeUnit.SECONDS)
