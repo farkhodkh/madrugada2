@@ -24,7 +24,7 @@ class MainScreenModule {
     }
 
 
-    @[Provides]
+    @[Provides MainScreenScope]
     fun providesCardReaderRepository(sdkRepository: ISDKRepository): CardReaderRepository =
         object : CardReaderRepository {
             override val sdkRepository: ISDKRepository

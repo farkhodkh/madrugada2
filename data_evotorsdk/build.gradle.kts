@@ -22,6 +22,7 @@ dependencies {
     //Modules
     implementation(project(":util"))
     implementation(project(":evotorlib"))
+    implementation(project(":core"))
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")

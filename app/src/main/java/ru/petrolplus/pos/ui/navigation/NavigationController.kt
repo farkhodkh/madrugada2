@@ -15,7 +15,10 @@ import ru.petrolplus.pos.navigation.Screens
 import ru.petrolplus.pos.mainscreen.ui.refund.RefundScreen
 import javax.inject.Inject
 
-
+/**
+ * Класс-обертка для создания NavHost
+ * Позволяет передавать сущности (например, фабрики для создания ViewModel) задействуя DI
+ */
 class PosNavController @Inject constructor(
     private val debitViewModelAssistedFactory: DebitViewModel.DebitViewModelFactory,
     private val settingsViewModelAssistedFactory: SettingsViewModel.SettingsViewModelFactory
