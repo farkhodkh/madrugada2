@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--  Типы операция  -->
-    <string name="debit">Дебет</string>
-    <string name="return_operation">Возврат</string>
-    <string name="debit_upper_case">ДЕБЕТ</string>
-    <string name="wallet_credit">КРЕДИТ КОШЕЛЬКА</string>
-    <string name="online_refill">ОНЛАЙН ПОПОЛНЕНИЕ СЧЕТА</string>
-    <string name="refund_to_card">ВОЗВРАТ НА КАРТУ</string>
-    <string name="refund_to_account">ВОЗВРАТ НА СЧЕТ</string>
-    <string name="unknown_operation">НЕИЗВЕСТНАЯ ОПЕРАЦИЯ</string>
+    <string name="app_name">POS</string>
 
-    <!--  Вводные конструкции  -->
+    <!--  Вводные конструкции для печати чеков/отчета  -->
     <string name="service_sum">Итого</string>
     <string name="service_price">Цена за</string>
     <string name="service_amount">Кол-во</string>
@@ -41,7 +33,7 @@
     <string name="total">ИТОГО</string>
     <string name="recalculate_mark">По пересч.</string>
 
-    <!--  описание ResponseCodes  -->
+    <!--  Описание ResponseCodes  -->
     <string name="success_response">ОДОБРЕНО</string>
     <string name="universal_error">Универсальная ошибка</string>
     <string name="system_error">Системная ошибка</string>
@@ -80,4 +72,72 @@
     <string name="limit_error">Лимит исчерпан</string>
     <string name="amount_error">Недостаточно средств</string>
     <string name="gen_ac_error">Ошибка на карте</string>
+
+    <!--  Типы карт  -->
+    <string name="petrol5">Петрол5</string>
+    <string name="petrol7">Петрол7</string>
+    <string name="unknown_card_type">Неизвестно</string>
+
+    <!--  Типы операций  -->
+    <string name="debit">Дебет</string>
+    <string name="return_operation">Возврат</string>
+    <string name="debit_upper_case">ДЕБЕТ</string>
+    <string name="wallet_credit">КРЕДИТ КОШЕЛЬКА</string>
+    <string name="online_refill">ОНЛАЙН ПОПОЛНЕНИЕ СЧЕТА</string>
+    <string name="refund_to_card">ВОЗВРАТ НА КАРТУ</string>
+    <string name="refund_to_account">ВОЗВРАТ НА СЧЕТ</string>
+    <string name="unknown_operation">НЕИЗВЕСТНАЯ ОПЕРАЦИЯ</string>
+
+    <!--  Exceptions  -->
+    <string name="no_records_exception">Запрашиваемых настроек не существует в хранилище</string>
+    <string name="current_state_forbidden_calling_function">При текущем значении state вызов данной функции не предусмотрен</string>
+    <string name="terminal_not_initialized_error">Терминал не инициализирован</string>
+    <string name="prining_exception">Во время печати произошла ошибка</string>
+    <string name="cache_dir_access_error">Ошибка при чтении файла настроек</string>
+
+    <string name="starting_application_label_text">Загрузка приложения ...</string>
+    <string name="insert_card_label_text">Вставьте карту</string>
+    <string name="need_to_upload_ini_file_label_text">Не обнаружен ini файл с настройками терминала. Загрузить?</string>
+    <string name="ini_file_description_label_text">Файл настроек необходимо получить у службы поддержки и загрузить на терминале</string>
+    <string name="Cancel">Отмена</string>
+    <string name="P7Lib">P7Lib</string>
+    <string name="OK">OK</string>
+    <string name="ping">Ping</string>
+    <string name="debit_label">Дебит</string>
+    <string name="refund_label">Возврат</string>
+    <string name="settings_label">Настройки</string>
+    <string name="apdu_config_line">Команда APDU</string>
+    <string name="apdu_command_result_line">Результат выполнения команды</string>
+    <string name="add_configuration_content_label_text">Добавление конфигурации</string>
+    <string name="configuration_content_label_text">Содержание конфигурационного файла</string>
+    <string name="put_configuration_content_here">Вставьте содержание конфигурационного файла</string>
+    <string name="сheck_is_printing">Идёт печать чека</string>
+    <string name="print_failed">Печать завершилась с ошибкой</string>
+    <string name="retry">Повторить</string>
+    <string name="cancel">Отменить</string>
+    <string name="configuration_demo_content">[General]
+AcquireID = 4000
+TerminalID = 12
+
+[Authorization]
+;Host1_ip = 91.240.172.69
+;Host1_port = 6567
+;Host1_ip = 127.0.0.1
+;Host1_ip = 91.240.172.192
+Host1_ip = 91.240.172.195
+Host1_port = 6567
+
+[AuthData]
+AuthPin = "000000000000"
+LastOnlineTrz=157
+
+[Signature]
+Data = ""
+
+[UUID]
+LastGenTime=1685106271
+ClockSequence=2331
+HasNodeID=1
+NodeID=01B652966F64
+</string>
 </resources>

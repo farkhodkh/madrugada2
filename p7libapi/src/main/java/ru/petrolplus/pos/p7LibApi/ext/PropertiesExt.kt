@@ -1,4 +1,4 @@
-package ru.petrolplus.pos.util.ext
+package ru.petrolplus.pos.p7LibApi.ext
 
 import ru.petrolplus.pos.p7LibApi.dto.InitDataDto
 import java.util.Properties

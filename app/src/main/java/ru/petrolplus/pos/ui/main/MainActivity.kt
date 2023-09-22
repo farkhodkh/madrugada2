@@ -23,7 +23,7 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException
 import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.gms.security.ProviderInstaller
 import ru.petrolplus.pos.App
-import ru.petrolplus.pos.ui.R
+import ru.petrolplus.pos.R
 import ru.petrolplus.pos.blockingScreen.StartingApplicationBlockingScreen
 import ru.petrolplus.pos.dialogs.ConfigurationFileRequiredDialog
 import ru.petrolplus.pos.dialogs.FilePickerDialog

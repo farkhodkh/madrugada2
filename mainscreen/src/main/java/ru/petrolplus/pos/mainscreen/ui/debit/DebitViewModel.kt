@@ -20,17 +20,16 @@ import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import java.util.Calendar
 import ru.petrolplus.pos.mainscreen.BuildConfig
-import ru.petrolplus.pos.mainscreen.R
+import ru.petrolplus.pos.R
 import ru.petrolplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 import ru.petrolplus.pos.mainscreen.ui.ext.toInitDataDto
 import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
-import ru.petrolplus.pos.networkapi.auth.GatewayAuthenticationUtil
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
 import ru.petrolplus.pos.p7LibApi.dto.TransactionUUIDDto
 import ru.petrolplus.pos.printerapi.PrinterRepository
 import ru.petrolplus.pos.sdkapi.CardReaderRepository
-import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.resources.ResourceHelper
 import kotlin.random.Random
 
 class DebitViewModel(

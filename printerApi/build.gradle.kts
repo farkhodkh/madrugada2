@@ -36,8 +36,8 @@ dependencies {
     //Coroutines
     implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
 
-
     // Modules
     implementation(project(":persistence"))
+    implementation(project(":resources"))
     implementation(project(":util"))
 }

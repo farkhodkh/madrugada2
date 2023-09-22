@@ -19,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import ru.petrolplus.pos.ui.R
+import ru.petrolplus.pos.R
 import ru.petrolplus.pos.util.constants.Constants.DEMO_CONFIGURATION
 
 @Composable

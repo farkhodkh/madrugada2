@@ -20,8 +20,9 @@ dependencies {
 
     //Modules
     implementation(project(":sdkapi"))
-    implementation(project(":util"))
     implementation(project(":evotorlib"))
+    implementation(project(":resources"))
+    implementation(project(":util"))
 
     //Coroutines
     implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")

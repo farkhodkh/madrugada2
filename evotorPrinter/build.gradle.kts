@@ -44,6 +44,7 @@ dependencies {
     // Modules
     implementation(project(":printerApi"))
     implementation(project(":persistence"))
-    implementation(project(":util"))
     implementation(project(":evotorlib"))
+    implementation(project(":resources"))
+    implementation(project(":util"))
 }

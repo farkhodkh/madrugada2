@@ -1,7 +1,8 @@
-package ru.petrolplus.pos.util
+package ru.petrolplus.pos.resources
 
 import android.content.Context
 import com.google.gson.Gson
+import ru.petrolplus.pos.util.IOUtil
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -22,9 +23,7 @@ object ResourceHelper {
     /**
      * Метод для получение строки из ресурсов
      */
-    fun getStringResource(resourceId: Int) = weakContext.get()?.let {
-        it.resources.getString(resourceId)
-    } ?: ""
+    fun getStringResource(resourceId: Int) = weakContext.get()?.resources?.getString(resourceId) ?: ""
 
     /**
      * Метод для получения файлов из assets

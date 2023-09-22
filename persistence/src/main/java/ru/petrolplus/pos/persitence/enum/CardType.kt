@@ -1,7 +1,7 @@
 package ru.petrolplus.pos.persitence.enum
 
-import ru.petrolplus.pos.persitence.R
-import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.R
+import ru.petrolplus.pos.resources.ResourceHelper
 
 /**
  * Энумерация представляющая тип карты

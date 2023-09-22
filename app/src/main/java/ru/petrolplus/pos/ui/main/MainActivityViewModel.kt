@@ -16,7 +16,7 @@ import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
 import ru.petrolplus.pos.util.ConfigurationFileReader
 import ru.petrolplus.pos.util.constants.Constants.CONFIG_FILE_NAME
-import ru.petrolplus.pos.util.ext.toInitDataDto
+import ru.petrolplus.pos.p7LibApi.ext.toInitDataDto
 import java.io.FileNotFoundException
 import java.io.IOException
 import kotlin.system.exitProcess

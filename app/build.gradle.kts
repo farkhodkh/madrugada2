@@ -105,6 +105,7 @@ dependencies {
     //Modules
     implementation(project(":core"))
     implementation(project(":util"))
+    implementation(project(":resources"))
     implementation(project(":ui"))
     implementation(project(":mainscreen"))
     implementation(project(":p7lib"))
