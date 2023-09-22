@@ -51,8 +51,8 @@ import ru.petrolplus.pos.blockingScreen.FailedPrintScreen
 import ru.petrolplus.pos.blockingScreen.PrintProgressScreen
 import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewState
-import ru.petrolplus.pos.ui.R
-import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.R
+import ru.petrolplus.pos.resources.ResourceHelper
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale

@@ -107,6 +107,7 @@ dependencies {
     implementation(project(":util"))
     implementation(project(":presentation_ui"))
     implementation(project(":presentation_mainscreen"))
+    implementation(project(":resources"))
     implementation(project(":p7lib"))
     implementation(project(":p7libapi"))
     implementation(project(":data_evotorsdk"))

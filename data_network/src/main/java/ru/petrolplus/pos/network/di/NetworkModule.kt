@@ -1,6 +1,5 @@
 package ru.petrolplus.pos.network.di
 
-import android.util.Log
 import androidx.work.DelegatingWorkerFactory
 import com.google.gson.GsonBuilder
 import com.localebro.okhttpprofiler.OkHttpProfilerInterceptor
@@ -10,8 +9,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.petrolplus.pos.BuildConfig
 import ru.petrolplus.pos.core.AppScope
+import ru.petrolplus.pos.network.BuildConfig
 import ru.petrolplus.pos.network.repository.GatewayServerRepositoryImpl
 import ru.petrolplus.pos.network.ssl.NoSSLv3SocketFactory
 import ru.petrolplus.pos.network.ssl.SSLContextFactory

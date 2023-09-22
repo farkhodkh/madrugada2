@@ -35,6 +35,7 @@ dependencies {
     //Modules
     implementation(project(":core"))
     implementation(project(":util"))
+    implementation(project(":resources"))
     implementation(project(":presentation_ui"))
     implementation(project(":data_sdkapi"))
     implementation(project(":p7libapi"))

@@ -17,12 +17,13 @@ dependencies {
 
     //Evotor
     implementation("${Dependencies.evotor}:${Versions.evotor}")
-    implementation(project(":data_sdkapi"))
 
     //Modules
+    implementation(project(":data_sdkapi"))
     implementation(project(":util"))
     implementation(project(":evotorlib"))
     implementation(project(":core"))
+    implementation(project(":resources"))
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")

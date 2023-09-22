@@ -1,13 +1,11 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
     id("ru.petrolplus.pos.convention")
 }
 
 android {
-    namespace = Dependencies.namespaceUtil
-
+    namespace = Dependencies.namespace
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
@@ -16,4 +14,7 @@ android {
 dependencies {
     //Json
     implementation("${Dependencies.gson}:${Versions.gson}")
+
+    //Modules
+    implementation(project(":util"))
 }

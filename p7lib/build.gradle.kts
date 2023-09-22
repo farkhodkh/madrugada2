@@ -20,16 +20,12 @@ android {
 }
 
 dependencies {
-
-    implementation(project(":p7libapi"))
-
-
-
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
     implementation("${Dependencies.composeRuntime}:${Versions.compose}")
 
     //Modules
+    implementation(project(":p7libapi"))
     implementation(project(":core"))
     implementation(project(":util"))
     implementation(project(":data_networkapi"))

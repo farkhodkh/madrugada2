@@ -35,9 +35,9 @@ android {
 dependencies {
     //Coroutines
     implementation("${Dependencies.kotlinxCoroutines}:${Versions.kotlinxCoroutines}")
-    implementation(project(":data_persistence"))
-
 
     // Modules
+    implementation(project(":data_persistence"))
+    implementation(project(":resources"))
     implementation(project(":util"))
 }

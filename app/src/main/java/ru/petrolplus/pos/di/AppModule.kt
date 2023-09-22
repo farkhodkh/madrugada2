@@ -3,6 +3,7 @@ package ru.petrolplus.pos.di
 import dagger.Module
 import dagger.Provides
 import ru.petrolplus.pos.core.AppScope
+import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7Lib.impl.P7LibCallbacksImpl
 import ru.petrolplus.pos.p7Lib.impl.P7LibRepositoryImpl
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
@@ -16,5 +17,5 @@ object AppModule {
     fun providesP7LibRepository(): IP7LibRepository = P7LibRepositoryImpl()
 
     @[Provides AppScope]
-    fun providesP7LibCallbacks(): IP7LibCallbacks = P7LibCallbacksImpl()
+    fun providesP7LibCallbacks(gatewayServerRepository: GatewayServerRepositoryApi): IP7LibCallbacks = P7LibCallbacksImpl(gatewayServerRepository)
 }

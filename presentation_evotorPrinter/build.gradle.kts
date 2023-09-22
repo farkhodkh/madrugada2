@@ -41,8 +41,7 @@ dependencies {
 
     // Evator
     implementation("${Dependencies.evotor}:${Versions.evotor}")
-    implementation(project(":presentation_printerApi"))
-    implementation(project(":data_persistence"))
+
 
     //Dagger 2
     implementation("${Dependencies.dagger}:${Versions.dagger}")
@@ -51,5 +50,9 @@ dependencies {
     // Modules
     implementation(project(":core"))
     implementation(project(":util"))
+    implementation(project(":presentation_printerApi"))
+    implementation(project(":data_persistence"))
     implementation(project(":evotorlib"))
+    implementation(project(":resources"))
+    implementation(project(":util"))
 }

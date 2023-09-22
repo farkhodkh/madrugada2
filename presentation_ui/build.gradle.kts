@@ -29,5 +29,6 @@ dependencies {
     //Modules
     implementation(project(":util"))
     implementation(project(":data_persistence"))
+    implementation(project(":resources"))
     implementation(kotlin("reflect"))
 }

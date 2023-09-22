@@ -29,7 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import ru.petrolplus.pos.defaults.Purple100
-import ru.petrolplus.pos.ui.R
+import ru.petrolplus.pos.R
 
 @Composable
 fun ConfigurationFileRequiredDialog(
