@@ -32,7 +32,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil
 import com.google.android.gms.security.ProviderInstaller
 import kotlinx.coroutines.launch
 import ru.petrolplus.pos.App
-import ru.petrolplus.pos.ui.R
+import ru.petrolplus.pos.R
 import ru.petrolplus.pos.blockingScreen.StartingApplicationBlockingScreen
 import ru.petrolplus.pos.core.errorhandling.PosCoroutineExceptionHandler
 import ru.petrolplus.pos.dialogs.ConfigurationFileRequiredDialog
@@ -42,9 +42,8 @@ import ru.petrolplus.pos.di.MainScreenModule
 import ru.petrolplus.pos.navigation.BottomBarItem
 import ru.petrolplus.pos.navigation.BottomNavigationController
 import ru.petrolplus.pos.navigation.Screens
-import ru.petrolplus.pos.ui.BottomNavWithBadgesTheme
-import ru.petrolplus.pos.ui.navigation.NavigationController
-import ru.petrolplus.pos.util.ResourceHelper
+import ru.petrolplus.pos.defaults.BottomNavWithBadgesTheme
+import ru.petrolplus.pos.ui.navigation.PosNavController
 import ru.petrolplus.pos.util.constants.Constants
 import javax.inject.Inject
 
@@ -52,6 +51,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var viewModel: MainActivityViewModel
+
+    @Inject
+    lateinit var posNavController: PosNavController
 
     lateinit var mainScreenSubcomponent: MainScreenComponent
 
@@ -113,7 +115,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         ) {
-                            NavigationController(navController = navController)
+                            posNavController.SetupNavHost(navController = navController)
                         }
                     }
                 }

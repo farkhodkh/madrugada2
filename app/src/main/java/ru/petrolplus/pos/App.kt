@@ -15,8 +15,8 @@ import ru.petrolplus.pos.di.AppComponent
 import ru.petrolplus.pos.di.AppComponentDependencies
 import ru.petrolplus.pos.di.DaggerAppComponent
 import ru.petrolplus.pos.networkworker.worker.GatewayConfigScheduler
+import ru.petrolplus.pos.resources.ResourceHelper
 import ru.petrolplus.pos.util.ErrorLogger
-import ru.petrolplus.pos.util.ResourceHelper
 import java.net.CookieHandler
 import java.net.CookieManager
 import java.security.Security
