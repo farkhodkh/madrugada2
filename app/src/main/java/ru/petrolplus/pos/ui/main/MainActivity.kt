@@ -32,8 +32,8 @@ import ru.petrolplus.pos.di.MainScreenModule
 import ru.petrolplus.pos.navigation.BottomBarItem
 import ru.petrolplus.pos.navigation.BottomNavigationController
 import ru.petrolplus.pos.navigation.Screens
-import ru.petrolplus.pos.ui.BottomNavWithBadgesTheme
-import ru.petrolplus.pos.ui.navigation.NavigationController
+import ru.petrolplus.pos.defaults.BottomNavWithBadgesTheme
+import ru.petrolplus.pos.ui.navigation.PosNavController
 import ru.petrolplus.pos.util.constants.Constants
 import javax.inject.Inject
 
@@ -41,6 +41,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var viewModel: MainActivityViewModel
+
+    @Inject
+    lateinit var posNavController: PosNavController
 
     lateinit var mainScreenSubcomponent: MainScreenComponent
 
@@ -102,7 +105,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         ) {
-                            NavigationController(navController = navController)
+                            posNavController.SetupNavHost(navController = navController)
                         }
                     }
                 }
