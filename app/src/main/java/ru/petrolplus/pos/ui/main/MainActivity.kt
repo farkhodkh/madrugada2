@@ -43,6 +43,7 @@ import ru.petrolplus.pos.navigation.BottomBarItem
 import ru.petrolplus.pos.navigation.BottomNavigationController
 import ru.petrolplus.pos.navigation.Screens
 import ru.petrolplus.pos.defaults.BottomNavWithBadgesTheme
+import ru.petrolplus.pos.resources.ResourceHelper
 import ru.petrolplus.pos.ui.navigation.PosNavController
 import ru.petrolplus.pos.util.constants.Constants
 import javax.inject.Inject
@@ -175,7 +176,7 @@ class MainActivity : ComponentActivity() {
         LaunchedEffect(snackBarState) {
             compositionAwareScope.launch {
                 PosCoroutineExceptionHandler.errorsRelay.collect {
-                    val message = it.message ?: ResourceHelper.getStringResource(ru.petrolplus.pos.R.string.unknown_error)
+                    val message = it.message ?: ResourceHelper.getStringResource(R.string.unknown_error)
                    snackBarState.showSnackbar(message)
                 }
             }

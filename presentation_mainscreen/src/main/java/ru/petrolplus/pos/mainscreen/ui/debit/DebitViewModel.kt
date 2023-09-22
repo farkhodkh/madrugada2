@@ -20,7 +20,6 @@ import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
 import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import java.util.Calendar
 import ru.petrolplus.pos.R
-import ru.petrolplus.pos.mainscreen.BuildConfig
 import ru.petrolplus.pos.core.errorhandling.launchHandling
 import ru.petrolplus.pos.core.errorhandling.launchInHandling
 import ru.petrolplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup

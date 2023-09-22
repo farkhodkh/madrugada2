@@ -93,6 +93,7 @@
     <string name="terminal_not_initialized_error">Терминал не инициализирован</string>
     <string name="prining_exception">Во время печати произошла ошибка</string>
     <string name="cache_dir_access_error">Ошибка при чтении файла настроек</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
 
     <string name="starting_application_label_text">Загрузка приложения ...</string>
     <string name="insert_card_label_text">Вставьте карту</string>
