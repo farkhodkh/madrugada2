@@ -10,6 +10,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
@@ -46,6 +47,7 @@ import ru.petrolplus.pos.defaults.BottomNavWithBadgesTheme
 import ru.petrolplus.pos.resources.ResourceHelper
 import ru.petrolplus.pos.ui.navigation.PosNavController
 import ru.petrolplus.pos.util.constants.Constants
+import ru.petrolplus.pos.util.ext.copyPlainTextToClipboard
 import javax.inject.Inject
 
 class MainActivity : ComponentActivity() {
@@ -176,8 +178,15 @@ class MainActivity : ComponentActivity() {
         LaunchedEffect(snackBarState) {
             compositionAwareScope.launch {
                 PosCoroutineExceptionHandler.errorsRelay.collect {
-                    val message = it.message ?: ResourceHelper.getStringResource(R.string.unknown_error)
-                   snackBarState.showSnackbar(message)
+                    val message =
+                        it.message ?: ResourceHelper.getStringResource(R.string.unknown_error)
+                    val result = snackBarState.showSnackbar(
+                        message,
+                        actionLabel = resources.getString(R.string.copy)
+                    )
+                    if (result == SnackbarResult.ActionPerformed) {
+                        copyPlainTextToClipboard("terminal_error", message)
+                    }
                 }
             }
         }
