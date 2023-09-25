@@ -1,6 +1,7 @@
 package ru.petrolplus.pos.p7Lib.impl
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import ru.petrolplus.pos.core.errorhandling.runBlockingHandling
 import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
@@ -65,7 +66,7 @@ class P7LibCallbacksImpl(private val gatewayServerRepository: GatewayServerRepos
      * @return результат операции со статусов и массивом байтов полученных от AS
      */
     override fun doASDataExchange(data: ByteArray): OperationResult {
-        return runBlockingHandling(Dispatchers.IO) {
+        return runBlocking(Dispatchers.IO) {
             try {
                 val result = gatewayServerRepository.sendData(data)
                 OperationResult(OK, result ?: byteArrayOf())
