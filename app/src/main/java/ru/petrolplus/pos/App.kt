@@ -20,6 +20,7 @@ import ru.petrolplus.pos.util.ErrorLogger
 import java.net.CookieHandler
 import java.net.CookieManager
 import java.security.Security
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -56,6 +57,7 @@ class App : Application() {
 
         initWorkManager()
         if (BuildConfig.DEBUG) initLogger(appComponent.logger)
+        Locale.setDefault(Locale("ru"))
     }
 
     private inner class AppComponentDependenciesImpl: AppComponentDependencies {

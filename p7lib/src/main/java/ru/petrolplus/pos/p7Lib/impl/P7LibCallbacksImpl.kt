@@ -2,7 +2,6 @@ package ru.petrolplus.pos.p7Lib.impl
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import ru.petrolplus.pos.core.errorhandling.runBlockingHandling
 import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.dto.TransactionRecordDto
