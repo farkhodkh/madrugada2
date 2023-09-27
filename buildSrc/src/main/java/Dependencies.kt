@@ -106,4 +106,8 @@ object Versions {
     const val gson = "2.10.1"
     const val evotor = "v0.6.03"
     const val room = "2.5.2"
+
+    const val spotless = "6.21.0"
+    const val ktlint = "0.50.0"
+    const val detekt = "1.23.1"
 }
