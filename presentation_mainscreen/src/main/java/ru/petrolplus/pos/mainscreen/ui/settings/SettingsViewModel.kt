@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import ru.petrolplus.pos.core.errorhandling.launchHandling
 import ru.petrolplus.pos.persitence.ServicesPersistence
 import ru.petrolplus.pos.persitence.dto.ServicesDTO
 import dagger.assisted.Assisted
@@ -25,7 +25,7 @@ class SettingsViewModel @AssistedInject constructor(
     override fun createInitialState(): SettingsViewState = SettingsViewState.DebugState
 
     fun addOrReplaceServices(servicesDTO: ServicesDTO) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launchHandling(Dispatchers.IO) {
             servicesPersistence.addOrReplace(servicesDTO.services)
         }
     }

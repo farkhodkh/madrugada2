@@ -35,4 +35,5 @@ dependencies {
 
     //Modules
     implementation(project(":p7libapi"))
+    implementation(project(":core"))
 }
