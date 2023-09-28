@@ -109,5 +109,5 @@ object Versions {
 
     const val spotless = "6.21.0"
     const val ktlint = "0.50.0"
-    const val detekt = "1.23.1"
+    const val detekt = "1.17.0"
 }
