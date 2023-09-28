@@ -10,6 +10,7 @@ import ru.petrolplus.pos.evotorsdk.di.EvotorSDKModule
 import ru.petrolplus.pos.network.di.NetworkComponentDependencies
 import ru.petrolplus.pos.network.di.NetworkModule
 import ru.petrolplus.pos.p7Lib.di.P7LibComponentDependencies
+import ru.petrolplus.pos.util.ErrorLogger
 
 @Component(
     modules = [
@@ -23,6 +24,8 @@ import ru.petrolplus.pos.p7Lib.di.P7LibComponentDependencies
 @AppScope
 interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies, NetworkComponentDependencies
 {
+    val logger: ErrorLogger
+
     @Component.Builder
     interface Builder {
 

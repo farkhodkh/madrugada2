@@ -1,5 +1,6 @@
 package ru.petrolplus.pos.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import ru.petrolplus.pos.core.AppScope
@@ -8,6 +9,8 @@ import ru.petrolplus.pos.p7Lib.impl.P7LibCallbacksImpl
 import ru.petrolplus.pos.p7Lib.impl.P7LibRepositoryImpl
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
+import ru.petrolplus.pos.util.ErrorLogger
+import ru.petrolplus.pos.util.FileLogger
 
 @Module
 object AppModule {
@@ -18,4 +21,7 @@ object AppModule {
 
     @[Provides AppScope]
     fun providesP7LibCallbacks(gatewayServerRepository: GatewayServerRepositoryApi): IP7LibCallbacks = P7LibCallbacksImpl(gatewayServerRepository)
+
+    @[Provides AppScope]
+    fun providesLogger(context: Context): ErrorLogger = FileLogger(context)
 }

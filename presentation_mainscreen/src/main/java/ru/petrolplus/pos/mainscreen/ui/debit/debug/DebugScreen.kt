@@ -504,7 +504,7 @@ private fun SnapshotStateList<Pair<String, Any>>.toGUIDParamsDTO(): GUIDParamsDT
 private fun SnapshotStateList<Pair<String, Any>>.toTransactionDto(): TransactionDTO {
     val map = this.associate { it }
     val dateString = map.getOrThrow("terminalDate") as String
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale("ru"))
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     val date = dateFormat.parse(dateString)
     val calendar = Calendar.getInstance().apply { time = date!! }
 
