@@ -2,8 +2,6 @@ package ru.petrolplus.pos.mainscreen.ui.debit
 
 import android.os.Bundle
 import android.util.Log
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -34,6 +32,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import ru.petrolplus.pos.mainscreen.BuildConfig
+import ru.petrolplus.pos.mainscreen.ui.BaseViewModel
 
 class DebitViewModel @AssistedInject constructor(
     private val cardReaderRepository: CardReaderRepository,
@@ -45,10 +44,7 @@ class DebitViewModel @AssistedInject constructor(
     private val p7LibRepository: IP7LibRepository,
     private val p7LibCallbacks: IP7LibCallbacks,
     @Assisted private val savedStateHandle: SavedStateHandle,
-) : ViewModel() {
-
-    private val _viewState = mutableStateOf<DebitViewState>(DebitViewState.StartingState)
-    val viewState: State<DebitViewState> = _viewState
+) : BaseViewModel<DebitViewState>() {
 
     init {
         viewModelScope.launch {
@@ -56,16 +52,19 @@ class DebitViewModel @AssistedInject constructor(
                 .sdkRepository
                 .latestCommands
                 .onEach { value ->
-                    _viewState.value = DebitViewState
-                        .CommandExecutionState(value)
+                    setState(DebitViewState.CommandExecutionState(value))
                 }
                 .launchIn(viewModelScope)
         }
 
-        if (BuildConfig.DEBUG) {
-            //Тестовое состояние экрана в случае если тип сборки DEBUG
-            _viewState.value = DebitViewState.DebugState.APDU
-        }
+
+    }
+
+    override fun createInitialState(): DebitViewState = if (BuildConfig.DEBUG) {
+        //Тестовое состояние экрана в случае если тип сборки DEBUG
+        DebitViewState.DebugState.APDU
+    } else {
+        DebitViewState.StartingState
     }
 
     fun ping() {
@@ -96,7 +95,7 @@ class DebitViewModel @AssistedInject constructor(
      * @throws IllegalStateException если функция вызвана при отсутствии ошибки печати
      */
     fun repeatPrinting() {
-        when (val state = _viewState.value) {
+        when (val state = currentState) {
             is DebitViewState.DebugState.PrinterState.FailedState.Receipt -> printTransactionTest(state.transactionId)
             DebitViewState.DebugState.PrinterState.FailedState.ShiftReport -> printShiftReport()
             else ->
@@ -105,15 +104,15 @@ class DebitViewModel @AssistedInject constructor(
     }
 
     fun resetPrinter() {
-        _viewState.value = DebitViewState.DebugState.PrinterState.WaitDocument
+        setState(DebitViewState.DebugState.PrinterState.WaitDocument)
     }
 
     private fun onFailPrintShiftReport() {
-        _viewState.value = DebitViewState.DebugState.PrinterState.FailedState.ShiftReport
+        setState(DebitViewState.DebugState.PrinterState.FailedState.ShiftReport)
     }
 
     private fun onFailPrintReceipt(transactionId: String) {
-        _viewState.value = DebitViewState.DebugState.PrinterState.FailedState.Receipt(transactionId)
+        setState(DebitViewState.DebugState.PrinterState.FailedState.Receipt(transactionId))
     }
 
     //region TEST_METHODS
@@ -121,8 +120,8 @@ class DebitViewModel @AssistedInject constructor(
     //Проверяется возможна ли сейчас печать. Переход в состояние печати
     //В Debug сборке симуляция ошибки во время печати. Печать чека с отслеживанием наличия ошибки
     fun printShiftReport() {
-        if (_viewState.value == DebitViewState.DebugState.PrinterState.Printing) return
-        _viewState.value = DebitViewState.DebugState.PrinterState.Printing
+        if (currentState == DebitViewState.DebugState.PrinterState.Printing) return
+        setState(DebitViewState.DebugState.PrinterState.Printing)
 
         viewModelScope.launch(Dispatchers.IO) {
             // Симуляция ошибки во время печати
@@ -149,9 +148,9 @@ class DebitViewModel @AssistedInject constructor(
     //В Debug сборке симуляция ошибки во время печати. Печать чека с отслеживанием наличия ошибки
     fun printTransactionTest(transactionId: String) {
         if (transactionId.isEmpty()
-            || _viewState.value == DebitViewState.DebugState.PrinterState.Printing) return
+            || currentState == DebitViewState.DebugState.PrinterState.Printing) return
 
-        _viewState.value = DebitViewState.DebugState.PrinterState.Printing
+        setState(DebitViewState.DebugState.PrinterState.Printing)
 
         viewModelScope.launch(Dispatchers.IO) {
             val data = receiptPersistence.getDebitReceipt(transactionId)
@@ -190,13 +189,14 @@ class DebitViewModel @AssistedInject constructor(
     //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
     //Загружает все транзакции из бд
     private suspend fun loadTransactions() {
-        val oldState = _viewState.value as? DebitViewState.DebugState.Debit
+        val oldState = currentState as? DebitViewState.DebugState.Debit
         val transactions = transactionsPersistence.getAll().map { it.toString() }
-        _viewState.value = oldState?.copy(
+        val newState = oldState?.copy(
             debitDebugGroup = oldState.debitDebugGroup.copy(
                 transactionsOutput = transactions
             )
         ) ?: DebitViewState.DebugState.Debit(DebitDebugGroup(transactionsOutput = transactions))
+        setState(newState)
     }
 
     //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется
@@ -204,12 +204,13 @@ class DebitViewModel @AssistedInject constructor(
     fun saveGUIDParams(guidParams: GUIDParamsDTO) {
         viewModelScope.launch(Dispatchers.IO) {
             settingsPersistence.setGUIDparams(guidParams)
-            val oldState = _viewState.value as DebitViewState.DebugState.Debit
-            _viewState.value = oldState.copy(
+            val oldState = currentState as DebitViewState.DebugState.Debit
+            val newState = oldState.copy(
                 debitDebugGroup = oldState.debitDebugGroup.copy(
                     guidParamsOutput = listOf(settingsPersistence.getGUIDparams().toString())
                 )
             )
+            setState(newState)
         }
     }
 
@@ -217,12 +218,12 @@ class DebitViewModel @AssistedInject constructor(
     //Изза бага с рассинхроном состояния экрана и отображения, при переключении вкладок так-же меняем стейты
     fun setTab(index: Int) {
         // Блокировака переключения пока идёт печать
-        if (_viewState.value == DebitViewState.DebugState.PrinterState.Printing) return
+        if (currentState == DebitViewState.DebugState.PrinterState.Printing) return
 
         when (index) {
-            0 -> _viewState.value = DebitViewState.DebugState.APDU
-            2 -> _viewState.value = DebitViewState.DebugState.PrinterState.WaitDocument
-            else -> _viewState.value = DebitViewState.DebugState.Debit()
+            0 -> setState(DebitViewState.DebugState.APDU)
+            2 -> setState(DebitViewState.DebugState.PrinterState.WaitDocument)
+            else -> setState(DebitViewState.DebugState.Debit())
         }
     }
 
@@ -239,7 +240,7 @@ class DebitViewModel @AssistedInject constructor(
     //FIXME: Метод тестовый, по хорошему заменится тестами или переедет в тестовую вью модель
     //меняет текущий вьюстейт на тестовый или подменяет текущее тестовое состояние новым
     fun onTransactionDataChanges(debitDebugGroup: DebitDebugGroup) {
-        _viewState.value = DebitViewState.DebugState.Debit(debitDebugGroup)
+        setState(DebitViewState.DebugState.Debit(debitDebugGroup))
     }
 
     //FIXME: Метод тестовый, не потребуется в проде, напрямую взоидействие базы и UI не планируется

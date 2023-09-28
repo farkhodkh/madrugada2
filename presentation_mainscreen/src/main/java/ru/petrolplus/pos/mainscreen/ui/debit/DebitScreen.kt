@@ -4,7 +4,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewModelScope
 import ru.petrolplus.pos.blockingScreen.InsertClientCardScreen
 import ru.petrolplus.pos.mainscreen.ui.debit.debug.DebugScreen
 
@@ -14,17 +16,17 @@ fun DebitScreen(
     onClickListener: (String) -> Unit,
 ) {
 
-    when (viewModel.viewState.value) {
+    when (val state = viewModel.viewState.collectAsState(viewModel.viewModelScope).value) {
         DebitViewState.StartingState -> {
             InsertClientCardScreen {
 
             }
         }
         is DebitViewState.DebugState -> {
-            DebugScreen(viewModel)
+            DebugScreen(viewModel, state)
         }
         is DebitViewState.CommandExecutionState -> {
-            DebugScreen(viewModel)
+            DebugScreen(viewModel, state)
         }
         else -> {
             Surface {

@@ -59,10 +59,11 @@ import java.util.Locale
 
 @Composable
 fun DebugScreen(
-    viewModel: DebitViewModel
+    viewModel: DebitViewModel,
+    state: DebitViewState
 ) {
     val tabs = listOf("APDU", "DATABASE", "PRINTER")
-    val tabIndex = when (viewModel.viewState.value) {
+    val tabIndex = when (state) {
         is DebitViewState.DebugState.PrinterState -> 2
         is DebitViewState.DebugState.Debit -> 1
         else -> 0
@@ -77,13 +78,13 @@ fun DebugScreen(
             }
 
         }
-        when (val viewState = viewModel.viewState.value) {
+        when (state) {
             DebitViewState.DebugState.APDU, is DebitViewState.CommandExecutionState -> APDUScreen(
-                viewModel, viewState
+                viewModel, state
             )
 
             is DebitViewState.DebugState.PrinterState -> PrinterScreen(viewModel)
-            is DebitViewState.DebugState.Debit -> DatabaseScreen(viewModel, viewState)
+            is DebitViewState.DebugState.Debit -> DatabaseScreen(viewModel, state)
             else -> Surface { }
         }
     }

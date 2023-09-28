@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ru.petrolplus.pos.mainscreen.ui.settings.debug.SettingsDebugScreen
@@ -15,7 +16,8 @@ fun SettingsScreen(
     viewModel: SettingsViewModel,
     onClickListener: (String) -> Unit
 ) {
-    when(viewModel.viewState.value) {
+
+    when(viewModel.viewState.collectAsState().value) {
         SettingsViewState.DebugState -> {
             SettingsDebugScreen(viewModel)
         }
