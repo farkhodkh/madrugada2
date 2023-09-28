@@ -5,6 +5,11 @@ plugins {
     kotlin("android") version Versions.kotlinAndroid apply false
 
     id("com.diffplug.spotless") version Versions.spotless
+    id("io.gitlab.arturbosch.detekt") version "1.17.0"
+}
+
+allprojects {
+    apply(from = "${project.rootDir}/detekt.gradle")
 }
 
 subprojects {
