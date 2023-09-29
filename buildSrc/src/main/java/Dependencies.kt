@@ -66,6 +66,8 @@ object Dependencies {
     const val roomKtx = "androidx.room:room-ktx"
     const val roomTesting = "androidx.room:room-testing"
 
+    const val detekt = "io.gitlab.arturbosch.detekt"
+    const val spotless = "com.diffplug.spotless"
 }
 
 object Versions {

@@ -32,8 +32,8 @@ plugins {
     id("com.android.library") version Versions.androidApplication apply false
     kotlin("android") version Versions.kotlinAndroid apply false
 
-    id("com.diffplug.spotless") version Versions.spotless
-    id("io.gitlab.arturbosch.detekt") version Versions.detekt
+    id(Dependencies.spotless) version Versions.spotless
+    id(Dependencies.detekt) version Versions.detekt
 }
 
 
