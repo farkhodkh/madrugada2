@@ -1,0 +1,17 @@
+# Определение конфигурации для всех файлов Kotlin (.kt и .kts)
+[*.{kt,kts}]
+
+# Индентация должна быть пробелами, а не табами
+indent_style = space
+
+# Размер отступа в пробелах
+indent_size = 4
+
+# Убирать пробелы в конце строк
+trim_trailing_whitespace = true
+
+# Вставлять пустую строку в конце файла
+insert_final_newline = true
+
+# Кодировка файла (UTF-8)
+charset = utf-8

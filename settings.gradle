@@ -16,6 +16,7 @@ dependencyResolutionManagement {
     }
 }
 
+
 rootProject.name = "POS"
 include ':app'
 include ':presentation_ui'
