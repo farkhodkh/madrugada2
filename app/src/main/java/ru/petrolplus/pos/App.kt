@@ -5,19 +5,28 @@ import android.content.Context
 import androidx.work.Configuration
 import androidx.work.DelegatingWorkerFactory
 import androidx.work.WorkManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.bouncycastle.jce.provider.BouncyCastleProvider
+import ru.petrolplus.pos.core.errorhandling.PosCoroutineExceptionHandler
 import ru.petrolplus.pos.di.AppComponent
 import ru.petrolplus.pos.di.AppComponentDependencies
 import ru.petrolplus.pos.di.DaggerAppComponent
 import ru.petrolplus.pos.networkworker.worker.GatewayConfigScheduler
 import ru.petrolplus.pos.resources.ResourceHelper
+import ru.petrolplus.pos.util.ErrorLogger
 import java.net.CookieHandler
 import java.net.CookieManager
 import java.security.Security
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Named
 
 class App : Application() {
+
+    private val applicationScope = CoroutineScope(SupervisorJob())
 
     @Inject
     @Named(GatewayConfigScheduler.REMOTE_CONFIG_WORKER)
@@ -47,6 +56,8 @@ class App : Application() {
         appComponent.inject(this)
 
         initWorkManager()
+        if (BuildConfig.DEBUG) initLogger(appComponent.logger)
+        Locale.setDefault(Locale("ru"))
     }
 
     private inner class AppComponentDependenciesImpl: AppComponentDependencies {
@@ -78,6 +89,13 @@ class App : Application() {
         )
 
         workerScheduler.scheduleWorker(this)
+    }
+
+    private fun initLogger(logger: ErrorLogger) {
+        PosCoroutineExceptionHandler.errorsRelay
+            .onEach { logger.log(it) }
+            .launchIn(applicationScope)
+
     }
 }
 

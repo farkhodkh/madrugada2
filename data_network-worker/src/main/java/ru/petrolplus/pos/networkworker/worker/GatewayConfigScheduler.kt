@@ -5,7 +5,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import ru.petrolplus.pos.core.errorhandling.launchHandling
 
 /**
  * Планировщик для инициализации Worker по пингу шлюза
@@ -17,7 +17,7 @@ class GatewayConfigScheduler {
     }
 
     fun scheduleWorker(context: Context) {
-        CoroutineScope(Dispatchers.Default).launch {
+        CoroutineScope(Dispatchers.Default).launchHandling {
 
             val remoteConfigWorkRequest =
                 OneTimeWorkRequest.Builder(GatewayConfigWorker::class.java).build()
