@@ -1,8 +1,9 @@
 package ru.petrolplus.pos.mainscreen.ui.debit
 
+import ru.petrolplus.pos.mainscreen.ui.ViewState
 import ru.petrolplus.pos.mainscreen.ui.debit.debug.DebitDebugGroup
 
-sealed class DebitViewState {
+sealed class DebitViewState : ViewState {
     object StartingState: DebitViewState()
     sealed class DebugState: DebitViewState() {
         object APDU : DebugState()

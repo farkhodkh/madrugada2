@@ -1,5 +1,7 @@
 package ru.petrolplus.pos.mainscreen.ui.settings
 
-sealed class SettingsViewState {
+import ru.petrolplus.pos.mainscreen.ui.ViewState
+
+sealed class SettingsViewState : ViewState {
     object DebugState : SettingsViewState()
 }

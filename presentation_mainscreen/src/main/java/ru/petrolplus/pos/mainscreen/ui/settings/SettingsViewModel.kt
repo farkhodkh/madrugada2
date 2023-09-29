@@ -15,13 +15,14 @@ import ru.petrolplus.pos.persitence.dto.ServicesDTO
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import ru.petrolplus.pos.mainscreen.ui.BaseViewModel
 
 class SettingsViewModel @AssistedInject constructor(
     private val servicesPersistence: ServicesPersistence,
     @Assisted private val savedStateHandle: SavedStateHandle
-): ViewModel() {
-    private val _viewState = mutableStateOf<SettingsViewState>(SettingsViewState.DebugState)
-    val viewState: State<SettingsViewState> = _viewState
+): BaseViewModel<SettingsViewState>() {
+
+    override fun createInitialState(): SettingsViewState = SettingsViewState.DebugState
 
     fun addOrReplaceServices(servicesDTO: ServicesDTO) {
         viewModelScope.launchHandling(Dispatchers.IO) {
