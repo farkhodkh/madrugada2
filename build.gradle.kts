@@ -7,12 +7,17 @@ tasks.register("createPreCommitHook", Copy::class.java) {
     if (!gitHooksDirectory.exists()) gitHooksDirectory.mkdirs()
 
     group = "git hooks"
+
+    val preCommitFile = File("$rootDir/.git/hooks/pre-commit")
+    if (preCommitFile.exists() && preCommitFile.delete()) {
+        logger.quiet("Deleted existing pre-commit hook.")
+    }
+
     from(scriptHookPath)
     into(hooksDir)
     fileMode = 775
 
     doLast {
-        val preCommitFile = File("$project.rootDir/.git/hooks/pre-commit")
         if (preCommitFile.setExecutable(true)) logger.quiet("Set pre-commit hook as executable.")
         else logger.warn("Failed to set pre-commit hook as executable.")
     }
