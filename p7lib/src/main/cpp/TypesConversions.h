@@ -4,22 +4,18 @@
 #ifndef POS_TYPES_CONVERSIONS_H
 #define POS_TYPES_CONVERSIONS_H
 //---------------------------------------------------------------------------------------------------------------
-
+#include <jni.h>
+#include <string>
+#include <vector>
 #include "P7Lib_lib.h"
 
-#include <jni.h>
-#include <android/log.h>
-
-#include <string>
-
-using namespace std;
 using namespace P7Lib;
 //---------------------------------------------------------------------------------------------------------------
 
 class TP7LibTypes {
 public:
   static bool JByteArrayToVector(JNIEnv *env, const jbyteArray &Array, std::vector<unsigned char> *Vector);
-  static bool VectorToJByteArray(JNIEnv *env, const std::vector<unsigned char> &Vector, jbyteArray *Array);
+  static bool VectorToJByteArray(JNIEnv *env, const std::vector<unsigned char>& source, jbyteArray* jbArray);
   static bool ArrayToJByteArray(JNIEnv *env, const unsigned char *Data, int DSataSize, jbyteArray *Array);
 
 
@@ -53,14 +49,14 @@ public:
   static bool ConvertSimpleDocToJObj(JNIEnv *env, const TSimpleDoc *SimpleDoc, jobject *SimpleDocJObj);
 
   static bool CreateCardKeyJObj(JNIEnv *env, jobject *CardKeyJObj);
-  static bool ConvertCardKeyToJObj(JNIEnv *env, const TCardKey *CardKey, jobject *CardKeyJObj);
+  static bool ConvertCardKeyToJObj(JNIEnv* env, const TCardKey* cardKey, jobject* cardKeyJObj,bool createCardKey);
   static bool ConvertCardKeyFromJObj(JNIEnv *env, const jobject *CardKeyJObj, TCardKey *CardKey);
 
   static TCardType GetCardType(JNIEnv *env, const jobject *CardTypeJObj);
   static bool ConvertCardTypeToJObj(JNIEnv *env,  TCardType CardType,jobject *CardTypeJObj);
 
   static bool CreateCardInfoJObj(JNIEnv *env, jobject *CardKeyJObj);
-  static bool ConvertCardInfoToJObj(JNIEnv *env, const TCardInfo *CardInfo, jobject *CardInfoJObj);
+  static bool ConvertCardInfoToJObj(JNIEnv* env, const TCardInfo* cardInfo, jobject* cardInfoJObj,bool createCardInfo);
 
   static bool CreateTransactionInfoJObj(JNIEnv *env, jobject *TransactionInfoJObj);
   static bool ConvertTransactionInfoToJObj(JNIEnv *env, const TTransactionInfo *TransInfo, jobject *TransInfoJObj);
@@ -79,6 +75,7 @@ public:
   static bool ConvertStTimeToJObj(JNIEnv *env, const TSTTime *StTime, jobject *StTimeJObj);
   static bool ConvertStTimeFromJObj(JNIEnv *env, const jobject *StTimeJObj, TSTTime *StTime);
 
+  static std::string JbyteArrayToStdString(JNIEnv *env, jbyteArray jbArray);
 
 
 

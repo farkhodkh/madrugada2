@@ -25,69 +25,73 @@ Java_ru_petrolplus_pos_p7Lib_impl_P7LibRepositoryImpl_init(JNIEnv *env, jobject 
                                                           jobject init_data, jobject last_op_guid,
                                                           jobject callbacks, jstring temp_dir,
                                                           jstring data_dir) {
-  bool isOK = true;
 
-  TIniData         IniData;
-  TTransactionUUID LastOpGUID;
-  std::string      TempDir;
-  std::string      DataDir;
+    TCallbackController::Log("[init] is being started");
+    bool isOK = true;
 
-  if (isOK)  { isOK = TP7LibTypes::ConvertIniDataFromJObj(env, &init_data, &IniData);  }
-  if (isOK)  { isOK = TP7LibTypes::ConvertTransactionUUIDFromJObj(env, &last_op_guid, &LastOpGUID);  }
-  if (isOK)  { isOK = TP7LibTypes::JStringToString(env, temp_dir, TempDir);  }
-  if (isOK)  { isOK = TP7LibTypes::JStringToString(env, data_dir, DataDir);  }
+    TIniData         IniData;
+    TTransactionUUID LastOpGUID;
+    std::string      TempDir;
+    std::string      DataDir;
 
-  TP7ErrorType ResultCode = TP7ErrorType::OK;
-  if (isOK) {
-    ResultCode = TP7Lib::Init(IniData, LastOpGUID,
+    if (isOK)  { isOK = TP7LibTypes::ConvertIniDataFromJObj(env, &init_data, &IniData);  }
+    if (isOK)  { isOK = TP7LibTypes::ConvertTransactionUUIDFromJObj(env, &last_op_guid, &LastOpGUID);  }
+    if (isOK)  { isOK = TP7LibTypes::JStringToString(env, temp_dir, TempDir);  }
+    if (isOK)  { isOK = TP7LibTypes::JStringToString(env, data_dir, DataDir);  }
+
+    TP7ErrorType ResultCode = TP7ErrorType::OK;
+    if (isOK) {
+        ResultCode = TP7Lib::Init(IniData, LastOpGUID,
                               TCallbackController::GetCallbacks(env, callbacks),
                               TempDir, DataDir);
-  }
-  else {
-    ResultCode = TP7ErrorType::UndefinedError;
-  }
+    }
+    else {
+        ResultCode = TP7ErrorType::UndefinedError;
+    }
 
-  jobject ResultCodeJObj = nullptr;
-  TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
-
-  return ResultCodeJObj;
+    jobject ResultCodeJObj = nullptr;
+    TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
+    TCallbackController::Log("[init] is completed");
+    return ResultCodeJObj;
 }
 //-------------------------------------------------------------------
 
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_ru_petrolplus_pos_p7Lib_impl_P7LibRepositoryImpl_deInit(JNIEnv *env, jobject thiz) {
-  TP7ErrorType ResultCode;
-  jobject ResultCodeJObj = nullptr;
+    TCallbackController::Log("[deInit] is being started");
+    TP7ErrorType ResultCode;
+    jobject ResultCodeJObj = nullptr;
+    ResultCode = TP7Lib::Deinit();
+    TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
 
-  ResultCode = TP7Lib::Deinit();
-  TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
-
-  return ResultCodeJObj;
+    TCallbackController::Log("[deInit] is completed");
+    return ResultCodeJObj;
 }
 //-------------------------------------------------------------------
 
 extern "C"
 JNIEXPORT jobject JNICALL
-Java_ru_petrolplus_pos_p7Lib_impl_P7LibRepositoryImpl_detect(JNIEnv *env, jobject thiz,
-                                                            jobject card_key, jobject card_data) {
-//  TP7ErrorType ResultCode = TP7ErrorType::OK;
-  jobject      ResultCodeJObj = nullptr;
-//
-//  TCardKey  CardKey;
-//  TCardInfo CardInfo;
-//
-//  ResultCode = TP7Lib::Detect(CardKey, CardInfo);
-//
-//  jobject CardKeyJObj = nullptr;
-//  jobject CardInfoJObj = nullptr;
-//
-//  TP7LibTypes::ConvertCardKeyToJObj(env, &CardKey, &CardKeyJObj);
-//  TP7LibTypes::ConvertCardInfoToJObj(env, &CardInfo, &CardInfoJObj);
-//
-//  TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
+Java_ru_petrolplus_pos_p7Lib_impl_P7LibRepositoryImpl_detect(JNIEnv *env, jobject thiz,jobject card_key, jobject card_data) {
 
-  return ResultCodeJObj;
+    TCallbackController::Log("[detect] is being started");
+    TP7ErrorType ResultCode = TP7ErrorType::OK;
+    jobject      ResultCodeJObj = nullptr;
+    TCardKey  CardKey;
+    TCardInfo CardInfo;
+
+    ResultCode = TP7Lib::Detect(CardKey, CardInfo);
+    // uncomment this tp test PublicKey,PublicExp, CommandNumber
+    //CardKey.PublicKey = {0,1,2,3,4,5,6,7,8,9,10,9,8,7,6,5,4,3,2,1};
+    //CardKey.PublicExp = {10,9,8,7,6,5,4,3,2,1,0,1,2,3,4,5,6,7,8,9};
+    //CardInfo.CardNumber = 1000;
+    //
+    TP7LibTypes::ConvertCardKeyToJObj(env, &CardKey, &card_key,false);
+    TP7LibTypes::ConvertCardInfoToJObj(env, &CardInfo, &card_data,false);
+    TP7LibTypes::ConvertResultCodeToJObj(env, ResultCode, &ResultCodeJObj);
+
+    TCallbackController::Log("[detect] is completed");
+    return ResultCodeJObj;
 }
 //-------------------------------------------------------------------
 

@@ -5,36 +5,60 @@
 #define POS_TYPES_CONVERSIONS_CPP
 //---------------------------------------------------------------------------------------------------------------
 
+#include <sstream>
+#include <iostream>
+#include <iomanip>
 #include "TypesConversions.h"
+#include "CallbackController.h"
 
 //---------------------------------------------------------------------------------------------------------------
+std::string TP7LibTypes::JbyteArrayToStdString(JNIEnv *env, jbyteArray jbArray)
+{
+    jsize len = env->GetArrayLength(jbArray);
+    jbyte* arrData = env->GetByteArrayElements(jbArray, 0);
+    std::string s = "[VectorToJByteArray] jbyteArray: ";
+    for (size_t i=0; i<len; i++) {
+        char sz[8];
+        snprintf(sz,8,"%02X ",static_cast<unsigned int>(arrData[i] & 0xFF));
+        s+= sz;
+    }
+    env->ReleaseByteArrayElements(jbArray, arrData, 0);
+    return s;
+}
 
 bool TP7LibTypes::JByteArrayToVector(JNIEnv *env, const jbyteArray &Array, std::vector<unsigned char> *Vector) {
-  bool Result = false;
-  if (env && Vector) {
-    Vector->clear();
-    const size_t DataLen = env->GetArrayLength(Array);
-    Vector->resize(DataLen);
-    if (DataLen) {
-      env->GetByteArrayRegion(Array, 0, DataLen, reinterpret_cast<jbyte *>(Vector->data()));  }
-    Result = true;
-  } // if env && Vector
-  return Result;
+    bool Result = false;
+    if (env && Vector) {
+        Vector->clear();
+        const size_t DataLen = env->GetArrayLength(Array);
+        Vector->resize(DataLen);
+        if (DataLen) {
+            env->GetByteArrayRegion(Array, 0, DataLen, reinterpret_cast<jbyte *>(Vector->data()));
+        }
+        Result = true;
+    }
+    return Result;
 }
 //--------------------------------------------------
 
-bool TP7LibTypes::VectorToJByteArray(JNIEnv *env, const std::vector<unsigned char> &Vector, jbyteArray *Array) {
+bool TP7LibTypes::VectorToJByteArray(JNIEnv *env, const std::vector<unsigned char>& source, jbyteArray* jbArray) {
   bool Result = false;
-  if (env && Array) {
-    if (*Array) {
-      env->DeleteLocalRef(*Array);
-      *Array = nullptr;  }
-    const jsize Len = static_cast<jsize>(Vector.size());
-    *Array = env->NewByteArray(Len);
-    Result = (*Array != nullptr);
+  if (env && jbArray) {
+    if (*jbArray) {
+      env->DeleteLocalRef(*jbArray);
+      *jbArray = nullptr;
+    }
+    const jsize Len = static_cast<jsize>(source.size());
+    *jbArray = env->NewByteArray(Len);
+    Result = (*jbArray != nullptr);
     if (Result) {
-      env->SetByteArrayRegion(*Array, 0, Len, reinterpret_cast<const jbyte *>(Vector.data()));  }
-  } // if env && Array
+      env->SetByteArrayRegion(*jbArray, 0, Len, reinterpret_cast<const jbyte *>(source.data()));
+    }
+#ifdef DEBUG_BUILD
+    auto dump = JbyteArrayToStdString(env, *jbArray);
+    TCallbackController::Log(dump);
+#endif
+  }
   return Result;
 }
 //--------------------------------------------------
@@ -285,7 +309,7 @@ bool TP7LibTypes::ConvertApduDataToJObj(JNIEnv *env, const TAPDUData *APDUData, 
 
     jclass ApduDataClass = env->FindClass("ru/petrolplus/pos/p7LibApi/requests/ApduData");
 
-    jfieldID GLA_ID  = env->GetFieldID(ApduDataClass, "GLA", "B");
+    jfieldID GLA_ID  = env->GetFieldID(ApduDataClass, "CLA", "B");
     jfieldID INS_ID  = env->GetFieldID(ApduDataClass, "INS", "B");
     jfieldID P1_ID  = env->GetFieldID(ApduDataClass, "P1", "B");
     jfieldID P2_ID  = env->GetFieldID(ApduDataClass, "P2", "B");
@@ -682,40 +706,47 @@ bool TP7LibTypes::CreateCardKeyJObj(JNIEnv *env, jobject *CardKeyJObj) {
 }
 //--------------------------------------------------
 
-bool TP7LibTypes::ConvertCardKeyToJObj(JNIEnv *env, const TCardKey *CardKey, jobject *CardKeyJObj) {
+bool TP7LibTypes::ConvertCardKeyToJObj(JNIEnv* env, const TCardKey* cardKey, jobject* cardKeyJObj,bool createCardKey) {
   bool Result = false;
 
-  if (env && CardKey && CardKeyJObj) {
-    jbyteArray JBArray = nullptr;
+  if (env && cardKey && cardKeyJObj) {
+    if (createCardKey) {
+        if (!CreateCardKeyJObj(env, cardKeyJObj)) {
+            return false;
+        }
+    }
+    jclass cardKeyJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/CardKeyDto");
+    if (!cardKeyJObjClass) {
+      return false;
+    }
 
-    Result = CreateCardKeyJObj(env, CardKeyJObj);
-    jclass CardKeyJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/CardKeyDto");
-    Result = (Result && CardKeyJObjClass != nullptr);
-    if (!Result) {
-      return false;  }
-
-    jfieldID publicKey_ID = env->GetFieldID(CardKeyJObjClass, "publicKey", "[B");
-    jfieldID publicExt_ID = env->GetFieldID(CardKeyJObjClass, "publicExp", "[B");
-    jfieldID nonce_ID = env->GetFieldID(CardKeyJObjClass, "nonce", "[B");
+    jfieldID publicKey_ID = env->GetFieldID(cardKeyJObjClass, "publicKey", "[B");
+    jfieldID publicExt_ID = env->GetFieldID(cardKeyJObjClass, "publicExp", "[B");
+    jfieldID nonce_ID = env->GetFieldID(cardKeyJObjClass, "nonce", "[B");
     Result = (publicKey_ID && publicExt_ID && nonce_ID);
 
     if (Result) {
-      Result = VectorToJByteArray(env, CardKey->PublicKey, &JBArray);
-      env->SetObjectField(*CardKeyJObj, publicKey_ID, JBArray);
+      jbyteArray JBArray = nullptr;
+      Result = VectorToJByteArray(env, cardKey->PublicKey, &JBArray);
+      env->SetObjectField(*cardKeyJObj, publicKey_ID, JBArray);
       env->DeleteLocalRef(JBArray);
-      JBArray = nullptr;  }
+      JBArray = nullptr;
+    }
     if (Result) {
-      Result = VectorToJByteArray(env, CardKey->PublicExp, &JBArray);
-      env->SetObjectField(*CardKeyJObj, publicExt_ID, JBArray);
+      jbyteArray JBArray = nullptr;
+      Result = VectorToJByteArray(env, cardKey->PublicExp, &JBArray);
+      env->SetObjectField(*cardKeyJObj, publicExt_ID, JBArray);
       env->DeleteLocalRef(JBArray);
-      JBArray = nullptr;  }
+      JBArray = nullptr;
+    }
     if (Result) {
-      Result = VectorToJByteArray(env, CardKey->Nonce, &JBArray);
-      env->SetObjectField(*CardKeyJObj, nonce_ID, JBArray);
+      jbyteArray JBArray = nullptr;
+      Result = VectorToJByteArray(env, cardKey->Nonce, &JBArray);
+      env->SetObjectField(*cardKeyJObj, nonce_ID, JBArray);
       env->DeleteLocalRef(JBArray);
-      JBArray = nullptr;  }
-  } // if env && CardKey && CardKeyJObj
-
+      JBArray = nullptr;
+    }
+  }
   return Result;
 }
 //--------------------------------------------------
@@ -840,55 +871,58 @@ bool TP7LibTypes::CreateCardInfoJObj(JNIEnv *env, jobject *CardInfoJObj) {
   bool Result = false;
   if (env &&  CardInfoJObj) {
     if (*CardInfoJObj) {
-      DeleteLocalRef(env, CardInfoJObj);  }
+      DeleteLocalRef(env, CardInfoJObj);
+    }
 
     jclass CardInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/CardInfo");
     jmethodID CardInfoConstructorID = env->GetMethodID(CardInfoJObjClass, "<init>", "()V");
     *CardInfoJObj = env->NewObject(CardInfoJObjClass, CardInfoConstructorID);
 
     Result = (*CardInfoJObj != nullptr);
-  } // if env && CardInfoJObj
+  }
   return Result;
 }
 //--------------------------------------------------
 
-bool TP7LibTypes::ConvertCardInfoToJObj(JNIEnv *env, const TCardInfo *CardInfo, jobject *CardInfoJObj) {
+bool TP7LibTypes::ConvertCardInfoToJObj(JNIEnv* env, const TCardInfo* cardInfo, jobject* cardInfoJObj,bool createCardInfo) {
   bool Result = false;
 
-  if (env && CardInfo && CardInfoJObj) {
+  if (env && cardInfo && cardInfoJObj) {
     jbyteArray JBArray = nullptr;
-
-    Result = CreateCardInfoJObj(env, CardInfoJObj);
-    jclass CardInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/CardInfo");
-    Result = (Result && CardInfoJObjClass != nullptr);
-    if (!Result) {
-      return false;  }
-
-    jfieldID isRecalcCard_ID = env->GetFieldID(CardInfoJObjClass, "isRecalcCard", "Z");
-    jfieldID PTC_ID = env->GetFieldID(CardInfoJObjClass, "PTC", "B");
-    jfieldID cardNumber_ID = env->GetFieldID(CardInfoJObjClass, "cardNumber", "J");
-    jfieldID issuerID_ID = env->GetFieldID(CardInfoJObjClass, "issuerID", "J");
-    jfieldID cardType_ID = env->GetFieldID(CardInfoJObjClass, "cardType",
+    if (createCardInfo) {
+        if (!CreateCardInfoJObj(env, cardInfoJObj)) {
+            return false;
+        }
+    }
+    jclass cardInfoJObjClass = env->FindClass("ru/petrolplus/pos/p7LibApi/dto/card/CardInfo");
+    if (!cardInfoJObjClass) {
+      return false;
+    }
+    jfieldID isRecalcCard_ID = env->GetFieldID(cardInfoJObjClass, "isRecalcCard", "Z");
+    jfieldID PTC_ID = env->GetFieldID(cardInfoJObjClass, "PTC", "B");
+    jfieldID cardNumber_ID = env->GetFieldID(cardInfoJObjClass, "cardNumber", "J");
+    jfieldID issuerID_ID = env->GetFieldID(cardInfoJObjClass, "issuerID", "J");
+    jfieldID cardType_ID = env->GetFieldID(cardInfoJObjClass, "cardType",
                                            "Lru/petrolplus/pos/p7LibApi/dto/card/CardType;");
     Result = (isRecalcCard_ID && PTC_ID && cardNumber_ID && issuerID_ID && cardType_ID);
 
     if (Result) {
       long long LongVal = 0;
-      env->SetBooleanField(*CardInfoJObj, isRecalcCard_ID, CardInfo->isRecalcCard);
-      env->SetByteField(*CardInfoJObj, PTC_ID, CardInfo->PTC);
-      LongVal = CardInfo->CardNumber;
-      env->SetLongField(*CardInfoJObj, cardNumber_ID, LongVal);
-      LongVal = CardInfo->IssuerID;
-      env->SetLongField(*CardInfoJObj, issuerID_ID, LongVal);
+      env->SetBooleanField(*cardInfoJObj, isRecalcCard_ID, cardInfo->isRecalcCard);
+      env->SetByteField(*cardInfoJObj, PTC_ID, cardInfo->PTC);
+      LongVal = cardInfo->CardNumber;
+      env->SetLongField(*cardInfoJObj, cardNumber_ID, LongVal);
+      LongVal = cardInfo->IssuerID;
+      env->SetLongField(*cardInfoJObj, issuerID_ID, LongVal);
       jobject CardTypeJObj = nullptr;
-      Result = ConvertCardTypeToJObj(env, CardInfo->CardType, &CardTypeJObj);
+      Result = ConvertCardTypeToJObj(env, cardInfo->CardType, &CardTypeJObj);
       if (Result) {
-        env->SetObjectField(*CardInfoJObj, cardType_ID, CardTypeJObj);  }
+        env->SetObjectField(*cardInfoJObj, cardType_ID, CardTypeJObj);
+      }
       env->DeleteLocalRef(CardTypeJObj);
       CardTypeJObj = nullptr;
-    } // if Result
-  } // if env && CardKey && CardInfoJObj
-
+    }
+  }
   return Result;
 }
 //--------------------------------------------------

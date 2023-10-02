@@ -23,7 +23,6 @@ private:
   static jobject CallbackObject;
 
   static jmethodID    LogCallbackID;
-  static void         Log(const std::string &Msg);
 
   static jmethodID    CardResetCallbackID;
   static TP7ErrorType CardReset(TAPDUAnswer &Answer);
@@ -56,6 +55,7 @@ private:
 public:
   static TCallbacksSet GetCallbacks(JNIEnv *jniEnv, jobject &CallbackObjectJava);
   static void Free(void);
+  static void Log(const std::string& msg);
 };
 //---------------------------------------------------------------------------------------------------------------
 

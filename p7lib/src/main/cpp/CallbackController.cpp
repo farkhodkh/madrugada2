@@ -42,20 +42,23 @@ void TCallbackController::Free(void) {
     if (JniEnv) {
       JniEnv->DeleteGlobalRef(CallbackObject);
       CallbackObject = nullptr;  }
-  } // if CallbackObject
+  }
 }
 //--------------------------------------------------
 
-void TCallbackController::Log(const std::string &Msg) {
-  JNIEnv* jniEnv = getJniEnv();
-  if (jniEnv && CallbackObject && LogCallbackID) {
-    jstring JStr = nullptr;
-
-    TP7LibTypes::StringToJString(jniEnv, Msg, JStr);
-
-    jniEnv->CallVoidMethod(CallbackObject, LogCallbackID, JStr);
-    jniEnv->DeleteLocalRef(JStr);
-  } // if jniEnv && CallbackObject && LogCallbackID
+void TCallbackController::Log(const std::string& msg) {
+#ifdef DEBUG_BUILD
+    if (msg.size()) {
+        __android_log_write(ANDROID_LOG_DEBUG, "PPR", msg.c_str());
+    }
+#endif
+    JNIEnv* jniEnv = getJniEnv();
+    if (jniEnv && CallbackObject && LogCallbackID) {
+        jstring JStr = nullptr;
+        TP7LibTypes::StringToJString(jniEnv, msg, JStr);
+        jniEnv->CallVoidMethod(CallbackObject, LogCallbackID, JStr);
+        jniEnv->DeleteLocalRef(JStr);
+    }
 }
 //--------------------------------------------------
 
@@ -75,7 +78,7 @@ TP7ErrorType TCallbackController::ResetCard(TAPDUAnswer &Answer, jmethodID *Meth
     TP7LibTypes::DeleteLocalRef(jniEnv, &ApduAnswerJObj);
   } // if jniEnv && CallbackObject && LogCallbackID
   else {
-    TCallbackController::Log("TCallbackController::ResetCard: No instance.");
+    TCallbackController::Log("[ResetCard]: No instance.");
   }
 
   return Result;
