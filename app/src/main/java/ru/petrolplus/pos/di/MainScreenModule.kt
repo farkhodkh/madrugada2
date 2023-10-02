@@ -3,11 +3,16 @@ package ru.petrolplus.pos.di
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.core.MainScreenScope
+import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewModel
+import ru.petrolplus.pos.mainscreen.ui.settings.SettingsViewModel
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
+import ru.petrolplus.pos.persitence.SettingsPersistence
+import ru.petrolplus.pos.sdkapi.CardReaderRepository
+import ru.petrolplus.pos.sdkapi.ISDKRepository
 import ru.petrolplus.pos.ui.main.MainActivityViewModel
+import ru.petrolplus.pos.ui.navigation.NavigationController
 import ru.petrolplus.pos.util.ConfigurationFileReader
 
 @Module
@@ -19,14 +24,30 @@ class MainScreenModule {
     }
 
     @[Provides MainScreenScope]
+    fun providesCardReaderRepository(sdkRepository: ISDKRepository): CardReaderRepository =
+        object : CardReaderRepository {
+            override val sdkRepository: ISDKRepository
+                get() = sdkRepository
+        }
+
+    @[Provides MainScreenScope]
     fun providesMainActivityViewModel(
         repository: IP7LibRepository,
         configurationFileReader: ConfigurationFileReader,
         settingsPersistence: SettingsPersistence,
-        callBacks: IP7LibCallbacks
+        callBacks: IP7LibCallbacks,
     ): MainActivityViewModel = MainActivityViewModel(
         p7LibraryRepository = repository,
         configurationFileReader = configurationFileReader,
         settingsPersistence = settingsPersistence,
-        callbacks = callBacks)
+        callbacks = callBacks,
+    )
+
+    @[Provides MainScreenScope]
+    fun provideNavHostController(
+        debitViewModelFactory: DebitViewModel.DebitViewModelFactory,
+        settingsViewModelFactory: SettingsViewModel.SettingsViewModelFactory,
+    ): NavigationController {
+        return NavigationController(debitViewModelFactory, settingsViewModelFactory)
+    }
 }

@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import ru.petrolplus.pos.persitence.SettingsPersistence
-import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
-import ru.petrolplus.pos.R
+import ru.petrolplus.pos.core.errorhandling.launchHandling
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
+import ru.petrolplus.pos.p7LibApi.ext.toInitDataDto
+import ru.petrolplus.pos.persitence.SettingsPersistence
+import ru.petrolplus.pos.persitence.dto.BaseSettingsDTO
+import ru.petrolplus.pos.resources.R
 import ru.petrolplus.pos.util.ConfigurationFileReader
 import ru.petrolplus.pos.util.constants.Constants.CONFIG_FILE_NAME
-import ru.petrolplus.pos.util.ext.toInitDataDto
 import java.io.FileNotFoundException
 import java.io.IOException
 import kotlin.system.exitProcess
@@ -25,7 +25,7 @@ class MainActivityViewModel(
     private val p7LibraryRepository: IP7LibRepository,
     private val configurationFileReader: ConfigurationFileReader,
     private val settingsPersistence: SettingsPersistence,
-    private val callbacks: IP7LibCallbacks
+    private val callbacks: IP7LibCallbacks,
 ) : ViewModel() {
 
     private val _viewState: MutableStateFlow<MainScreenState> =
@@ -34,18 +34,17 @@ class MainActivityViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), MainScreenState.StartingState)
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launchHandling {
             delay(2000)
             _viewState.value = MainScreenState.CheckingSettingsState
         }
     }
 
     fun setupConfiguration(configFileName: String) {
-
         val properties = try {
             configurationFileReader.readConfiguration(configFileName)
         } catch (e: Exception) {
-            when(e) {
+            when (e) {
                 is ConfigurationFileReader.NoConfigurationFileException -> {
                     _viewState.value = MainScreenState.NoIniFileError
                 }
@@ -58,14 +57,14 @@ class MainActivityViewModel(
 
         val initDataDto = properties.toInitDataDto()
 
-        viewModelScope.launch {
+        viewModelScope.launchHandling {
             settingsPersistence.setBaseSettings(
                 BaseSettingsDTO(
                     acquirerId = initDataDto.acquirerId,
                     terminalId = initDataDto.terminalId,
                     hostIp = initDataDto.hostIp,
-                    hostPort = initDataDto.hostPort
-                )
+                    hostPort = initDataDto.hostPort,
+                ),
             )
         }
 
@@ -81,14 +80,12 @@ class MainActivityViewModel(
     }
 
     fun configurationFileDownloaded(baseContext: Context, configurationContent: String) {
-
         try {
             val filename = CONFIG_FILE_NAME
             baseContext.openFileOutput(filename, Context.MODE_PRIVATE).use {
                 it.write(configurationContent.toByteArray())
             }
             _viewState.value = MainScreenState.CheckingSuccessState
-
         } catch (ex: FileNotFoundException) {
             _viewState.value =
                 MainScreenState.CheckingSettingsError(R.string.cache_dir_access_error)
@@ -96,6 +93,5 @@ class MainActivityViewModel(
             _viewState.value =
                 MainScreenState.CheckingSettingsError(errorMessage = ex.localizedMessage.orEmpty())
         }
-
     }
 }

@@ -3,24 +3,28 @@ package ru.petrolplus.pos.di
 import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
-import ru.petrolplus.pos.core.AppScope
 import ru.petrolplus.pos.App
+import ru.petrolplus.pos.core.AppScope
+import ru.petrolplus.pos.evotorprinter.di.EvatorPrinterModule
+import ru.petrolplus.pos.evotorsdk.di.EvotorSDKModule
 import ru.petrolplus.pos.network.di.NetworkComponentDependencies
-import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
+import ru.petrolplus.pos.network.di.NetworkModule
 import ru.petrolplus.pos.p7Lib.di.P7LibComponentDependencies
-import ru.petrolplus.pos.printerapi.PrinterRepository
-import ru.petrolplus.pos.sdkapi.CardReaderRepository
+import ru.petrolplus.pos.util.ErrorLogger
 
 @Component(
-    modules = [AppModule::class, SubcomponentModule::class, NetworkComponentModule::class],
-    dependencies = [AppComponentDependencies::class]
+    modules = [
+        AppModule::class,
+        SubcomponentModule::class,
+        NetworkModule::class,
+        EvatorPrinterModule::class,
+        EvotorSDKModule::class,
+    ],
+    dependencies = [AppComponentDependencies::class],
 )
 @AppScope
-interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies, NetworkComponentDependencies
-{
-    val printer: PrinterRepository
-    val readerRepository: CardReaderRepository
-    val gatewayServerRepository: GatewayServerRepositoryApi
+interface AppComponent : MainScreenComponentDependencies, P7LibComponentDependencies, NetworkComponentDependencies {
+    val logger: ErrorLogger
 
     @Component.Builder
     interface Builder {

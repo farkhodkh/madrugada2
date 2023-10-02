@@ -14,9 +14,6 @@ android {
 }
 
 dependencies {
-    //TODO - Эту зависимость нужно убрать от сюда
-    implementation(project(":p7libapi"))
-
     //Json
     implementation("${Dependencies.gson}:${Versions.gson}")
 }

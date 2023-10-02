@@ -13,6 +13,7 @@ object Dependencies {
     const val namespaceEvotorSdk = "ru.petrolplus.pos.evotorsdk"
     const val namespaceSdkApi = "ru.petrolplus.pos.sdkapi"
     const val namespaceRoom = "ru.petrolplus.pos.room"
+    const val namespaceResources = "ru.petrolplus.pos.resources"
     const val namespacePersistence = "ru.petrolplus.pos.persitence"
     const val namespacePrinterApi = "ru.petrolplus.pos.printerapi"
     const val namespaceEvatorPrinter = "ru.petrolplus.pos.evatorprinter"
@@ -66,6 +67,8 @@ object Dependencies {
     const val roomKtx = "androidx.room:room-ktx"
     const val roomTesting = "androidx.room:room-testing"
 
+    const val detekt = "io.gitlab.arturbosch.detekt"
+    const val spotless = "com.diffplug.spotless"
 }
 
 object Versions {
@@ -106,4 +109,8 @@ object Versions {
     const val gson = "2.10.1"
     const val evotor = "v0.6.03"
     const val room = "2.5.2"
+
+    const val spotless = "6.21.0"
+    const val ktlint = "0.50.0"
+    const val detekt = "1.17.0"
 }

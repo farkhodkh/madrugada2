@@ -1,72 +1,64 @@
 package ru.petrolplus.pos.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSavedStateRegistryOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.petrolplus.pos.App
-import ru.petrolplus.pos.appComponent
 import ru.petrolplus.pos.mainscreen.ui.configuration.ConfigurationCheckScreen
 import ru.petrolplus.pos.mainscreen.ui.debit.DebitScreen
 import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewModel
+import ru.petrolplus.pos.mainscreen.ui.refund.RefundScreen
 import ru.petrolplus.pos.mainscreen.ui.settings.SettingsScreen
 import ru.petrolplus.pos.mainscreen.ui.settings.SettingsViewModel
 import ru.petrolplus.pos.navigation.Screens
-import ru.petrolplus.pos.ui.main.MainActivity
-import ru.petrolplus.pos.ui.views.RefundScreen
+import javax.inject.Inject
 
-@Composable
-fun NavigationController(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Screens.DebitScreen.route) {
-
-        composable(
-            route = Screens.DebitScreen.route
-        ) {
-            val mainScreenComponent = (LocalContext.current as MainActivity).mainScreenSubcomponent
-            DebitScreen(
-                onClickListener = { screen ->
+/**
+ * Класс-обертка для создания NavHost
+ * Позволяет передавать сущности (например, фабрики для создания ViewModel) задействуя DI
+ */
+class NavigationController @Inject constructor(
+    private val debitViewModelAssistedFactory: DebitViewModel.DebitViewModelFactory,
+    private val settingsViewModelAssistedFactory: SettingsViewModel.SettingsViewModelFactory,
+) {
+    @Composable
+    fun SetupNavHost(navController: NavHostController) {
+        NavHost(navController = navController, startDestination = Screens.DebitScreen.route) {
+            composable(route = Screens.DebitScreen.route) {
+                DebitScreen(
+                    viewModel = viewModel(
+                        factory = DebitViewModel.provideFactory(
+                            factory = debitViewModelAssistedFactory,
+                            owner = LocalSavedStateRegistryOwner.current,
+                        ),
+                    ),
+                ) { screen ->
                     navController.navigate(screen)
-                },
-                viewModel = viewModel(
-                    factory = DebitViewModel.provideFactory(
-                        cardReaderRepository = (LocalContext.current.applicationContext as App).appComponent.readerRepository,
-                        gatewayServer = (LocalContext.current.applicationContext as App).appComponent.gatewayServerRepository,
-                        owner = LocalSavedStateRegistryOwner.current,
-                        printerRepository = (LocalContext.current.applicationContext as App).appComponent.printer,
-                        receiptPersistence = mainScreenComponent.receiptPersistence,
-                        transactionsPersistence = mainScreenComponent.transactionsPersistence,
-                        settingsPersistence = mainScreenComponent.settingsPersistence,
-                        p7LibRepository = mainScreenComponent.p7LibRepository,
-                        p7LibCallbacks = mainScreenComponent.p7LibCallbacks
-                    )
-                )
-            )
-        }
-
-        composable(Screens.SettingsScreen.route) {
-            SettingsScreen(
-                viewModel(
-                    factory = SettingsViewModel.provideFactory(
-                        (LocalContext.current as MainActivity).mainScreenSubcomponent.servicesPersistence,
-                        owner = LocalSavedStateRegistryOwner.current
-                    )
-                )
-            ) { screen ->
-                navController.navigate(screen)
+                }
             }
-        }
 
-        composable(Screens.RefundScreen.route) {
-            RefundScreen(onClickListener = { screen ->
-                navController.navigate(screen)
-            })
-        }
+            composable(Screens.SettingsScreen.route) {
+                SettingsScreen(
+                    viewModel = viewModel(
+                        factory = SettingsViewModel.provideFactory(
+                            factory = settingsViewModelAssistedFactory,
+                            owner = LocalSavedStateRegistryOwner.current,
+                        ),
+                    ),
+                ) { screen ->
+                    navController.navigate(screen)
+                }
+            }
 
-        composable(Screens.ConfigurationCheckScreen.route) {
-            ConfigurationCheckScreen()
+            composable(Screens.RefundScreen.route) {
+                RefundScreen { screen -> navController.navigate(screen) }
+            }
+
+            composable(Screens.ConfigurationCheckScreen.route) {
+                ConfigurationCheckScreen()
+            }
         }
     }
 }

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">POS</string>
+
+    <!--  Вводные конструкции для печати чеков/отчета  -->
+    <string name="service_sum">Итого</string>
+    <string name="service_price">Цена за</string>
+    <string name="service_amount">Кол-во</string>
+    <string name="service">Услуга</string>
+    <string name="service_number">Чек No.</string>
+    <string name="service_number_denial">ЧЕК ОТКАЗА</string>
+    <string name="pos_number_en">POS No.</string>
+    <string name="pos_number_ru">Терминал No.</string>
+    <string name="card">Карта</string>
+    <string name="inn">ИНН</string>
+    <string name="operation_confirmed_by_pin">Операция подтверждена</string>
+    <string name="debit_confirmed_by_pin">вводом ПИН кода</string>
+    <string name="operation_confirmed_by_terminal">Операция одобрена</string>
+    <string name="return_confirmed_by_terminal">терминалом</string>
+    <string name="operator_number">Оператор No.</string>
+    <string name="footer_text">Добро пожаловать</string>
+    <string name="price_unit">Р</string>
+    <string name="current_price_unit">* Р</string>
+    <string name="denial">ОТКАЗ</string>
+    <string name="denial_code">Код отказа</string>
+    <string name="shift_report_title">ОТЧЕТ ЗА СМЕНУ</string>
+    <string name="shift_start">НАЧАЛО</string>
+    <string name="shift_time">ВРЕМЯ</string>
+    <string name="cards_petrolplus_title">КАРТЫ ПЕТРОЛ+</string>
+    <string name="card_processed">ОБРАБОТАНО КАРТ</string>
+    <string name="current_price">* - текушая цена</string>
+    <string name="total">ИТОГО</string>
+    <string name="recalculate_mark">По пересч.</string>
+    <string name="init_p7_lib">P7Lib</string>
+    <string name="init_card_reader">Init CardReader</string>
+    <string name="detect_card_data">CardDetect card</string>
+    <string name="read_card_data">Чтения данных карты</string>
+
+    <!--  Описание ResponseCodes  -->
+    <string name="success_response">ОДОБРЕНО</string>
+    <string name="universal_error">Универсальная ошибка</string>
+    <string name="system_error">Системная ошибка</string>
+    <string name="lib_init">Системная ошибка инициализации</string>
+    <string name="ini">Ошибка с ini-файлом</string>
+    <string name="call_error">Некорректный вызов библиотеки извне</string>
+    <string name="worng_card">Не Petrol 7</string>
+    <string name="bad_card">Ошибка чтения/работы с картой</string>
+    <string name="bad_sam">Проблемы с SAM</string>
+    <string name="pin_fail">Ошибка проверки PIN</string>
+    <string name="wrong_pin">Hеверный PIN</string>
+    <string name="wrong_args">Неверный заказ</string>
+    <string name="wrong_service">Неверная услуга</string>
+    <string name="debit_fail">Ошибка дебета</string>
+    <string name="refund_fail">Ошибка возврата</string>
+    <string name="fatal_error">Ошибка обслуживания</string>
+    <string name="net_error">Ошибка запроса АС</string>
+    <string name="as_timout">Таймаут авторизации</string>
+    <string name="as_limits">Нет онлайн лимитов</string>
+    <string name="as_ext_auth">Требуется доп.авторизация</string>
+    <string name="as_blocked">Карта заблокирована</string>
+    <string name="as_no_founds">Недостаточно средств</string>
+    <string name="as_no_limits">Превышение лимита</string>
+    <string name="as_pin_error">Неверный PIN</string>
+    <string name="as_no_service">Сервис недоступен</string>
+    <string name="as_no_time">В текущее время не обслуживается</string>
+    <string name="as_unknown">Карта неизвестна</string>
+    <string name="as_error">Ошибка на АС</string>
+    <string name="as_comm_error">Ошибка на АС</string>
+    <string name="as_bl_exp">ЧС на АС устарел</string>
+    <string name="as_card_exp">Срок действия карты истек</string>
+    <string name="as_no_em">Прием данного эмитента не разрешен</string>
+    <string name="as_no_term">Неверный номер терминала</string>
+    <string name="as_bl">Ошибка проверки ЧС</string>
+    <string name="srv_error">Нет услуги</string>
+    <string name="limit_error">Лимит исчерпан</string>
+    <string name="amount_error">Недостаточно средств</string>
+    <string name="gen_ac_error">Ошибка на карте</string>
+
+    <!--  Типы карт  -->
+    <string name="petrol5">Петрол5</string>
+    <string name="petrol7">Петрол7</string>
+    <string name="unknown_card_type">Неизвестно</string>
+
+    <!--  Типы операций  -->
+    <string name="debit">Дебет</string>
+    <string name="return_operation">Возврат</string>
+    <string name="debit_upper_case">ДЕБЕТ</string>
+    <string name="wallet_credit">КРЕДИТ КОШЕЛЬКА</string>
+    <string name="online_refill">ОНЛАЙН ПОПОЛНЕНИЕ СЧЕТА</string>
+    <string name="refund_to_card">ВОЗВРАТ НА КАРТУ</string>
+    <string name="refund_to_account">ВОЗВРАТ НА СЧЕТ</string>
+    <string name="unknown_operation">НЕИЗВЕСТНАЯ ОПЕРАЦИЯ</string>
+
+    <!--  Exceptions  -->
+    <string name="no_records_exception">Запрашиваемых настроек не существует в хранилище</string>
+    <string name="current_state_forbidden_calling_function">При текущем значении state вызов данной функции не предусмотрен</string>
+    <string name="terminal_not_initialized_error">Терминал не инициализирован</string>
+    <string name="prining_exception">Во время печати произошла ошибка</string>
+    <string name="cache_dir_access_error">Ошибка при чтении файла настроек</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+
+    <string name="starting_application_label_text">Загрузка приложения ...</string>
+    <string name="insert_card_label_text">Вставьте карту</string>
+    <string name="need_to_upload_ini_file_label_text">Не обнаружен ini файл с настройками терминала. Загрузить?</string>
+    <string name="ini_file_description_label_text">Файл настроек необходимо получить у службы поддержки и загрузить на терминале</string>
+    <string name="Cancel">Отмена</string>
+    <string name="copy">Копировать</string>
+    <string name="P7Lib">P7Lib</string>
+    <string name="OK">OK</string>
+    <string name="ping">Ping</string>
+    <string name="debit_label">Дебит</string>
+    <string name="refund_label">Возврат</string>
+    <string name="settings_label">Настройки</string>
+    <string name="apdu_config_line">Команда APDU</string>
+    <string name="apdu_command_result_line">Результат выполнения команды</string>
+    <string name="add_configuration_content_label_text">Добавление конфигурации</string>
+    <string name="configuration_content_label_text">Содержание конфигурационного файла</string>
+    <string name="put_configuration_content_here">Вставьте содержание конфигурационного файла</string>
+    <string name="сheck_is_printing">Идёт печать чека</string>
+    <string name="print_failed">Печать завершилась с ошибкой</string>
+    <string name="retry">Повторить</string>
+    <string name="cancel">Отменить</string>
+    <string name="configuration_demo_content">[General]
+AcquireID = 4000
+TerminalID = 12
+
+[Authorization]
+;Host1_ip = 91.240.172.69
+;Host1_port = 6567
+;Host1_ip = 127.0.0.1
+;Host1_ip = 91.240.172.192
+Host1_ip = 91.240.172.195
+Host1_port = 6567
+
+[AuthData]
+AuthPin = "000000000000"
+LastOnlineTrz=157
+
+[Signature]
+Data = ""
+
+[UUID]
+LastGenTime=1685106271
+ClockSequence=2331
+HasNodeID=1
+NodeID=01B652966F64
+</string>
+</resources>
