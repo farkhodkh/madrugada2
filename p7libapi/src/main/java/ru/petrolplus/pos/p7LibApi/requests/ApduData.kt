@@ -2,7 +2,7 @@ package ru.petrolplus.pos.p7LibApi.requests
 
 /**
  * Класс задаёт структуру информационного сообщения, адресованного карте
- * @property GLA - класс команды, зависит от фазы жизни карты
+ * @property СLA - класс команды, зависит от фазы жизни карты
  * @property INS - номер команды
  * @property P1 - первый параметр команды
  * @property P2 - второй параметр команды
@@ -13,7 +13,7 @@ package ru.petrolplus.pos.p7LibApi.requests
 
 //todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class ApduData(
-    var GLA: Byte = 0,
+    var CLA: Byte = 0,
     var INS: Byte = 0,
     var P1: Byte = 0,
     var P2: Byte = 0,
@@ -27,7 +27,7 @@ class ApduData(
  * Порядок элементов массива:
  * CLA INS P1 P2 Lc <DataCmd> Le – для ICC и NFC интерфейсов
  */
-fun ApduData.toEvotorApduByteArray(): ByteArray = byteArrayOf(this.GLA, this.INS, this.P1, this.P2)
+fun ApduData.toEvotorApduByteArray(): ByteArray = byteArrayOf(this.CLA, this.INS, this.P1, this.P2)
     //TODO - В LC должна записываться длина массива "DATA", вычисляем длину самостоятельно
     // Уточнить почему LC не вычисляется на стороне библиотеки
     // Это только для select app или для всех apdu?

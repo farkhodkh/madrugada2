@@ -90,17 +90,17 @@ public class BerTlvParser {
         }
 
         // value
-//        if(tag.isConstructed()) {
-//
-//            ArrayList<BerTlv> list = new ArrayList<BerTlv>();
-//            addChildren(aLevel, aBuf, aOffset + tagBytesCount + lengthBytesCount, levelPadding, lengthBytesCount, valueLength, list);
-//
-//            int resultOffset = aOffset + tagBytesCount + lengthBytesCount + valueLength;
-//            if(log.isDebugEnabled()) {
-//                log.debug("{}returning constructed offset = {}", levelPadding, resultOffset);
-//            }
-//            return new ParseResult(new BerTlv(tag, list), resultOffset);
-//        } else {
+        if(tag.isConstructed()) {
+
+            ArrayList<BerTlv> list = new ArrayList<BerTlv>();
+            addChildren(aLevel, aBuf, aOffset + tagBytesCount + lengthBytesCount, levelPadding, lengthBytesCount, valueLength, list);
+
+            int resultOffset = aOffset + tagBytesCount + lengthBytesCount + valueLength;
+            if(log.isDebugEnabled()) {
+                log.debug("{}returning constructed offset = {}", levelPadding, resultOffset);
+            }
+            return new ParseResult(new BerTlv(tag, list), resultOffset);
+        } else {
             // value
             byte[] value = new byte[valueLength];
             System.arraycopy(aBuf, aOffset+tagBytesCount+lengthBytesCount, value, 0, valueLength);
@@ -110,7 +110,7 @@ public class BerTlvParser {
                 log.debug("{}returning primitive offset = {}", levelPadding, resultOffset);
             }
             return new ParseResult(new BerTlv(tag, value), resultOffset);
-//        }
+        }
 
     }
 
@@ -199,29 +199,29 @@ public class BerTlvParser {
 
         int length = aBuf[aOffset] & 0xff;
 
-//        if((length & 0x80) == 0x80) {
-//            int numberOfBytes = length & 0x7f;
-//            if(numberOfBytes>3) {
-//                throw new IllegalStateException(String.format("At position %d the len is more then 3 [%d]", aOffset, numberOfBytes));
-//            }
-//
-//            length = 0;
-//            for(int i=aOffset+1; i<aOffset+1+numberOfBytes; i++) {
-//                length = length * 0x100 + (aBuf[i] & 0xff);
-//            }
-//
-//        }
+        if((length & 0x80) == 0x80) {
+            int numberOfBytes = length & 0x7f;
+            if(numberOfBytes>3) {
+                throw new IllegalStateException(String.format("At position %d the len is more then 3 [%d]", aOffset, numberOfBytes));
+            }
+
+            length = 0;
+            for(int i=aOffset+1; i<aOffset+1+numberOfBytes; i++) {
+                length = length * 0x100 + (aBuf[i] & 0xff);
+            }
+
+        }
         return length;
     }
 
     private static int getLengthBytesCount(byte aBuf[], int aOffset) {
-        return 1;
-//        int len = aBuf[aOffset] & 0xff;
-//        if( (len & 0x80) == 0x80) {
-//            return 1 + (len & 0x7f);
-//        } else {
-//            return 1;
-//        }
+//        return 1;
+        int len = aBuf[aOffset] & 0xff;
+        if( (len & 0x80) == 0x80) {
+            return 1 + (len & 0x7f);
+        } else {
+            return 1;
+        }
     }
 
     private static final IBerTlvLogger EMPTY_LOGGER = new IBerTlvLogger() {

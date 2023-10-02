@@ -62,6 +62,8 @@ class DebitViewModel(
 
     private val _viewState = mutableStateOf<DebitViewState>(DebitViewState.StartingState)
     val viewState: State<DebitViewState> = _viewState
+    var cardKey = CardKeyDto()
+    var cardData = CardInfo()
 
     init {
         viewModelScope.launch {
@@ -106,7 +108,12 @@ class DebitViewModel(
                 "${TlvCommands.ExchangeWithAPDU.code}$command${command.getEvotorAlignmentString()}"
                     )
 
-                return berTlv?.list?.lastOrNull()?.bytesValue
+                var resultArray: ByteArray = byteArrayOf()
+                berTlv?.list?.sortedBy { it.tag.bytes.firstOrNull() }?.forEach {tlv ->
+                    resultArray = resultArray.plus(tlv.bytesValue)
+                }
+                resultArray.map { HexUtil.toHexString(it) }.toString()
+                return resultArray
             }
         }
 
@@ -355,26 +362,30 @@ class DebitViewModel(
 
     //FIXME: Метод тестовый, не потребуется в проде, для вызова detect карты в p7lib
     fun testDetectCardData() {
-        val cardKey = CardKeyDto()
-        val cardData = CardInfo()
-        p7LibRepository
-            .detect(cardKey, cardData).let { result ->
-                when (result) {
-                    is NotPetrol7Card -> {
-                        _viewState.value = DebitViewState.CardDetectState.NotPetrol7Card
+        viewModelScope.launch {
+            p7LibRepository
+                .detect(cardKey, cardData).let { result ->
+                    if (cardData != null && cardKey != null) {
+                        val f = 0
                     }
-                    is CardAuthError -> {
-                        _viewState.value = DebitViewState.CardDetectState.CardAuthError
-                    }
-                    else -> {
-                        val b = 0
+                    when (result) {
+                        is NotPetrol7Card -> {
+                            _viewState.value = DebitViewState.CardDetectState.NotPetrol7Card
+                        }
+
+                        is CardAuthError -> {
+                            _viewState.value = DebitViewState.CardDetectState.CardAuthError
+                        }
+                        is OK -> {
+                            _viewState.value = DebitViewState.CardDetectState.CardOkState
+                        }
+                        else -> {
+                            val res = result.code
+                            _viewState.value = DebitViewState.CardDetectState.CardUnknownState
+                        }
                     }
                 }
-            }
-
-        //p7LibCallbacks.sendDataToSam
-        cardReaderRepository
-            .sdkRepository
+        }
     }
     //endregion
 }

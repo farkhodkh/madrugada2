@@ -34,14 +34,14 @@ class P7LibCallbacksImpl : IP7LibCallbacks {
     }
 
     override fun sendDataToCard(data: ApduData, answer: ApduAnswer): ResultCode {
-        val data = listener.onSendDataToCard(data, answer)
+        val resultData = listener.onSendDataToCard(data, answer)
 
-        return if (data == null) {
+        return if (resultData == null) {
             CardReadError
         } else {
             answer.sw1  = 0x90
             answer.sw2  = 0x00
-            answer.data = data
+            answer.data = resultData
             OK
         }
     }
