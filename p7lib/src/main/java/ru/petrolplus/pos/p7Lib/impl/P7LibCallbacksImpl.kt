@@ -1,5 +1,6 @@
 package ru.petrolplus.pos.p7Lib.impl
 
+import android.util.Log
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.OnP7LibResultListener
 import ru.petrolplus.pos.p7LibApi.dto.TransactionRecordDto
@@ -13,11 +14,12 @@ import ru.petrolplus.pos.p7LibApi.responces.ResultCode
 import ru.petrolplus.pos.util.ext.isCorrectEvotorAtr
 
 class P7LibCallbacksImpl : IP7LibCallbacks {
+    private val TAG = "P7LIB_LOG"
+
     override lateinit var listener: OnP7LibResultListener
 
     override fun log(message: String) {
-        //TODO: код подлежит переработке
-        val b = 0
+        Log.d(TAG, "$message")
     }
 
     override fun cardReset(answer: ApduAnswer): ResultCode {
