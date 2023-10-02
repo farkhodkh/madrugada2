@@ -23,15 +23,15 @@ fun InsertClientCardScreen(
     modifier: Modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight(),
-        onClickListener: () -> Unit,
-    ) {
+    onClickListener: () -> Unit,
+) {
     Surface(
         modifier = modifier,
         elevation = 3.dp,
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 modifier = Modifier.padding(16.dp).clickable { onClickListener.invoke() },

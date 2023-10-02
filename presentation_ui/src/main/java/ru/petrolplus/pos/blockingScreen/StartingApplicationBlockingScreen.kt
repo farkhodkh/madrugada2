@@ -17,13 +17,13 @@ import ru.petrolplus.pos.resources.R
 fun StartingApplicationBlockingScreen(
     modifier: Modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight()
+        .fillMaxHeight(),
 ) {
     Text(
         modifier = Modifier.padding(16.dp),
         textAlign = TextAlign.Center,
         style = typography.h4,
-        text = stringResource(R.string.starting_application_label_text)
+        text = stringResource(R.string.starting_application_label_text),
     )
 }
 
@@ -32,4 +32,3 @@ fun StartingApplicationBlockingScreen(
 fun StartingApplicationBlockingScreenPreview() {
     StartingApplicationBlockingScreen()
 }
-

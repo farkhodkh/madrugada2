@@ -45,13 +45,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.petrolplus.pos.resources.R
-import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
-import ru.petrolplus.pos.persitence.dto.TransactionDTO
 import ru.petrolplus.pos.blockingScreen.FailedPrintScreen
 import ru.petrolplus.pos.blockingScreen.PrintProgressScreen
 import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewModel
 import ru.petrolplus.pos.mainscreen.ui.debit.DebitViewState
+import ru.petrolplus.pos.persitence.dto.GUIDParamsDTO
+import ru.petrolplus.pos.persitence.dto.TransactionDTO
+import ru.petrolplus.pos.resources.R
 import ru.petrolplus.pos.resources.ResourceHelper
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -60,7 +60,7 @@ import java.util.Locale
 @Composable
 fun DebugScreen(
     viewModel: DebitViewModel,
-    state: DebitViewState
+    state: DebitViewState,
 ) {
     val tabs = listOf("APDU", "DATABASE", "PRINTER")
     val tabIndex = when (state) {
@@ -72,15 +72,17 @@ fun DebugScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         TabRow(selectedTabIndex = tabIndex) {
             tabs.forEachIndexed { index, tab ->
-                Tab(selected = tabIndex == index,
+                Tab(
+                    selected = tabIndex == index,
                     onClick = { viewModel.setTab(index) },
-                    text = { Text(text = tab) })
+                    text = { Text(text = tab) },
+                )
             }
-
         }
         when (state) {
             DebitViewState.DebugState.APDU, is DebitViewState.CommandExecutionState -> APDUScreen(
-                viewModel, state
+                viewModel,
+                state,
             )
 
             is DebitViewState.DebugState.PrinterState -> PrinterScreen(viewModel)
@@ -97,7 +99,7 @@ fun PrinterScreen(viewModel: DebitViewModel) {
     Surface(
         modifier = Modifier
             .padding(top = 16.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         when (viewModel.viewState.value) {
             DebitViewState.DebugState.PrinterState.Printing ->
@@ -106,32 +108,38 @@ fun PrinterScreen(viewModel: DebitViewModel) {
             is DebitViewState.DebugState.PrinterState.FailedState -> FailedPrintScreen(
                 retry = viewModel::repeatPrinting,
                 dismiss = viewModel::resetPrinter,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
             )
 
             is DebitViewState.DebugState.PrinterState -> {
-                Column(modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                ) {
                     OutlinedTextField(
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text(text = "Transaction ID") },
                         value = transactionId,
                         onValueChange = { transactionId = it },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Button(modifier = Modifier.fillMaxWidth(),
-                        onClick = { viewModel.printTransactionTest(transactionId) }) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { viewModel.printTransactionTest(transactionId) },
+                    ) {
                         Text(text = "Распечатать")
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    Button(modifier = Modifier.fillMaxWidth(),
-                        onClick = viewModel::printShiftReport) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = viewModel::printShiftReport,
+                    ) {
                         Text(text = "Распечатать чек смены")
                     }
                 }
@@ -139,7 +147,6 @@ fun PrinterScreen(viewModel: DebitViewModel) {
 
             else -> Surface {}
         }
-
     }
 }
 
@@ -148,7 +155,7 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
     Surface(
         modifier = Modifier
             .padding(top = 16.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         val placeholder: String = stringResource(id = R.string.apdu_config_line)
 
@@ -157,60 +164,71 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
         }
 
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
-            BasicTextField(value = message, onValueChange = { newText ->
-                message = newText
-            }, maxLines = 100, singleLine = false, textStyle = TextStyle(
-                fontSize = 18.sp,
-            ), decorationBox = { innerTextField ->
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                        .border(
-                            width = 1.dp,
-                            color = Color.DarkGray,
-                            shape = RoundedCornerShape(size = 16.dp)
-                        )
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                ) {
-                    if (message.isEmpty()) {
-                        Text(
-                            text = placeholder,
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Normal,
-                            color = Color.LightGray
-                        )
+            BasicTextField(
+                value = message,
+                onValueChange = { newText ->
+                    message = newText
+                },
+                maxLines = 100,
+                singleLine = false,
+                textStyle = TextStyle(
+                    fontSize = 18.sp,
+                ),
+                decorationBox = { innerTextField ->
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
+                            .border(
+                                width = 1.dp,
+                                color = Color.DarkGray,
+                                shape = RoundedCornerShape(size = 16.dp),
+                            )
+                            .padding(horizontal = 16.dp, vertical = 12.dp),
+                    ) {
+                        if (message.isEmpty()) {
+                            Text(
+                                text = placeholder,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.LightGray,
+                            )
+                        }
+                        innerTextField()
                     }
-                    innerTextField()
-                }
-            })
+                },
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Row {
-
-                Button(modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp), onClick = {
-                    viewModel.testP7LibCommand()
-                }) {
+                Button(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    onClick = {
+                        viewModel.testP7LibCommand()
+                    },
+                ) {
                     Text(
-                        text = stringResource(id = R.string.P7Lib)
+                        text = stringResource(id = R.string.P7Lib),
                     )
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Button(modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp), onClick = {
-                    viewModel.sendCommand(message)
-                }) {
+                Button(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    onClick = {
+                        viewModel.sendCommand(message)
+                    },
+                ) {
                     Text(
-                        text = stringResource(id = R.string.OK)
+                        text = stringResource(id = R.string.OK),
                     )
                 }
             }
@@ -218,25 +236,31 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Row {
-                Button(modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp), onClick = {
-                    viewModel.sendDebit()
-                }) {
+                Button(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    onClick = {
+                        viewModel.sendDebit()
+                    },
+                ) {
                     Text(
-                        text = stringResource(id = R.string.debit_label)
+                        text = stringResource(id = R.string.debit_label),
                     )
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                Button(modifier = Modifier
-                    .weight(1f)
-                    .padding(8.dp), onClick = {
-                    viewModel.ping()
-                }) {
+                Button(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    onClick = {
+                        viewModel.ping()
+                    },
+                ) {
                     Text(
-                        text = stringResource(id = R.string.ping)
+                        text = stringResource(id = R.string.ping),
                     )
                 }
 
@@ -244,7 +268,7 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                     viewModel.testP7LibCommand()
                 }) {
                     Text(
-                        text = stringResource(id = R.string.init_p7_lib)
+                        text = stringResource(id = R.string.init_p7_lib),
                     )
                 }
             }
@@ -254,7 +278,7 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                     viewModel.testInitCardReader()
                 }) {
                     Text(
-                        text = stringResource(id = R.string.init_card_reader)
+                        text = stringResource(id = R.string.init_card_reader),
                     )
                 }
 
@@ -262,7 +286,7 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                     viewModel.testReadCardData()
                 }) {
                     Text(
-                        text = stringResource(id = R.string.read_card_data)
+                        text = stringResource(id = R.string.read_card_data),
                     )
                 }
 
@@ -270,7 +294,7 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                     viewModel.testDetectCardData()
                 }) {
                     Text(
-                        text = stringResource(id = R.string.detect_card_data)
+                        text = stringResource(id = R.string.detect_card_data),
                     )
                 }
             }
@@ -283,7 +307,6 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                     .fillMaxWidth(),
                 text = (viewState as? DebitViewState.CommandExecutionState)?.commandResult ?: "",
             )
-
         }
     }
 }
@@ -295,24 +318,27 @@ fun DatabaseScreen(viewModel: DebitViewModel, viewState: DebitViewState.DebugSta
             Modifier
                 .fillMaxSize()
                 .padding(16.dp, 8.dp, 16.dp, 64.dp)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
-
             Text(
                 text = "Добавление GUID параметров",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h5,
             )
 
             val guidFields = viewState.debitDebugGroup.guidParams.takeIf {
                 it.isNotEmpty()
             } ?: getTestData(
-                context = LocalContext.current, fileName = "guid_fields.json"
+                context = LocalContext.current, fileName = "guid_fields.json",
             ) {
-                if (it.first == "clockSequence") Pair(
-                    it.first, (it.second as Int).toShort()
-                ) else it
+                if (it.first == "clockSequence") {
+                    Pair(
+                        it.first, (it.second as Int).toShort(),
+                    )
+                } else {
+                    it
+                }
             }
 
             Form(list = guidFields) {
@@ -321,8 +347,10 @@ fun DatabaseScreen(viewModel: DebitViewModel, viewState: DebitViewState.DebugSta
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(modifier = Modifier.fillMaxWidth(),
-                onClick = { viewModel.saveGUIDParams(guidFields.toGUIDParamsDTO()) }) {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { viewModel.saveGUIDParams(guidFields.toGUIDParamsDTO()) },
+            ) {
                 Text(text = "Сохранить")
             }
 
@@ -330,38 +358,41 @@ fun DatabaseScreen(viewModel: DebitViewModel, viewState: DebitViewState.DebugSta
 
             Output(title = "GUID", listItems = viewState.debitDebugGroup.guidParamsOutput)
 
-
             Text(
                 text = "Добавление транзакции",
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h5,
             )
 
             val transactionFields =
                 viewState.debitDebugGroup.transaction.takeIf { it.isNotEmpty() } ?: getTestData(
-                    context = LocalContext.current, fileName = "transaction_fields.json"
+                    context = LocalContext.current, fileName = "transaction_fields.json",
                 )
 
             Form(list = transactionFields) {
                 viewModel.onTransactionDataChanges(
                     viewState.debitDebugGroup.copy(
-                        transaction = it
-                    )
+                        transaction = it,
+                    ),
                 )
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(modifier = Modifier.fillMaxWidth(),
-                onClick = { viewModel.fetchTransactions() }) {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { viewModel.fetchTransactions() },
+            ) {
                 Text(text = "Загрузить")
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            Button(modifier = Modifier.fillMaxWidth(),
-                onClick = { viewModel.testDebit(transactionFields.toTransactionDto()) }) {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { viewModel.testDebit(transactionFields.toTransactionDto()) },
+            ) {
                 Text(text = "Добавить")
             }
 
@@ -381,7 +412,7 @@ fun DatabaseScreen(viewModel: DebitViewModel, viewState: DebitViewState.DebugSta
 private fun getTestData(
     context: Context,
     fileName: String,
-    additionalMapper: ((Pair<String, Any>) -> Pair<String, Any>)? = null
+    additionalMapper: ((Pair<String, Any>) -> Pair<String, Any>)? = null,
 ): SnapshotStateList<Pair<String, Any>> {
     val file = ResourceHelper.getAssetFile(fileName)
     require(file != null) { "отсутствует файл $fileName" }
@@ -393,7 +424,7 @@ private fun getTestData(
         .map { it.split(" : ") }
         .map {
             it[0].replace("\"", "").replace("\\r\\n ", "").trim() to parseTyped(
-                it[1].trim().replace("\"", "")
+                it[1].trim().replace("\"", ""),
             )
         }
         .map { if (additionalMapper != null) additionalMapper(it) else it }
@@ -411,7 +442,7 @@ private fun getTestData(
 @Composable
 private fun Form(
     list: SnapshotStateList<Pair<String, Any>>,
-    onValueChanged: (SnapshotStateList<Pair<String, Any>>) -> Unit
+    onValueChanged: (SnapshotStateList<Pair<String, Any>>) -> Unit,
 ) {
     list.forEachIndexed { index, (k, v) ->
         when (v) {
@@ -420,12 +451,14 @@ private fun Form(
                 label = { Text(text = k) },
                 value = v.toString(),
                 onValueChange = { value: String ->
-                    onValueChanged(list.apply {
-                        this[index] =
-                            Pair(k, value.zeroIfEmpty().toShortOrNull() ?: Short.MAX_VALUE)
-                    })
+                    onValueChanged(
+                        list.apply {
+                            this[index] =
+                                Pair(k, value.zeroIfEmpty().toShortOrNull() ?: Short.MAX_VALUE)
+                        },
+                    )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             )
 
             is Int -> OutlinedTextField(
@@ -433,11 +466,13 @@ private fun Form(
                 label = { Text(text = k) },
                 value = v.toString(),
                 onValueChange = { value: String ->
-                    onValueChanged(list.apply {
-                        this[index] = Pair(k, value.zeroIfEmpty().toIntOrNull() ?: Int.MAX_VALUE)
-                    })
+                    onValueChanged(
+                        list.apply {
+                            this[index] = Pair(k, value.zeroIfEmpty().toIntOrNull() ?: Int.MAX_VALUE)
+                        },
+                    )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             )
 
             is Long -> OutlinedTextField(
@@ -445,24 +480,28 @@ private fun Form(
                 label = { Text(text = k) },
                 value = v.toString(),
                 onValueChange = { value: String ->
-                    onValueChanged(list.apply {
-                        this[index] = Pair(k, value.zeroIfEmpty().toLongOrNull() ?: Long.MAX_VALUE)
-                    })
+                    onValueChanged(
+                        list.apply {
+                            this[index] = Pair(k, value.zeroIfEmpty().toLongOrNull() ?: Long.MAX_VALUE)
+                        },
+                    )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             )
 
             is Boolean -> {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(text = k, style = MaterialTheme.typography.caption)
                     Spacer(modifier = Modifier.width(16.dp))
                     Switch(checked = v, onCheckedChange = { value: Boolean ->
-                        onValueChanged(list.apply {
-                            this[index] = Pair(k, value)
-                        })
+                        onValueChanged(
+                            list.apply {
+                                this[index] = Pair(k, value)
+                            },
+                        )
                     })
                 }
             }
@@ -472,15 +511,16 @@ private fun Form(
                 label = { Text(text = k) },
                 value = v.toString(),
                 onValueChange = { value: String ->
-                    onValueChanged(list.apply {
-                        value.takeIf { it.length <= 32 }?.let { this[index] = Pair(k, it) }
-                    })
+                    onValueChanged(
+                        list.apply {
+                            value.takeIf { it.length <= 32 }?.let { this[index] = Pair(k, it) }
+                        },
+                    )
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             )
         }
     }
-
 }
 
 /**
@@ -501,13 +541,13 @@ private fun Output(title: String, listItems: List<String>) {
             text = title,
             Modifier.weight(0.7f),
             style = MaterialTheme.typography.h6,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
         Button(onClick = { isExpanded = !isExpanded }, modifier = Modifier.weight(0.3f)) {
             Icon(
                 painter = painterResource(id = androidx.constraintlayout.widget.R.drawable.abc_ic_arrow_drop_right_black_24dp),
                 contentDescription = null,
-                modifier = Modifier.rotate(rotation)
+                modifier = Modifier.rotate(rotation),
             )
         }
     }
@@ -520,7 +560,8 @@ private fun Output(title: String, listItems: List<String>) {
         }
 
         Text(
-            modifier = Modifier.fillMaxWidth(), text = stringBuilder.toString()
+            modifier = Modifier.fillMaxWidth(),
+            text = stringBuilder.toString(),
         )
     }
 }

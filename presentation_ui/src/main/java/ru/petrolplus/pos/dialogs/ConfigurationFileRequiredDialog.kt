@@ -34,39 +34,38 @@ import ru.petrolplus.pos.resources.R
 @Composable
 fun ConfigurationFileRequiredDialog(
     modifier: Modifier = Modifier,
-    onClickListener: (Boolean) -> Unit
+    onClickListener: (Boolean) -> Unit,
 ) {
     Surface(modifier = modifier) {
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Card(
-                //shape = MaterialTheme.shapes.medium,
+                // shape = MaterialTheme.shapes.medium,
                 shape = RoundedCornerShape(10.dp),
                 // modifier = modifier.size(280.dp, 240.dp)
                 modifier = Modifier.padding(10.dp, 5.dp, 10.dp, 10.dp),
-                elevation = 8.dp
+                elevation = 8.dp,
             ) {
                 Column(
                     modifier
-                        .background(Color.White)
+                        .background(Color.White),
                 ) {
-
-                    //.......................................................................
+                    // .......................................................................
                     Image(
                         painter = painterResource(id = R.drawable.ic_notification),
                         contentDescription = null, // decorative
                         contentScale = ContentScale.Fit,
                         colorFilter = ColorFilter.tint(
-                            color = Color.Blue
+                            color = Color.Blue,
                         ),
                         modifier = Modifier
                             .padding(top = 35.dp)
                             .height(70.dp)
                             .fillMaxWidth(),
 
-                        )
+                    )
 
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
@@ -77,7 +76,7 @@ fun ConfigurationFileRequiredDialog(
                                 .fillMaxWidth(),
                             style = MaterialTheme.typography.h5,
                             maxLines = 3,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
                         )
                         Text(
                             text = stringResource(id = R.string.ini_file_description_label_text),
@@ -85,18 +84,17 @@ fun ConfigurationFileRequiredDialog(
                             modifier = Modifier
                                 .padding(top = 10.dp, start = 15.dp, end = 15.dp)
                                 .fillMaxWidth(),
-                            style = MaterialTheme.typography.body2
+                            style = MaterialTheme.typography.body2,
                         )
                     }
-                    //.......................................................................
+                    // .......................................................................
                     Row(
                         Modifier
                             .fillMaxWidth()
                             .padding(top = 10.dp)
                             .background(Purple100),
-                        horizontalArrangement = Arrangement.SpaceAround
+                        horizontalArrangement = Arrangement.SpaceAround,
                     ) {
-
                         TextButton(onClick = {
                             onClickListener.invoke(true)
                         }) {
@@ -104,7 +102,7 @@ fun ConfigurationFileRequiredDialog(
                                 text = stringResource(id = R.string.OK),
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Blue,
-                                modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
+                                modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
                             )
                         }
                         TextButton(onClick = {
@@ -114,7 +112,7 @@ fun ConfigurationFileRequiredDialog(
                                 text = stringResource(id = R.string.Cancel),
                                 fontWeight = FontWeight.ExtraBold,
                                 color = Color.Black,
-                                modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
+                                modifier = Modifier.padding(top = 5.dp, bottom = 5.dp),
                             )
                         }
                     }

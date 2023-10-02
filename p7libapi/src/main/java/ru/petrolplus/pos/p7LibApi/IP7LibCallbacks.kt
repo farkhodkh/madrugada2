@@ -1,11 +1,11 @@
 package ru.petrolplus.pos.p7LibApi
 
+import ru.petrolplus.pos.p7LibApi.dto.PrintableDataDto
 import ru.petrolplus.pos.p7LibApi.dto.TransactionRecordDto
 import ru.petrolplus.pos.p7LibApi.requests.ApduData
 import ru.petrolplus.pos.p7LibApi.responces.ApduAnswer
-import ru.petrolplus.pos.p7LibApi.responces.ResultCode
-import ru.petrolplus.pos.p7LibApi.dto.PrintableDataDto
 import ru.petrolplus.pos.p7LibApi.responces.OperationResult
+import ru.petrolplus.pos.p7LibApi.responces.ResultCode
 
 /**
  * Interface для обслуживания "callback" ов библиотеки p7lib
@@ -96,5 +96,4 @@ interface IP7LibCallbacks {
      * @return Код результата выполнения операции
      */
     fun transferOOBToAS(oobData: ByteArray): ResultCode
-
 }

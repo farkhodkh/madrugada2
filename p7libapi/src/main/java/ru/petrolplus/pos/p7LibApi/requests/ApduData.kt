@@ -11,7 +11,7 @@ package ru.petrolplus.pos.p7LibApi.requests
  * @property LE - длинна данных предполагаемого ответа
  */
 
-//todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
+// todo: при возможности, использовать val и убрать инициализацию (требует существенной переработки JNI)
 class ApduData(
     var CLA: Byte = 0,
     var INS: Byte = 0,
@@ -19,7 +19,7 @@ class ApduData(
     var P2: Byte = 0,
     var LC: Byte = 0,
     var Data: ByteArray = byteArrayOf(),
-    var LE: Byte = 0
+    var LE: Byte = 0,
 )
 
 /**
@@ -28,7 +28,7 @@ class ApduData(
  * CLA INS P1 P2 Lc <DataCmd> Le – для ICC и NFC интерфейсов
  */
 fun ApduData.toEvotorApduByteArray(): ByteArray = byteArrayOf(this.CLA, this.INS, this.P1, this.P2)
-    //TODO - В LC должна записываться длина массива "DATA", вычисляем длину самостоятельно
+    // TODO - В LC должна записываться длина массива "DATA", вычисляем длину самостоятельно
     // Уточнить почему LC не вычисляется на стороне библиотеки
     // Это только для select app или для всех apdu?
     .plus(this.Data.size.toByte())

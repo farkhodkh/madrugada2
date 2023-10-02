@@ -1,7 +1,7 @@
 package ru.petrolplus.pos.printerapi
 
-import ru.petrolplus.pos.resources.ResourceHelper
 import ru.petrolplus.pos.resources.R
+import ru.petrolplus.pos.resources.ResourceHelper
 
 object Formatting {
     const val SIZE_JUSTIFY_WITH_CENTER_MIDDLE = 3
@@ -9,7 +9,6 @@ object Formatting {
     const val TERMINAL_NUMBER_MASK_SIZE = 5
     const val PRINTER_DATE_PATTERN = "dd/MM/yy HH:mm:ss"
     const val BASE_UNIT_LENGTH = 1
-
 }
 
 object IntroductoryConstruction {
@@ -46,7 +45,7 @@ object IntroductoryConstruction {
 }
 
 sealed class ResponseCode(val code: Int, val description: String) {
-    object Success : ResponseCode(SUCCESS, ResourceHelper.getStringResource(R.string.success_response) )
+    object Success : ResponseCode(SUCCESS, ResourceHelper.getStringResource(R.string.success_response))
 
     sealed class Error(code: Int, description: String) : ResponseCode(code, description) {
         object Universal : Error(UNIVERSAL_ERROR, ResourceHelper.getStringResource(R.string.universal_error))
@@ -73,7 +72,7 @@ sealed class ResponseCode(val code: Int, val description: String) {
         object ASNoLimits : Error(AS_NO_LIMITS, ResourceHelper.getStringResource(R.string.as_no_limits))
         object ASPin : Error(AS_PIN_ERROR, ResourceHelper.getStringResource(R.string.as_pin_error))
         object ASNoService : Error(AS_NO_SERVICE, ResourceHelper.getStringResource(R.string.as_no_service))
-        object ASNoTime : Error(AS_NO_TIME,  ResourceHelper.getStringResource(R.string.as_no_time))
+        object ASNoTime : Error(AS_NO_TIME, ResourceHelper.getStringResource(R.string.as_no_time))
         object ASUnknown : Error(AS_UNKNOWN, ResourceHelper.getStringResource(R.string.as_unknown))
         object ASError : Error(AS_ERROR, ResourceHelper.getStringResource(R.string.as_error))
         object ASCommError : Error(AS_COMM_ERROR, ResourceHelper.getStringResource(R.string.as_comm_error))

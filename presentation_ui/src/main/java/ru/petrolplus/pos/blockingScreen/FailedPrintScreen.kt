@@ -26,7 +26,8 @@ import ru.petrolplus.pos.resources.R
 @Composable
 fun FailedPrintScreen(
     modifier: Modifier = Modifier,
-    retry: () -> Unit, dismiss: () -> Unit
+    retry: () -> Unit,
+    dismiss: () -> Unit,
 ) {
     Surface(
         modifier = modifier,
@@ -35,7 +36,7 @@ fun FailedPrintScreen(
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             Text(
                 modifier = Modifier.padding(16.dp),
@@ -47,7 +48,7 @@ fun FailedPrintScreen(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Button(onClick = retry) {
                     Text(stringResource(id = R.string.retry))
@@ -57,7 +58,7 @@ fun FailedPrintScreen(
 
                 Button(
                     onClick = dismiss,
-                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.error)
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.error),
                 ) {
                     Text(stringResource(id = R.string.cancel), color = MaterialTheme.colors.onError)
                 }

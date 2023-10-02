@@ -34,7 +34,7 @@ fun PrintProgressScreen(
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             CircularProgressIndicator()
             Spacer(modifier = Modifier.height(8.dp))

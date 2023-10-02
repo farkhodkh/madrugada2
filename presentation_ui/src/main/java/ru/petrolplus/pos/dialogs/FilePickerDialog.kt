@@ -29,15 +29,14 @@ fun FilePickerDialog(onClickListener: (String) -> Unit) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
             LaunchedEffect(Unit) {
                 message.value = DEMO_CONFIGURATION
             }
 
             Text(
-                text = stringResource(R.string.add_configuration_content_label_text)
+                text = stringResource(R.string.add_configuration_content_label_text),
             )
 
             Spacer(modifier = Modifier.height(20.dp))

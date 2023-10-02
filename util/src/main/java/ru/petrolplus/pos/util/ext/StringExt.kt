@@ -8,7 +8,7 @@ fun String.isNotConfigurationCommentedLine() =
  * TODO - длину не проверяем, результаты теста покажут
  */
 fun String?.isCorrectEvotorAtr(): Boolean =
-    this != null && this.startsWith("3B")// && this.length == 22
+    this != null && this.startsWith("3B") // && this.length == 22
 
 /**
  * Метод возвращает строку с выравниванием команды Эвотор
