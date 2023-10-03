@@ -28,6 +28,9 @@ fun DebitScreen(
         is DebitViewState.CommandExecutionState -> {
             DebugScreen(viewModel, state)
         }
+        is DebitViewState.CardDetectState -> {
+            DebugScreen(viewModel, state)
+        }
         else -> {
             Surface {
                 Column(

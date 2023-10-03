@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.petrolplus.pos.core.errorhandling.launchHandling
 import ru.petrolplus.pos.core.errorhandling.launchInHandling
+import ru.petrolplus.pos.evotorsdk.util.HexUtil
 import ru.petrolplus.pos.evotorsdk.util.TlvCommands
 import ru.petrolplus.pos.evotorsdk.util.TlvTags
 import ru.petrolplus.pos.mainscreen.BuildConfig
@@ -25,12 +26,13 @@ import ru.petrolplus.pos.mainscreen.ui.ext.toInitDataDto
 import ru.petrolplus.pos.networkapi.GatewayServerRepositoryApi
 import ru.petrolplus.pos.p7LibApi.IP7LibCallbacks
 import ru.petrolplus.pos.p7LibApi.IP7LibRepository
+import ru.petrolplus.pos.p7LibApi.OnP7LibResultListener
 import ru.petrolplus.pos.p7LibApi.dto.CardKeyDto
 import ru.petrolplus.pos.p7LibApi.dto.TransactionUUIDDto
 import ru.petrolplus.pos.p7LibApi.dto.card.CardInfo
-import ru.petrolplus.pos.p7LibApi.responces.CardAuthError
-import ru.petrolplus.pos.p7LibApi.responces.NotPetrol7Card
-import ru.petrolplus.pos.p7LibApi.responces.OK
+import ru.petrolplus.pos.p7LibApi.requests.ApduData
+import ru.petrolplus.pos.p7LibApi.requests.toEvotorApduByteArray
+import ru.petrolplus.pos.p7LibApi.responces.*
 import ru.petrolplus.pos.persitence.ReceiptPersistence
 import ru.petrolplus.pos.persitence.SettingsPersistence
 import ru.petrolplus.pos.persitence.TransactionsPersistence
@@ -40,6 +42,10 @@ import ru.petrolplus.pos.printerapi.PrinterRepository
 import ru.petrolplus.pos.resources.R
 import ru.petrolplus.pos.resources.ResourceHelper
 import ru.petrolplus.pos.sdkapi.CardReaderRepository
+import ru.petrolplus.pos.sdkapi.tlv.BerTag
+import ru.petrolplus.pos.sdkapi.tlv.BerTlvBuilder
+import ru.petrolplus.pos.util.ext.getEvotorAlignmentString
+import ru.petrolplus.pos.util.ext.toEvotorCommandLine
 import java.util.Calendar
 import kotlin.random.Random
 
@@ -64,6 +70,42 @@ class DebitViewModel @AssistedInject constructor(
                 setState(DebitViewState.CommandExecutionState(value.dataString))
             }
             .launchInHandling(viewModelScope)
+
+        p7LibCallbacks.listener = object : OnP7LibResultListener {
+            override fun onCardReset(answer: ApduAnswer): String? {
+                val berTlv = cardReaderRepository
+                    .sdkRepository
+                    .sendCommandTlv(
+                        TlvCommands
+                            .GetCardReaderInfo
+                            .code
+                    )
+
+                return berTlv?.list?.lastOrNull()?.bytesValue?.let { tagData ->
+                    HexUtil.toHexString(tagData)
+                }
+            }
+
+            override fun onSendDataToCard(data: ApduData, answer: ApduAnswer): ByteArray? {
+                val dataArray = data.toEvotorApduByteArray()
+
+                val byteArray: List<String> = BerTlvBuilder()
+                    .addHex(BerTag(TlvTags.CardFind.code), TlvTags.CardFind.defValue)
+                    .addHex(BerTag(TlvTags.Apdu.code), HexUtil.toHexString(dataArray))
+                    .buildArray().map { HexUtil.toHexString(it) }
+
+                val command = byteArray.toEvotorCommandLine()
+
+                val berTlv = cardReaderRepository
+                    .sdkRepository
+                    .sendCommandTlv(
+                        "${TlvCommands.ExchangeWithAPDU.code}$command${command.getEvotorAlignmentString()}"
+                    )
+
+                return berTlv?.list?.lastOrNull()?.bytesValue
+            }
+        }
+
     }
 
     override fun createInitialState(): DebitViewState = if (BuildConfig.DEBUG) {
@@ -105,7 +147,10 @@ class DebitViewModel @AssistedInject constructor(
      */
     fun repeatPrinting() {
         when (val state = currentState) {
-            is DebitViewState.DebugState.PrinterState.FailedState.Receipt -> printTransactionTest(state.transactionId)
+            is DebitViewState.DebugState.PrinterState.FailedState.Receipt -> printTransactionTest(
+                state.transactionId
+            )
+
             DebitViewState.DebugState.PrinterState.FailedState.ShiftReport -> printShiftReport()
             else ->
                 throw IllegalStateException(ResourceHelper.getStringResource(R.string.current_state_forbidden_calling_function))
@@ -130,7 +175,7 @@ class DebitViewModel @AssistedInject constructor(
             owner: SavedStateRegistryOwner,
             defaultArgs: Bundle? = null,
 
-        ): AbstractSavedStateViewModelFactory =
+            ): AbstractSavedStateViewModelFactory =
             object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(
@@ -142,6 +187,7 @@ class DebitViewModel @AssistedInject constructor(
                 }
             }
     }
+
     //region TEST_METHODS
 
     // FIXME: Метод тестовый. Распечатывает сменный отчет
@@ -207,13 +253,21 @@ class DebitViewModel @AssistedInject constructor(
     }
 
     // FIXME: Метод тестовый. Проверка работы библиотеки P7Lib
-    fun testP7LibCommand() {
+    fun initP7LibCommand() {
         viewModelScope.launchHandling {
             val initData = settingsPersistence.getBaseSettings().toInitDataDto()
             val uuidDto = TransactionUUIDDto()
             val cacheDir = ResourceHelper.getExternalCacheDirectory() ?: ""
             val result = p7LibRepository.init(initData, uuidDto, p7LibCallbacks, cacheDir, cacheDir)
-            val b = result.code
+            when (result) {
+                is OK, is AlreadyInitialized -> {
+                    setState(DebitViewState.CommandExecutionState("Библиотека P7LIb успешно инициализирована"))
+                }
+
+                else -> {
+                    setState(DebitViewState.CommandExecutionState("Неизвестный статус инициализации P7LIb"))
+                }
+            }
         }
     }
 
@@ -304,7 +358,7 @@ class DebitViewModel @AssistedInject constructor(
             )
     }
 
-// FIXME: Метод тестовый, не потребуется в проде, для вызова detect карты в p7lib
+    // FIXME: Метод тестовый, не потребуется в проде, для вызова detect карты в p7lib
     fun testDetectCardData() {
         var cardKey = CardKeyDto()
         var cardData = CardInfo()
@@ -323,9 +377,11 @@ class DebitViewModel @AssistedInject constructor(
                         is CardAuthError -> {
                             setState(DebitViewState.CardDetectState.CardAuthError)
                         }
+
                         is OK -> {
                             setState(DebitViewState.CardDetectState.CardOkState)
                         }
+
                         else -> {
                             val res = result.code
                             setState(DebitViewState.CardDetectState.CardUnknownState)

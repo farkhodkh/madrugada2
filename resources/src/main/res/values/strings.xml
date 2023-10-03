@@ -31,10 +31,10 @@
     <string name="current_price">* - текушая цена</string>
     <string name="total">ИТОГО</string>
     <string name="recalculate_mark">По пересч.</string>
-    <string name="init_p7_lib">P7Lib</string>
-    <string name="init_card_reader">Init CardReader</string>
-    <string name="detect_card_data">CardDetect card</string>
-    <string name="read_card_data">Чтения данных карты</string>
+    <string name="init_p7_lib">Init P7Lib</string>
+    <string name="init_card_reader">Init CR</string>
+    <string name="detect_card_data">Card detect</string>
+    <string name="read_card_data">Test CR</string>
 
     <!--  Описание ResponseCodes  -->
     <string name="success_response">ОДОБРЕНО</string>

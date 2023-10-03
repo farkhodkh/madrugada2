@@ -80,7 +80,7 @@ fun DebugScreen(
             }
         }
         when (state) {
-            DebitViewState.DebugState.APDU, is DebitViewState.CommandExecutionState -> APDUScreen(
+            DebitViewState.DebugState.APDU, is DebitViewState.CommandExecutionState, is DebitViewState.CardDetectState -> APDUScreen(
                 viewModel,
                 state,
             )
@@ -204,31 +204,37 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Row {
+
                 Button(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp),
+                    modifier = testButtonModifier,
                     onClick = {
-                        viewModel.testP7LibCommand()
+                        viewModel.ping()
                     },
                 ) {
                     Text(
-                        text = stringResource(id = R.string.P7Lib),
+                        text = stringResource(id = R.string.ping),
+                        fontSize = buttonTextSize
                     )
                 }
 
-                Spacer(modifier = Modifier.width(8.dp))
-
                 Button(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp),
+                    modifier = testButtonModifier,
                     onClick = {
                         viewModel.sendCommand(message)
                     },
                 ) {
                     Text(
                         text = stringResource(id = R.string.OK),
+                        fontSize = buttonTextSize
+                    )
+                }
+
+                Button(modifier = testButtonModifier, onClick = {
+                    viewModel.initP7LibCommand()
+                }) {
+                    Text(
+                        text = stringResource(id = R.string.init_p7_lib),
+                        fontSize = buttonTextSize
                     )
                 }
             }
@@ -236,49 +242,12 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Row {
-                Button(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp),
-                    onClick = {
-                        viewModel.sendDebit()
-                    },
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.debit_label),
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Button(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(8.dp),
-                    onClick = {
-                        viewModel.ping()
-                    },
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.ping),
-                    )
-                }
-
-                Button(modifier = testButtonModifier, onClick = {
-                    viewModel.testP7LibCommand()
-                }) {
-                    Text(
-                        text = stringResource(id = R.string.init_p7_lib),
-                    )
-                }
-            }
-
-            Row {
                 Button(modifier = testButtonModifier, onClick = {
                     viewModel.testInitCardReader()
                 }) {
                     Text(
                         text = stringResource(id = R.string.init_card_reader),
+                        fontSize = buttonTextSize
                     )
                 }
 
@@ -287,6 +256,7 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                 }) {
                     Text(
                         text = stringResource(id = R.string.read_card_data),
+                        fontSize = buttonTextSize
                     )
                 }
 
@@ -295,17 +265,40 @@ fun APDUScreen(viewModel: DebitViewModel, viewState: DebitViewState) {
                 }) {
                     Text(
                         text = stringResource(id = R.string.detect_card_data),
+                        fontSize = buttonTextSize
                     )
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
 
+
+            Row {
+                Button(
+                    modifier = testButtonModifier,
+                    onClick = {
+                        viewModel.sendDebit()
+                    },
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.debit_label),
+                        fontSize = buttonTextSize
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            val statusText = when(viewState) {
+                is DebitViewState.CommandExecutionState -> viewState.commandResult
+                is DebitViewState.CardDetectState -> viewState.detectDescription
+                else -> ""
+            }
             Text(
                 modifier = Modifier
                     .height(150.dp)
                     .padding(start = 16.dp, end = 16.dp)
                     .fillMaxWidth(),
-                text = (viewState as? DebitViewState.CommandExecutionState)?.commandResult ?: "",
+                text = statusText,
             )
         }
     }
@@ -468,7 +461,8 @@ private fun Form(
                 onValueChange = { value: String ->
                     onValueChanged(
                         list.apply {
-                            this[index] = Pair(k, value.zeroIfEmpty().toIntOrNull() ?: Int.MAX_VALUE)
+                            this[index] =
+                                Pair(k, value.zeroIfEmpty().toIntOrNull() ?: Int.MAX_VALUE)
                         },
                     )
                 },
@@ -482,7 +476,8 @@ private fun Form(
                 onValueChange = { value: String ->
                     onValueChanged(
                         list.apply {
-                            this[index] = Pair(k, value.zeroIfEmpty().toLongOrNull() ?: Long.MAX_VALUE)
+                            this[index] =
+                                Pair(k, value.zeroIfEmpty().toLongOrNull() ?: Long.MAX_VALUE)
                         },
                     )
                 },
@@ -626,3 +621,5 @@ private val testButtonModifier = Modifier
     .width(100.dp)
     .height(70.dp)
     .padding(8.dp)
+
+private val buttonTextSize = 12.sp
